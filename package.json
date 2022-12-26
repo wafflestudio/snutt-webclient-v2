@@ -5,9 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:test": "NODE_ENV=test vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "npx eslint ./src"
+    "lint": "npx eslint ./src",
+    "build:test": "tsc && NODE_ENV=test vite build",
+    "preview:test": "NODE_ENV=test vite preview",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -16,6 +20,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.17",
+    "@playwright/test": "^1.29.1",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
     "@typescript-eslint/eslint-plugin": "^5.47.0",
