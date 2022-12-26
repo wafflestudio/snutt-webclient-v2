@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Logo } from './icons/logo';
+import { Logo } from '@/components/icons/logo';
 
 export const Layout = ({ children }: PropsWithChildren<unknown>) => {
   return (
