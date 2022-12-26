@@ -13,7 +13,7 @@ export const MainTimetableSection = ({ className }: Props) => {
     <Wrapper className={className}>
       <Tabs value={'1'}>
         {mockIds.map((id) => (
-          <Tabs.Tab data-testid="mt-tab" data-id={id} value={id} aria-selected>
+          <Tabs.Tab data-testid="mt-tab" data-id={id} value={id} aria-selected key={id}>
             나의 시간표 <CloseIcon />
           </Tabs.Tab>
         ))}
