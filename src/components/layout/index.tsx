@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { IcLogo } from '@/components/icons/ic-logo';
+import { BREAKPOINT } from '@/styles/constants';
 
 export const Layout = ({ children }: PropsWithChildren<unknown>) => {
   return (
@@ -34,9 +35,9 @@ const HeaderInner = styled.div`
   margin: 0 auto;
   width: 100%;
 
-  max-width: 1024px;
+  max-width: ${BREAKPOINT}px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: ${BREAKPOINT}px) {
     max-width: 700px;
   }
 `;
@@ -58,6 +59,6 @@ const Title = styled.h1`
 `;
 
 const Main = styled.main`
-  max-width: 1024px;
+  max-width: ${BREAKPOINT}px;
   margin: 0 auto;
 `;

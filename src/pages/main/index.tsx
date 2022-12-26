@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { Layout } from '@/components/layout';
+import { BREAKPOINT } from '@/styles/constants';
 
 import { MainLectureSection } from './main-lecture-section';
 import { MainTimetableSection } from './main-timetable-section';
@@ -29,7 +30,7 @@ const sectionStyle = css`
   height: 745px;
   margin: 0 auto;
 
-  @media (max-width: 1024px) {
+  @media (max-width: ${BREAKPOINT}px) {
     width: 100%;
     max-width: 700px;
     height: 400px;
