@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -9,6 +9,7 @@ import { semesterService } from '@/usecases/semesterService';
 
 export const Layout = ({ children }: PropsWithChildren<unknown>) => {
   const { data: courseBooks } = useCourseBooks();
+  const [bookIndex, setBookIndex] = useState(0);
 
   return (
     <div>
@@ -19,9 +20,15 @@ export const Layout = ({ children }: PropsWithChildren<unknown>) => {
               <IcLogo />
               <Title>SNUTT</Title>
             </HomeLink>
-            <select>
+            <select
+              data-testid="course-book-select"
+              value={bookIndex}
+              onChange={(e) => setBookIndex(Number(e.target.value))}
+            >
               {courseBooks?.map((cb, i) => (
-                <option key={i}>{semesterService.getCourseBookLabel(cb)}</option>
+                <option key={i} value={i}>
+                  {semesterService.getCourseBookLabel(cb)}
+                </option>
               ))}
             </select>
           </HeaderLeft>

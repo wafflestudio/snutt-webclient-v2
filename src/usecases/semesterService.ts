@@ -1,9 +1,8 @@
+import { CourseBook } from '@/entities/semester';
 import { EnvRepository, envRepository } from '@/repositories/envRepository';
 import { SemesterRepository, semesterRepository } from '@/repositories/semesterRepository';
 
 import { AuthService, authService } from './authService';
-
-type CourseBook = { year: number; semester: 1 | 2 | 3 | 4 };
 
 export interface SemesterService {
   getCourseBooks(): Promise<CourseBook[]>;
