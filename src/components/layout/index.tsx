@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Logo } from '@/components/icons/logo';
+import { IcLogo } from '@/components/icons/ic-logo';
 
 export const Layout = ({ children }: PropsWithChildren<unknown>) => {
   return (
@@ -10,7 +10,7 @@ export const Layout = ({ children }: PropsWithChildren<unknown>) => {
       <Header>
         <HeaderLeft>
           <HomeLink to="/">
-            <Logo />
+            <IcLogo />
             <Title>SNUTT</Title>
           </HomeLink>
         </HeaderLeft>
