@@ -2,20 +2,22 @@ import { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Logo } from '@/components/icons/logo';
+import { IcLogo } from '@/components/icons/ic-logo';
 
 export const Layout = ({ children }: PropsWithChildren<unknown>) => {
   return (
     <div>
       <Header>
-        <HeaderLeft>
-          <HomeLink to="/">
-            <Logo />
-            <Title>SNUTT</Title>
-          </HomeLink>
-        </HeaderLeft>
+        <HeaderInner>
+          <HeaderLeft>
+            <HomeLink to="/">
+              <IcLogo />
+              <Title>SNUTT</Title>
+            </HomeLink>
+          </HeaderLeft>
+        </HeaderInner>
       </Header>
-      <main>{children}</main>
+      <Main>{children}</Main>
     </div>
   );
 };
@@ -26,6 +28,17 @@ const Header = styled.header`
   display: flex;
   align-items: center;
   padding: 20px;
+`;
+
+const HeaderInner = styled.div`
+  margin: 0 auto;
+  width: 100%;
+
+  max-width: 1024px;
+
+  @media (max-width: 1024px) {
+    max-width: 700px;
+  }
 `;
 
 const HeaderLeft = styled.div``;
@@ -42,4 +55,9 @@ const Title = styled.h1`
   margin-right: 10px;
   color: black;
   text-size-adjust: 100%;
+`;
+
+const Main = styled.main`
+  max-width: 1024px;
+  margin: 0 auto;
 `;

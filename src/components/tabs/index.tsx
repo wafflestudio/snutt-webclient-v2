@@ -54,4 +54,5 @@ Tabs.Tab = Tab;
 
 const TabsWrapper = styled.div`
   display: flex;
+  align-items: center;
 `;

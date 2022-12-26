@@ -1,31 +1,45 @@
 import { useState } from 'react';
+import styled, { css } from 'styled-components';
 
 import { Layout } from '@/components/layout';
-import { Tabs } from '@/components/tabs';
+
+import { MainLectureSection } from './main-lecture-section';
+import { MainTimetableSection } from './main-timetable-section';
 
 export const Main = () => {
   const [lectureTab, setLectureTab] = useState<'result' | 'current'>('current');
 
   return (
     <Layout>
-      <Tabs value={lectureTab}>
-        <Tabs.Tab
-          data-testid="ml-result-tab"
-          value="result"
-          aria-selected={lectureTab === 'result'}
-          onClick={() => setLectureTab('result')}
-        >
-          검색결과
-        </Tabs.Tab>
-        <Tabs.Tab
-          data-testid="ml-current-tab"
-          value="current"
-          aria-selected={lectureTab === 'current'}
-          onClick={() => setLectureTab('current')}
-        >
-          현재 시간표
-        </Tabs.Tab>
-      </Tabs>
+      <Wrapper>
+        <LectureSection tab={lectureTab} changeTab={setLectureTab} />
+        <TimetableSections />
+      </Wrapper>
     </Layout>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const sectionStyle = css`
+  width: 50%;
+  height: 745px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    max-width: 700px;
+    height: 400px;
+  }
+`;
+
+const LectureSection = styled(MainLectureSection)`
+  ${sectionStyle};
+`;
+
+const TimetableSections = styled(MainTimetableSection)`
+  ${sectionStyle};
+`;
