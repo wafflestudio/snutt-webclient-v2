@@ -2,11 +2,11 @@ import styled from 'styled-components';
 
 import { Tabs } from '@/components/tabs';
 
-type Props = { tab: 'current' | 'result'; changeTab: (tab: 'current' | 'result') => void };
+type Props = { className?: string; tab: 'current' | 'result'; changeTab: (tab: 'current' | 'result') => void };
 
-export const MainLectureSection = ({ tab, changeTab }: Props) => {
+export const MainLectureSection = ({ tab, changeTab, className }: Props) => {
   return (
-    <Wrapper>
+    <Wrapper className={className}>
       <Tabs value={tab}>
         <Tabs.Tab
           data-testid="ml-result-tab"
@@ -36,5 +36,5 @@ const Wrapper = styled.section`
 
 const Content = styled.div`
   background-color: #ffffff;
-  min-height: 400px;
+  height: calc(100% - 33px);
 `;

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import styled, { css } from 'styled-components';
 
 import { Layout } from '@/components/layout';
 
@@ -10,8 +11,35 @@ export const Main = () => {
 
   return (
     <Layout>
-      <MainLectureSection tab={lectureTab} changeTab={setLectureTab} />
-      <MainTimetableSection />
+      <Wrapper>
+        <LectureSection tab={lectureTab} changeTab={setLectureTab} />
+        <TimetableSections />
+      </Wrapper>
     </Layout>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const sectionStyle = css`
+  width: 50%;
+  height: 745px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    max-width: 700px;
+    height: 400px;
+  }
+`;
+
+const LectureSection = styled(MainLectureSection)`
+  ${sectionStyle};
+`;
+
+const TimetableSections = styled(MainTimetableSection)`
+  ${sectionStyle};
+`;

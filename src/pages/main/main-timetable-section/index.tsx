@@ -4,10 +4,13 @@ import { IcClose } from '@/components/icons/ic-close';
 import { IcPlus } from '@/components/icons/ic-plus';
 import { Tabs } from '@/components/tabs';
 
-export const MainTimetableSection = () => {
+type Props = { className?: string };
+
+export const MainTimetableSection = ({ className }: Props) => {
   const mockIds = ['1'];
+
   return (
-    <Wrapper>
+    <Wrapper className={className}>
       <Tabs value={'1'}>
         {mockIds.map((id) => (
           <Tabs.Tab data-testid="mt-tab" data-id={id} value={id} aria-selected>
@@ -27,7 +30,7 @@ const Wrapper = styled.section`
 
 const Content = styled.div`
   background-color: #ffffff;
-  min-height: 400px;
+  height: calc(100% - 33px);
 `;
 
 const CloseIcon = styled(IcClose)`
