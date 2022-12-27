@@ -1,7 +1,9 @@
 import { rest } from 'msw';
 
 import { CourseBook } from '@/entities/semester';
-import { Timetable } from '@/entities/timetable';
+import { FullTimetable, Timetable } from '@/entities/timetable';
+
+import { mockTimeTable, mockTimeTable123, mockTimeTable456, mockTimeTable789 } from '../fixtures/timetable';
 
 export const handlers = [
   rest.get<never, never, CourseBook[]>(`*/course_books`, (req, res, ctx) => {
@@ -44,5 +46,14 @@ export const handlers = [
         },
       ]),
     );
+  }),
+
+  rest.get<never, { id: string }, FullTimetable>(`*/tables/:id`, (req, res, ctx) => {
+    const { id } = req.params;
+    if (id === '123') return res(ctx.json(mockTimeTable123));
+    if (id === '456') return res(ctx.json(mockTimeTable456));
+    if (id === '789') return res(ctx.json(mockTimeTable789));
+
+    return res(ctx.json(mockTimeTable));
   }),
 ];
