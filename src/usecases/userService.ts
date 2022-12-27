@@ -8,7 +8,7 @@ export interface UserService {
   getUserInfo(): Promise<User>;
 }
 
-const getAuthService = (args: {
+const getUserService = (args: {
   services: [AuthService];
   repositories: [UserRepository, EnvRepository];
 }): UserService => {
@@ -21,4 +21,4 @@ const getAuthService = (args: {
   };
 };
 
-export const userService = getAuthService({ services: [authService], repositories: [userRepository, envRepository] });
+export const userService = getUserService({ services: [authService], repositories: [userRepository, envRepository] });
