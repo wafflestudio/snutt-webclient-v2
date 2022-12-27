@@ -13,6 +13,8 @@ type Props = {
   currentFullTimetable: FullTimetable | undefined;
   currentTimetable: Timetable | undefined;
   changeCurrentTimetable: (id: string) => void;
+  hoveredLectureId: string | null;
+  setHoveredLectureId: (id: string | null) => void;
 };
 
 export const MainTimetableSection = ({
@@ -21,6 +23,8 @@ export const MainTimetableSection = ({
   currentFullTimetable,
   currentYearSemesterTimetables,
   changeCurrentTimetable,
+  hoveredLectureId,
+  setHoveredLectureId,
 }: Props) => {
   return (
     <Wrapper className={className}>
@@ -39,7 +43,15 @@ export const MainTimetableSection = ({
         ))}
         <AddIcon />
       </Tabs>
-      <Content>{currentFullTimetable && <MainTimeTable timetable={currentFullTimetable} />}</Content>
+      <Content>
+        {currentFullTimetable && (
+          <MainTimeTable
+            timetable={currentFullTimetable}
+            hoveredLectureId={hoveredLectureId}
+            setHoveredLectureId={setHoveredLectureId}
+          />
+        )}
+      </Content>
     </Wrapper>
   );
 };

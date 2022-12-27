@@ -4,12 +4,17 @@ import styled from 'styled-components';
 import { FullTimetable } from '@/entities/timetable';
 import { colorService } from '@/usecases/colorService';
 
-type Props = { timetable: FullTimetable; className?: string };
-
 const allDays = ['월', '화', '수', '목', '금', '토', '일'];
 const times = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
-export const MainTimeTable = ({ timetable, className }: Props) => {
+type Props = {
+  timetable: FullTimetable;
+  className?: string;
+  hoveredLectureId: string | null;
+  setHoveredLectureId: (id: string | null) => void;
+};
+
+export const MainTimeTable = ({ timetable, className, hoveredLectureId, setHoveredLectureId }: Props) => {
   const { data: colorList } = useColorList();
 
   const maxDay = Math.max(...timetable.lecture_list.flatMap((l) => l.class_time_json).map((item) => item.day));
@@ -45,6 +50,7 @@ export const MainTimeTable = ({ timetable, className }: Props) => {
       {timetable.lecture_list.map((lecture) => {
         const backgroundColor = lecture.color.bg ?? colorList?.[lecture.colorIndex - 1]?.bg ?? '#94E6FE';
         const color = lecture.color.fg ?? colorList?.[lecture.colorIndex - 1]?.fg ?? '#1579C2';
+        const isHovered = lecture._id === hoveredLectureId;
 
         return lecture.class_time_json.map((time) => {
           const colStart = time.day;
@@ -57,8 +63,11 @@ export const MainTimeTable = ({ timetable, className }: Props) => {
               $colStart={colStart + 2}
               $rowStart={rowStart}
               $rowEnd={rowEnd}
+              $hovered={isHovered}
               key={time._id}
               style={{ backgroundColor, color }}
+              onMouseEnter={() => setHoveredLectureId(lecture._id)}
+              onMouseLeave={() => setHoveredLectureId(null)}
             >
               {lecture.course_title}
             </Item>
@@ -107,7 +116,7 @@ const TimeLine = styled.div<{ $rowStart: number }>`
   border-bottom: 1px solid rgb(232, 235, 240);
 `;
 
-const Item = styled.div<{ $colStart: number; $rowStart: number; $rowEnd: number }>`
+const Item = styled.div<{ $colStart: number; $rowStart: number; $rowEnd: number; $hovered: boolean }>`
   grid-column: ${({ $colStart }) => `${$colStart} / ${$colStart + 1}`};
   grid-row: ${({ $rowStart, $rowEnd }) => `${$rowStart} / ${$rowEnd}`};
   font-size: 10px;
@@ -116,4 +125,7 @@ const Item = styled.div<{ $colStart: number; $rowStart: number; $rowEnd: number 
   justify-content: center;
   align-items: center;
   text-align: center;
+  cursor: pointer;
+  transition: filter 0.1s;
+  filter: ${({ $hovered }) => ($hovered ? 'brightness(40%)' : 'none')};
 `;
