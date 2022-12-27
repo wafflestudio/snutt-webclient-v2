@@ -5,6 +5,8 @@ import { IcPlus } from '@/components/icons/ic-plus';
 import { Tabs } from '@/components/tabs';
 import { FullTimetable, Timetable } from '@/entities/timetable';
 
+import { MainTimeTable } from './main-timetable';
+
 type Props = {
   className?: string;
   currentYearSemesterTimetables: Timetable[] | undefined;
@@ -20,8 +22,6 @@ export const MainTimetableSection = ({
   currentYearSemesterTimetables,
   changeCurrentTimetable,
 }: Props) => {
-  console.log(currentFullTimetable);
-
   return (
     <Wrapper className={className}>
       <Tabs value={currentTimetable?._id}>
@@ -39,7 +39,7 @@ export const MainTimetableSection = ({
         ))}
         <AddIcon />
       </Tabs>
-      <Content></Content>
+      <Content>{currentFullTimetable && <MainTimeTable timetable={currentFullTimetable} />}</Content>
     </Wrapper>
   );
 };

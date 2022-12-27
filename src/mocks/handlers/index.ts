@@ -1,5 +1,6 @@
 import { rest } from 'msw';
 
+import { Color } from '@/entities/color';
 import { CourseBook } from '@/entities/semester';
 import { FullTimetable, Timetable } from '@/entities/timetable';
 
@@ -55,5 +56,25 @@ export const handlers = [
     if (id === '789') return res(ctx.json(mockTimeTable789));
 
     return res(ctx.json(mockTimeTable));
+  }),
+
+  rest.get<never, never, { message: 'ok'; colors: Color[]; names: string[] }>(`*/colors/vivid_ios`, (req, res, ctx) => {
+    return res(
+      ctx.json({
+        message: 'ok',
+        colors: [
+          { fg: '#ffffff', bg: '#e54459' },
+          { fg: '#ffffff', bg: '#f58d3d' },
+          { fg: '#ffffff', bg: '#fac52d' },
+          { fg: '#ffffff', bg: '#a6d930' },
+          { fg: '#ffffff', bg: '#2bc366' },
+          { fg: '#ffffff', bg: '#1bd0c9' },
+          { fg: '#ffffff', bg: '#1d99e9' },
+          { fg: '#ffffff', bg: '#4f48c4' },
+          { fg: '#ffffff', bg: '#af56b3' },
+        ],
+        names: ['석류', '감귤', '들국', '완두', '비취', '지중해', '하늘', '라벤더', '자수정'],
+      }),
+    );
   }),
 ];

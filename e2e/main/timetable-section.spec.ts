@@ -26,3 +26,26 @@ test('시간표 목록 탭이 정상 동작한다 (시간표 없는 학기)', as
   const tabs = page.getByTestId('mt-tab');
   await expect(tabs).toHaveCount(0);
 });
+
+test('시간표 내용이 잘 보여진다 (월~금 시간표)', async ({ page }) => {
+  await page.goto('/');
+  const table = page.getByTestId('main-timetable');
+  const lecture = page.getByTestId('main-timetable-lecture');
+  await expect(table).not.toContainText('토');
+  await expect(lecture).toHaveCount(18);
+  await expect(lecture.filter({ hasText: '고급수학 2' })).toHaveCount(2);
+  await expect(lecture.filter({ hasText: '상상력과 문화' }).first()).toHaveAttribute(
+    'style',
+    'background-color: rgb(166, 217, 48); color: rgb(255, 255, 255);',
+  );
+  await expect(lecture.filter({ hasText: '생물학실험' })).toHaveCSS('grid-column', '2 / 3');
+  await expect(lecture.filter({ hasText: '생물학실험' })).toHaveCSS('grid-row', '16 / 20');
+});
+
+test('시간표 내용이 잘 보여진다 (월~일 시간표)', async ({ page }) => {
+  await page.goto('/?year=2001&semester=2');
+  const table = page.getByTestId('main-timetable');
+  const lecture = page.getByTestId('main-timetable-lecture');
+  await expect(table).toContainText('일');
+  await expect(lecture.filter({ hasText: '헬스' })).toHaveCount(7);
+});
