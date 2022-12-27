@@ -2,11 +2,18 @@ import styled from 'styled-components';
 
 import { Lecture } from '@/entities/lecture';
 
-type Props = { lecture: Lecture };
+type Props = { lecture: Lecture; hoveredLectureId: string | null; setHoveredLectureId: (id: string | null) => void };
 
-export const MainLectureListItem = ({ lecture }: Props) => {
+export const MainLectureListItem = ({ lecture, hoveredLectureId, setHoveredLectureId }: Props) => {
+  const isHovered = hoveredLectureId === lecture._id;
+
   return (
-    <LectureListItem data-testid="main-lecture-listitem">
+    <LectureListItem
+      data-testid="main-lecture-listitem"
+      onMouseEnter={() => setHoveredLectureId(lecture._id)}
+      onMouseLeave={() => setHoveredLectureId(null)}
+      $hovered={isHovered}
+    >
       <LectureInner>
         <LectureHeader>
           <LectureHeaderLeft>
@@ -23,17 +30,17 @@ export const MainLectureListItem = ({ lecture }: Props) => {
           {lecture.department}, {lecture.academic_year}
         </LectureDepartment>
         <LectureTime data-testid="main-lecture-listitem-time">{lecture.real_class_time}</LectureTime>
+        {lecture.remark && <LectureNotice>{lecture.remark}</LectureNotice>}
       </LectureInner>
     </LectureListItem>
   );
 };
 
-const LectureListItem = styled.li`
+const LectureListItem = styled.li<{ $hovered: boolean }>`
   list-style-type: none;
-
-  &:hover {
-    background-color: #f8f8f9;
-  }
+  cursor: pointer;
+  transition: background-color 0.1s;
+  background-color: ${({ $hovered }) => ($hovered ? '#bbb' : '#fff')};
 `;
 
 const LectureInner = styled.div`
@@ -79,4 +86,11 @@ const LectureDepartment = styled.div`
 const LectureTime = styled.div`
   opacity: 0.8;
   font-size: 14px;
+`;
+
+const LectureNotice = styled.div`
+  margin-top: 14px;
+  font-size: 13px;
+  font-style: italic;
+  opacity: 0.6;
 `;

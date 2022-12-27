@@ -10,9 +10,18 @@ type Props = {
   tab: 'current' | 'result';
   changeTab: (tab: 'current' | 'result') => void;
   currentFullTimetable: FullTimetable | undefined;
+  hoveredLectureId: string | null;
+  setHoveredLectureId: (id: string | null) => void;
 };
 
-export const MainLectureSection = ({ tab, changeTab, className, currentFullTimetable }: Props) => {
+export const MainLectureSection = ({
+  tab,
+  changeTab,
+  className,
+  currentFullTimetable,
+  hoveredLectureId,
+  setHoveredLectureId,
+}: Props) => {
   return (
     <Wrapper className={className}>
       <Tabs value={tab}>
@@ -40,7 +49,12 @@ export const MainLectureSection = ({ tab, changeTab, className, currentFullTimet
           ) : (
             <LectureList>
               {currentFullTimetable.lecture_list.map((l) => (
-                <MainLectureListItem lecture={l} key={l._id} />
+                <MainLectureListItem
+                  lecture={l}
+                  key={l._id}
+                  hoveredLectureId={hoveredLectureId}
+                  setHoveredLectureId={setHoveredLectureId}
+                />
               ))}
             </LectureList>
           ))}

@@ -11,6 +11,7 @@ import { MainLectureSection } from './main-lecture-section';
 import { MainTimetableSection } from './main-timetable-section';
 
 export const Main = () => {
+  const [hoveredLectureId, setHoveredLectureId] = useState<string | null>(null);
   const [lectureTab, setLectureTab] = useState<'result' | 'current'>('current');
   const [currentTimetableId, setCurrentTimetableId] = useState<string | null>(null);
   const { year, semester } = useYearSemester();
@@ -28,12 +29,20 @@ export const Main = () => {
   return (
     <Layout>
       <Wrapper>
-        <LectureSection tab={lectureTab} changeTab={setLectureTab} currentFullTimetable={currentFullTimetable} />
+        <LectureSection
+          tab={lectureTab}
+          changeTab={setLectureTab}
+          currentFullTimetable={currentFullTimetable}
+          hoveredLectureId={hoveredLectureId}
+          setHoveredLectureId={setHoveredLectureId}
+        />
         <TimetableSection
           currentYearSemesterTimetables={currentYearSemesterTimetables}
           currentTimetable={currentTimetable}
           currentFullTimetable={currentFullTimetable}
           changeCurrentTimetable={(id) => setCurrentTimetableId(id)}
+          hoveredLectureId={hoveredLectureId}
+          setHoveredLectureId={setHoveredLectureId}
         />
       </Wrapper>
     </Layout>
