@@ -1,3 +1,5 @@
+import { Color } from './color';
+
 export interface Lecture {
   _id: string;
   classification?: string;
@@ -25,6 +27,6 @@ export interface Lecture {
   lecture_number?: string;
   created_at: string;
   updated_at: string;
-  color: unknown;
+  color: Color | Record<string, never>;
   colorIndex: number;
 }

@@ -29,7 +29,7 @@ export const Main = () => {
     <Layout>
       <Wrapper>
         <LectureSection tab={lectureTab} changeTab={setLectureTab} currentFullTimetable={currentFullTimetable} />
-        <TimetableSections
+        <TimetableSection
           currentYearSemesterTimetables={currentYearSemesterTimetables}
           currentTimetable={currentTimetable}
           currentFullTimetable={currentFullTimetable}
@@ -58,20 +58,25 @@ const Wrapper = styled.div`
 
 const sectionStyle = css`
   width: 50%;
-  height: 745px;
+  height: 780px;
   margin: 0 auto;
 
   @media (max-width: ${BREAKPOINT}px) {
     width: 100%;
     max-width: 700px;
-    height: 400px;
   }
 `;
 
 const LectureSection = styled(MainLectureSection)`
   ${sectionStyle};
+  @media (max-width: ${BREAKPOINT}px) {
+    height: 400px;
+  }
 `;
 
-const TimetableSections = styled(MainTimetableSection)`
+const TimetableSection = styled(MainTimetableSection)`
   ${sectionStyle};
+  @media (max-width: ${BREAKPOINT}px) {
+    margin-bottom: 30px;
+  }
 `;
