@@ -4,9 +4,15 @@ import { SemesterRepository, semesterRepository } from '@/repositories/semesterR
 
 import { AuthService, authService } from './authService';
 
+type CourseBookLabel = `${number}-${1 | 'S' | 2 | 'W'}`;
+type CourseBookValue = `${number}-${1 | 2 | 3 | 4}`;
+type BaseCourseBook = Omit<CourseBook, 'updated_at'>;
+
 export interface SemesterService {
   getCourseBooks(): Promise<CourseBook[]>;
-  getCourseBookLabel(cb: CourseBook): string;
+  courseBookToLabel(cb: BaseCourseBook): CourseBookLabel;
+  courseBookToValue(cb: BaseCourseBook): CourseBookValue;
+  valueToCourseBook(value: CourseBookValue): BaseCourseBook;
 }
 
 const getSemesterService = (args: {
@@ -18,7 +24,12 @@ const getSemesterService = (args: {
 
   return {
     getCourseBooks: () => args.repositories[0].getCourseBooks({ baseUrl, apikey }),
-    getCourseBookLabel: ({ year, semester }: CourseBook) => `${year}-${[, 1, 'S', 2, 'W'][semester]}`,
+    courseBookToLabel: ({ year, semester }) => `${year}-${[, 1, 'S', 2, 'W'][semester] as 1 | 'S' | 2 | 'W'}`,
+    courseBookToValue: ({ year, semester }) => `${year}-${semester}`,
+    valueToCourseBook: (value) => ({
+      year: Number(value.split('-')[0]),
+      semester: Number(value.split('-')[1]) as 1 | 2 | 3 | 4,
+    }),
   };
 };
 

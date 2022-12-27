@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { PropsWithChildren, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { PropsWithChildren } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { IcLogo } from '@/components/icons/ic-logo';
@@ -9,7 +9,14 @@ import { semesterService } from '@/usecases/semesterService';
 
 export const Layout = ({ children }: PropsWithChildren<unknown>) => {
   const { data: courseBooks } = useCourseBooks();
-  const [bookIndex, setBookIndex] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const onChangeBook = ({ year, semester }: { year: number; semester: number }) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('year', `${year}`);
+    newParams.set('semester', `${semester}`);
+    setSearchParams(newParams);
+  };
 
   return (
     <div>
@@ -20,17 +27,28 @@ export const Layout = ({ children }: PropsWithChildren<unknown>) => {
               <IcLogo />
               <Title>SNUTT</Title>
             </HomeLink>
-            <select
-              data-testid="course-book-select"
-              value={bookIndex}
-              onChange={(e) => setBookIndex(Number(e.target.value))}
-            >
-              {courseBooks?.map((cb, i) => (
-                <option key={i} value={i}>
-                  {semesterService.getCourseBookLabel(cb)}
-                </option>
-              ))}
-            </select>
+            {courseBooks && courseBooks.length > 0 && (
+              <select
+                data-testid="course-book-select"
+                value={
+                  searchParams.get('year') && searchParams.get('semester')
+                    ? semesterService.courseBookToValue({
+                        year: Number(searchParams.get('year')),
+                        semester: Number(searchParams.get('semester')) as 1 | 2 | 3 | 4,
+                      })
+                    : semesterService.courseBookToValue(courseBooks[0])
+                }
+                onChange={(e) =>
+                  onChangeBook(semesterService.valueToCourseBook(e.target.value as `${number}-${1 | 2 | 3 | 4}`))
+                }
+              >
+                {courseBooks.map((cb, i) => (
+                  <option key={i} value={semesterService.courseBookToValue(cb)}>
+                    {semesterService.courseBookToLabel(cb)}
+                  </option>
+                ))}
+              </select>
+            )}
           </HeaderLeft>
         </HeaderInner>
       </Header>
