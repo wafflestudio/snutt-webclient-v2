@@ -1,10 +1,18 @@
 import styled from 'styled-components';
 
 import { Tabs } from '@/components/tabs';
+import { Timetable } from '@/entities/timetable';
 
-type Props = { className?: string; tab: 'current' | 'result'; changeTab: (tab: 'current' | 'result') => void };
+type Props = {
+  className?: string;
+  tab: 'current' | 'result';
+  changeTab: (tab: 'current' | 'result') => void;
+  currentTimetable: Timetable | undefined;
+};
 
-export const MainLectureSection = ({ tab, changeTab, className }: Props) => {
+export const MainLectureSection = ({ tab, changeTab, className, currentTimetable }: Props) => {
+  console.log(currentTimetable);
+
   return (
     <Wrapper className={className}>
       <Tabs value={tab}>

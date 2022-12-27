@@ -3,18 +3,34 @@ import styled from 'styled-components';
 import { IcClose } from '@/components/icons/ic-close';
 import { IcPlus } from '@/components/icons/ic-plus';
 import { Tabs } from '@/components/tabs';
+import { Timetable } from '@/entities/timetable';
 
-type Props = { className?: string };
+type Props = {
+  className?: string;
+  currentYearSemesterTimetables: Timetable[] | undefined;
+  currentTimetable: Timetable | undefined;
+  changeCurrentTimetable: (id: string) => void;
+};
 
-export const MainTimetableSection = ({ className }: Props) => {
-  const mockIds = ['1'];
-
+export const MainTimetableSection = ({
+  className,
+  currentTimetable,
+  currentYearSemesterTimetables,
+  changeCurrentTimetable,
+}: Props) => {
   return (
     <Wrapper className={className}>
-      <Tabs value={'1'}>
-        {mockIds.map((id) => (
-          <Tabs.Tab data-testid="mt-tab" data-id={id} value={id} aria-selected key={id}>
-            나의 시간표 <CloseIcon />
+      <Tabs value={currentTimetable?._id}>
+        {currentYearSemesterTimetables?.map(({ _id: id, title }) => (
+          <Tabs.Tab
+            data-testid="mt-tab"
+            data-id={id}
+            value={id}
+            aria-selected={id === currentTimetable?._id}
+            key={id}
+            onClick={() => changeCurrentTimetable(id)}
+          >
+            {title} <CloseIcon />
           </Tabs.Tab>
         ))}
         <AddIcon />
