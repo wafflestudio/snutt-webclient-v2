@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Tabs } from '@/components/tabs';
 import { FullTimetable } from '@/entities/timetable';
 
+import { MainLectureListItem } from './main-lecture-list-item';
+
 type Props = {
   className?: string;
   tab: 'current' | 'result';
@@ -11,8 +13,6 @@ type Props = {
 };
 
 export const MainLectureSection = ({ tab, changeTab, className, currentFullTimetable }: Props) => {
-  console.log(currentFullTimetable);
-
   return (
     <Wrapper className={className}>
       <Tabs value={tab}>
@@ -33,7 +33,18 @@ export const MainLectureSection = ({ tab, changeTab, className, currentFullTimet
           현재 시간표
         </Tabs.Tab>
       </Tabs>
-      <Content>{currentFullTimetable ? '' : <EmptyText>추가된 강의가 없습니다.</EmptyText>}</Content>
+      <Content>
+        {tab === 'current' &&
+          (!currentFullTimetable ? (
+            <EmptyText>추가된 강의가 없습니다.</EmptyText>
+          ) : (
+            <LectureList>
+              {currentFullTimetable.lecture_list.map((l) => (
+                <MainLectureListItem lecture={l} key={l._id} />
+              ))}
+            </LectureList>
+          ))}
+      </Content>
     </Wrapper>
   );
 };
@@ -51,4 +62,11 @@ const EmptyText = styled.p`
   margin: 0;
   padding: 20px 30px;
   font-size: 14px;
+`;
+
+const LectureList = styled.ul`
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-y: scroll;
 `;
