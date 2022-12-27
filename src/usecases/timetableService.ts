@@ -1,4 +1,4 @@
-import { Timetable } from '@/entities/timetable';
+import { FullTimetable, Timetable } from '@/entities/timetable';
 import { EnvRepository, envRepository } from '@/repositories/envRepository';
 import { TimetableRepository, timetableRepository } from '@/repositories/timetableRepository';
 
@@ -6,6 +6,7 @@ import { AuthService, authService } from './authService';
 
 export interface TimetableService {
   getTimetables(): Promise<Timetable[]>;
+  getFullTimetable(id: string): Promise<FullTimetable>;
 }
 
 const getTimetableService = (args: {
@@ -18,6 +19,7 @@ const getTimetableService = (args: {
 
   return {
     getTimetables: () => args.repositories[0].getTimetables({ baseUrl, apikey, token }),
+    getFullTimetable: (id: string) => args.repositories[0].getFullTimetable({ baseUrl, apikey, token }, { id }),
   };
 };
 

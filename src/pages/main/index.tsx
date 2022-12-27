@@ -23,13 +23,16 @@ export const Main = () => {
     ? currentYearSemesterTimetables?.find((tt) => tt._id === currentTimetableId)
     : currentYearSemesterTimetables?.[0];
 
+  const { data: currentFullTimetable } = useCurrentFullTimetable(currentTimetable?._id);
+
   return (
     <Layout>
       <Wrapper>
-        <LectureSection tab={lectureTab} changeTab={setLectureTab} currentTimetable={currentTimetable} />
+        <LectureSection tab={lectureTab} changeTab={setLectureTab} currentFullTimetable={currentFullTimetable} />
         <TimetableSections
           currentYearSemesterTimetables={currentYearSemesterTimetables}
           currentTimetable={currentTimetable}
+          currentFullTimetable={currentFullTimetable}
           changeCurrentTimetable={(id) => setCurrentTimetableId(id)}
         />
       </Wrapper>
@@ -38,6 +41,15 @@ export const Main = () => {
 };
 
 const useMyTimetables = () => useQuery(['tables'], () => timetableService.getTimetables());
+const useCurrentFullTimetable = (id: string | undefined) =>
+  useQuery(
+    ['tables', id],
+    () => {
+      if (!id) throw new Error();
+      return timetableService.getFullTimetable(id);
+    },
+    { enabled: !!id },
+  );
 
 const Wrapper = styled.div`
   display: flex;

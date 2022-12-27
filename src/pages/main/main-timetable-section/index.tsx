@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import { IcClose } from '@/components/icons/ic-close';
 import { IcPlus } from '@/components/icons/ic-plus';
 import { Tabs } from '@/components/tabs';
-import { Timetable } from '@/entities/timetable';
+import { FullTimetable, Timetable } from '@/entities/timetable';
 
 type Props = {
   className?: string;
   currentYearSemesterTimetables: Timetable[] | undefined;
+  currentFullTimetable: FullTimetable | undefined;
   currentTimetable: Timetable | undefined;
   changeCurrentTimetable: (id: string) => void;
 };
@@ -15,9 +16,12 @@ type Props = {
 export const MainTimetableSection = ({
   className,
   currentTimetable,
+  currentFullTimetable,
   currentYearSemesterTimetables,
   changeCurrentTimetable,
 }: Props) => {
+  console.log(currentFullTimetable);
+
   return (
     <Wrapper className={className}>
       <Tabs value={currentTimetable?._id}>

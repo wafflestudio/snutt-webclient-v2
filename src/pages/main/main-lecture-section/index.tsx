@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 
 import { Tabs } from '@/components/tabs';
-import { Timetable } from '@/entities/timetable';
+import { FullTimetable } from '@/entities/timetable';
 
 type Props = {
   className?: string;
   tab: 'current' | 'result';
   changeTab: (tab: 'current' | 'result') => void;
-  currentTimetable: Timetable | undefined;
+  currentFullTimetable: FullTimetable | undefined;
 };
 
-export const MainLectureSection = ({ tab, changeTab, className, currentTimetable }: Props) => {
-  console.log(currentTimetable);
+export const MainLectureSection = ({ tab, changeTab, className, currentFullTimetable }: Props) => {
+  console.log(currentFullTimetable);
 
   return (
     <Wrapper className={className}>
@@ -33,7 +33,7 @@ export const MainLectureSection = ({ tab, changeTab, className, currentTimetable
           현재 시간표
         </Tabs.Tab>
       </Tabs>
-      <Content></Content>
+      <Content>{currentFullTimetable ? '' : <EmptyText>추가된 강의가 없습니다.</EmptyText>}</Content>
     </Wrapper>
   );
 };
@@ -45,4 +45,10 @@ const Wrapper = styled.section`
 const Content = styled.div`
   background-color: #ffffff;
   height: calc(100% - 33px);
+`;
+
+const EmptyText = styled.p`
+  margin: 0;
+  padding: 20px 30px;
+  font-size: 14px;
 `;
