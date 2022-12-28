@@ -9,3 +9,5 @@ export const DAY_LABEL_MAP = {
   5: '토',
   6: '일',
 };
+
+export const dayArray = ['월', '화', '수', '목', '금', '토', '일'];
