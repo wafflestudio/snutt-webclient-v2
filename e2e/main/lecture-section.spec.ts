@@ -21,7 +21,7 @@ test('현재 시간표 탭이 정상 동작한다', async ({ page }) => {
   await expect(lectureItem.nth(1).getByTestId('main-lecture-listitem-instructor')).toHaveText('이영기 / 4학점');
   await expect(lectureItem.nth(3).getByTestId('main-lecture-listitem-department')).toHaveText('생명과학부, 1학년');
   await expect(lectureItem.nth(4).getByTestId('main-lecture-listitem-time')).toHaveText(
-    '화(12:30~13:45)/목(12:30~13:45)',
+    '화(12:30~13:45), 목(12:30~13:45)',
   );
 });
 

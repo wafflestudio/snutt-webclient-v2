@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+import { IcClock } from '@/components/icons/ic-clock';
+import { IcDots } from '@/components/icons/ic-dots';
+import { IcLabel } from '@/components/icons/ic-label';
+import { IcMap } from '@/components/icons/ic-map';
 import { Lecture } from '@/entities/lecture';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { lectureService } from '@/usecases/lectureService';
@@ -12,8 +16,19 @@ type Props = {
 };
 
 export const MainLectureListItem = ({ lecture, hoveredLectureId, setHoveredLectureId, onClickLecture }: Props) => {
-  const isHovered = hoveredLectureId === lecture._id;
   const { year, semester } = useYearSemester();
+
+  const isHovered = hoveredLectureId === lecture._id;
+  const department = [lecture.department, lecture.academic_year];
+  const places = lecture.class_time_json.map((t) => t.place);
+  const times = lectureService.getLectureTimeTexts(lecture);
+  const emptyText = '-';
+  const detailUrl =
+    lecture.course_number && year && semester ? lectureService.getLectureDetailUrl(lecture, { year, semester }) : null;
+
+  const onClickDelete = () => {
+    // TODO: implement
+  };
 
   return (
     <LectureListItem
@@ -30,27 +45,47 @@ export const MainLectureListItem = ({ lecture, hoveredLectureId, setHoveredLectu
             <LectureInstructor data-testid="main-lecture-listitem-instructor">
               {lecture.instructor} / {lecture.credit}학점
             </LectureInstructor>
-            {year && semester && lecture.course_number && (
-              <LectureLink
-                data-testid="main-lecture-listitem-link"
-                target="_blank"
-                onClick={(e) => e.stopPropagation()}
-                href={lectureService.getLectureDetailUrl(lecture, { year, semester })}
-              >
-                수강편람
-              </LectureLink>
-            )}
           </LectureHeaderLeft>
 
-          <LectureHeaderRight data-testid="main-lecture-listitem-number">
-            <LectureDeleteButton onClick={(e) => e.stopPropagation()}>삭제</LectureDeleteButton>
+          <LectureHeaderRight data-testid="main-lecture-listitem-right">
+            {detailUrl && (
+              <LectureButton
+                as="a"
+                href={detailUrl}
+                target="_blank"
+                onClick={(e) => e.stopPropagation()}
+                data-testid="main-lecture-listitem-link"
+              >
+                강의계획서
+              </LectureButton>
+            )}
+            <LectureButton style={{ color: '#ff0000' }} onClick={(e) => (e.stopPropagation(), onClickDelete())}>
+              삭제
+            </LectureButton>
           </LectureHeaderRight>
         </LectureHeader>
-        <LectureDepartment data-testid="main-lecture-listitem-department">
-          {lecture.department}, {lecture.academic_year}
-        </LectureDepartment>
-        <LectureTime data-testid="main-lecture-listitem-time">{lecture.real_class_time}</LectureTime>
-        {lecture.remark && <LectureNotice>{lecture.remark}</LectureNotice>}
+
+        <LectureDescription data-testid="main-lecture-listitem-department">
+          <LabelIcon />
+          {department.some(Boolean) ? department.join(', ') : emptyText}
+        </LectureDescription>
+
+        <LectureDescription data-testid="main-lecture-listitem-time">
+          <ClockIcon />
+          {times.some(Boolean) ? times.join(', ') : emptyText}
+        </LectureDescription>
+
+        <LectureDescription data-testid="main-lecture-listitem-place">
+          <MapIcon />
+          {places.some(Boolean) ? places.join(', ') : emptyText}
+        </LectureDescription>
+
+        {lecture.remark && (
+          <LectureDescription data-testid="main-lecture-listitem-remark" style={{ fontSize: 12, opacity: 0.6 }}>
+            <DotsIcon />
+            {lecture.remark}
+          </LectureDescription>
+        )}
       </LectureInner>
     </LectureListItem>
   );
@@ -72,6 +107,8 @@ const LectureInner = styled.div`
 const LectureHeader = styled.div`
   justify-content: space-between;
   display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 `;
 
 const LectureHeaderLeft = styled.div`
@@ -91,54 +128,52 @@ const LectureInstructor = styled.div`
   line-height: 18px;
 `;
 
-const LectureLink = styled.a`
-  margin: 0 0 0 6px;
-  font-size: 12px;
-  line-height: 18px;
-  opacity: 0.6;
-  color: rgb(98, 132, 241);
-  transition: opacity 0.1s;
-
-  &:hover {
-    font-weight: 700;
-    opacity: 1;
-  }
-`;
-
-const LectureDeleteButton = styled.p`
-  margin: 0 0 0 12px;
-  font-size: 12px;
-  line-height: 18px;
-  opacity: 0.6;
-  color: rgb(255, 0, 0);
-  transition: opacity 0.1s;
-
-  &:hover {
-    font-weight: 700;
-    opacity: 1;
-  }
-`;
-
 const LectureHeaderRight = styled.div`
   display: flex;
   font-size: 13px;
   line-height: 18px;
 `;
 
-const LectureDepartment = styled.div`
+const LectureButton = styled.button`
+  border: none;
+  background-color: transparent;
+  color: #000;
   opacity: 0.8;
-  margin: 10px 0 5px;
-  font-size: 14px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 2px;
+  text-decoration: none;
+
+  &:hover {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.08);
+  }
 `;
 
-const LectureTime = styled.div`
+const LectureDescription = styled.div`
   opacity: 0.8;
+  margin-bottom: 5px;
   font-size: 14px;
+  line-height: 18px;
+  display: flex;
 `;
 
-const LectureNotice = styled.div`
-  margin-top: 14px;
-  font-size: 13px;
-  font-style: italic;
-  opacity: 0.6;
+const LabelIcon = styled(IcLabel).attrs({ width: 14, height: 14 })`
+  margin-right: 10px;
+  min-width: 14px;
+`;
+
+const ClockIcon = styled(IcClock).attrs({ width: 14, height: 14 })`
+  margin-right: 10px;
+  min-width: 14px;
+`;
+
+const MapIcon = styled(IcMap).attrs({ width: 14, height: 14 })`
+  margin-right: 10px;
+  min-width: 14px;
+`;
+
+const DotsIcon = styled(IcDots).attrs({ width: 14, height: 14 })`
+  margin-right: 10px;
+  min-width: 14px;
 `;

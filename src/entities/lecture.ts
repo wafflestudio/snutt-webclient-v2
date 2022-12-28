@@ -1,4 +1,5 @@
 import { Color } from './color';
+import { Day } from './day';
 
 export interface Lecture {
   _id: string;
@@ -11,7 +12,7 @@ export interface Lecture {
   real_class_time: string;
   class_time_json: {
     _id: string;
-    day: number;
+    day: Day;
     start: number;
     len: number;
     place: string;

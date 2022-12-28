@@ -1,8 +1,10 @@
+import { DAY_LABEL_MAP } from '@/entities/day';
 import { Lecture } from '@/entities/lecture';
 import { CourseBook } from '@/entities/semester';
 
 export interface SemesterService {
   getLectureDetailUrl(lecture: Lecture, courseBook: Omit<CourseBook, 'updated_at'>): string;
+  getLectureTimeTexts(lecture: Lecture): string[];
 }
 
 const getLectureService = (): SemesterService => {
@@ -17,6 +19,8 @@ const getLectureService = (): SemesterService => {
 
       return `https://sugang.snu.ac.kr/sugang/cc/cc103.action?openSchyy=${year}&openShtmFg=${openShtmFg}&openDetaShtmFg=${openDetaShtmFg}&sbjtCd=${course_number}&ltNo=${lecture_number}&sbjtSubhCd=000`;
     },
+    getLectureTimeTexts: (lecture) =>
+      lecture.class_time_json.map((t) => `${DAY_LABEL_MAP[t.day]}(${t.start_time}~${t.end_time})`),
   };
 };
 
