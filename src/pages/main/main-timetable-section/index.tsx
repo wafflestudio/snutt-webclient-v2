@@ -15,6 +15,7 @@ type Props = {
   changeCurrentTimetable: (id: string) => void;
   hoveredLectureId: string | null;
   setHoveredLectureId: (id: string | null) => void;
+  onClickLecture: (id: string) => void;
 };
 
 export const MainTimetableSection = ({
@@ -25,6 +26,7 @@ export const MainTimetableSection = ({
   changeCurrentTimetable,
   hoveredLectureId,
   setHoveredLectureId,
+  onClickLecture,
 }: Props) => {
   return (
     <Wrapper className={className}>
@@ -49,6 +51,7 @@ export const MainTimetableSection = ({
             timetable={currentFullTimetable}
             hoveredLectureId={hoveredLectureId}
             setHoveredLectureId={setHoveredLectureId}
+            onClickLecture={onClickLecture}
           />
         )}
       </Content>

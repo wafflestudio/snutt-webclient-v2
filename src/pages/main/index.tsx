@@ -7,11 +7,13 @@ import { useYearSemester } from '@/hooks/useYearSemester';
 import { BREAKPOINT } from '@/styles/constants';
 import { timetableService } from '@/usecases/timetableService';
 
+import { MainLectureEditDialog } from './main-lecture-edit-dialog';
 import { MainLectureSection } from './main-lecture-section';
 import { MainTimetableSection } from './main-timetable-section';
 
 export const Main = () => {
   const [hoveredLectureId, setHoveredLectureId] = useState<string | null>(null);
+  const [dialogLectureId, setDialogLectureId] = useState<string | null>(null);
   const [lectureTab, setLectureTab] = useState<'result' | 'current'>('current');
   const [currentTimetableId, setCurrentTimetableId] = useState<string | null>(null);
   const { year, semester } = useYearSemester();
@@ -19,12 +21,15 @@ export const Main = () => {
 
   const currentYearSemesterTimetables =
     year && semester ? timetables?.filter((tt) => tt.year === year && tt.semester === semester) : undefined;
-
   const currentTimetable = currentTimetableId
     ? currentYearSemesterTimetables?.find((tt) => tt._id === currentTimetableId)
     : currentYearSemesterTimetables?.[0];
 
   const { data: currentFullTimetable } = useCurrentFullTimetable(currentTimetable?._id);
+
+  const dialogLecture = currentFullTimetable?.lecture_list.find((tt) => tt._id === dialogLectureId);
+
+  const onClickLecture = (id: string) => setDialogLectureId(id);
 
   return (
     <Layout>
@@ -35,6 +40,7 @@ export const Main = () => {
           currentFullTimetable={currentFullTimetable}
           hoveredLectureId={hoveredLectureId}
           setHoveredLectureId={setHoveredLectureId}
+          onClickLecture={onClickLecture}
         />
         <TimetableSection
           currentYearSemesterTimetables={currentYearSemesterTimetables}
@@ -43,8 +49,14 @@ export const Main = () => {
           changeCurrentTimetable={(id) => setCurrentTimetableId(id)}
           hoveredLectureId={hoveredLectureId}
           setHoveredLectureId={setHoveredLectureId}
+          onClickLecture={onClickLecture}
         />
       </Wrapper>
+      <MainLectureEditDialog
+        open={dialogLectureId !== null}
+        onClose={() => setDialogLectureId(null)}
+        lecture={dialogLecture}
+      />
     </Layout>
   );
 };
