@@ -1,7 +1,7 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
 
-const PORT = 3001;
+const PORT = 4174;
 
 const config: PlaywrightTestConfig = {
   testDir: './e2e',

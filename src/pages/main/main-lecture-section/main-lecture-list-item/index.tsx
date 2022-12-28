@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 import { Lecture } from '@/entities/lecture';
+import { useYearSemester } from '@/hooks/useYearSemester';
+import { lectureService } from '@/usecases/lectureService';
 
 type Props = {
   lecture: Lecture;
@@ -11,6 +13,7 @@ type Props = {
 
 export const MainLectureListItem = ({ lecture, hoveredLectureId, setHoveredLectureId, onClickLecture }: Props) => {
   const isHovered = hoveredLectureId === lecture._id;
+  const { year, semester } = useYearSemester();
 
   return (
     <LectureListItem
@@ -27,10 +30,21 @@ export const MainLectureListItem = ({ lecture, hoveredLectureId, setHoveredLectu
             <LectureInstructor data-testid="main-lecture-listitem-instructor">
               {lecture.instructor} / {lecture.credit}학점
             </LectureInstructor>
+            {year && semester && lecture.course_number && (
+              <LectureLink
+                data-testid="main-lecture-listitem-link"
+                target="_blank"
+                onClick={(e) => e.stopPropagation()}
+                href={lectureService.getLectureDetailUrl(lecture, { year, semester })}
+              >
+                수강편람
+              </LectureLink>
+            )}
           </LectureHeaderLeft>
-          <LectureNumber data-testid="main-lecture-listitem-number">
-            {lecture.course_number} / {lecture.lecture_number}
-          </LectureNumber>
+
+          <LectureHeaderRight data-testid="main-lecture-listitem-number">
+            <LectureDeleteButton onClick={(e) => e.stopPropagation()}>삭제</LectureDeleteButton>
+          </LectureHeaderRight>
         </LectureHeader>
         <LectureDepartment data-testid="main-lecture-listitem-department">
           {lecture.department}, {lecture.academic_year}
@@ -46,7 +60,7 @@ const LectureListItem = styled.li<{ $hovered: boolean }>`
   list-style-type: none;
   cursor: pointer;
   transition: background-color 0.1s;
-  background-color: ${({ $hovered }) => ($hovered ? '#bbb' : '#fff')};
+  background-color: ${({ $hovered }) => ($hovered ? '#ddd' : '#fff')};
 `;
 
 const LectureInner = styled.div`
@@ -77,8 +91,36 @@ const LectureInstructor = styled.div`
   line-height: 18px;
 `;
 
-const LectureNumber = styled.div`
-  opacity: 0.4;
+const LectureLink = styled.a`
+  margin: 0 0 0 6px;
+  font-size: 12px;
+  line-height: 18px;
+  opacity: 0.6;
+  color: rgb(98, 132, 241);
+  transition: opacity 0.1s;
+
+  &:hover {
+    font-weight: 700;
+    opacity: 1;
+  }
+`;
+
+const LectureDeleteButton = styled.p`
+  margin: 0 0 0 12px;
+  font-size: 12px;
+  line-height: 18px;
+  opacity: 0.6;
+  color: rgb(255, 0, 0);
+  transition: opacity 0.1s;
+
+  &:hover {
+    font-weight: 700;
+    opacity: 1;
+  }
+`;
+
+const LectureHeaderRight = styled.div`
+  display: flex;
   font-size: 13px;
   line-height: 18px;
 `;
