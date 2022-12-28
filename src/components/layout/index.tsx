@@ -8,6 +8,8 @@ import { useYearSemester } from '@/hooks/useYearSemester';
 import { BREAKPOINT } from '@/styles/constants';
 import { semesterService } from '@/usecases/semesterService';
 
+import { LayoutSearchbar } from './layout-searchbar';
+
 export const Layout = ({ children }: PropsWithChildren<unknown>) => {
   const { data: courseBooks } = useCourseBooks();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -45,6 +47,7 @@ export const Layout = ({ children }: PropsWithChildren<unknown>) => {
               </select>
             )}
           </HeaderLeft>
+          <LayoutSearchbar />
         </HeaderInner>
       </Header>
       <Main>{children}</Main>
@@ -63,6 +66,8 @@ const Header = styled.header`
 const HeaderInner = styled.div`
   margin: 0 auto;
   width: 100%;
+  display: flex;
+  align-items: center;
 
   max-width: ${BREAKPOINT}px;
 

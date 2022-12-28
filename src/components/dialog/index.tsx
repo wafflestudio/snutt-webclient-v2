@@ -5,15 +5,18 @@ import { Backdrop } from '@/components/backdrop';
 import { Portal } from '@/components/portal';
 
 interface Props {
+  className?: string;
   open: boolean;
   onClose: () => void;
 }
 
-export const Dialog = ({ children, open, onClose }: PropsWithChildren<Props>) => {
+export const Dialog = ({ children, open, onClose, className }: PropsWithChildren<Props>) => {
   return (
     <Portal>
       <Dimmer visible={open} onClick={onClose}>
-        <Container onClick={(e) => e.stopPropagation()}>{children}</Container>
+        <Container className={className} onClick={(e) => e.stopPropagation()}>
+          {children}
+        </Container>
       </Dimmer>
     </Portal>
   );
