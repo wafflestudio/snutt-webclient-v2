@@ -12,9 +12,16 @@ type Props = {
   className?: string;
   hoveredLectureId: string | null;
   setHoveredLectureId: (id: string | null) => void;
+  onClickLecture: (id: string) => void;
 };
 
-export const MainTimeTable = ({ timetable, className, hoveredLectureId, setHoveredLectureId }: Props) => {
+export const MainTimeTable = ({
+  timetable,
+  className,
+  hoveredLectureId,
+  setHoveredLectureId,
+  onClickLecture,
+}: Props) => {
   const { data: colorList } = useColorList();
 
   const maxDay = Math.max(...timetable.lecture_list.flatMap((l) => l.class_time_json).map((item) => item.day));
@@ -68,6 +75,7 @@ export const MainTimeTable = ({ timetable, className, hoveredLectureId, setHover
               style={{ backgroundColor, color }}
               onMouseEnter={() => setHoveredLectureId(lecture._id)}
               onMouseLeave={() => setHoveredLectureId(null)}
+              onClick={() => onClickLecture(lecture._id)}
             >
               {lecture.course_title}
             </Item>

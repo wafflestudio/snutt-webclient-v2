@@ -12,6 +12,7 @@ type Props = {
   currentFullTimetable: FullTimetable | undefined;
   hoveredLectureId: string | null;
   setHoveredLectureId: (id: string | null) => void;
+  onClickLecture: (id: string) => void;
 };
 
 export const MainLectureSection = ({
@@ -21,6 +22,7 @@ export const MainLectureSection = ({
   currentFullTimetable,
   hoveredLectureId,
   setHoveredLectureId,
+  onClickLecture,
 }: Props) => {
   return (
     <Wrapper className={className}>
@@ -54,6 +56,7 @@ export const MainLectureSection = ({
                   key={l._id}
                   hoveredLectureId={hoveredLectureId}
                   setHoveredLectureId={setHoveredLectureId}
+                  onClickLecture={onClickLecture}
                 />
               ))}
             </LectureList>

@@ -2,9 +2,14 @@ import styled from 'styled-components';
 
 import { Lecture } from '@/entities/lecture';
 
-type Props = { lecture: Lecture; hoveredLectureId: string | null; setHoveredLectureId: (id: string | null) => void };
+type Props = {
+  lecture: Lecture;
+  hoveredLectureId: string | null;
+  setHoveredLectureId: (id: string | null) => void;
+  onClickLecture: (id: string) => void;
+};
 
-export const MainLectureListItem = ({ lecture, hoveredLectureId, setHoveredLectureId }: Props) => {
+export const MainLectureListItem = ({ lecture, hoveredLectureId, setHoveredLectureId, onClickLecture }: Props) => {
   const isHovered = hoveredLectureId === lecture._id;
 
   return (
@@ -12,6 +17,7 @@ export const MainLectureListItem = ({ lecture, hoveredLectureId, setHoveredLectu
       data-testid="main-lecture-listitem"
       onMouseEnter={() => setHoveredLectureId(lecture._id)}
       onMouseLeave={() => setHoveredLectureId(null)}
+      onClick={() => onClickLecture(lecture._id)}
       $hovered={isHovered}
     >
       <LectureInner>
