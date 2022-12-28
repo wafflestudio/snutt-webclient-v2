@@ -1,25 +1,14 @@
 import { PropsWithChildren } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { IcLogo } from '@/components/icons/ic-logo';
-import { useCourseBooks } from '@/hooks/useCourseBooks';
-import { useYearSemester } from '@/hooks/useYearSemester';
 import { BREAKPOINT } from '@/styles/constants';
-import { semesterService } from '@/usecases/semesterService';
+
+import { LayoutSearchbar } from './layout-searchbar';
+import { LayoutYearSemesterSelect } from './layout-year-semester-select';
 
 export const Layout = ({ children }: PropsWithChildren<unknown>) => {
-  const { data: courseBooks } = useCourseBooks();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { year, semester } = useYearSemester();
-
-  const onChangeBook = ({ year, semester }: { year: number; semester: number }) => {
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set('year', `${year}`);
-    newParams.set('semester', `${semester}`);
-    setSearchParams(newParams);
-  };
-
   return (
     <div>
       <Header>
@@ -29,22 +18,9 @@ export const Layout = ({ children }: PropsWithChildren<unknown>) => {
               <IcLogo />
               <Title>SNUTT</Title>
             </HomeLink>
-            {year && semester && (
-              <select
-                data-testid="course-book-select"
-                value={semesterService.courseBookToValue({ year, semester })}
-                onChange={(e) =>
-                  onChangeBook(semesterService.valueToCourseBook(e.target.value as `${number}-${1 | 2 | 3 | 4}`))
-                }
-              >
-                {courseBooks?.map((cb, i) => (
-                  <option key={i} value={semesterService.courseBookToValue(cb)}>
-                    {semesterService.courseBookToLabel(cb)}
-                  </option>
-                ))}
-              </select>
-            )}
+            <LayoutYearSemesterSelect />
           </HeaderLeft>
+          <LayoutSearchbar />
         </HeaderInner>
       </Header>
       <Main>{children}</Main>
@@ -63,6 +39,8 @@ const Header = styled.header`
 const HeaderInner = styled.div`
   margin: 0 auto;
   width: 100%;
+  display: flex;
+  align-items: center;
 
   max-width: ${BREAKPOINT}px;
 
