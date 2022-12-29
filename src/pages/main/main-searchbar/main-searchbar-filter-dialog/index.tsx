@@ -3,13 +3,13 @@ import styled from 'styled-components';
 
 import { Dialog } from '@/components/dialog';
 
-import { LayoutSearchbarFilterTimeSelectDialog } from './layout-searchbar-filter-time-select-dialog';
+import { MainSearchbarFilterTimeSelectDialog } from './main-searchbar-filter-time-select-dialog';
 
 type Props = { open: boolean; onClose: () => void };
 
 type TimeForm = { checked: boolean; type: 'auto' | 'manual' | null };
 
-export const LayoutSearchbarFilterDialog = ({ open, onClose }: Props) => {
+export const MainSearchbarFilterDialog = ({ open, onClose }: Props) => {
   const [isTimeModalOpen, setTimeModalOpen] = useState(false);
   const [timeForm, setTimeForm] = useState<TimeForm>({ checked: false, type: null });
 
@@ -64,7 +64,7 @@ export const LayoutSearchbarFilterDialog = ({ open, onClose }: Props) => {
           </Row>
         </form>
       </StyledContent>
-      <LayoutSearchbarFilterTimeSelectDialog open={isTimeModalOpen} onClose={() => setTimeModalOpen(false)} />
+      <MainSearchbarFilterTimeSelectDialog open={isTimeModalOpen} onClose={() => setTimeModalOpen(false)} />
     </StyledDialog>
   );
 };

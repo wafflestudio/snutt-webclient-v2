@@ -9,6 +9,7 @@ import { timetableService } from '@/usecases/timetableService';
 
 import { MainLectureEditDialog } from './main-lecture-edit-dialog';
 import { MainLectureSection } from './main-lecture-section';
+import { MainSearchbar } from './main-searchbar';
 import { MainTimetableSection } from './main-timetable-section';
 
 export const Main = () => {
@@ -32,7 +33,7 @@ export const Main = () => {
   const onClickLecture = (id: string) => setDialogLectureId(id);
 
   return (
-    <Layout>
+    <Layout headerChildren={<MainSearchbar />}>
       <Wrapper>
         <LectureSection
           tab={lectureTab}
