@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { Layout } from '@/components/layout';
+import { SearchFilter } from '@/entities/search';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { BREAKPOINT } from '@/styles/constants';
 import { timetableService } from '@/usecases/timetableService';
@@ -32,8 +33,12 @@ export const Main = () => {
 
   const onClickLecture = (id: string) => setDialogLectureId(id);
 
+  const onSearch = (value: Partial<SearchFilter>) => {
+    console.log(value);
+  };
+
   return (
-    <Layout headerChildren={<MainSearchbar />}>
+    <Layout headerChildren={<MainSearchbar onSearch={onSearch} />}>
       <Wrapper>
         <LectureSection
           tab={lectureTab}

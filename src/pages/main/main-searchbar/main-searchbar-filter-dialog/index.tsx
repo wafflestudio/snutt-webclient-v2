@@ -3,15 +3,18 @@ import styled from 'styled-components';
 
 import { Dialog } from '@/components/dialog';
 
+import { SearchForm } from '..';
 import { MainSearchbarFilterTimeSelectDialog } from './main-searchbar-filter-time-select-dialog';
 
-type Props = { open: boolean; onClose: () => void };
+type Props = {
+  open: boolean;
+  onClose: () => void;
+  searchForm: Partial<SearchForm>;
+  onChangeSearchForm: <K extends keyof SearchForm>(key: K, value: SearchForm[K]) => void;
+};
 
-type TimeForm = { checked: boolean; type: 'auto' | 'manual' | null };
-
-export const MainSearchbarFilterDialog = ({ open, onClose }: Props) => {
+export const MainSearchbarFilterDialog = ({ open, onClose, searchForm, onChangeSearchForm }: Props) => {
   const [isTimeModalOpen, setTimeModalOpen] = useState(false);
-  const [timeForm, setTimeForm] = useState<TimeForm>({ checked: false, type: null });
 
   return (
     <StyledDialog open={open} onClose={onClose}>
@@ -27,8 +30,11 @@ export const MainSearchbarFilterDialog = ({ open, onClose }: Props) => {
               <input
                 data-testid="layout-searchbar-filter-dialog-form-time-check"
                 type="checkbox"
-                checked={timeForm.checked}
-                onChange={(e) => setTimeForm({ checked: e.target.checked, type: null })}
+                checked={searchForm.timeChecked ?? false}
+                onChange={(e) => {
+                  onChangeSearchForm('timeChecked', e.target.checked);
+                  onChangeSearchForm('timeType', null);
+                }}
               />
             </label>
             <label>
@@ -36,10 +42,12 @@ export const MainSearchbarFilterDialog = ({ open, onClose }: Props) => {
               <input
                 data-testid="layout-searchbar-filter-dialog-form-time-radio-auto"
                 type="radio"
-                name="time"
-                disabled={!timeForm.checked}
-                checked={timeForm.type === 'auto'}
-                onChange={() => setTimeForm({ checked: true, type: 'auto' })}
+                disabled={!searchForm.timeChecked}
+                checked={searchForm.timeType === 'auto'}
+                onChange={() => {
+                  onChangeSearchForm('timeChecked', true);
+                  onChangeSearchForm('timeType', 'auto');
+                }}
               />
             </label>
             <label>
@@ -47,15 +55,17 @@ export const MainSearchbarFilterDialog = ({ open, onClose }: Props) => {
               <input
                 data-testid="layout-searchbar-filter-dialog-form-time-radio-manual"
                 type="radio"
-                name="time"
-                disabled={!timeForm.checked}
-                checked={timeForm.type === 'manual'}
-                onChange={() => setTimeForm({ checked: true, type: 'manual' })}
+                disabled={!searchForm.timeChecked}
+                checked={searchForm.timeType === 'manual'}
+                onChange={() => {
+                  onChangeSearchForm('timeChecked', true);
+                  onChangeSearchForm('timeType', 'manual');
+                }}
               />
             </label>
             <button
               type="button"
-              disabled={timeForm.type !== 'manual'}
+              disabled={searchForm.timeType !== 'manual'}
               data-testid="layout-searchbar-filter-dialog-form-time-manual-button"
               onClick={() => setTimeModalOpen(true)}
             >

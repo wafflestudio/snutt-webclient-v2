@@ -1,20 +1,40 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import styled from 'styled-components';
 
 import { IcFilter } from '@/components/icons/ic-filter';
+import { SearchFilter } from '@/entities/search';
 
 import { MainSearchbarFilterDialog } from './main-searchbar-filter-dialog';
 import { MainSearchbarYearSemesterSelect } from './main-searchbar-year-semester-select';
 
-export const MainSearchbar = () => {
+type Props = { onSearch: (filter: Partial<SearchFilter>) => void };
+export type SearchForm = { title: string; timeChecked: boolean; timeType: 'auto' | 'manual' | null };
+
+export const MainSearchbar = ({ onSearch }: Props) => {
   const [open, setOpen] = useState(false);
+  const [searchForm, setSearchForm] = useState<Partial<SearchForm>>({});
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSearch(searchForm);
+  };
+
+  const onChangeSearchForm = <K extends keyof SearchForm>(key: K, value: SearchForm[K]) =>
+    setSearchForm((sf) => ({ ...sf, [key]: value }));
 
   return (
     <Wrapper>
       <MainSearchbarYearSemesterSelect />
-      <Input />
+      <Form onSubmit={onSubmit}>
+        <Input value={searchForm.title ?? ''} onChange={(e) => onChangeSearchForm('title', e.target.value)} />
+      </Form>
       <FilterIcon data-testid="layout-searchbar-filter-button" onClick={() => setOpen(true)} />
-      <MainSearchbarFilterDialog open={open} onClose={() => setOpen(false)} />
+      <MainSearchbarFilterDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        searchForm={searchForm}
+        onChangeSearchForm={onChangeSearchForm}
+      />
     </Wrapper>
   );
 };
@@ -32,6 +52,10 @@ const FilterIcon = styled(IcFilter)`
   cursor: pointer;
 `;
 
-const Input = styled.input`
+const Form = styled.form`
   flex-grow: 1;
+`;
+
+const Input = styled.input`
+  width: 100%;
 `;
