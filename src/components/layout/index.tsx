@@ -1,14 +1,13 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { IcLogo } from '@/components/icons/ic-logo';
 import { BREAKPOINT } from '@/styles/constants';
 
-import { LayoutSearchbar } from './layout-searchbar';
-import { LayoutYearSemesterSelect } from './layout-year-semester-select';
+type Props = { headerChildren?: ReactNode };
 
-export const Layout = ({ children }: PropsWithChildren<unknown>) => {
+export const Layout = ({ children, headerChildren }: PropsWithChildren<Props>) => {
   return (
     <div>
       <Header>
@@ -18,9 +17,9 @@ export const Layout = ({ children }: PropsWithChildren<unknown>) => {
               <IcLogo />
               <Title>SNUTT</Title>
             </HomeLink>
-            <LayoutYearSemesterSelect />
           </HeaderLeft>
-          <LayoutSearchbar />
+          <HeaderMiddle>{headerChildren}</HeaderMiddle>
+          <HeaderRight>woohm402 님</HeaderRight>
         </HeaderInner>
       </Header>
       <Main>{children}</Main>
@@ -39,18 +38,33 @@ const Header = styled.header`
 const HeaderInner = styled.div`
   margin: 0 auto;
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: 100px 1fr 100px;
+  gap: 30px;
   align-items: center;
 
   max-width: ${BREAKPOINT}px;
 
   @media (max-width: ${BREAKPOINT}px) {
     max-width: 700px;
+    grid-template-rows: 30px 1fr;
   }
 `;
 
 const HeaderLeft = styled.div`
   display: flex;
+`;
+
+const HeaderRight = styled.div`
+  grid-column: 3 / 4;
+`;
+
+const HeaderMiddle = styled.div`
+  @media (max-width: ${BREAKPOINT}px) {
+    max-width: 700px;
+    grid-row: 2 / 3;
+    grid-column: 1 / 4;
+  }
 `;
 
 const HomeLink = styled(Link)`

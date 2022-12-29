@@ -14,7 +14,7 @@ type Props = {
   onDragEnd: () => void;
 };
 
-export const LayoutSearchbarFilterTimeSelectCell = ({
+export const MainSearchbarFilterTimeSelectCell = ({
   dragStart,
   currentDrag,
   cellStatus,

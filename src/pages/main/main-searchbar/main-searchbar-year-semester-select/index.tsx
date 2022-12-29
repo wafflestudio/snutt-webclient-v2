@@ -4,7 +4,7 @@ import { useCourseBooks } from '@/hooks/useCourseBooks';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { semesterService } from '@/usecases/semesterService';
 
-export const LayoutYearSemesterSelect = () => {
+export const MainSearchbarYearSemesterSelect = () => {
   const { data: courseBooks } = useCourseBooks();
   const [searchParams, setSearchParams] = useSearchParams();
   const { year, semester } = useYearSemester();
