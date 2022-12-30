@@ -82,6 +82,7 @@ const AddIcon = styled(IcPlus)`
   cursor: pointer;
   opacity: 0.6;
   transition: opacity 0.1s;
+  height: 32px;
 
   &:hover {
     opacity: 1;
