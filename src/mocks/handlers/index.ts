@@ -19,10 +19,10 @@ export const handlers = [
   rest.get<never, never, CourseBook[]>(`*/course_books`, (req, res, ctx) => {
     return res(
       ctx.json([
-        { year: 1001, semester: 1, updated_at: '' },
-        { year: 2001, semester: 2, updated_at: '' },
-        { year: 3001, semester: 4, updated_at: '' },
-        { year: 4001, semester: 3, updated_at: '' },
+        { year: 1001, semester: 1, updated_at: '2022-12-28T12:45:17.509Z' },
+        { year: 2001, semester: 2, updated_at: '2022-12-28T12:45:17.509Z' },
+        { year: 3001, semester: 4, updated_at: '2022-12-28T12:45:17.509Z' },
+        { year: 4001, semester: 3, updated_at: '2022-12-28T12:45:17.509Z' },
       ]),
     );
   }),
