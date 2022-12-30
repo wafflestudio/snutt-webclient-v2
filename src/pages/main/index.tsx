@@ -3,10 +3,10 @@ import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { Layout } from '@/components/layout';
+import { useTokenContext } from '@/contexts/tokenContext';
 import { SearchFilter } from '@/entities/search';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { BREAKPOINT } from '@/styles/constants';
-import { authService } from '@/usecases/authService';
 import { timetableService } from '@/usecases/timetableService';
 import { queryKey } from '@/utils/query-key-factory';
 
@@ -70,7 +70,7 @@ export const Main = () => {
 };
 
 const useMyTimetables = () => {
-  const token = authService.getToken();
+  const { token } = useTokenContext();
 
   return useQuery(
     queryKey('tables', { token }),
@@ -82,7 +82,7 @@ const useMyTimetables = () => {
   );
 };
 const useCurrentFullTimetable = (id: string | undefined) => {
-  const token = authService.getToken();
+  const { token } = useTokenContext();
 
   return useQuery(
     queryKey(`tables/${id}`, { token }),

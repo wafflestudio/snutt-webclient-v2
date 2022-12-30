@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
+import { TokenContextProvider } from '@/contexts/tokenContext';
 import { Login } from '@/pages/login';
 import { Main } from '@/pages/main';
 import { MyPage } from '@/pages/mypage';
@@ -20,9 +21,11 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <GlobalStyles />
-      <ReactQueryDevtools />
+      <TokenContextProvider>
+        <RouterProvider router={router} />
+        <GlobalStyles />
+        <ReactQueryDevtools />
+      </TokenContextProvider>
     </QueryClientProvider>
   );
 }

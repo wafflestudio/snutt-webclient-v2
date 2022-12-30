@@ -1,19 +1,16 @@
-export interface StorageRepository {
-  getToken(): string | null;
-  setToken(token: string, persist: boolean): void;
-  clearToken(): void;
-}
+import { StorageKey } from '@/entities/storage';
 
-const tokenKey = 'snutt_token';
+export interface StorageRepository {
+  get(key: StorageKey, persist: boolean): string | null;
+  set(key: StorageKey, value: string, persist: boolean): void;
+  remove(key: StorageKey, persist: boolean): void;
+}
 
 const getStorageRepository = (): StorageRepository => {
   return {
-    getToken: () => sessionStorage.getItem(tokenKey) ?? localStorage.getItem(tokenKey),
-    setToken: (token, persist) => (persist ? localStorage : sessionStorage).setItem(tokenKey, token),
-    clearToken: () => {
-      localStorage.removeItem(tokenKey);
-      sessionStorage.removeItem(tokenKey);
-    },
+    get: (key, persist) => (persist ? localStorage.getItem(key) : sessionStorage.getItem(key)),
+    set: (key, value, persist) => (persist ? localStorage.setItem(key, value) : sessionStorage.setItem(key, value)),
+    remove: (key, persist) => (persist ? localStorage.removeItem(key) : sessionStorage.removeItem(key)),
   };
 };
 
