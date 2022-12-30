@@ -8,19 +8,24 @@ import { timeMaskService } from '@/usecases/timeMaskService';
 
 import { MainSearchbarFilterTimeSelectCell } from './main-searchbar-filter-time-select-cell';
 
-type Props = { open: boolean; onClose: () => void };
+type Props = { open: boolean; onClose: () => void; onChangeBitMask: (bm: number[]) => void };
 
 const times = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
 
 /**
  * @note 테스트코드가 붙어있지 않습니다. 수정할 때 주의해 주세요!
  */
-export const MainSearchbarFilterTimeSelectDialog = ({ open, onClose }: Props) => {
+export const MainSearchbarFilterTimeSelectDialog = ({ open, onClose, onChangeBitMask }: Props) => {
   const [dragStart, setDragStart] = useState<Position | null>(null);
   const [currentDrag, setCurrentDrag] = useState<Position | null>(null);
   const [cellStatus, setCellStatus] = useState<CellStatus>(
     timeMaskService.getInitialCellStatus(times.length * 2, dayArray.length),
   );
+
+  const onConfirm = () => {
+    onChangeBitMask(timeMaskService.getBitMask(cellStatus));
+    onClose();
+  };
 
   const endDrag = () => {
     try {
@@ -78,7 +83,7 @@ export const MainSearchbarFilterTimeSelectDialog = ({ open, onClose }: Props) =>
         <button data-testid="layout-searchbar-filter-time-select-dialog-cancel" onClick={onClose}>
           취소
         </button>
-        <button>확인</button>
+        <button onClick={onConfirm}>확인</button>
       </StyledDialog.Actions>
     </StyledDialog>
   );
