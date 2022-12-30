@@ -1,9 +1,12 @@
+import dayjs from 'dayjs';
 import { FormEvent, useState } from 'react';
 import styled from 'styled-components';
 
 import { IcFilter } from '@/components/icons/ic-filter';
+import { IcSearch } from '@/components/icons/ic-search';
 import { SearchFilter } from '@/entities/search';
 import { FullTimetable } from '@/entities/timetable';
+import { useCourseBooks } from '@/hooks/useCourseBooks';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { timeMaskService } from '@/usecases/timeMaskService';
 import { ArrayElement } from '@/utils/array-element';
@@ -41,6 +44,11 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable }: Props) => {
   const [open, setOpen] = useState(false);
   const [searchForm, setSearchForm] = useState<SearchForm>(initialForm);
   const { year, semester } = useYearSemester();
+  const { data: courseBooks } = useCourseBooks();
+  const currentCourseBook = courseBooks?.find((c) => c.year === year && c.semester === semester);
+  const currentCourseBookUpdatedAt = currentCourseBook
+    ? dayjs(currentCourseBook.updated_at).format('YYYY. MM. DD')
+    : '';
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -87,11 +95,18 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable }: Props) => {
       <MainSearchbarYearSemesterSelect />
       <Form onSubmit={onSubmit}>
         <Input
+          data-testid="main-searchbar-input"
+          placeholder={`원하는 강의를 검색하세요. (수강편람 최근 업데이트: ${currentCourseBookUpdatedAt})`}
           value={searchForm.title ?? ''}
           onChange={(e) => setSearchForm((sf) => ({ ...sf, title: e.target.value }))}
         />
+        <TransparentButton type="submit">
+          <SearchIcon />
+        </TransparentButton>
+        <TransparentButton type="button" data-testid="layout-searchbar-filter-button" onClick={() => setOpen(true)}>
+          <FilterIcon />
+        </TransparentButton>
       </Form>
-      <FilterIcon data-testid="layout-searchbar-filter-button" onClick={() => setOpen(true)} />
       <MainSearchbarFilterDialog
         open={open}
         onClose={() => setOpen(false)}
@@ -115,13 +130,56 @@ const Wrapper = styled.div`
 const FilterIcon = styled(IcFilter)`
   width: 30px;
   height: 30px;
-  cursor: pointer;
+`;
+
+const SearchIcon = styled(IcSearch)`
+  width: 20px;
+  height: 20px;
 `;
 
 const Form = styled.form`
   flex-grow: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const TransparentButton = styled.button`
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  min-width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 4px;
+  transition: opacity 0.2s;
+  opacity: 0.6;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const Input = styled.input`
   width: 100%;
+  height: 40px;
+  border-radius: 15px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d5dbe0;
+  outline: none;
+  padding-inline: 20px;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: #bec4c9;
+  }
+
+  &:focus {
+    border-color: #1bd0c8;
+  }
+
+  &::placeholder {
+    color: #d5dbe0;
+  }
 `;
