@@ -5,6 +5,7 @@ export interface TimetableService {
   getUpdatedCellStatus(prev: CellStatus, dragStart: Position, dragEnd: Position): CellStatus;
   checkIsInArea(target: Position, from: Position, to: Position): boolean;
   getDragMode(cellStatus: CellStatus, dragStart: Position): DragMode;
+  getBitMask(cellStatus: CellStatus): number[];
 }
 
 const getTimetableService = (): TimetableService => {
@@ -27,6 +28,10 @@ const getTimetableService = (): TimetableService => {
       target.j >= Math.min(from.j, to.j) &&
       target.j <= Math.max(from.j, to.j),
     getDragMode: (cellStatus, dragStart) => (cellStatus[dragStart.i][dragStart.j] ? 'remove' : 'add'),
+    getBitMask: (cellStatus) => {
+      const transposed = cellStatus[0].map((_, j) => cellStatus.map((row) => row[j])); // 행-열 반전
+      return transposed.map((row) => row.map(Number).reduce((acc, cur) => acc * 2 + cur, 0));
+    },
   };
 };
 
