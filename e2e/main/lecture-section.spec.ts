@@ -47,3 +47,26 @@ test('수강편람 버튼이 정상 동작한다', async ({ page, context }) => 
   );
   await expect(lectureItem.filter({ hasText: '복싱' }).getByTestId('main-lecture-listitem-link')).toHaveCount(0);
 });
+
+test('검색 결과 탭이 정상 동작한다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page, { login: false });
+  await page.getByTestId('main-searchbar-input').type('컴');
+  await Promise.all([
+    page.waitForRequest(
+      (req) =>
+        req.method() === 'POST' &&
+        req.url().includes('/search_query') &&
+        req.postDataJSON().title === '컴' &&
+        req.postDataJSON().limit === 200 &&
+        req.postDataJSON().semester === 1 &&
+        req.postDataJSON().year === 1001 &&
+        Object.entries(req.postDataJSON()).length === 4,
+    ),
+    page.getByTestId('main-searchbar-search').click(),
+  ]);
+  await expect(page.getByTestId('ml-result-tab')).toHaveAttribute('aria-selected', 'true');
+
+  const lectureItem = page.getByTestId('main-lecture-listitem');
+  await expect(lectureItem.nth(0).getByTestId('main-lecture-listitem-title')).toHaveText('컴퓨터구조');
+});

@@ -1,10 +1,10 @@
 import { DAY_LABEL_MAP } from '@/entities/day';
-import { Lecture } from '@/entities/lecture';
+import { BaseLecture } from '@/entities/lecture';
 import { CourseBook } from '@/entities/semester';
 
 export interface SemesterService {
-  getLectureDetailUrl(lecture: Lecture, courseBook: Omit<CourseBook, 'updated_at'>): string;
-  getLectureTimeTexts(lecture: Lecture): string[];
+  getLectureDetailUrl(lecture: BaseLecture, courseBook: Omit<CourseBook, 'updated_at'>): string;
+  getLectureTimeTexts(lecture: BaseLecture): string[];
 }
 
 const getLectureService = (): SemesterService => {

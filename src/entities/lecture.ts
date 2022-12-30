@@ -1,7 +1,7 @@
 import { Color } from './color';
 import { Day } from './day';
 
-export interface Lecture {
+export interface BaseLecture {
   _id: string;
   classification?: string;
   department?: string;
@@ -26,6 +26,9 @@ export interface Lecture {
   category?: string;
   course_number?: string;
   lecture_number?: string;
+}
+
+export interface Lecture extends BaseLecture {
   created_at: string;
   updated_at: string;
   color: Color | Record<string, never>;
