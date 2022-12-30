@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Dialog } from '@/components/dialog';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { searchService } from '@/usecases/searchService';
+import { ArrayElement } from '@/utils/array-element';
 
 import { SearchForm } from '..';
 import { MainSearchbarFilterTimeSelectDialog } from './main-searchbar-filter-time-select-dialog';
@@ -12,10 +13,14 @@ import { MainSearchbarFilterTimeSelectDialog } from './main-searchbar-filter-tim
 type Props = {
   open: boolean;
   onClose: () => void;
-  searchForm: Partial<SearchForm>;
-  onChangeCheckbox: (value: string) => void;
+  searchForm: SearchForm;
+  onChangeCheckbox: <F extends 'academicYear' | 'category' | 'classification' | 'credit' | 'department' | 'etc'>(
+    field: F,
+    e: ArrayElement<SearchForm[F]>,
+  ) => void;
   onChangeTimeRadio: (value: 'auto' | 'manual' | null) => void;
-  onChangeDepartment: (value: string) => void;
+  onChangeDepartment: (value: string[]) => void;
+  onChangeBitMask: (bm: number[]) => void;
 };
 
 export const MainSearchbarFilterDialog = ({
@@ -24,6 +29,7 @@ export const MainSearchbarFilterDialog = ({
   searchForm,
   onChangeCheckbox,
   onChangeTimeRadio,
+  onChangeBitMask,
   onChangeDepartment,
 }: Props) => {
   const [isTimeModalOpen, setTimeModalOpen] = useState(false);
@@ -40,7 +46,7 @@ export const MainSearchbarFilterDialog = ({
               <input
                 list="department"
                 value={searchForm.department}
-                onChange={(e) => onChangeDepartment(e.target.value)}
+                onChange={(e) => onChangeDepartment([e.target.value])}
               />
               <datalist id="department">
                 {data?.department.map((d) => (
@@ -52,19 +58,26 @@ export const MainSearchbarFilterDialog = ({
           <Row>
             <RowLabel>학년</RowLabel>
             {data?.academic_year.map((y) => (
-              <Checkbox key={y} value={y} checkboxes={searchForm.checkboxes} onChange={onChangeCheckbox} />
+              <Checkbox field="academicYear" key={y} value={y} searchForm={searchForm} onChange={onChangeCheckbox} />
             ))}
           </Row>
           <Row>
             <RowLabel>학점</RowLabel>
             {data?.credit.map((c) => (
-              <Checkbox key={c} value={c} checkboxes={searchForm.checkboxes} onChange={onChangeCheckbox} />
+              <Checkbox
+                field="credit"
+                key={c}
+                label={c}
+                value={Number(c.replace('학점', ''))}
+                searchForm={searchForm}
+                onChange={onChangeCheckbox}
+              />
             ))}
           </Row>
           <Row>
             <RowLabel>구분</RowLabel>
             {data?.classification.map((c) => (
-              <Checkbox key={c} value={c} checkboxes={searchForm.checkboxes} onChange={onChangeCheckbox} />
+              <Checkbox field="classification" key={c} value={c} searchForm={searchForm} onChange={onChangeCheckbox} />
             ))}
           </Row>
           <Row>
@@ -78,26 +91,32 @@ export const MainSearchbarFilterDialog = ({
           </Row>
           <Row>
             <RowLabel>기타</RowLabel>
-            <Checkbox value="영어진행 강의" checkboxes={searchForm.checkboxes} onChange={onChangeCheckbox} />
-            <Checkbox value="군휴학 원격수업" checkboxes={searchForm.checkboxes} onChange={onChangeCheckbox} />
+            <Checkbox field="etc" label="영어진행 강의" value="E" searchForm={searchForm} onChange={onChangeCheckbox} />
+            <Checkbox
+              field="etc"
+              label="군휴학 원격수업"
+              value="MO"
+              searchForm={searchForm}
+              onChange={onChangeCheckbox}
+            />
           </Row>
           <Row>
             <RowLabel>시간대 검색</RowLabel>
-            <Checkbox
-              data-testid="layout-searchbar-filter-dialog-form-time-check"
-              value="시간대 검색"
-              checkboxes={searchForm.checkboxes}
-              onChange={(e) => {
-                onChangeCheckbox(e);
-                onChangeTimeRadio(null);
-              }}
-            />
+            <label>
+              시간대 검색
+              <input
+                type="checkbox"
+                checked={searchForm.timeType !== null}
+                onChange={(e) => onChangeTimeRadio(e.target.checked ? 'auto' : null)}
+                data-testid="layout-searchbar-filter-dialog-form-time-check"
+              />
+            </label>
             <label>
               빈 시간대만 검색하기
               <input
                 data-testid="layout-searchbar-filter-dialog-form-time-radio-auto"
                 type="radio"
-                disabled={!searchForm.checkboxes?.includes('시간대 검색')}
+                disabled={searchForm.timeType === null}
                 checked={searchForm.timeType === 'auto'}
                 onChange={() => onChangeTimeRadio('auto')}
               />
@@ -107,7 +126,7 @@ export const MainSearchbarFilterDialog = ({
               <input
                 data-testid="layout-searchbar-filter-dialog-form-time-radio-manual"
                 type="radio"
-                disabled={!searchForm.checkboxes?.includes('시간대 검색')}
+                disabled={searchForm.timeType === null}
                 checked={searchForm.timeType === 'manual'}
                 onChange={() => onChangeTimeRadio('manual')}
               />
@@ -123,29 +142,36 @@ export const MainSearchbarFilterDialog = ({
           </Row>
         </form>
       </StyledContent>
-      <MainSearchbarFilterTimeSelectDialog open={isTimeModalOpen} onClose={() => setTimeModalOpen(false)} />
+      <MainSearchbarFilterTimeSelectDialog
+        open={isTimeModalOpen}
+        onClose={() => setTimeModalOpen(false)}
+        onChangeBitMask={onChangeBitMask}
+      />
     </StyledDialog>
   );
 };
 
-const Checkbox = ({
+const Checkbox = <F extends 'academicYear' | 'category' | 'classification' | 'credit' | 'department' | 'etc'>({
   value,
-  checkboxes,
+  label,
+  searchForm,
   onChange,
-
+  field,
   'data-testid': dataTestId,
 }: {
+  field: F;
   'data-testid'?: string;
-  value: string;
-  checkboxes?: string[];
-  onChange: (value: string) => void;
+  label?: string;
+  value: ArrayElement<SearchForm[F]>;
+  searchForm: SearchForm;
+  onChange: (field: F, value: ArrayElement<SearchForm[F]>) => void;
 }) => (
   <label>
-    {value}
+    {label ?? value}
     <input
       type="checkbox"
-      checked={checkboxes?.includes(value)}
-      onChange={() => onChange(value)}
+      checked={(searchForm[field] as typeof value[]).includes(value)}
+      onChange={() => onChange(field, value)}
       data-testid={dataTestId}
     />
   </label>

@@ -34,11 +34,11 @@ export const Main = () => {
   const onClickLecture = (id: string) => setDialogLectureId(id);
 
   const onSearch = (value: Partial<SearchFilter>) => {
-    console.log(value);
+    console.log(value); // TODO: implement
   };
 
   return (
-    <Layout headerChildren={<MainSearchbar onSearch={onSearch} />}>
+    <Layout headerChildren={<MainSearchbar onSearch={onSearch} currentFullTimetable={currentFullTimetable} />}>
       <Wrapper>
         <LectureSection
           tab={lectureTab}

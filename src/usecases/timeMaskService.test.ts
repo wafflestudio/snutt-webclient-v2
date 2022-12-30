@@ -42,3 +42,23 @@ test('getUpdatedCellStatus', () => {
     [true, true, false],
   ]);
 });
+
+test('getBitMask', () => {
+  expect(
+    timeMaskService.getBitMask([
+      [false, false, true],
+      [false, false, false],
+    ]),
+  ).toStrictEqual([0, 0, 2]);
+
+  expect(
+    timeMaskService.getBitMask([
+      [false, false, true],
+      [false, false, false],
+      [false, true, false],
+      [true, false, false],
+      [false, true, false],
+      [false, true, false],
+    ]),
+  ).toStrictEqual([4, 11, 32]);
+});
