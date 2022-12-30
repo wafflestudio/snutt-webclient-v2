@@ -1,13 +1,21 @@
+import { useQuery } from '@tanstack/react-query';
 import { PropsWithChildren, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { IcLogo } from '@/components/icons/ic-logo';
+import { useTokenContext } from '@/contexts/tokenContext';
 import { BREAKPOINT } from '@/styles/constants';
+import { userService } from '@/usecases/userService';
+import { queryKey } from '@/utils/query-key-factory';
 
 type Props = { headerChildren?: ReactNode };
 
 export const Layout = ({ children, headerChildren }: PropsWithChildren<Props>) => {
+  const { data: myInfo } = useMyInfo();
+
+  const isLogged = !!useTokenContext().token;
+
   return (
     <div>
       <Header>
@@ -19,11 +27,34 @@ export const Layout = ({ children, headerChildren }: PropsWithChildren<Props>) =
             </HomeLink>
           </HeaderLeft>
           <HeaderMiddle>{headerChildren}</HeaderMiddle>
-          <HeaderRight>woohm402 님</HeaderRight>
+          <HeaderRight>
+            {isLogged ? (
+              <ProfileText to="/mypage" data-testid="layout-my-info">
+                {myInfo?.local_id}님
+              </ProfileText>
+            ) : (
+              <ProfileText to="/login" data-testid="layout-my-info">
+                로그인
+              </ProfileText>
+            )}
+          </HeaderRight>
         </HeaderInner>
       </Header>
       <Main>{children}</Main>
     </div>
+  );
+};
+
+const useMyInfo = () => {
+  const { token } = useTokenContext();
+
+  return useQuery(
+    queryKey('user/info', { token }),
+    () => {
+      if (!token) throw new Error('no token');
+      return userService.getUserInfo(token);
+    },
+    { enabled: !!token },
   );
 };
 
@@ -84,4 +115,15 @@ const Title = styled.h1`
 const Main = styled.main`
   max-width: ${BREAKPOINT}px;
   margin: 0 auto;
+`;
+
+const ProfileText = styled(Link)`
+  text-decoration: none;
+  color: black;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
