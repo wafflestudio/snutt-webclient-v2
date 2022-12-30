@@ -7,6 +7,10 @@ test('학기 목록 드롭다운이 정상 동작한다', async ({ page }) => {
   await expect(select).toHaveValue('1001-1');
   await select.selectOption({ label: '2001-S' });
   await expect(page).toHaveURL('/?year=2001&semester=2');
+  await expect(page.getByTestId('main-searchbar-input')).toHaveAttribute(
+    'placeholder',
+    '원하는 강의를 검색하세요. (수강편람 최근 업데이트: 2022. 12. 28)',
+  );
 });
 
 test('필터 모달이 정상 동작한다', async ({ page }) => {
