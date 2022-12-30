@@ -3,9 +3,11 @@ import { PropsWithChildren, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { IcAlarm } from '@/components/icons/ic-alarm';
 import { IcLogo } from '@/components/icons/ic-logo';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { BREAKPOINT } from '@/styles/constants';
+import { notificationService } from '@/usecases/notificationService';
 import { userService } from '@/usecases/userService';
 import { queryKey } from '@/utils/query-key-factory';
 
@@ -13,8 +15,13 @@ type Props = { headerChildren?: ReactNode };
 
 export const Layout = ({ children, headerChildren }: PropsWithChildren<Props>) => {
   const { data: myInfo } = useMyInfo();
+  const { data: notificationCount } = useNotificationCount();
+  const { data: notifications } = useNotificationList();
 
   const isLogged = !!useTokenContext().token;
+
+  console.log(notifications);
+  console.log(notificationCount);
 
   return (
     <div>
@@ -28,6 +35,7 @@ export const Layout = ({ children, headerChildren }: PropsWithChildren<Props>) =
           </HeaderLeft>
           <HeaderMiddle>{headerChildren}</HeaderMiddle>
           <HeaderRight>
+            <NotificationIcon />
             {isLogged ? (
               <ProfileText to="/mypage" data-testid="layout-my-info">
                 {myInfo?.local_id}님
@@ -58,6 +66,32 @@ const useMyInfo = () => {
   );
 };
 
+const useNotificationCount = () => {
+  const { token } = useTokenContext();
+
+  return useQuery(
+    queryKey('notifications/count', { token }),
+    () => {
+      if (!token) throw new Error('no token');
+      return notificationService.getCount(token);
+    },
+    { enabled: !!token },
+  );
+};
+
+const useNotificationList = () => {
+  const { token } = useTokenContext();
+
+  return useQuery(
+    queryKey('notifications', { token }),
+    () => {
+      if (!token) throw new Error('no token');
+      return notificationService.getList(token);
+    },
+    { enabled: !!token },
+  );
+};
+
 const Header = styled.header`
   height: 120px;
   background-color: #ffffff;
@@ -70,7 +104,7 @@ const HeaderInner = styled.div`
   margin: 0 auto;
   width: 100%;
   display: grid;
-  grid-template-columns: 100px 1fr 100px;
+  grid-template-columns: 100px 1fr auto;
   gap: 30px;
   align-items: center;
 
@@ -88,6 +122,9 @@ const HeaderLeft = styled.div`
 
 const HeaderRight = styled.div`
   grid-column: 3 / 4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;
 
 const HeaderMiddle = styled.div`
@@ -122,6 +159,15 @@ const ProfileText = styled(Link)`
   color: black;
   opacity: 0.8;
   transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const NotificationIcon = styled(IcAlarm)`
+  opacity: 0.6;
+  cursor: pointer;
 
   &:hover {
     opacity: 1;
