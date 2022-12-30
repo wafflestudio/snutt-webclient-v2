@@ -1,15 +1,16 @@
 import { EnvRepository, envRepository } from '@/repositories/envRepository';
+import { StorageRepository, storageRepository } from '@/repositories/storageRepository';
 
 export interface AuthService {
   getApiKey(): string;
-  getToken(): string;
+  getToken(): string | null;
 }
 
-const getAuthService = (args: { repositories: [EnvRepository] }): AuthService => {
+const getAuthService = (args: { repositories: [EnvRepository, StorageRepository] }): AuthService => {
   return {
     getApiKey: () => args.repositories[0].getApiKey(),
-    getToken: () => args.repositories[0].getToken(), // TODO: change (로컬 개발용으로 환경변수에서 불러옴)
+    getToken: () => args.repositories[1].getToken(),
   };
 };
 
-export const authService = getAuthService({ repositories: [envRepository] });
+export const authService = getAuthService({ repositories: [envRepository, storageRepository] });

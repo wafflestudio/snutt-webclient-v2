@@ -1,7 +1,12 @@
 import { expect, test } from '@playwright/test';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { givenUser } from '../utils/user.ts';
+
 test('강의 목록 탭이 정상 동작한다', async ({ page }) => {
   await page.goto('/');
+  await givenUser(page);
   const resultTab = page.getByTestId('ml-result-tab');
   const currentTab = page.getByTestId('ml-current-tab');
   await expect(resultTab).toHaveAttribute('aria-selected', 'false');
@@ -13,6 +18,7 @@ test('강의 목록 탭이 정상 동작한다', async ({ page }) => {
 
 test('현재 시간표 탭이 정상 동작한다', async ({ page }) => {
   await page.goto('/');
+  await givenUser(page);
   const currentTab = page.getByTestId('ml-current-tab');
   await expect(currentTab).toHaveAttribute('aria-selected', 'true');
 
@@ -27,6 +33,7 @@ test('현재 시간표 탭이 정상 동작한다', async ({ page }) => {
 
 test('수강편람 버튼이 정상 동작한다', async ({ page, context }) => {
   await page.goto('/');
+  await givenUser(page);
   const currentTab = page.getByTestId('ml-current-tab');
   await expect(currentTab).toHaveAttribute('aria-selected', 'true');
 
