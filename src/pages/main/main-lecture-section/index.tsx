@@ -46,7 +46,7 @@ export const MainLectureSection = ({
       </Tabs>
       <Content>
         {tab === 'current' &&
-          (!currentFullTimetable ? (
+          (!currentFullTimetable ? null : currentFullTimetable.lecture_list.length === 0 ? (
             <EmptyText>추가된 강의가 없습니다.</EmptyText>
           ) : (
             <LectureList>

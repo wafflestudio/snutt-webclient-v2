@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { PropsWithChildren, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import { IcAlarm } from '@/components/icons/ic-alarm';
 import { IcLogo } from '@/components/icons/ic-logo';
@@ -29,7 +29,7 @@ export const Layout = ({ children, headerChildren }: PropsWithChildren<Props>) =
         <HeaderInner>
           <HeaderLeft>
             <HomeLink to="/">
-              <IcLogo />
+              <LogoIcon tabIndex={0} />
               <Title>SNUTT</Title>
             </HomeLink>
           </HeaderLeft>
@@ -100,11 +100,29 @@ const Header = styled.header`
   padding: 20px;
 `;
 
+const crazyRotate = keyframes`
+  0% {
+    transform: rotate3d(1, 1, 1, 0deg);
+  }
+  50% {
+    transform: rotate3d(1, 1, 1, 360deg);
+  }
+  100% {
+    transform: rotate3d(1, 1, 1, 0deg);
+  }
+`;
+
+const LogoIcon = styled(IcLogo)`
+  &:focus {
+    animation: ${crazyRotate} 1s linear infinite;
+  }
+`;
+
 const HeaderInner = styled.div`
   margin: 0 auto;
   width: 100%;
   display: grid;
-  grid-template-columns: 100px 1fr auto;
+  grid-template-columns: 100px 1fr 140px;
   gap: 30px;
   align-items: center;
 
@@ -125,6 +143,7 @@ const HeaderRight = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  justify-content: space-between;
 `;
 
 const HeaderMiddle = styled.div`
@@ -159,17 +178,47 @@ const ProfileText = styled(Link)`
   color: black;
   opacity: 0.8;
   transition: opacity 0.2s;
+  width: 80px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 500;
 
   &:hover {
     opacity: 1;
   }
 `;
 
+const shake = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(-30deg);
+    opacity: 0.6;
+  }
+  30% {
+    transform: rotate(30deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: rotate(-30deg);
+  }
+  70% {
+    transform: rotate(30deg);
+    opacity: 0.5;
+  }
+  100% {
+    transform: rotate3d(1, 1, 1, 360deg);
+  }
+`;
+
 const NotificationIcon = styled(IcAlarm)`
   opacity: 0.6;
   cursor: pointer;
+  border-radius: 50%;
 
   &:hover {
     opacity: 1;
+    animation: ${shake} 1s infinite linear;
   }
 `;
