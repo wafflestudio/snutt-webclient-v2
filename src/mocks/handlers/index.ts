@@ -1,21 +1,22 @@
 import { rest } from 'msw';
 
 import { Color } from '@/entities/color';
+import { Notification } from '@/entities/notification';
 import { CourseBook } from '@/entities/semester';
 import { FullTimetable, Timetable } from '@/entities/timetable';
-import { SearchRepository } from '@/repositories/searchRepository';
-import { UserRepository } from '@/repositories/userRepository';
-
-import { mockVividIos } from '../fixtures/color';
-import { mockTags } from '../fixtures/tag';
+import { mockVividIos } from '@/mocks/fixtures/color';
+import { mockNotification } from '@/mocks/fixtures/notification';
+import { mockTags } from '@/mocks/fixtures/tag';
 import {
   mockTimeTable,
   mockTimeTable123,
   mockTimeTable456,
   mockTimeTable789,
   mockTimeTables,
-} from '../fixtures/timetable';
-import { mockUser } from '../fixtures/user';
+} from '@/mocks/fixtures/timetable';
+import { mockUser } from '@/mocks/fixtures/user';
+import { SearchRepository } from '@/repositories/searchRepository';
+import { UserRepository } from '@/repositories/userRepository';
 
 export const handlers = [
   rest.get<never, never, CourseBook[]>(`*/course_books`, (req, res, ctx) => {
@@ -70,5 +71,19 @@ export const handlers = [
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
     return res(ctx.json(mockUser));
+  }),
+
+  rest.get<never, never, { count: number }>(`/notification/count`, (req, res, ctx) => {
+    if (!req.headers.get('x-access-token')) return res(ctx.status(403));
+    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+
+    return res(ctx.json({ count: 3 }));
+  }),
+
+  rest.get<never, never, Notification[]>(`/notification`, (req, res, ctx) => {
+    if (!req.headers.get('x-access-token')) return res(ctx.status(403));
+    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+
+    return res(ctx.json(mockNotification));
   }),
 ];
