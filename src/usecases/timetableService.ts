@@ -5,8 +5,8 @@ import { TimetableRepository, timetableRepository } from '@/repositories/timetab
 import { AuthService, authService } from './authService';
 
 export interface TimetableService {
-  getTimetables(): Promise<Timetable[]>;
-  getFullTimetable(id: string): Promise<FullTimetable>;
+  getTimetables(token: string): Promise<Timetable[]>;
+  getFullTimetable(token: string, id: string): Promise<FullTimetable>;
 }
 
 const getTimetableService = (args: {
@@ -15,11 +15,11 @@ const getTimetableService = (args: {
 }): TimetableService => {
   const baseUrl = args.repositories[1].getBaseUrl();
   const apikey = args.services[0].getApiKey();
-  const token = args.services[0].getToken();
 
   return {
-    getTimetables: () => args.repositories[0].getTimetables({ baseUrl, apikey, token }),
-    getFullTimetable: (id: string) => args.repositories[0].getFullTimetable({ baseUrl, apikey, token }, { id }),
+    getTimetables: (token: string) => args.repositories[0].getTimetables({ baseUrl, apikey, token }),
+    getFullTimetable: (token: string, id: string) =>
+      args.repositories[0].getFullTimetable({ baseUrl, apikey, token }, { id }),
   };
 };
 

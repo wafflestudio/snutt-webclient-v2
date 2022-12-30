@@ -6,7 +6,9 @@ import { Layout } from '@/components/layout';
 import { SearchFilter } from '@/entities/search';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { BREAKPOINT } from '@/styles/constants';
+import { authService } from '@/usecases/authService';
 import { timetableService } from '@/usecases/timetableService';
+import { queryKey } from '@/utils/query-key-factory';
 
 import { MainLectureEditDialog } from './main-lecture-edit-dialog';
 import { MainLectureSection } from './main-lecture-section';
@@ -67,16 +69,30 @@ export const Main = () => {
   );
 };
 
-const useMyTimetables = () => useQuery(['tables'], () => timetableService.getTimetables());
-const useCurrentFullTimetable = (id: string | undefined) =>
-  useQuery(
-    ['tables', id],
+const useMyTimetables = () => {
+  const token = authService.getToken();
+
+  return useQuery(
+    queryKey('tables', { token }),
     () => {
-      if (!id) throw new Error();
-      return timetableService.getFullTimetable(id);
+      if (!token) throw Error('no token');
+      return timetableService.getTimetables(token);
     },
-    { enabled: !!id },
+    { enabled: !!token },
   );
+};
+const useCurrentFullTimetable = (id: string | undefined) => {
+  const token = authService.getToken();
+
+  return useQuery(
+    queryKey(`tables/${id}`, { token }),
+    () => {
+      if (!id || !token) throw new Error();
+      return timetableService.getFullTimetable(token, id);
+    },
+    { enabled: !!id && !!token },
+  );
+};
 
 const Wrapper = styled.div`
   display: flex;

@@ -28,10 +28,14 @@ export const handlers = [
   }),
 
   rest.get<never, never, Timetable[]>(`*/tables`, (req, res, ctx) => {
+    if (!req.headers.get('x-access-token')) return res(ctx.status(403));
+
     return res(ctx.json(mockTimeTables));
   }),
 
   rest.get<never, { id: string }, FullTimetable>(`*/tables/:id`, (req, res, ctx) => {
+    if (!req.headers.get('x-access-token')) return res(ctx.status(403));
+
     const { id } = req.params;
     if (id === '123') return res(ctx.json(mockTimeTable123));
     if (id === '456') return res(ctx.json(mockTimeTable456));
