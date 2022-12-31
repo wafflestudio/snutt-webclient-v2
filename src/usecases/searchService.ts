@@ -1,3 +1,4 @@
+import { SearchFilter, SearchResultLecture } from '@/entities/search';
 import { CourseBook } from '@/entities/semester';
 import { EnvRepository, envRepository } from '@/repositories/envRepository';
 import { SearchRepository, searchRepository } from '@/repositories/searchRepository';
@@ -14,6 +15,7 @@ export interface SearchService {
     instructor: string[];
     updated_at: number;
   }>;
+  search(params: Partial<SearchFilter>): Promise<SearchResultLecture[]>;
 }
 
 const getSearchService = (deps: {
@@ -24,7 +26,8 @@ const getSearchService = (deps: {
   const baseUrl = deps.repositories[1].getBaseUrl();
 
   return {
-    getTags: async (yearSemester) => deps.repositories[0].getTags({ apikey, baseUrl }, yearSemester),
+    getTags: (yearSemester) => deps.repositories[0].getTags({ apikey, baseUrl }, yearSemester),
+    search: (params) => deps.repositories[0].search({ apikey, baseUrl }, params),
   };
 };
 

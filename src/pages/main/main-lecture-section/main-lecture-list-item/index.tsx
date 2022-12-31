@@ -4,18 +4,25 @@ import { IcClock } from '@/components/icons/ic-clock';
 import { IcDots } from '@/components/icons/ic-dots';
 import { IcLabel } from '@/components/icons/ic-label';
 import { IcMap } from '@/components/icons/ic-map';
-import { Lecture } from '@/entities/lecture';
+import { BaseLecture } from '@/entities/lecture';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { lectureService } from '@/usecases/lectureService';
 
 type Props = {
-  lecture: Lecture;
+  lecture: BaseLecture;
   hoveredLectureId: string | null;
   setHoveredLectureId: (id: string | null) => void;
   onClickLecture: (id: string) => void;
+  type: 'current' | 'result';
 };
 
-export const MainLectureListItem = ({ lecture, hoveredLectureId, setHoveredLectureId, onClickLecture }: Props) => {
+export const MainLectureListItem = ({
+  lecture,
+  hoveredLectureId,
+  setHoveredLectureId,
+  onClickLecture,
+  type,
+}: Props) => {
   const { year, semester } = useYearSemester();
 
   const isHovered = hoveredLectureId === lecture._id;
@@ -27,6 +34,10 @@ export const MainLectureListItem = ({ lecture, hoveredLectureId, setHoveredLectu
     lecture.course_number && year && semester ? lectureService.getLectureDetailUrl(lecture, { year, semester }) : null;
 
   const onClickDelete = () => {
+    // TODO: implement
+  };
+
+  const onClickAdd = () => {
     // TODO: implement
   };
 
@@ -59,9 +70,20 @@ export const MainLectureListItem = ({ lecture, hoveredLectureId, setHoveredLectu
                 강의계획서
               </LectureButton>
             )}
-            <LectureButton style={{ color: '#ff0000' }} onClick={(e) => (e.stopPropagation(), onClickDelete())}>
-              삭제
-            </LectureButton>
+            {
+              {
+                current: (
+                  <LectureButton style={{ color: '#ff0000' }} onClick={(e) => (e.stopPropagation(), onClickDelete())}>
+                    삭제
+                  </LectureButton>
+                ),
+                result: (
+                  <LectureButton style={{ color: '#0000ff' }} onClick={(e) => (e.stopPropagation(), onClickAdd())}>
+                    추가
+                  </LectureButton>
+                ),
+              }[type]
+            }
           </LectureHeaderRight>
         </LectureHeader>
 

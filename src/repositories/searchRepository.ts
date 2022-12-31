@@ -1,3 +1,4 @@
+import { SearchFilter, SearchResultLecture } from '@/entities/search';
 import { CourseBook } from '@/entities/semester';
 
 export interface SearchRepository {
@@ -13,6 +14,7 @@ export interface SearchRepository {
     instructor: string[];
     updated_at: number;
   }>;
+  search(args: { baseUrl: string; apikey: string }, params: Partial<SearchFilter>): Promise<SearchResultLecture[]>;
 }
 
 const getSearchRepository = (): SearchRepository => {
@@ -24,6 +26,16 @@ const getSearchRepository = (): SearchRepository => {
       const data = await response.json().catch(() => null);
       if (!response.ok) throw data;
       return data as Awaited<ReturnType<SearchRepository['getTags']>>;
+    },
+    search: async ({ baseUrl, apikey }, params) => {
+      const response = await fetch(`${baseUrl}/search_query`, {
+        headers: { 'x-access-apikey': apikey, 'content-type': 'application/json;charset=UTF-8' },
+        method: 'POST',
+        body: JSON.stringify(params),
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok) throw data;
+      return data as SearchResultLecture[];
     },
   };
 };

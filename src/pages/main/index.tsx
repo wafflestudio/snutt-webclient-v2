@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
@@ -7,6 +7,7 @@ import { useTokenContext } from '@/contexts/tokenContext';
 import { SearchFilter } from '@/entities/search';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { BREAKPOINT } from '@/styles/constants';
+import { searchService } from '@/usecases/searchService';
 import { timetableService } from '@/usecases/timetableService';
 import { queryKey } from '@/utils/query-key-factory';
 
@@ -31,12 +32,15 @@ export const Main = () => {
 
   const { data: currentFullTimetable } = useCurrentFullTimetable(currentTimetable?._id);
 
+  const { mutate, data: searchResult } = useSearchResult();
+
   const dialogLecture = currentFullTimetable?.lecture_list.find((tt) => tt._id === dialogLectureId);
 
   const onClickLecture = (id: string) => setDialogLectureId(id);
 
-  const onSearch = (value: Partial<SearchFilter>) => {
-    console.log(value); // TODO: implement
+  const onSearch = async (value: Partial<SearchFilter>) => {
+    setLectureTab('result');
+    mutate(value);
   };
 
   return (
@@ -49,6 +53,7 @@ export const Main = () => {
           hoveredLectureId={hoveredLectureId}
           setHoveredLectureId={setHoveredLectureId}
           onClickLecture={onClickLecture}
+          searchResult={searchResult}
         />
         <TimetableSection
           currentYearSemesterTimetables={currentYearSemesterTimetables}
@@ -81,6 +86,7 @@ const useMyTimetables = () => {
     { enabled: !!token },
   );
 };
+
 const useCurrentFullTimetable = (id: string | undefined) => {
   const { token } = useTokenContext();
 
@@ -92,6 +98,10 @@ const useCurrentFullTimetable = (id: string | undefined) => {
     },
     { enabled: !!id && !!token },
   );
+};
+
+const useSearchResult = () => {
+  return useMutation((value: Partial<SearchFilter>) => searchService.search(value));
 };
 
 const Wrapper = styled.div`

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { Tabs } from '@/components/tabs';
+import { SearchResultLecture } from '@/entities/search';
 import { FullTimetable } from '@/entities/timetable';
 
 import { MainLectureListItem } from './main-lecture-list-item';
@@ -13,6 +14,7 @@ type Props = {
   hoveredLectureId: string | null;
   setHoveredLectureId: (id: string | null) => void;
   onClickLecture: (id: string) => void;
+  searchResult?: SearchResultLecture[];
 };
 
 export const MainLectureSection = ({
@@ -23,6 +25,7 @@ export const MainLectureSection = ({
   hoveredLectureId,
   setHoveredLectureId,
   onClickLecture,
+  searchResult,
 }: Props) => {
   return (
     <Wrapper className={className}>
@@ -57,10 +60,29 @@ export const MainLectureSection = ({
                   hoveredLectureId={hoveredLectureId}
                   setHoveredLectureId={setHoveredLectureId}
                   onClickLecture={onClickLecture}
+                  type="current"
                 />
               ))}
             </LectureList>
           ))}
+        {tab === 'result' && (
+          <LectureList>
+            {!searchResult ? null : searchResult.length === 0 ? (
+              <EmptyText>추가된 강의가 없습니다.</EmptyText>
+            ) : (
+              searchResult?.map((l) => (
+                <MainLectureListItem
+                  lecture={l}
+                  key={l._id}
+                  hoveredLectureId={hoveredLectureId}
+                  setHoveredLectureId={setHoveredLectureId}
+                  onClickLecture={onClickLecture}
+                  type="result"
+                />
+              ))
+            )}
+          </LectureList>
+        )}
       </Content>
     </Wrapper>
   );

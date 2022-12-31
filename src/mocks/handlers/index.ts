@@ -2,10 +2,12 @@ import { rest } from 'msw';
 
 import { Color } from '@/entities/color';
 import { Notification } from '@/entities/notification';
+import { SearchFilter, SearchResultLecture } from '@/entities/search';
 import { CourseBook } from '@/entities/semester';
 import { FullTimetable, Timetable } from '@/entities/timetable';
 import { mockVividIos } from '@/mocks/fixtures/color';
 import { mockNotification } from '@/mocks/fixtures/notification';
+import { mockSearchResult } from '@/mocks/fixtures/search';
 import { mockTags } from '@/mocks/fixtures/tag';
 import {
   mockTimeTable,
@@ -66,24 +68,30 @@ export const handlers = [
     },
   ),
 
-  rest.get<never, never, Awaited<ReturnType<UserRepository['getUserInfo']>>>(`/user/info`, (req, res, ctx) => {
+  rest.get<never, never, Awaited<ReturnType<UserRepository['getUserInfo']>>>(`*/user/info`, (req, res, ctx) => {
     if (!req.headers.get('x-access-token')) return res(ctx.status(403));
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
     return res(ctx.json(mockUser));
   }),
 
-  rest.get<never, never, { count: number }>(`/notification/count`, (req, res, ctx) => {
+  rest.get<never, never, { count: number }>(`*/notification/count`, (req, res, ctx) => {
     if (!req.headers.get('x-access-token')) return res(ctx.status(403));
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
     return res(ctx.json({ count: 3 }));
   }),
 
-  rest.get<never, never, Notification[]>(`/notification`, (req, res, ctx) => {
+  rest.get<never, never, Notification[]>(`*/notification`, (req, res, ctx) => {
     if (!req.headers.get('x-access-token')) return res(ctx.status(403));
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
     return res(ctx.json(mockNotification));
+  }),
+
+  rest.post<Partial<SearchFilter>, never, SearchResultLecture[]>(`*/search_query`, (req, res, ctx) => {
+    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+
+    return res(ctx.json(mockSearchResult));
   }),
 ];

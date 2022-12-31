@@ -18,7 +18,7 @@ type Props = { onSearch: (filter: Partial<SearchFilter>) => void; currentFullTim
 
 export type SearchForm = {
   title: SearchFilter['title'];
-  academicYear: SearchFilter['academicYear'];
+  academicYear: SearchFilter['academic_year'];
   category: SearchFilter['category'];
   credit: SearchFilter['credit'];
   etc: SearchFilter['etc'];
@@ -57,7 +57,7 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable }: Props) => {
     const undefinedIfEmpty = <T,>(e: T[]) => (e.length === 0 ? undefined : e);
 
     onSearch({
-      academicYear: undefinedIfEmpty(searchForm.academicYear),
+      academic_year: undefinedIfEmpty(searchForm.academicYear),
       category: undefinedIfEmpty(searchForm.category),
       classification: undefinedIfEmpty(searchForm.classification),
       credit: undefinedIfEmpty(searchForm.credit),
@@ -66,12 +66,13 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable }: Props) => {
       year,
       semester,
       title: searchForm.title,
-      timeMask:
+      time_mask:
         searchForm.timeType === 'manual'
           ? searchForm.manualBitmask
           : searchForm.timeType === 'auto'
           ? timeMaskService.getTimetableEmptyTimeBitMask(currentFullTimetable)
           : undefined,
+      limit: 200,
     });
   };
 
@@ -100,7 +101,7 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable }: Props) => {
           value={searchForm.title ?? ''}
           onChange={(e) => setSearchForm((sf) => ({ ...sf, title: e.target.value }))}
         />
-        <TransparentButton type="submit">
+        <TransparentButton data-testid="main-searchbar-search" type="submit">
           <SearchIcon />
         </TransparentButton>
         <TransparentButton type="button" data-testid="layout-searchbar-filter-button" onClick={() => setOpen(true)}>
