@@ -38,7 +38,13 @@ export const Login = () => {
       <LoginWrapper>
         <Header>시작하기</Header>
         <Input placeholder="아이디" value={id} onChange={(e) => setId(e.target.value)} />
-        <Input placeholder="비밀번호" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <Input
+          placeholder="비밀번호"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSignIn()}
+        />
         <CheckboxWrapper>
           <Checkbox id="keepSignIn" checked={keepSignIn} onChange={(e) => setKeepSignIn(e.target.checked)} />
           <Label htmlFor="keepSignIn">로그인 유지</Label>
@@ -99,20 +105,22 @@ const Label = styled.label`
   font-weight: 400;
   color: #333;
   opacity: 0.7;
+  cursor: pointer;
 
   &:hover {
     color: #1bd0c9;
   }
 `;
 
+const Checkbox = styled.input.attrs({ type: 'checkbox' })`
+  margin-top: 0;
+  cursor: pointer;
+`;
+
 const ErrorMessage = styled.span`
   color: #d13d37;
   text-align: center;
   margin: 20px 0;
-`;
-
-const Checkbox = styled.input.attrs({ type: 'checkbox' })`
-  margin-top: 0;
 `;
 
 const Button = styled.button`
@@ -124,6 +132,7 @@ const Button = styled.button`
   font-size: 13px;
   background-color: transparent;
   opacity: 1;
+  cursor: pointer;
 `;
 
 const SignInButton = styled(Button)`
