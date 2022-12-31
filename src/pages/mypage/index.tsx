@@ -8,6 +8,8 @@ import { useTokenContext } from '@/contexts/tokenContext';
 import { userService } from '@/usecases/userService';
 import { queryKey } from '@/utils/query-key-factory';
 
+import { MypageChangePassword } from './mypage-change-password';
+
 export const MyPage = () => {
   const { token } = useTokenContext();
   const { data: myInfo } = useMyInfo();
@@ -33,14 +35,7 @@ export const MyPage = () => {
         <br />
         <Row>
           <RowLabel>비밀번호 관리</RowLabel>
-          <PasswordWrapper>
-            <PasswordInput placeholder="현재 비밀번호" />
-            <PasswordInput placeholder="새 비밀번호" />
-            <PasswordInput placeholder="새 비밀번호 확인" />
-            <Button style={{ width: 100 }} $color="#1bd0c9">
-              변경하기
-            </Button>
-          </PasswordWrapper>
+          <MypageChangePassword />
         </Row>
         <br />
         <br />
@@ -99,13 +94,6 @@ const Button = styled.button<{ $color: `#${string}` }>`
   }
 `;
 
-const PasswordWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: end;
-`;
-
 const Row = styled.div`
   min-height: 40px;
   display: flex;
@@ -118,15 +106,4 @@ const RowLabel = styled.div`
   opacity: 0.2;
   font-weight: 700;
   line-height: 40px;
-`;
-
-const PasswordInput = styled.input.attrs({ type: 'password' })`
-  height: 40px;
-  margin-bottom: 10px;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  border-bottom: 1px solid #ebeef2;
-  font-size: 14px;
-  width: 100%;
 `;
