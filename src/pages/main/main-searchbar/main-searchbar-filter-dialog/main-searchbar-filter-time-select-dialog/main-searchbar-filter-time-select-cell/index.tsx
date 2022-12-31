@@ -33,9 +33,11 @@ export const MainSearchbarFilterTimeSelectCell = ({
       $isOddRow={i % 2 === 1}
       $selected={cellStatus[i][j]}
       $dragging={isInArea ? dragMode : null}
-      onMouseDown={onDragStart}
       onMouseEnter={() => isDragging && onDragEnter()}
       onMouseUp={onDragEnd}
+      // 화면 밖에서 mouseUp 했을 때를 대응해주기 위해 !isDragging 조건 추가
+      // https://github.com/wafflestudio/snutt-webclient-v2/pull/39
+      onMouseDown={() => !isDragging && onDragStart()}
     />
   );
 };
