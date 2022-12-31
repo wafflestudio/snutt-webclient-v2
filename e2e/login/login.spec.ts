@@ -1,6 +1,14 @@
 import { expect, test } from '@playwright/test';
 
-test('ui가 잘 보여진다', async ({ page }) => {
+test('로컬 로그인이 성공적으로 동작한다.', async ({ page }) => {
   await page.goto('/login');
-  await expect(page.getByText('로그인')).toHaveCount(2);
+  const id = 'test-id';
+  const password = 'test-password';
+
+  await page.getByTestId('id-input').fill(id);
+  await page.getByTestId('password-input').fill(password);
+
+  await page.getByTestId('local-signin-button').click();
+
+  await expect(page).toHaveURL('/');
 });

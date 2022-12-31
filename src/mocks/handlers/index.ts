@@ -1,12 +1,14 @@
 import dayjs from 'dayjs';
 import { rest } from 'msw';
 
+import { SignInResponse } from '@/entities/auth';
 import { Color } from '@/entities/color';
 import { CoreServerError } from '@/entities/error';
 import { Notification } from '@/entities/notification';
 import { SearchFilter, SearchResultLecture } from '@/entities/search';
 import { CourseBook, Semester } from '@/entities/semester';
 import { FullTimetable, Timetable } from '@/entities/timetable';
+import { mockSignInReponse } from '@/mocks/fixtures/auth';
 import { mockVividIos } from '@/mocks/fixtures/color';
 import { mockNotification } from '@/mocks/fixtures/notification';
 import { mockSearchResult } from '@/mocks/fixtures/search';
@@ -169,6 +171,11 @@ export const handlers = [
       return res(ctx.status(200), ctx.json(mockTimeTable123));
     },
   ),
+  rest.post<never, { id: string; password: string }, SignInResponse>(`*/auth/login_local`, (req, res, ctx) => {
+    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+
+    return res(ctx.json(mockSignInReponse));
+  }),
 ];
 
 const isOverlap = (
