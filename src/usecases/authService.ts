@@ -6,6 +6,8 @@ export interface AuthService {
   getToken(): string | null;
   saveToken(token: string, persist: boolean): void;
   clearToken(): void;
+  isValidPassword(password: string): boolean;
+  changePassword(oldPassword: string, newPassword: string): Promise<{ token: string }>;
 }
 
 const getAuthService = (args: { repositories: [EnvRepository, StorageRepository] }): AuthService => {
@@ -18,6 +20,16 @@ const getAuthService = (args: { repositories: [EnvRepository, StorageRepository]
     clearToken: () => {
       storageRepo.remove('snutt_token', false);
       storageRepo.remove('snutt_token', true);
+    },
+    isValidPassword: (password) =>
+      password.split('').some((item) => /[0-9]+/.test(item)) &&
+      password.split('').some((item) => /[a-zA-Z]+/.test(item)) &&
+      password.length >= 6 &&
+      password.length <= 20,
+    changePassword: async (oldPassword, newPassword) => {
+      console.log('not implemented');
+      console.log(oldPassword, newPassword);
+      return { token: '' };
     },
   };
 };
