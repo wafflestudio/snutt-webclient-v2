@@ -77,6 +77,7 @@ const useMyInfo = () => {
 const Wrapper = styled.div`
   width: 400px;
   margin: 0 auto;
+  padding: 30px 20px 0;
 `;
 
 const Button = styled.button<{ $color: `#${string}` }>`
