@@ -37,20 +37,21 @@ export const Login = () => {
     <Layout>
       <LoginWrapper>
         <Header>시작하기</Header>
-        <Input placeholder="아이디" value={id} onChange={(e) => setId(e.target.value)} />
+        <Input placeholder="아이디" value={id} onChange={(e) => setId(e.target.value)} data-testid="id-input" />
         <Input
           placeholder="비밀번호"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSignIn()}
+          data-testid="password-input"
         />
         <CheckboxWrapper>
           <Checkbox id="keepSignIn" checked={keepSignIn} onChange={(e) => setKeepSignIn(e.target.checked)} />
           <Label htmlFor="keepSignIn">로그인 유지</Label>
         </CheckboxWrapper>
         <ErrorMessage>{errorMessage}</ErrorMessage>
-        <SignInButton disabled={!(id && password)} onClick={handleSignIn}>
+        <SignInButton disabled={!(id && password)} onClick={handleSignIn} data-testid="local-signin-button">
           로그인
         </SignInButton>
       </LoginWrapper>
