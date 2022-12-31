@@ -4,8 +4,9 @@ import styled from 'styled-components';
 
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
+import { CoreServerError } from '@/entities/error';
 import { authService } from '@/usecases/authService';
-import { getErrorMessage } from '@/utils/errorTable';
+import { errorService } from '@/usecases/errorService';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -24,12 +25,10 @@ export const Login = () => {
 
       saveToken(res.token, keepSignIn);
       navigate('/');
-    } catch (error: any) {
-      console.log(error);
+    } catch (error) {
+      const errorCode = (error as CoreServerError).errcode;
 
-      const errorCode = error?.errcode;
-
-      setErrorMessage(getErrorMessage(errorCode));
+      setErrorMessage(errorService.getErrorMessage(errorCode));
     }
   };
 
