@@ -3,7 +3,7 @@ import { rest } from 'msw';
 import { Color } from '@/entities/color';
 import { Notification } from '@/entities/notification';
 import { SearchFilter, SearchResultLecture } from '@/entities/search';
-import { CourseBook } from '@/entities/semester';
+import { CourseBook, Semester } from '@/entities/semester';
 import { FullTimetable, Timetable } from '@/entities/timetable';
 import { mockVividIos } from '@/mocks/fixtures/color';
 import { mockNotification } from '@/mocks/fixtures/notification';
@@ -19,6 +19,8 @@ import {
 import { mockUser } from '@/mocks/fixtures/user';
 import { SearchRepository } from '@/repositories/searchRepository';
 import { UserRepository } from '@/repositories/userRepository';
+
+import { CoreServerError } from './../../entities/error';
 
 export const handlers = [
   rest.get<never, never, CourseBook[]>(`*/course_books`, (req, res, ctx) => {
@@ -94,4 +96,23 @@ export const handlers = [
 
     return res(ctx.json(mockSearchResult));
   }),
+
+  rest.post<{ title: string; year: number; semester: Semester }, never, Timetable[] | CoreServerError>(
+    `*/tables`,
+    async (req, res, ctx) => {
+      if (!req.headers.get('x-access-token')) return res(ctx.status(403));
+      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+
+      try {
+        const { title, year, semester } = await req.json();
+
+        if (mockTimeTables.some((tt) => tt.title === title && tt.year === year && tt.semester === semester))
+          return res(ctx.status(403), ctx.json({ errcode: 12291, message: 'duplicate timetable title', ext: {} }));
+
+        return res(ctx.json(mockTimeTables));
+      } catch (err) {
+        return res(ctx.status(400));
+      }
+    },
+  ),
 ];

@@ -1,3 +1,4 @@
+import { Semester } from '@/entities/semester';
 import { FullTimetable, Timetable } from '@/entities/timetable';
 
 export interface TimetableRepository {
@@ -6,6 +7,10 @@ export interface TimetableRepository {
     args: { baseUrl: string; apikey: string; token: string },
     params: { id: string },
   ): Promise<FullTimetable>;
+  createTimetable(
+    args: { baseUrl: string; apikey: string; token: string },
+    params: { title: string; year: number; semester: Semester },
+  ): Promise<Timetable[]>;
 }
 
 const getTimetableRepository = (): TimetableRepository => {
@@ -25,6 +30,20 @@ const getTimetableRepository = (): TimetableRepository => {
       const data = await response.json().catch(() => null);
       if (!response.ok) throw data;
       return data as FullTimetable;
+    },
+    createTimetable: async ({ baseUrl, apikey, token }, { title, year, semester }) => {
+      const response = await fetch(`${baseUrl}/tables`, {
+        headers: {
+          'x-access-apikey': apikey,
+          'x-access-token': token,
+          'content-type': 'application/json;charset=UTF-8',
+        },
+        method: 'POST',
+        body: JSON.stringify({ title, year, semester }),
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok) throw data;
+      return data as Timetable[];
     },
   };
 };
