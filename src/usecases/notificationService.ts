@@ -1,8 +1,7 @@
 import { Notification } from '@/entities/notification';
-import { EnvRepository, envRepository } from '@/repositories/envRepository';
 import { NotificationRepository, notificationRepository } from '@/repositories/notificationRepository';
-
-import { AuthService, authService } from './authService';
+import { AuthService, authService } from '@/usecases/authService';
+import { EnvService, envService } from '@/usecases/envService';
 
 export interface NotificationService {
   getCount(token: string): Promise<{ count: number }>;
@@ -10,10 +9,10 @@ export interface NotificationService {
 }
 
 const getNotificationService = (args: {
-  services: [AuthService];
-  repositories: [NotificationRepository, EnvRepository];
+  services: [AuthService, EnvService];
+  repositories: [NotificationRepository];
 }): NotificationService => {
-  const baseUrl = args.repositories[1].getBaseUrl();
+  const baseUrl = args.services[1].getBaseUrl();
   const apikey = args.services[0].getApiKey();
 
   return {
@@ -23,6 +22,6 @@ const getNotificationService = (args: {
 };
 
 export const notificationService = getNotificationService({
-  services: [authService],
-  repositories: [notificationRepository, envRepository],
+  services: [authService, envService],
+  repositories: [notificationRepository],
 });

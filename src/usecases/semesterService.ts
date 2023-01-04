@@ -1,8 +1,7 @@
 import { CourseBook } from '@/entities/semester';
-import { EnvRepository, envRepository } from '@/repositories/envRepository';
 import { SemesterRepository, semesterRepository } from '@/repositories/semesterRepository';
-
-import { AuthService, authService } from './authService';
+import { AuthService, authService } from '@/usecases/authService';
+import { EnvService, envService } from '@/usecases/envService';
 
 type CourseBookLabel = `${number}-${1 | 'S' | 2 | 'W'}`;
 type CourseBookValue = `${number}-${1 | 2 | 3 | 4}`;
@@ -16,10 +15,10 @@ export interface SemesterService {
 }
 
 const getSemesterService = (args: {
-  services: [AuthService];
-  repositories: [SemesterRepository, EnvRepository];
+  services: [AuthService, EnvService];
+  repositories: [SemesterRepository];
 }): SemesterService => {
-  const baseUrl = args.repositories[1].getBaseUrl();
+  const baseUrl = args.services[1].getBaseUrl();
   const apikey = args.services[0].getApiKey();
 
   return {
@@ -34,6 +33,6 @@ const getSemesterService = (args: {
 };
 
 export const semesterService = getSemesterService({
-  services: [authService],
-  repositories: [semesterRepository, envRepository],
+  services: [authService, envService],
+  repositories: [semesterRepository],
 });

@@ -12,9 +12,18 @@
     "react/jsx-no-useless-fragment": ["error", { "allowExpressions": true }],
     "no-restricted-imports": [
       "error",
+      { "name": "@/constants/environment", "message": "\n\nenvironmentService 를 통해 환경변수에 접근해야 합니다.\n\n" }
+    ],
+    "no-restricted-syntax": [
+      "error",
       {
-        "paths": [{ "name": "react", "importNames": ["default", "FC"] }],
-        "patterns": [{ "group": ["./__[a-z]*__/*"], "message": "index.ts 를 통해 export해 주세요." }]
+        "selector": "MemberExpression[object.name=process][property.name=env]",
+        "message": "process.env 대신 environmentService 를 통해 환경변수에 접근해야 합니다."
+      },
+      {
+        // 이 규칙은 vite 를 이용하지 않게 된다면 제거되어야 합니다.
+        "selector": "MemberExpression[object.meta.name=import][object.property.name=meta][property.name=env]",
+        "message": "import.meta.env 대신 environmentService 를 통해 환경변수에 접근해야 합니다."
       }
     ]
   }
