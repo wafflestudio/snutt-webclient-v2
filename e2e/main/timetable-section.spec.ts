@@ -65,3 +65,41 @@ test('로그인되지 않았을 경우, 시간표 목록 탭이 정상 동작한
   const tabs = page.getByTestId('mt-tab');
   await expect(tabs).toHaveCount(0);
 });
+
+test('로그인되었을 경우, 시간표 생성 기능이 정상 동작한다 (성공 케이스)', async ({ page }) => {
+  await page.goto('/?year=1001&semester=1');
+  await givenUser(page, { login: true });
+  await page.getByTestId('mt-create-timetable').click();
+  await page.getByTestId('mt-create-timetable-title').type('나비의 시간표');
+  await Promise.all([
+    page.waitForRequest(
+      (req) =>
+        req.url().includes('/tables') &&
+        req.method() === 'POST' &&
+        req.postDataJSON().semester === 1 &&
+        req.postDataJSON().year === 1001 &&
+        req.postDataJSON().title === '나비의 시간표',
+    ),
+    page.getByTestId('mt-create-timetable-confirm').click(),
+  ]);
+
+  const tabs = page.getByTestId('mt-tab');
+  await expect(tabs).toHaveCount(3);
+  const newTab = tabs.filter({ hasText: '나비의 시간표' });
+  await expect(newTab).toHaveAttribute('aria-selected', `${true}`);
+});
+
+test('로그인되었을 경우, 시간표 생성 기능이 정상 동작한다 (실패 케이스)', async ({ page }) => {
+  await page.goto('/?year=1001&semester=1');
+  await givenUser(page, { login: true });
+  await page.getByTestId('mt-create-timetable').click();
+  await page.getByTestId('mt-create-timetable-title').type('나의 시간표');
+  await page.getByTestId('mt-create-timetable-confirm').click();
+
+  const tabs = page.getByTestId('mt-tab');
+  await expect(tabs).toHaveCount(2);
+  await expect(page.getByTestId('mt-create-timetable-error')).toHaveText('동일한 이름의 시간표가 존재합니다');
+  await page.getByTestId('mt-create-timetable-cancel').click();
+  await page.getByTestId('mt-create-timetable').click();
+  await expect(page.getByTestId('mt-create-timetable-error')).toHaveText('');
+});

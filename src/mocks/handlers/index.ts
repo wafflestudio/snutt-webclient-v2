@@ -1,6 +1,8 @@
+import dayjs from 'dayjs';
 import { rest } from 'msw';
 
 import { Color } from '@/entities/color';
+import { CoreServerError } from '@/entities/error';
 import { Notification } from '@/entities/notification';
 import { SearchFilter, SearchResultLecture } from '@/entities/search';
 import { CourseBook, Semester } from '@/entities/semester';
@@ -19,8 +21,6 @@ import {
 import { mockUser } from '@/mocks/fixtures/user';
 import { SearchRepository } from '@/repositories/searchRepository';
 import { UserRepository } from '@/repositories/userRepository';
-
-import { CoreServerError } from './../../entities/error';
 
 export const handlers = [
   rest.get<never, never, CourseBook[]>(`*/course_books`, (req, res, ctx) => {
@@ -109,7 +109,10 @@ export const handlers = [
         if (mockTimeTables.some((tt) => tt.title === title && tt.year === year && tt.semester === semester))
           return res(ctx.status(403), ctx.json({ errcode: 12291, message: 'duplicate timetable title', ext: {} }));
 
-        return res(ctx.json(mockTimeTables));
+        const _id = `${Math.random()}`;
+        const newTimetable = { _id, year, semester, title, total_credit: 0, updated_at: dayjs().format() };
+
+        return res(ctx.json(mockTimeTables.concat(newTimetable)));
       } catch (err) {
         return res(ctx.status(400));
       }
