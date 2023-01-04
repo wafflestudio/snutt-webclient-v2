@@ -16,7 +16,7 @@ const router = createBrowserRouter([
   { path: '/mypage', element: <MyPage /> },
 ]);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false } } });
 
 function App() {
   return (

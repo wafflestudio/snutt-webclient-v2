@@ -63,6 +63,7 @@ export const Main = () => {
           hoveredLectureId={hoveredLectureId}
           setHoveredLectureId={setHoveredLectureId}
           onClickLecture={onClickLecture}
+          setCurrentTimetable={(id: string) => setCurrentTimetableId(id)}
         />
       </Wrapper>
       <MainLectureEditDialog

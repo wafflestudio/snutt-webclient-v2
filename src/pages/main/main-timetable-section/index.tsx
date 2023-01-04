@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { IcClose } from '@/components/icons/ic-close';
@@ -5,6 +6,7 @@ import { IcPlus } from '@/components/icons/ic-plus';
 import { Tabs } from '@/components/tabs';
 import { FullTimetable, Timetable } from '@/entities/timetable';
 
+import { MainCreateTimetableDialog } from './main-create-timetable-dialog';
 import { MainTimeTable } from './main-timetable';
 
 type Props = {
@@ -16,6 +18,7 @@ type Props = {
   hoveredLectureId: string | null;
   setHoveredLectureId: (id: string | null) => void;
   onClickLecture: (id: string) => void;
+  setCurrentTimetable: (id: string) => void;
 };
 
 export const MainTimetableSection = ({
@@ -27,7 +30,10 @@ export const MainTimetableSection = ({
   hoveredLectureId,
   setHoveredLectureId,
   onClickLecture,
+  setCurrentTimetable,
 }: Props) => {
+  const [isCreateTimetableDialogOpen, setCreateTimetableDialogOpen] = useState(false);
+
   return (
     <Wrapper className={className}>
       <Tabs value={currentTimetable?._id}>
@@ -43,7 +49,7 @@ export const MainTimetableSection = ({
             {title} <CloseIcon />
           </Tabs.Tab>
         ))}
-        <AddIcon />
+        <AddIcon data-testid="mt-create-timetable" onClick={() => setCreateTimetableDialogOpen(true)} />
       </Tabs>
       <Content>
         {currentFullTimetable && (
@@ -55,6 +61,11 @@ export const MainTimetableSection = ({
           />
         )}
       </Content>
+      <MainCreateTimetableDialog
+        isOpen={isCreateTimetableDialogOpen}
+        close={() => setCreateTimetableDialogOpen(false)}
+        setCurrentTimetable={setCurrentTimetable}
+      />
     </Wrapper>
   );
 };
