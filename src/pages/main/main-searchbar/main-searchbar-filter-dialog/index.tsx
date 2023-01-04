@@ -185,7 +185,7 @@ const useSearchFilterTags = () => {
       if (!year || !semester) throw Error();
       return searchService.getTags({ year, semester });
     },
-    { enabled: !!(year && semester) },
+    { enabled: !!(year && semester), staleTime: Infinity },
   );
 };
 
