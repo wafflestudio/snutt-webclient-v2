@@ -1,5 +1,3 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
@@ -16,17 +14,12 @@ const router = createBrowserRouter([
   { path: '/mypage', element: <MyPage /> },
 ]);
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false } } });
-
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TokenContextProvider>
-        <RouterProvider router={router} />
-        <GlobalStyles />
-        <ReactQueryDevtools />
-      </TokenContextProvider>
-    </QueryClientProvider>
+    <TokenContextProvider>
+      <RouterProvider router={router} />
+      <GlobalStyles />
+    </TokenContextProvider>
   );
 }
 

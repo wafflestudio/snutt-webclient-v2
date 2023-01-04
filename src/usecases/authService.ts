@@ -1,5 +1,5 @@
-import { EnvRepository, envRepository } from '@/repositories/envRepository';
 import { StorageRepository, storageRepository } from '@/repositories/storageRepository';
+import { EnvService, envService } from '@/usecases/envService';
 
 export interface AuthService {
   getApiKey(): string;
@@ -10,11 +10,11 @@ export interface AuthService {
   changePassword(oldPassword: string, newPassword: string): Promise<{ token: string }>;
 }
 
-const getAuthService = (args: { repositories: [EnvRepository, StorageRepository] }): AuthService => {
-  const [envRepo, storageRepo] = args.repositories;
+const getAuthService = (args: { repositories: [StorageRepository]; services: [EnvService] }): AuthService => {
+  const [storageRepo] = args.repositories;
 
   return {
-    getApiKey: () => envRepo.getApiKey(),
+    getApiKey: () => args.services[0].getApiKey(),
     getToken: () => storageRepo.get('snutt_token', false) ?? storageRepo.get('snutt_token', true),
     saveToken: (token, persist) => storageRepo.set('snutt_token', token, persist),
     clearToken: () => {
@@ -34,4 +34,4 @@ const getAuthService = (args: { repositories: [EnvRepository, StorageRepository]
   };
 };
 
-export const authService = getAuthService({ repositories: [envRepository, storageRepository] });
+export const authService = getAuthService({ repositories: [storageRepository], services: [envService] });

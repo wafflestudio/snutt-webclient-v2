@@ -1,19 +1,18 @@
 import { Color } from '@/entities/color';
 import { ColorRepository, colorRepository } from '@/repositories/colorRepository';
-import { EnvRepository, envRepository } from '@/repositories/envRepository';
-
-import { AuthService, authService } from './authService';
+import { AuthService, authService } from '@/usecases/authService';
+import { EnvService, envService } from '@/usecases/envService';
 
 export interface ColorService {
   getColorList(): Promise<Color[]>;
 }
 
 const getColorService = (args: {
-  services: [AuthService];
-  repositories: [ColorRepository, EnvRepository];
+  services: [AuthService, EnvService];
+  repositories: [ColorRepository];
 }): ColorService => {
   const apikey = args.services[0].getApiKey();
-  const baseUrl = args.repositories[1].getBaseUrl();
+  const baseUrl = args.services[1].getBaseUrl();
 
   return {
     getColorList: () => args.repositories[0].getColorPalette({ baseUrl, apikey }).then((res) => res.colors),
@@ -21,6 +20,6 @@ const getColorService = (args: {
 };
 
 export const colorService = getColorService({
-  services: [authService],
-  repositories: [colorRepository, envRepository],
+  services: [authService, envService],
+  repositories: [colorRepository],
 });

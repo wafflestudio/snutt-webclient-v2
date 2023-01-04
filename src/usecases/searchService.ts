@@ -1,9 +1,8 @@
 import { SearchFilter, SearchResultLecture } from '@/entities/search';
 import { CourseBook } from '@/entities/semester';
-import { EnvRepository, envRepository } from '@/repositories/envRepository';
 import { SearchRepository, searchRepository } from '@/repositories/searchRepository';
-
-import { AuthService, authService } from './authService';
+import { AuthService, authService } from '@/usecases/authService';
+import { EnvService, envService } from '@/usecases/envService';
 
 export interface SearchService {
   getTags(params: Omit<CourseBook, 'updated_at'>): Promise<{
@@ -19,11 +18,11 @@ export interface SearchService {
 }
 
 const getSearchService = (deps: {
-  services: [AuthService];
-  repositories: [SearchRepository, EnvRepository];
+  services: [AuthService, EnvService];
+  repositories: [SearchRepository];
 }): SearchService => {
   const apikey = deps.services[0].getApiKey();
-  const baseUrl = deps.repositories[1].getBaseUrl();
+  const baseUrl = deps.services[1].getBaseUrl();
 
   return {
     getTags: (yearSemester) => deps.repositories[0].getTags({ apikey, baseUrl }, yearSemester),
@@ -32,6 +31,6 @@ const getSearchService = (deps: {
 };
 
 export const searchService = getSearchService({
-  services: [authService],
-  repositories: [searchRepository, envRepository],
+  services: [authService, envService],
+  repositories: [searchRepository],
 });

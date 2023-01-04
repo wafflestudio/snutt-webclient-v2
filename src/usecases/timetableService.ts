@@ -1,9 +1,8 @@
 import { Semester } from '@/entities/semester';
 import { FullTimetable, Timetable } from '@/entities/timetable';
-import { EnvRepository, envRepository } from '@/repositories/envRepository';
 import { TimetableRepository, timetableRepository } from '@/repositories/timetableRepository';
-
-import { AuthService, authService } from './authService';
+import { AuthService, authService } from '@/usecases/authService';
+import { EnvService, envService } from '@/usecases/envService';
 
 export interface TimetableService {
   getTimetables(token: string): Promise<Timetable[]>;
@@ -12,10 +11,10 @@ export interface TimetableService {
 }
 
 const getTimetableService = (args: {
-  services: [AuthService];
-  repositories: [TimetableRepository, EnvRepository];
+  services: [AuthService, EnvService];
+  repositories: [TimetableRepository];
 }): TimetableService => {
-  const baseUrl = args.repositories[1].getBaseUrl();
+  const baseUrl = args.services[1].getBaseUrl();
   const apikey = args.services[0].getApiKey();
 
   return {
@@ -28,6 +27,6 @@ const getTimetableService = (args: {
 };
 
 export const timetableService = getTimetableService({
-  services: [authService],
-  repositories: [timetableRepository, envRepository],
+  services: [authService, envService],
+  repositories: [timetableRepository],
 });
