@@ -33,7 +33,9 @@ const TabWrapper = styled.div<{ $selected: boolean }>`
 
   opacity: ${({ $selected }) => ($selected ? 1 : 0.2)};
   font-weight: ${({ $selected }) => ($selected ? 700 : 400)};
-  border-bottom: ${({ $selected }) => ($selected ? '1px solid #1bd0c9' : 'none')};
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: ${({ $selected }) => ($selected ? '#1bd0c9' : 'transparent')};
 `;
 
 // Tabs
@@ -44,9 +46,9 @@ export interface TabsProps extends HTMLAttributes<HTMLDivElement> {
 export const Tabs = ({ value, children, ...props }: TabsProps) => {
   const { Provider } = tabsContext;
   return (
-    <Provider value={{ value }}>
-      <TabsWrapper {...props}>{children}</TabsWrapper>
-    </Provider>
+    <TabsWrapper {...props}>
+      <Provider value={{ value }}>{children}</Provider>
+    </TabsWrapper>
   );
 };
 
