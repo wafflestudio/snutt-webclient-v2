@@ -20,6 +20,7 @@ import {
 } from '@/mocks/fixtures/timetable';
 import { mockUser } from '@/mocks/fixtures/user';
 import { SearchRepository } from '@/repositories/searchRepository';
+import { timetableRepository } from '@/repositories/timetableRepository';
 import { UserRepository } from '@/repositories/userRepository';
 
 export const handlers = [
@@ -118,4 +119,13 @@ export const handlers = [
       }
     },
   ),
+
+  rest.put<
+    Parameters<typeof timetableRepository['updateLecture']>[2],
+    Parameters<typeof timetableRepository['updateLecture']>[1],
+    FullTimetable
+  >(`*/tables/:id/lecture/:lecture_id`, async (req, res, ctx) => {
+    // TODO: 시간표 validation ?
+    return res(ctx.status(200), ctx.json(mockTimeTable123));
+  }),
 ];

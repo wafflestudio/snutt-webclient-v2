@@ -67,6 +67,7 @@ export const Main = () => {
         />
       </Wrapper>
       <MainLectureEditDialog
+        timetableId={currentFullTimetable?._id}
         open={dialogLectureId !== null}
         onClose={() => setDialogLectureId(null)}
         lecture={dialogLecture}
