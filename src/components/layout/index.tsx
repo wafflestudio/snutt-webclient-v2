@@ -15,13 +15,10 @@ type Props = { headerChildren?: ReactNode };
 
 export const Layout = ({ children, headerChildren }: PropsWithChildren<Props>) => {
   const { data: myInfo } = useMyInfo();
-  const { data: notificationCount } = useNotificationCount();
-  const { data: notifications } = useNotificationList();
+  useNotificationCount();
+  useNotificationList();
 
   const isLogged = !!useTokenContext().token;
-
-  console.log(notifications);
-  console.log(notificationCount);
 
   return (
     <div>

@@ -1,10 +1,12 @@
+import { Color } from '@/entities/color';
 import { DAY_LABEL_MAP } from '@/entities/day';
-import { BaseLecture } from '@/entities/lecture';
+import { BaseLecture, Lecture } from '@/entities/lecture';
 import { CourseBook } from '@/entities/semester';
 
 export interface SemesterService {
   getLectureDetailUrl(lecture: BaseLecture, courseBook: Omit<CourseBook, 'updated_at'>): string;
   getLectureTimeTexts(lecture: BaseLecture): string[];
+  getLectureColor(lecture: Lecture, colorList: Color[]): Color;
 }
 
 const getLectureService = (): SemesterService => {
@@ -21,6 +23,11 @@ const getLectureService = (): SemesterService => {
     },
     getLectureTimeTexts: (lecture) =>
       lecture.class_time_json.map((t) => `${DAY_LABEL_MAP[t.day]}(${t.start_time}~${t.end_time})`),
+    getLectureColor: (lecture, colorList) => {
+      const bg = lecture.color.bg ?? colorList?.[lecture.colorIndex - 1]?.bg ?? '#94E6FE';
+      const fg = lecture.color.fg ?? colorList?.[lecture.colorIndex - 1]?.fg ?? '#1579C2';
+      return { bg, fg };
+    },
   };
 };
 
