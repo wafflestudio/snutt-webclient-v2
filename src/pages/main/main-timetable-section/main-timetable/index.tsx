@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { FullTimetable } from '@/entities/timetable';
 import { colorService } from '@/usecases/colorService';
+import { lectureService } from '@/usecases/lectureService';
 
 const allDays = ['월', '화', '수', '목', '금', '토', '일'];
 const times = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
@@ -55,8 +56,9 @@ export const MainTimeTable = ({
       }
 
       {timetable.lecture_list.map((lecture) => {
-        const backgroundColor = lecture.color.bg ?? colorList?.[lecture.colorIndex - 1]?.bg ?? '#94E6FE';
-        const color = lecture.color.fg ?? colorList?.[lecture.colorIndex - 1]?.fg ?? '#1579C2';
+        if (!colorList) return;
+
+        const { bg: backgroundColor, fg: color } = lectureService.getLectureColor(lecture, colorList);
         const isHovered = lecture._id === hoveredLectureId;
 
         return lecture.class_time_json.map((time) => {
