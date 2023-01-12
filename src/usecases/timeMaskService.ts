@@ -1,5 +1,5 @@
-import { dayArray } from '@/entities/day';
-import { CellStatus, DragMode, Position } from '@/entities/timeMask';
+import { Day, dayArray } from '@/entities/day';
+import { CellStatus, DragMode, Position, TimeMask } from '@/entities/timeMask';
 import { FullTimetable } from '@/entities/timetable';
 
 export interface TimeMaskService {
@@ -7,8 +7,9 @@ export interface TimeMaskService {
   getUpdatedCellStatus(prev: CellStatus, dragStart: Position, dragEnd: Position): CellStatus;
   checkIsInArea(target: Position, from: Position, to: Position): boolean;
   getDragMode(cellStatus: CellStatus, dragStart: Position): DragMode;
-  getBitMask(cellStatus: CellStatus): number[];
-  getTimetableEmptyTimeBitMask(timetable?: FullTimetable): number[];
+  getBitMask(cellStatus: CellStatus): TimeMask;
+  getTimetableEmptyTimeBitMask(timetable?: FullTimetable): TimeMask;
+  getLectureFullTimeBitMask(classTimeJson: { day: Day; start: number; len: number }[]): TimeMask;
 }
 
 const getTimeMaskService = (): TimeMaskService => {
@@ -33,9 +34,9 @@ const getTimeMaskService = (): TimeMaskService => {
     getDragMode: (cellStatus, dragStart) => (cellStatus[dragStart.i][dragStart.j] ? 'remove' : 'add'),
     getBitMask: (cellStatus) => {
       const transposed = cellStatus[0].map((_, j) => cellStatus.map((row) => row[j])); // 행-열 반전
-      return transposed.map((row) => row.map(Number).reduce((acc, cur) => acc * 2 + cur, 0));
+      return transposed.map((row) => row.map(Number).reduce((acc, cur) => acc * 2 + cur, 0)) as TimeMask;
     },
-    getTimetableEmptyTimeBitMask: (timetable?: FullTimetable) => {
+    getTimetableEmptyTimeBitMask: (timetable) => {
       const cellStatus = Array([8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22].length * 2)
         .fill(0)
         .map(() => Array(dayArray.length).fill(true));
@@ -47,6 +48,19 @@ const getTimeMaskService = (): TimeMaskService => {
             cellStatus[i + t.start * 2][t.day] = false;
           }
         });
+
+      return timeMaskService.getBitMask(cellStatus);
+    },
+    getLectureFullTimeBitMask: (classTimeJson) => {
+      const cellStatus = Array([8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22].length * 2)
+        .fill(0)
+        .map(() => Array(dayArray.length).fill(false));
+
+      classTimeJson.forEach((t) => {
+        for (let i = 0; i < t.len * 2; i++) {
+          cellStatus[i + t.start * 2][t.day] = true;
+        }
+      });
 
       return timeMaskService.getBitMask(cellStatus);
     },

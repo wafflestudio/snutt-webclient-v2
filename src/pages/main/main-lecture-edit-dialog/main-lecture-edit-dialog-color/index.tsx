@@ -4,7 +4,11 @@ import styled from 'styled-components';
 import { COLOR_LABEL_MAP } from '@/constants/color';
 import { Color } from '@/entities/color';
 
-type Props = { colorList: Color[]; currentColor: Color; onChangeColor: (color: Color) => void };
+type Props = {
+  colorList: Color[];
+  currentColor: Color;
+  onChangeColor: (index: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9, color: Color) => void;
+};
 
 export const MainLectureEditDialogColor = ({ colorList, currentColor: { bg, fg }, onChangeColor }: Props) => {
   const isCustomColor = colorList.every((c) => c.bg !== bg);
@@ -12,7 +16,7 @@ export const MainLectureEditDialogColor = ({ colorList, currentColor: { bg, fg }
 
   return (
     <ColorChipsWrapper>
-      {colorList.map((c) => {
+      {colorList.map((c, i) => {
         const isSelected = bg === c.bg;
 
         return (
@@ -24,7 +28,7 @@ export const MainLectureEditDialogColor = ({ colorList, currentColor: { bg, fg }
                 ? { border: `1px solid ${c.bg}`, backgroundColor: c.bg, color: c.fg }
                 : { border: `1px solid ${c.bg}`, color: c.bg }
             }
-            onClick={() => onChangeColor(c)}
+            onClick={() => onChangeColor(i as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9, c)}
           >
             {COLOR_LABEL_MAP[c.bg] ?? c.bg}
           </ColorChip>
@@ -42,13 +46,13 @@ export const MainLectureEditDialogColor = ({ colorList, currentColor: { bg, fg }
         <Palette
           value={customColor}
           onChange={(e) => {
-            onChangeColor({ bg: e.target.value, fg: '#ffffff' });
+            onChangeColor(9, { bg: e.target.value, fg: '#ffffff' });
             setCustomColor(e.target.value);
           }}
           onClick={(e) =>
             'value' in e.target &&
             typeof e.target.value === 'string' &&
-            onChangeColor({ bg: e.target.value, fg: '#ffffff' })
+            onChangeColor(9, { bg: e.target.value, fg: '#ffffff' })
           }
         />
       </CustomColorChip>

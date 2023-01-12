@@ -32,5 +32,5 @@ export interface Lecture extends BaseLecture {
   created_at: string;
   updated_at: string;
   color: Color | Record<string, never>;
-  colorIndex: number;
+  colorIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 }
