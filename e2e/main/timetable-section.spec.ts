@@ -103,3 +103,19 @@ test('로그인되었을 경우, 시간표 생성 기능이 정상 동작한다 
   await page.getByTestId('mt-create-timetable').click();
   await expect(page.getByTestId('mt-create-timetable-error')).toHaveText('');
 });
+
+test('로그인되었을 경우, 시간표 삭제 기능이 정상 동작한다', async ({ page }) => {
+  await page.goto('/?year=1001&semester=1');
+  await givenUser(page, { login: true });
+
+  const tabs = page.getByTestId('mt-tab');
+  await tabs.filter({ hasText: '나무의 시간표' }).locator('[data-testid=mt-tab-delete]').click();
+  await expect(page.getByTestId('mt-tt-delete-submit')).toBeDisabled();
+  await page.getByTestId('mt-tt-delete-input').type('18학점');
+  await Promise.all([
+    page.waitForRequest((req) => req.method() === 'DELETE' && req.url().includes('/tables/456')),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/tables')),
+    page.getByTestId('mt-tt-delete-submit').click(),
+  ]);
+  await expect(tabs.filter({ hasText: '나의 시간표' })).toHaveAttribute('aria-selected', `${true}`);
+});
