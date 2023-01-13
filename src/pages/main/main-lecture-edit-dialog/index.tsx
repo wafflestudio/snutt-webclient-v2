@@ -63,7 +63,16 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
         class_time_mask: timeMaskService.getLectureFullTimeBitMask(draft.class_time_json ?? lecture.class_time_json),
         ...color,
       },
-      { onSuccess: close },
+      {
+        onSuccess: close,
+        onError: (err) => {
+          const message =
+            err && typeof err === 'object' && 'errcode' in err && err.errcode === 12300
+              ? '강의시간이 서로 겹칩니다.'
+              : '오류가 발생했습니다.';
+          alert(message);
+        },
+      },
     );
   };
 

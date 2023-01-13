@@ -51,5 +51,14 @@ test('강의 수정 모달이 잘 취소된다', async ({ page }) => {
 test('강의 수정 모달이 잘 취소된다 (실패케이스)', async ({ page }) => {
   await page.goto('/');
   await givenUser(page);
-  // TODO: test
+  const lectureItem = page.getByTestId('main-lecture-listitem');
+  await expect(page.getByTestId('main-lecture-edit-dialog-content')).toHaveCount(0);
+  await lectureItem.filter({ hasText: '상상력과 문화' }).click();
+  await page.getByTestId('main-lecture-edit-dialog-time').nth(1).locator('select').nth(0).selectOption('1');
+  page.on('dialog', async (dialog) => {
+    expect(dialog.type()).toBe('alert');
+    expect(dialog.message()).toBe('강의 시간이 서로 겹칩니다.');
+    await dialog.accept();
+  });
+  await page.getByTestId('main-lecture-edit-dialog-submit').click();
 });
