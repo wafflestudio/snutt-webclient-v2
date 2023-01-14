@@ -6,6 +6,7 @@ import { IcDots } from '@/components/icons/ic-dots';
 import { IcLabel } from '@/components/icons/ic-label';
 import { IcMap } from '@/components/icons/ic-map';
 import { BaseLecture } from '@/entities/lecture';
+import { FullTimetable } from '@/entities/timetable';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { lectureService } from '@/usecases/lectureService';
 
@@ -14,6 +15,7 @@ import { MainLectureDeleteDialog } from './main-lecture-delete-dialog';
 type Props = {
   timetableId?: string;
   lecture: BaseLecture;
+  currentFullTimetable?: FullTimetable;
   hoveredLectureId?: string | null;
   setHoveredLectureId?: (id: string | null) => void;
   onClickLecture?: (id: string) => void;
@@ -26,6 +28,7 @@ export const MainLectureListItem = ({
   hoveredLectureId,
   setHoveredLectureId,
   onClickLecture,
+  currentFullTimetable,
   type,
 }: Props) => {
   const { year, semester } = useYearSemester();
@@ -77,7 +80,7 @@ export const MainLectureListItem = ({
               {
                 current: (
                   <LectureButton
-                    style={{ color: '#ff0000' }}
+                    $color="#ff0000"
                     onClick={(e) => (e.stopPropagation(), setDeleteDialogOpen(true))}
                     data-testid="main-lecture-listitem-delete"
                   >
@@ -85,7 +88,11 @@ export const MainLectureListItem = ({
                   </LectureButton>
                 ),
                 result: (
-                  <LectureButton style={{ color: '#0000ff' }} onClick={(e) => (e.stopPropagation(), onClickAdd())}>
+                  <LectureButton
+                    disabled={!currentFullTimetable}
+                    $color="#0000ff"
+                    onClick={(e) => (e.stopPropagation(), onClickAdd())}
+                  >
                     추가
                   </LectureButton>
                 ),
@@ -170,10 +177,10 @@ const LectureHeaderRight = styled.div`
   line-height: 18px;
 `;
 
-const LectureButton = styled.button`
+const LectureButton = styled.button<{ $color?: `#${string}` }>`
   border: none;
   background-color: transparent;
-  color: #000;
+  color: ${({ $color = '#000000' }) => $color};
   opacity: 0.8;
   padding: 8px 12px;
   cursor: pointer;
@@ -183,6 +190,11 @@ const LectureButton = styled.button`
   &:hover {
     opacity: 1;
     background-color: rgba(0, 0, 0, 0.08);
+  }
+
+  &:disabled {
+    color: #888;
+    cursor: not-allowed;
   }
 `;
 

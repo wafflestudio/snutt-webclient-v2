@@ -76,7 +76,13 @@ export const MainLectureSection = ({
               <EmptyText>검색 결과가 없습니다.</EmptyText>
             ) : (
               searchResult?.map((l) => (
-                <MainLectureListItem timetableId={currentFullTimetable?._id} lecture={l} key={l._id} type="result" />
+                <MainLectureListItem
+                  currentFullTimetable={currentFullTimetable}
+                  timetableId={currentFullTimetable?._id}
+                  lecture={l}
+                  key={l._id}
+                  type="result"
+                />
               ))
             )}
           </LectureList>
