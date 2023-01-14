@@ -4,7 +4,8 @@ import { Tabs } from '@/components/tabs';
 import { SearchResultLecture } from '@/entities/search';
 import { FullTimetable, Timetable } from '@/entities/timetable';
 
-import { MainLectureListItem } from './main-lecture-list-item';
+import { MainCurrentLectureTab } from './main-current-lecture-tab';
+import { MainSearchLectureTab } from './main-search-lecture-tab';
 
 type Props = {
   className?: string;
@@ -50,42 +51,17 @@ export const MainLectureSection = ({
         </Tabs.Tab>
       </Tabs>
       <Content>
-        {tab === 'current' &&
-          (!currentYearSemesterTimetables ? null : currentYearSemesterTimetables.length === 0 ? (
-            <EmptyText data-testid="ml-current-no-timetable">시간표가 없습니다.</EmptyText>
-          ) : !currentFullTimetable ? null : currentFullTimetable.lecture_list.length === 0 ? (
-            <EmptyText data-testid="ml-current-no-lecture">추가된 강의가 없습니다.</EmptyText>
-          ) : (
-            <LectureList>
-              {currentFullTimetable.lecture_list.map((l) => (
-                <MainLectureListItem
-                  timetableId={currentFullTimetable?._id}
-                  lecture={l}
-                  key={l._id}
-                  hoveredLectureId={hoveredLectureId}
-                  setHoveredLectureId={setHoveredLectureId}
-                  onClickLecture={onClickLecture}
-                  type="current"
-                />
-              ))}
-            </LectureList>
-          ))}
+        {tab === 'current' && (
+          <MainCurrentLectureTab
+            currentYearSemesterTimetables={currentYearSemesterTimetables}
+            hoveredLectureId={hoveredLectureId}
+            setHoveredLectureId={setHoveredLectureId}
+            onClickLecture={onClickLecture}
+            currentFullTimetable={currentFullTimetable}
+          />
+        )}
         {tab === 'result' && (
-          <LectureList>
-            {!searchResult ? null : searchResult.length === 0 ? (
-              <EmptyText>검색 결과가 없습니다.</EmptyText>
-            ) : (
-              searchResult?.map((l) => (
-                <MainLectureListItem
-                  currentFullTimetable={currentFullTimetable}
-                  timetableId={currentFullTimetable?._id}
-                  lecture={l}
-                  key={l._id}
-                  type="result"
-                />
-              ))
-            )}
-          </LectureList>
+          <MainSearchLectureTab currentFullTimetable={currentFullTimetable} searchResult={searchResult} />
         )}
       </Content>
     </Wrapper>
@@ -99,17 +75,4 @@ const Wrapper = styled.section`
 const Content = styled.div`
   background-color: #ffffff;
   height: calc(100% - 33px);
-`;
-
-const EmptyText = styled.p`
-  margin: 0;
-  padding: 20px 30px;
-  font-size: 14px;
-`;
-
-const LectureList = styled.ul`
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow-y: scroll;
 `;
