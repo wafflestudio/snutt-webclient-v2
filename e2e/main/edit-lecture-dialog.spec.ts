@@ -62,3 +62,9 @@ test('강의 수정 모달이 잘 취소된다 (실패케이스)', async ({ page
   });
   await page.getByTestId('main-lecture-edit-dialog-submit').click();
 });
+
+test('강의 수정 모달이 잘 취소된다 (성공케이스, 커스텀강의)', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page);
+  // TODO:
+});

@@ -7,6 +7,7 @@ import { Tabs } from '@/components/tabs';
 import { FullTimetable, Timetable } from '@/entities/timetable';
 
 import { MainCreateTimetableDialog } from './main-create-timetable-dialog';
+import { MainDeleteTimetableDialog } from './main-delete-timetable-dialog';
 import { MainTimeTable } from './main-timetable';
 
 type Props = {
@@ -18,7 +19,7 @@ type Props = {
   hoveredLectureId: string | null;
   setHoveredLectureId: (id: string | null) => void;
   onClickLecture: (id: string) => void;
-  setCurrentTimetable: (id: string) => void;
+  setCurrentTimetable: (id: string | null) => void;
 };
 
 export const MainTimetableSection = ({
@@ -33,6 +34,7 @@ export const MainTimetableSection = ({
   setCurrentTimetable,
 }: Props) => {
   const [isCreateTimetableDialogOpen, setCreateTimetableDialogOpen] = useState(false);
+  const [deleteTimetableDialogId, setDeleteTimetableDialogId] = useState<string | null>(null);
 
   return (
     <Wrapper className={className}>
@@ -46,7 +48,7 @@ export const MainTimetableSection = ({
             key={id}
             onClick={() => changeCurrentTimetable(id)}
           >
-            {title} <CloseIcon />
+            {title} <CloseIcon data-testid="mt-tab-delete" onClick={() => setDeleteTimetableDialogId(id)} />
           </Tabs.Tab>
         ))}
         <AddIcon data-testid="mt-create-timetable" onClick={() => setCreateTimetableDialogOpen(true)} />
@@ -65,6 +67,15 @@ export const MainTimetableSection = ({
         isOpen={isCreateTimetableDialogOpen}
         close={() => setCreateTimetableDialogOpen(false)}
         setCurrentTimetable={setCurrentTimetable}
+      />
+      <MainDeleteTimetableDialog
+        isOpen={deleteTimetableDialogId !== null}
+        close={() => setDeleteTimetableDialogId(null)}
+        timetable={currentFullTimetable}
+        onDelete={() => {
+          setCurrentTimetable(null);
+          setDeleteTimetableDialogId(null);
+        }}
       />
     </Wrapper>
   );
