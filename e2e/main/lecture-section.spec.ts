@@ -48,6 +48,20 @@ test('수강편람 버튼이 정상 동작한다', async ({ page, context }) => 
   await expect(lectureItem.filter({ hasText: '복싱' }).getByTestId('main-lecture-listitem-link')).toHaveCount(0);
 });
 
+test('강의 삭제 기능이 정상 동작한다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page);
+  const lectureItem = page.getByTestId('main-lecture-listitem');
+  await lectureItem.filter({ hasText: '고급수학 2' }).getByTestId('main-lecture-listitem-delete').click();
+  await Promise.all([
+    page.waitForRequest(
+      (req) => req.method() === 'DELETE' && req.url().includes('/tables/123/lecture/5d1a0132db261b554d5d0078'),
+    ),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/tables/123')),
+    page.getByTestId('ml-lecture-delete-submit').click(),
+  ]);
+});
+
 test('검색 결과 탭이 정상 동작한다', async ({ page }) => {
   await page.goto('/');
   await givenUser(page, { login: false });

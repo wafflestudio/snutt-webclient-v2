@@ -13,7 +13,13 @@ interface Props {
 export const Dialog = ({ children, open, onClose, className }: PropsWithChildren<Props>) => {
   return (
     <Portal>
-      <Dimmer visible={open} onClick={onClose}>
+      <Dimmer
+        visible={open}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+      >
         <Container className={className} onClick={(e) => e.stopPropagation()}>
           {children}
         </Container>

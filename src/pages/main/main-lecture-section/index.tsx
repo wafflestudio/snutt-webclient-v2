@@ -55,6 +55,7 @@ export const MainLectureSection = ({
             <LectureList>
               {currentFullTimetable.lecture_list.map((l) => (
                 <MainLectureListItem
+                  timetableId={currentFullTimetable?._id}
                   lecture={l}
                   key={l._id}
                   hoveredLectureId={hoveredLectureId}
@@ -71,14 +72,7 @@ export const MainLectureSection = ({
               <EmptyText>추가된 강의가 없습니다.</EmptyText>
             ) : (
               searchResult?.map((l) => (
-                <MainLectureListItem
-                  lecture={l}
-                  key={l._id}
-                  hoveredLectureId={hoveredLectureId}
-                  setHoveredLectureId={setHoveredLectureId}
-                  onClickLecture={onClickLecture}
-                  type="result"
-                />
+                <MainLectureListItem timetableId={currentFullTimetable?._id} lecture={l} key={l._id} type="result" />
               ))
             )}
           </LectureList>
