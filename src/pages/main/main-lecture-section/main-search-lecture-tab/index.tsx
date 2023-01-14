@@ -8,10 +8,16 @@ import { MainSearchLectureListItem } from './main-search-lecture-list-item';
 type Props = {
   searchResult?: SearchResultLecture[];
   currentFullTimetable?: FullTimetable;
+  previewLectureId: string | null;
   setPreviewLectureId: (id: string | null) => void;
 };
 
-export const MainSearchLectureTab = ({ searchResult, currentFullTimetable, setPreviewLectureId }: Props) => {
+export const MainSearchLectureTab = ({
+  searchResult,
+  currentFullTimetable,
+  setPreviewLectureId,
+  previewLectureId,
+}: Props) => {
   if (!searchResult) return null;
 
   if (searchResult.length === 0) return <MainLectureEmptyText>검색 결과가 없습니다.</MainLectureEmptyText>;
@@ -21,6 +27,7 @@ export const MainSearchLectureTab = ({ searchResult, currentFullTimetable, setPr
       {searchResult?.map((l) => (
         <MainSearchLectureListItem
           timetableId={currentFullTimetable?._id}
+          previewLectureId={previewLectureId}
           lecture={l}
           key={l._id}
           setPreviewLectureId={setPreviewLectureId}

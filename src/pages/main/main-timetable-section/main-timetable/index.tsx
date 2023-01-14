@@ -95,7 +95,7 @@ export const MainTimeTable = ({
 
         return (
           <Item
-            data-testid="main-timetable-lecture"
+            data-testid="main-timetable-preview-lecture"
             $colStart={colStart + 2}
             $rowStart={rowStart}
             $rowEnd={rowEnd}

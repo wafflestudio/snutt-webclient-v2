@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
 
+import { ErrorDialog } from '@/components/error-dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { BaseLecture } from '@/entities/lecture';
+import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { timetableService } from '@/usecases/timetableService';
 import { get } from '@/utils/object/get';
 import { queryKey } from '@/utils/query-key-factory';
@@ -13,25 +15,48 @@ type Props = {
   timetableId?: string;
   lecture: BaseLecture;
   setPreviewLectureId: (id: string | null) => void;
+  previewLectureId: string | null;
 };
 
-export const MainSearchLectureListItem = ({ lecture, timetableId, setPreviewLectureId }: Props) => {
+export const MainSearchLectureListItem = ({ lecture, timetableId, setPreviewLectureId, previewLectureId }: Props) => {
   const { mutate } = useAddLecture(timetableId, lecture._id);
+
+  const { open, isOpen, onClose, message } = useErrorDialog();
 
   return (
     <LectureListItem
       data-testid="main-lecture-listitem"
       onMouseEnter={() => setPreviewLectureId(lecture._id)}
       onMouseLeave={() => setPreviewLectureId(null)}
+      $isPreview={previewLectureId === lecture._id}
     >
       <MainLectureListItem
         lecture={lecture}
         cta={
-          <LectureButton disabled={!timetableId} $color="#0000ff" onClick={() => mutate()}>
+          <LectureButton
+            disabled={!timetableId}
+            $color="#0000ff"
+            onClick={() =>
+              mutate(undefined, {
+                onError: (err) => {
+                  const errcode = get(err, ['errcode']);
+                  const message = (() => {
+                    if (errcode === 12292) return '이미 해당 강의가 존재합니다.';
+                    if (errcode === 12300) return '강의 시간이 서로 겹칩니다.';
+                    // TODO: sentry
+                    return '오류가 발생했습니다.';
+                  })();
+
+                  open(message);
+                },
+              })
+            }
+          >
             추가
           </LectureButton>
         }
       />
+      <ErrorDialog isOpen={isOpen} onClose={onClose} message={message} />
     </LectureListItem>
   );
 };
@@ -47,26 +72,14 @@ const useAddLecture = (id?: string, lectureId?: string) => {
 
       return timetableService.addLecture(token, { id, lecture_id: lectureId });
     },
-    {
-      onSuccess: () => queryClient.invalidateQueries(queryKey(`tables/${id}`, { token })),
-      onError: (err) => {
-        const errcode = get(err, ['errcode']);
-        const message = (() => {
-          if (errcode === 12292) return '이미 해당 강의가 존재합니다.';
-          if (errcode === 12300) return '강의 시간이 서로 겹칩니다.';
-          // TODO: sentry
-          return '오류가 발생했습니다.';
-        })();
-
-        alert(message);
-      },
-    },
+    { onSuccess: () => queryClient.invalidateQueries(queryKey(`tables/${id}`, { token })) },
   );
 };
 
-const LectureListItem = styled.li`
+const LectureListItem = styled.li<{ $isPreview: boolean }>`
   list-style-type: none;
   transition: background-color 0.1s;
+  background-color: ${({ $isPreview }) => ($isPreview ? '#ddd' : '#fff')};
 `;
 
 const LectureButton = styled.button<{ $color?: `#${string}` }>`
