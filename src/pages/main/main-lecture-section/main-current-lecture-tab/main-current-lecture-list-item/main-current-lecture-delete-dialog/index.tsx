@@ -14,7 +14,7 @@ type Props = {
   lecture: BaseLecture;
 };
 
-export const MainLectureDeleteDialog = ({ isOpen, close, timetableId, lecture }: Props) => {
+export const MainCurrentLectureDeleteDialog = ({ isOpen, close, timetableId, lecture }: Props) => {
   const { mutate } = useDeleteLecture(timetableId, lecture._id);
 
   return (
