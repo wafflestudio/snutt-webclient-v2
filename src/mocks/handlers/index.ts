@@ -172,6 +172,9 @@ export const handlers = [
 ];
 
 const isOverlap = (
-  c1: { start: number; len: number; day: number }, // c1 이 c2 보다 빠른 경우만 확인
-  c2: { start: number; len: number; day: number }, // c1 < c2
-) => c1.day === c2.day && c1.start <= c2.start && c1.start + c1.len > c2.start;
+  c1: { start: number; len: number; day: number; _id?: string }, // c1 이 c2 보다 빠른 경우만 확인
+  c2: { start: number; len: number; day: number; _id?: string }, // c1 < c2
+) => {
+  if (c1._id && c2._id && c1._id === c2._id) return false;
+  return c1.day === c2.day && c1.start <= c2.start && c1.start + c1.len > c2.start;
+};

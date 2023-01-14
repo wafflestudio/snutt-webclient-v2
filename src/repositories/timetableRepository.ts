@@ -55,7 +55,7 @@ const getTimetableRepository = (): TimetableRepository => {
     },
     getFullTimetable: async ({ baseUrl, apikey, token }, { id }) => {
       const response = await fetch(`${baseUrl}/tables/${id}`, {
-        headers: { 'x-access-apikey': apikey, 'x-access-token': token },
+        headers: { 'x-access-apikey': apikey, 'x-access-token': token, accept: 'application/json' },
       });
       const data = await response.json().catch(() => null);
       if (!response.ok) throw data;
