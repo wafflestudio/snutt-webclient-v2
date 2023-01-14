@@ -96,3 +96,12 @@ test('검색 결과 탭이 정상 동작한다', async ({ page }) => {
   const lectureItem = page.getByTestId('main-lecture-listitem');
   await expect(lectureItem.nth(0).getByTestId('main-lecture-listitem-title')).toHaveText('컴퓨터구조');
 });
+
+test('검색 결과 탭이 정상 동작한다 (시간표 없을 때)', async ({ page }) => {
+  await page.goto('/?year=4001&semester=3');
+  await givenUser(page, { login: false });
+  await page.getByTestId('main-searchbar-input').type('컴');
+  await page.getByTestId('main-searchbar-search').click();
+  const lectureItem = page.getByTestId('main-lecture-listitem');
+  await expect(lectureItem.nth(0).getByText('추가')).toBeDisabled();
+});
