@@ -8,6 +8,7 @@ import { FullTimetable, Timetable } from '@/entities/timetable';
 
 import { MainCreateTimetableDialog } from './main-create-timetable-dialog';
 import { MainDeleteTimetableDialog } from './main-delete-timetable-dialog';
+import { MainNoTimetable } from './main-no-timetable';
 import { MainTimeTable } from './main-timetable';
 
 type Props = {
@@ -54,14 +55,19 @@ export const MainTimetableSection = ({
         <AddIcon data-testid="mt-create-timetable" onClick={() => setCreateTimetableDialogOpen(true)} />
       </Tabs>
       <Content>
-        {currentFullTimetable && (
-          <MainTimeTable
-            timetable={currentFullTimetable}
-            hoveredLectureId={hoveredLectureId}
-            setHoveredLectureId={setHoveredLectureId}
-            onClickLecture={onClickLecture}
-          />
-        )}
+        {currentYearSemesterTimetables &&
+          (currentYearSemesterTimetables.length > 0 ? (
+            currentFullTimetable && (
+              <MainTimeTable
+                timetable={currentFullTimetable}
+                hoveredLectureId={hoveredLectureId}
+                setHoveredLectureId={setHoveredLectureId}
+                onClickLecture={onClickLecture}
+              />
+            )
+          ) : (
+            <NoTimetable onClickCreate={() => setCreateTimetableDialogOpen(true)} />
+          ))}
       </Content>
       <MainCreateTimetableDialog
         isOpen={isCreateTimetableDialogOpen}
@@ -109,4 +115,8 @@ const AddIcon = styled(IcPlus)`
   &:hover {
     opacity: 1;
   }
+`;
+
+const NoTimetable = styled(MainNoTimetable)`
+  height: 100%;
 `;

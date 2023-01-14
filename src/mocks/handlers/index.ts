@@ -16,6 +16,7 @@ import {
   mockTimeTable123,
   mockTimeTable456,
   mockTimeTable789,
+  mockTimeTable101112,
   mockTimeTables,
 } from '@/mocks/fixtures/timetable';
 import { mockUser } from '@/mocks/fixtures/user';
@@ -52,6 +53,7 @@ export const handlers = [
     if (id === '123') return res(ctx.json(mockTimeTable123));
     if (id === '456') return res(ctx.json(mockTimeTable456));
     if (id === '789') return res(ctx.json(mockTimeTable789));
+    if (id === '101112') return res(ctx.json(mockTimeTable101112));
 
     return res(ctx.json(mockTimeTable));
   }),

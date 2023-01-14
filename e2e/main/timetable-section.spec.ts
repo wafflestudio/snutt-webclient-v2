@@ -28,10 +28,11 @@ test('로그인되었을 경우, 시간표 목록 탭이 정상 동작한다 (�
 });
 
 test('로그인되었을 경우, 시간표 목록 탭이 정상 동작한다 (시간표 없는 학기)', async ({ page }) => {
-  await page.goto('/?year=3001&semester=4');
+  await page.goto('/?year=4001&semester=3');
   await givenUser(page);
   const tabs = page.getByTestId('mt-tab');
   await expect(tabs).toHaveCount(0);
+  await expect(page.getByTestId('mt-empty-create-timetable')).toHaveCount(1);
 });
 
 test('로그인되었을 경우, 시간표 내용이 잘 보여진다 (월~금 시간표)', async ({ page }) => {

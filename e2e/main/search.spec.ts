@@ -34,7 +34,12 @@ test('검색 폼이 잘 보여진다', async ({ page }) => {
   await expect(page.getByText('시간대 검색')).toHaveCount(2);
 });
 
-test('검색 기능이 정상 동작한다', async ({ page }) => {
+test('검색 기능이 정상 동작한다 (검색 결과 있을 때)', async ({ page }) => {
+  await page.goto('/');
+  // TODO:
+});
+
+test('검색 기능이 정상 동작한다 (검색 결과 없을 때)', async ({ page }) => {
   await page.goto('/');
   // TODO:
 });

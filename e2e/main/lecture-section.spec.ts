@@ -16,7 +16,7 @@ test('강의 목록 탭이 정상 동작한다', async ({ page }) => {
   await expect(currentTab).toHaveAttribute('aria-selected', 'false');
 });
 
-test('현재 시간표 탭이 정상 동작한다', async ({ page }) => {
+test('현재 시간표 탭이 정상 동작한다 (시간표 있을 때)', async ({ page }) => {
   await page.goto('/');
   await givenUser(page);
   const currentTab = page.getByTestId('ml-current-tab');
@@ -29,6 +29,18 @@ test('현재 시간표 탭이 정상 동작한다', async ({ page }) => {
   await expect(lectureItem.nth(4).getByTestId('main-lecture-listitem-time')).toHaveText(
     '화(12:30~13:45), 목(12:30~13:45)',
   );
+});
+
+test('현재 시간표 탭이 정상 동작한다 (강의 없을 때)', async ({ page }) => {
+  await page.goto('/?year=3001&semester=4');
+  await givenUser(page);
+  await expect(page.getByTestId('ml-current-no-lecture')).toHaveCount(1);
+});
+
+test('현재 시간표 탭이 정상 동작한다 (시간표 없을 때)', async ({ page }) => {
+  await page.goto('/?year=4001&semester=3');
+  await givenUser(page);
+  await expect(page.getByTestId('ml-current-no-timetable')).toHaveCount(1);
 });
 
 test('수강편람 버튼이 정상 동작한다', async ({ page, context }) => {

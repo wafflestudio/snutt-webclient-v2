@@ -47,6 +47,7 @@ export const Main = () => {
     <Layout headerChildren={<MainSearchbar onSearch={onSearch} currentFullTimetable={currentFullTimetable} />}>
       <Wrapper>
         <LectureSection
+          currentYearSemesterTimetables={currentYearSemesterTimetables}
           tab={lectureTab}
           changeTab={setLectureTab}
           currentFullTimetable={currentFullTimetable}

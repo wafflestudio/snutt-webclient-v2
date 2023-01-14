@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { Tabs } from '@/components/tabs';
 import { SearchResultLecture } from '@/entities/search';
-import { FullTimetable } from '@/entities/timetable';
+import { FullTimetable, Timetable } from '@/entities/timetable';
 
 import { MainLectureListItem } from './main-lecture-list-item';
 
@@ -11,6 +11,7 @@ type Props = {
   tab: 'current' | 'result';
   changeTab: (tab: 'current' | 'result') => void;
   currentFullTimetable: FullTimetable | undefined;
+  currentYearSemesterTimetables?: Timetable[];
   hoveredLectureId: string | null;
   setHoveredLectureId: (id: string | null) => void;
   onClickLecture: (id: string) => void;
@@ -20,6 +21,7 @@ type Props = {
 export const MainLectureSection = ({
   tab,
   changeTab,
+  currentYearSemesterTimetables,
   className,
   currentFullTimetable,
   hoveredLectureId,
@@ -49,8 +51,10 @@ export const MainLectureSection = ({
       </Tabs>
       <Content>
         {tab === 'current' &&
-          (!currentFullTimetable ? null : currentFullTimetable.lecture_list.length === 0 ? (
-            <EmptyText>추가된 강의가 없습니다.</EmptyText>
+          (!currentYearSemesterTimetables ? null : currentYearSemesterTimetables.length === 0 ? (
+            <EmptyText data-testid="ml-current-no-timetable">시간표가 없습니다.</EmptyText>
+          ) : !currentFullTimetable ? null : currentFullTimetable.lecture_list.length === 0 ? (
+            <EmptyText data-testid="ml-current-no-lecture">추가된 강의가 없습니다.</EmptyText>
           ) : (
             <LectureList>
               {currentFullTimetable.lecture_list.map((l) => (
@@ -69,7 +73,7 @@ export const MainLectureSection = ({
         {tab === 'result' && (
           <LectureList>
             {!searchResult ? null : searchResult.length === 0 ? (
-              <EmptyText>추가된 강의가 없습니다.</EmptyText>
+              <EmptyText>검색 결과가 없습니다.</EmptyText>
             ) : (
               searchResult?.map((l) => (
                 <MainLectureListItem timetableId={currentFullTimetable?._id} lecture={l} key={l._id} type="result" />
