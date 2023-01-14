@@ -17,6 +17,7 @@ type Props = {
   setHoveredLectureId: (id: string | null) => void;
   onClickLecture: (id: string) => void;
   searchResult?: SearchResultLecture[];
+  setPreviewLectureId: (id: string | null) => void;
 };
 
 export const MainLectureSection = ({
@@ -28,6 +29,7 @@ export const MainLectureSection = ({
   hoveredLectureId,
   setHoveredLectureId,
   onClickLecture,
+  setPreviewLectureId,
   searchResult,
 }: Props) => {
   return (
@@ -61,7 +63,11 @@ export const MainLectureSection = ({
           />
         )}
         {tab === 'result' && (
-          <MainSearchLectureTab currentFullTimetable={currentFullTimetable} searchResult={searchResult} />
+          <MainSearchLectureTab
+            currentFullTimetable={currentFullTimetable}
+            searchResult={searchResult}
+            setPreviewLectureId={setPreviewLectureId}
+          />
         )}
       </Content>
     </Wrapper>

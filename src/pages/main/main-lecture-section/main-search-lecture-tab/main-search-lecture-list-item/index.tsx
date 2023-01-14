@@ -7,19 +7,24 @@ import { MainLectureListItem } from '../../main-lecture-listitem';
 type Props = {
   timetableId?: string;
   lecture: BaseLecture;
+  setPreviewLectureId: (id: string | null) => void;
 };
 
-export const MainSearchLectureListItem = ({ lecture, timetableId }: Props) => {
+export const MainSearchLectureListItem = ({ lecture, timetableId, setPreviewLectureId }: Props) => {
   const onClickAdd = () => {
     // TODO: implement
   };
 
   return (
-    <LectureListItem data-testid="main-lecture-listitem">
+    <LectureListItem
+      data-testid="main-lecture-listitem"
+      onMouseEnter={() => setPreviewLectureId(lecture._id)}
+      onMouseLeave={() => setPreviewLectureId(null)}
+    >
       <MainLectureListItem
         lecture={lecture}
         cta={
-          <LectureButton disabled={!timetableId} $color="#0000ff" onClick={(e) => (e.stopPropagation(), onClickAdd())}>
+          <LectureButton disabled={!timetableId} $color="#0000ff" onClick={onClickAdd}>
             추가
           </LectureButton>
         }
