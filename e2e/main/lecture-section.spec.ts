@@ -112,6 +112,10 @@ test('검색 결과 탭에서 추가 기능이 정상 동작한다 (성공)', as
   await page.getByTestId('main-searchbar-input').type('컴');
   await page.getByTestId('main-searchbar-search').click();
 
+  await expect(page.getByTestId('main-timetable-preview-lecture')).toHaveCount(0);
+  await page.getByTestId('main-lecture-listitem').nth(10).hover();
+  await expect(page.getByTestId('main-timetable-preview-lecture')).toHaveCount(2);
+
   await Promise.all([
     page.waitForRequest(
       (req) => req.method() === 'POST' && req.url().includes('tables/789/lecture/6329ab4fcb360c002b6efbf8'),
@@ -126,10 +130,6 @@ test('검색 결과 탭에서 추가 기능이 정상 동작한다 (실패)', as
   await givenUser(page, { login: true });
   await page.getByTestId('main-searchbar-input').type('컴');
   await page.getByTestId('main-searchbar-search').click();
-  page.on('dialog', async (dialog) => {
-    expect(dialog.type()).toBe('alert');
-    expect(dialog.message()).toBe('비밀번호 확인이 일치하지 않습니다.');
-    await dialog.accept();
-  });
   await page.getByTestId('main-lecture-listitem').nth(0).getByText('추가').click();
+  await expect(page.getByTestId('error-dialog-message')).toHaveText('강의 시간이 서로 겹칩니다.');
 });

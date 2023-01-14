@@ -52,6 +52,7 @@ export const Main = () => {
           currentYearSemesterTimetables={currentYearSemesterTimetables}
           tab={lectureTab}
           changeTab={setLectureTab}
+          previewLectureId={previewLectureId}
           currentFullTimetable={currentFullTimetable}
           hoveredLectureId={hoveredLectureId}
           setHoveredLectureId={setHoveredLectureId}

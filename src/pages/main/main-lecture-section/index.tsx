@@ -18,10 +18,12 @@ type Props = {
   onClickLecture: (id: string) => void;
   searchResult?: SearchResultLecture[];
   setPreviewLectureId: (id: string | null) => void;
+  previewLectureId: string | null;
 };
 
 export const MainLectureSection = ({
   tab,
+  previewLectureId,
   changeTab,
   currentYearSemesterTimetables,
   className,
@@ -64,6 +66,7 @@ export const MainLectureSection = ({
         )}
         {tab === 'result' && (
           <MainSearchLectureTab
+            previewLectureId={previewLectureId}
             currentFullTimetable={currentFullTimetable}
             searchResult={searchResult}
             setPreviewLectureId={setPreviewLectureId}
