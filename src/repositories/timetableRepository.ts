@@ -29,6 +29,10 @@ export interface TimetableRepository {
       credit: number;
     } & ({ colorIndex: 9; color: Color } | { colorIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 }),
   ): Promise<FullTimetable>;
+  deleteLecture(
+    args: { baseUrl: string; apikey: string; token: string },
+    params: { id: string; lecture_id: string },
+  ): Promise<FullTimetable>;
 }
 
 const getTimetableRepository = (): TimetableRepository => {
@@ -72,6 +76,15 @@ const getTimetableRepository = (): TimetableRepository => {
         },
         method: 'PUT',
         body: JSON.stringify(body),
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok) throw data;
+      return data as FullTimetable;
+    },
+    deleteLecture: async ({ baseUrl, apikey, token }, { id, lecture_id }) => {
+      const response = await fetch(`${baseUrl}/tables/${id}/lecture/${lecture_id}`, {
+        headers: { 'x-access-apikey': apikey, 'x-access-token': token },
+        method: 'DELETE',
       });
       const data = await response.json().catch(() => null);
       if (!response.ok) throw data;
