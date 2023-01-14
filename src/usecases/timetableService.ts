@@ -28,6 +28,7 @@ export interface TimetableService {
     } & ({ colorIndex: 9; color: Color } | { colorIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 }),
   ): Promise<FullTimetable>;
   deleteLecture(token: string, params: { id: string; lecture_id: string }): Promise<FullTimetable>;
+  addLecture(token: string, params: { id: string; lecture_id: string }): Promise<FullTimetable>;
 }
 
 const getTimetableService = (args: {
@@ -46,6 +47,7 @@ const getTimetableService = (args: {
     updateLecture: async (token, params, body) =>
       args.repositories[0].updateLecture({ baseUrl, apikey, token }, params, body),
     deleteLecture: async (token, params) => args.repositories[0].deleteLecture({ baseUrl, apikey, token }, params),
+    addLecture: async (token, params) => args.repositories[0].addLecture({ baseUrl, apikey, token }, params),
   };
 };
 
