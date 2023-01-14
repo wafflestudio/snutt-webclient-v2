@@ -82,10 +82,7 @@ export const MainTimetableSection = ({
         isOpen={deleteTimetableDialogId !== null}
         close={() => setDeleteTimetableDialogId(null)}
         timetable={currentFullTimetable}
-        onDelete={() => {
-          setCurrentTimetable(null);
-          setDeleteTimetableDialogId(null);
-        }}
+        onDelete={() => setCurrentTimetable(null)}
       />
     </Wrapper>
   );

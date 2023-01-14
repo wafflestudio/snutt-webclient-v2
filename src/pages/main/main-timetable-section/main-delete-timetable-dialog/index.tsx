@@ -44,7 +44,14 @@ export const MainDeleteTimetableDialog = ({ isOpen, close, onDelete, timetable }
       <Dialog.Actions>
         <button
           data-testid="mt-tt-delete-submit"
-          onClick={() => mutate(undefined, { onSuccess: onDelete })}
+          onClick={() =>
+            mutate(undefined, {
+              onSuccess: () => {
+                onDelete();
+                onClose();
+              },
+            })
+          }
           disabled={!isDeletable}
         >
           확인
