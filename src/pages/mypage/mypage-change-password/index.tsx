@@ -13,11 +13,13 @@ export const MypageChangePassword = () => {
 
   const onSubmit = async () => {
     if (newPassword !== newPasswordConfirm) {
+      // TODO: ErrorDialog 로 마이그레이션
       alert('비밀번호 확인이 일치하지 않습니다.');
       return;
     }
 
     if (!authService.isValidPassword(newPassword)) {
+      // TODO: ErrorDialog 로 마이그레이션
       alert('비밀번호는 영문자, 숫자가 조합된 6자리 이상 20자리 이하여야 합니다.');
       return;
     }

@@ -68,8 +68,9 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
         onError: (err) => {
           const message =
             err && typeof err === 'object' && 'errcode' in err && err.errcode === 12300
-              ? '강의시간이 서로 겹칩니다.'
+              ? '강의 시간이 서로 겹칩니다.'
               : '오류가 발생했습니다.';
+          // TODO: ErrorDialog 로 마이그레이션
           alert(message);
         },
       },

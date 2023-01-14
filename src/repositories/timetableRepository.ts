@@ -46,7 +46,9 @@ export interface TimetableRepository {
 const getTimetableRepository = (): TimetableRepository => {
   return {
     getTimetables: async ({ baseUrl, apikey, token }) => {
-      const response = await fetch(`${baseUrl}/tables`, {
+      // TODO: tables 뒤에 trailing slash 붙여줘야 하는지 확인
+      // https://wafflestudio.slack.com/archives/C0PAVPS5T/p1673712860582649
+      const response = await fetch(`${baseUrl}/tables/`, {
         headers: { 'x-access-apikey': apikey, 'x-access-token': token },
       });
       const data = await response.json().catch(() => null);
@@ -55,7 +57,7 @@ const getTimetableRepository = (): TimetableRepository => {
     },
     getFullTimetable: async ({ baseUrl, apikey, token }, { id }) => {
       const response = await fetch(`${baseUrl}/tables/${id}`, {
-        headers: { 'x-access-apikey': apikey, 'x-access-token': token },
+        headers: { 'x-access-apikey': apikey, 'x-access-token': token, accept: 'application/json' },
       });
       const data = await response.json().catch(() => null);
       if (!response.ok) throw data;
@@ -71,7 +73,9 @@ const getTimetableRepository = (): TimetableRepository => {
       return data as Timetable[];
     },
     createTimetable: async ({ baseUrl, apikey, token }, { title, year, semester }) => {
-      const response = await fetch(`${baseUrl}/tables`, {
+      // TODO: tables 뒤에 trailing slash 붙여줘야 하는지 확인
+      // https://wafflestudio.slack.com/archives/C0PAVPS5T/p1673712860582649
+      const response = await fetch(`${baseUrl}/tables/`, {
         headers: {
           'x-access-apikey': apikey,
           'x-access-token': token,

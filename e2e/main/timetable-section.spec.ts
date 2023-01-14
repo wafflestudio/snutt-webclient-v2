@@ -119,4 +119,6 @@ test('로그인되었을 경우, 시간표 삭제 기능이 정상 동작한다'
     page.getByTestId('mt-tt-delete-submit').click(),
   ]);
   await expect(tabs.filter({ hasText: '나의 시간표' })).toHaveAttribute('aria-selected', `${true}`);
+  await tabs.filter({ hasText: '나의 시간표' }).locator('[data-testid=mt-tab-delete]').click();
+  await expect(page.getByTestId('mt-tt-delete-input')).toHaveValue('');
 });
