@@ -20,6 +20,7 @@ test('강의 수정 모달이 잘 보여진다 (성공케이스)', async ({ page
     page.waitForRequest(
       (req) =>
         req.method() === 'PUT' &&
+        req.url().includes('tables/123/lecture/5d1decbddb261b554d609dcc') &&
         req.postDataJSON().class_time_json[0].place === '낙아치' &&
         req.postDataJSON().class_time_json[2].place === '302-208' &&
         req.postDataJSON().course_title === '컴퓨터프로그래밍' &&
@@ -30,6 +31,7 @@ test('강의 수정 모달이 잘 보여진다 (성공케이스)', async ({ page
         req.postDataJSON().class_time_mask[2] === 240 &&
         req.postDataJSON().colorIndex === 7,
     ),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('tables/123')),
     page.getByTestId('main-lecture-edit-dialog-submit').click(),
   ]);
   // TODO: 모달 닫히는거 확인

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -12,6 +12,7 @@ import { lectureService } from '@/usecases/lectureService';
 import { timeMaskService } from '@/usecases/timeMaskService';
 import { timetableService } from '@/usecases/timetableService';
 import { ArrayElement } from '@/utils/array-element';
+import { queryKey } from '@/utils/query-key-factory';
 
 import { MainLectureEditDialogColor } from './main-lecture-edit-dialog-color';
 import { MainLectureEditDialogTime } from './main-lecture-edit-dialog-time';
@@ -68,8 +69,9 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
         onError: (err) => {
           const message =
             err && typeof err === 'object' && 'errcode' in err && err.errcode === 12300
-              ? '강의시간이 서로 겹칩니다.'
+              ? '강의 시간이 서로 겹칩니다.'
               : '오류가 발생했습니다.';
+          // TODO: ErrorDialog 로 마이그레이션
           alert(message);
         },
       },
@@ -154,13 +156,17 @@ const useColorList = () => useQuery(['colors'], () => colorService.getColorList(
 
 const useUpdateLecture = (id?: string, lectureId?: string) => {
   const { token } = useTokenContext();
+  const queryClient = useQueryClient();
 
-  return useMutation((body: Parameters<typeof timetableService.updateLecture>[2]) => {
-    if (!token) throw new Error('no token');
-    if (!id) throw new Error('no id');
-    if (!lectureId) throw new Error('no lectureId');
-    return timetableService.updateLecture(token, { id, lecture_id: lectureId }, body);
-  });
+  return useMutation(
+    (body: Parameters<typeof timetableService.updateLecture>[2]) => {
+      if (!token) throw new Error('no token');
+      if (!id) throw new Error('no id');
+      if (!lectureId) throw new Error('no lectureId');
+      return timetableService.updateLecture(token, { id, lecture_id: lectureId }, body);
+    },
+    { onSuccess: () => queryClient.invalidateQueries(queryKey(`tables/${id}`, { token })) },
+  );
 };
 
 const EditDialog = styled(Dialog)`
