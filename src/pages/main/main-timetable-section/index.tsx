@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { IcClose } from '@/components/icons/ic-close';
 import { IcPlus } from '@/components/icons/ic-plus';
 import { Tabs } from '@/components/tabs';
+import { BaseLecture } from '@/entities/lecture';
 import { FullTimetable, Timetable } from '@/entities/timetable';
 
 import { MainCreateTimetableDialog } from './main-create-timetable-dialog';
@@ -21,6 +22,7 @@ type Props = {
   setHoveredLectureId: (id: string | null) => void;
   onClickLecture: (id: string) => void;
   setCurrentTimetable: (id: string | null) => void;
+  previewLecture?: BaseLecture;
 };
 
 export const MainTimetableSection = ({
@@ -32,6 +34,7 @@ export const MainTimetableSection = ({
   hoveredLectureId,
   setHoveredLectureId,
   onClickLecture,
+  previewLecture,
   setCurrentTimetable,
 }: Props) => {
   const [isCreateTimetableDialogOpen, setCreateTimetableDialogOpen] = useState(false);
@@ -60,6 +63,7 @@ export const MainTimetableSection = ({
             currentFullTimetable && (
               <MainTimeTable
                 timetable={currentFullTimetable}
+                previewLecture={previewLecture}
                 hoveredLectureId={hoveredLectureId}
                 setHoveredLectureId={setHoveredLectureId}
                 onClickLecture={onClickLecture}

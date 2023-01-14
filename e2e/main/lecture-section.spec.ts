@@ -105,3 +105,31 @@ test('검색 결과 탭이 정상 동작한다 (시간표 없을 때)', async ({
   const lectureItem = page.getByTestId('main-lecture-listitem');
   await expect(lectureItem.nth(0).getByText('추가')).toBeDisabled();
 });
+
+test('검색 결과 탭에서 추가 기능이 정상 동작한다 (성공)', async ({ page }) => {
+  await page.goto('/?year=2001&semester=2');
+  await givenUser(page, { login: true });
+  await page.getByTestId('main-searchbar-input').type('컴');
+  await page.getByTestId('main-searchbar-search').click();
+
+  await Promise.all([
+    page.waitForRequest(
+      (req) => req.method() === 'POST' && req.url().includes('tables/789/lecture/6329ab4fcb360c002b6efbf8'),
+    ),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('tables/789')),
+    page.getByTestId('main-lecture-listitem').nth(10).getByText('추가').click(),
+  ]);
+});
+
+test('검색 결과 탭에서 추가 기능이 정상 동작한다 (실패)', async ({ page }) => {
+  await page.goto('/?year=2001&semester=2');
+  await givenUser(page, { login: true });
+  await page.getByTestId('main-searchbar-input').type('컴');
+  await page.getByTestId('main-searchbar-search').click();
+  page.on('dialog', async (dialog) => {
+    expect(dialog.type()).toBe('alert');
+    expect(dialog.message()).toBe('비밀번호 확인이 일치하지 않습니다.');
+    await dialog.accept();
+  });
+  await page.getByTestId('main-lecture-listitem').nth(0).getByText('추가').click();
+});

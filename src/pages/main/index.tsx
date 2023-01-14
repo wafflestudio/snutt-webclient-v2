@@ -18,6 +18,7 @@ import { MainTimetableSection } from './main-timetable-section';
 
 export const Main = () => {
   const [hoveredLectureId, setHoveredLectureId] = useState<string | null>(null);
+  const [previewLectureId, setPreviewLectureId] = useState<string | null>(null);
   const [dialogLectureId, setDialogLectureId] = useState<string | null>(null);
   const [lectureTab, setLectureTab] = useState<'result' | 'current'>('current');
   const [currentTimetableId, setCurrentTimetableId] = useState<string | null>(null);
@@ -35,6 +36,7 @@ export const Main = () => {
   const { mutate, data: searchResult } = useSearchResult();
 
   const dialogLecture = currentFullTimetable?.lecture_list.find((tt) => tt._id === dialogLectureId);
+  const previewLecture = searchResult?.find((item) => item._id === previewLectureId);
 
   const onClickLecture = (id: string) => setDialogLectureId(id);
 
@@ -55,11 +57,13 @@ export const Main = () => {
           setHoveredLectureId={setHoveredLectureId}
           onClickLecture={onClickLecture}
           searchResult={searchResult}
+          setPreviewLectureId={setPreviewLectureId}
         />
         <TimetableSection
           currentYearSemesterTimetables={currentYearSemesterTimetables}
           currentTimetable={currentTimetable}
           currentFullTimetable={currentFullTimetable}
+          previewLecture={previewLecture}
           changeCurrentTimetable={(id) => setCurrentTimetableId(id)}
           hoveredLectureId={hoveredLectureId}
           setHoveredLectureId={setHoveredLectureId}

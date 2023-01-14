@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
+import { BaseLecture } from '@/entities/lecture';
 import { FullTimetable } from '@/entities/timetable';
 import { colorService } from '@/usecases/colorService';
 import { lectureService } from '@/usecases/lectureService';
@@ -14,6 +15,7 @@ type Props = {
   hoveredLectureId: string | null;
   setHoveredLectureId: (id: string | null) => void;
   onClickLecture: (id: string) => void;
+  previewLecture?: BaseLecture;
 };
 
 export const MainTimeTable = ({
@@ -22,6 +24,7 @@ export const MainTimeTable = ({
   hoveredLectureId,
   setHoveredLectureId,
   onClickLecture,
+  previewLecture,
 }: Props) => {
   const { data: colorList } = useColorList();
 
@@ -84,6 +87,25 @@ export const MainTimeTable = ({
           );
         });
       })}
+
+      {previewLecture?.class_time_json.map((time) => {
+        const colStart = time.day;
+        const rowStart = time.start * 2 + 2;
+        const rowEnd = rowStart + time.len * 2;
+
+        return (
+          <Item
+            data-testid="main-timetable-lecture"
+            $colStart={colStart + 2}
+            $rowStart={rowStart}
+            $rowEnd={rowEnd}
+            $isPreview
+            key={time._id}
+          >
+            {previewLecture.course_title}
+          </Item>
+        );
+      })}
     </Wrapper>
   );
 };
@@ -126,16 +148,41 @@ const TimeLine = styled.div<{ $rowStart: number }>`
   border-bottom: 1px solid rgb(232, 235, 240);
 `;
 
-const Item = styled.div<{ $colStart: number; $rowStart: number; $rowEnd: number; $hovered: boolean }>`
+const flash = keyframes`
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 0.8;
+  }
+`;
+
+const Item = styled.div<{
+  $colStart: number;
+  $rowStart: number;
+  $rowEnd: number;
+  $hovered?: boolean;
+  $isPreview?: boolean;
+}>`
   grid-column: ${({ $colStart }) => `${$colStart} / ${$colStart + 1}`};
   grid-row: ${({ $rowStart, $rowEnd }) => `${$rowStart} / ${$rowEnd}`};
   font-size: 10px;
   display: flex;
   flex-direction: column;
+  padding: 4px 6px;
   justify-content: center;
   align-items: center;
   text-align: center;
   cursor: pointer;
   transition: filter 0.1s;
-  filter: ${({ $hovered }) => ($hovered ? 'brightness(40%)' : 'none')};
+  filter: ${({ $hovered = false }) => ($hovered ? 'brightness(40%)' : 'none')};
+
+  ${({ $isPreview = false }) =>
+    $isPreview
+      ? css`
+          box-shadow: 0px 2px 4px #000;
+          background-color: #ddd;
+          animation: ${flash} 0.5s linear infinite alternate;
+        `
+      : 'none'};
 `;
