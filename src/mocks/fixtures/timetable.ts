@@ -25,6 +25,14 @@ export const mockTimeTables: Timetable[] = [
     updated_at: '2022-10-16T05:25:43.381Z',
     total_credit: 0,
   },
+  {
+    _id: '101112',
+    year: 3001,
+    semester: 4,
+    title: '나무꾼의 시간표',
+    updated_at: '2022-10-16T05:25:43.381Z',
+    total_credit: 0,
+  },
 ];
 
 export const mockTimeTable123: FullTimetable = {
@@ -1090,6 +1098,17 @@ export const mockTimeTable789: FullTimetable = {
       colorIndex: 3,
     },
   ],
+  theme: 0,
+  updated_at: '2019-07-17T10:25:50.990Z',
+};
+
+export const mockTimeTable101112: FullTimetable = {
+  _id: '101112',
+  user_id: '5c59377722ac5f0f310df48b',
+  year: 3001,
+  semester: 4,
+  title: '나무꾼의 시간표',
+  lecture_list: [],
   theme: 0,
   updated_at: '2019-07-17T10:25:50.990Z',
 };
