@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { IcClock } from '@/components/icons/ic-clock';
@@ -8,22 +9,27 @@ import { BaseLecture } from '@/entities/lecture';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { lectureService } from '@/usecases/lectureService';
 
+import { MainLectureDeleteDialog } from './main-lecture-delete-dialog';
+
 type Props = {
+  timetableId?: string;
   lecture: BaseLecture;
-  hoveredLectureId: string | null;
-  setHoveredLectureId: (id: string | null) => void;
-  onClickLecture: (id: string) => void;
+  hoveredLectureId?: string | null;
+  setHoveredLectureId?: (id: string | null) => void;
+  onClickLecture?: (id: string) => void;
   type: 'current' | 'result';
 };
 
 export const MainLectureListItem = ({
   lecture,
+  timetableId,
   hoveredLectureId,
   setHoveredLectureId,
   onClickLecture,
   type,
 }: Props) => {
   const { year, semester } = useYearSemester();
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const isHovered = hoveredLectureId === lecture._id;
   const department = [lecture.department, lecture.academic_year];
@@ -33,10 +39,6 @@ export const MainLectureListItem = ({
   const detailUrl =
     lecture.course_number && year && semester ? lectureService.getLectureDetailUrl(lecture, { year, semester }) : null;
 
-  const onClickDelete = () => {
-    // TODO: implement
-  };
-
   const onClickAdd = () => {
     // TODO: implement
   };
@@ -44,10 +46,11 @@ export const MainLectureListItem = ({
   return (
     <LectureListItem
       data-testid="main-lecture-listitem"
-      onMouseEnter={() => setHoveredLectureId(lecture._id)}
-      onMouseLeave={() => setHoveredLectureId(null)}
-      onClick={() => onClickLecture(lecture._id)}
+      onMouseEnter={() => setHoveredLectureId?.(lecture._id)}
+      onMouseLeave={() => setHoveredLectureId?.(null)}
+      onClick={() => onClickLecture?.(lecture._id)}
       $hovered={isHovered}
+      $clickable={!!onClickLecture}
     >
       <LectureInner>
         <LectureHeader>
@@ -73,7 +76,11 @@ export const MainLectureListItem = ({
             {
               {
                 current: (
-                  <LectureButton style={{ color: '#ff0000' }} onClick={(e) => (e.stopPropagation(), onClickDelete())}>
+                  <LectureButton
+                    style={{ color: '#ff0000' }}
+                    onClick={(e) => (e.stopPropagation(), setDeleteDialogOpen(true))}
+                    data-testid="main-lecture-listitem-delete"
+                  >
                     삭제
                   </LectureButton>
                 ),
@@ -109,13 +116,20 @@ export const MainLectureListItem = ({
           </LectureDescription>
         )}
       </LectureInner>
+
+      <MainLectureDeleteDialog
+        lecture={lecture}
+        timetableId={timetableId}
+        isOpen={isDeleteDialogOpen}
+        close={() => setDeleteDialogOpen(false)}
+      />
     </LectureListItem>
   );
 };
 
-const LectureListItem = styled.li<{ $hovered: boolean }>`
+const LectureListItem = styled.li<{ $hovered: boolean; $clickable: boolean }>`
   list-style-type: none;
-  cursor: pointer;
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
   transition: background-color 0.1s;
   background-color: ${({ $hovered }) => ($hovered ? '#ddd' : '#fff')};
 `;
