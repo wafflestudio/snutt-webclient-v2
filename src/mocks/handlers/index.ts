@@ -143,4 +143,15 @@ export const handlers = [
 
     return res(ctx.status(200), ctx.json(mockTimeTable123));
   }),
+
+  rest.delete<never, { id: string }, Timetable[] | CoreServerError>(`*/tables/:id`, async (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(mockTimeTables));
+  }),
+
+  rest.delete<never, { id: string; lectureId: string }, FullTimetable>(
+    `*/tables/:id/lecture/:lectureId`,
+    async (req, res, ctx) => {
+      return res(ctx.status(200), ctx.json(mockTimeTable123));
+    },
+  ),
 ];
