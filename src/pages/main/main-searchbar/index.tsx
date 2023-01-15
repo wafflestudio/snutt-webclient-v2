@@ -14,7 +14,11 @@ import { ArrayElement } from '@/utils/array-element';
 import { MainSearchbarFilterDialog } from './main-searchbar-filter-dialog';
 import { MainSearchbarYearSemesterSelect } from './main-searchbar-year-semester-select';
 
-type Props = { onSearch: (filter: Partial<SearchFilter>) => void; currentFullTimetable?: FullTimetable };
+type Props = {
+  onSearch: (filter: Partial<SearchFilter>) => void;
+  currentFullTimetable?: FullTimetable;
+  resetSearchResult: () => void;
+};
 
 export type SearchForm = {
   title: SearchFilter['title'];
@@ -40,7 +44,7 @@ const initialForm = {
   manualBitmask: [],
 };
 
-export const MainSearchbar = ({ onSearch, currentFullTimetable }: Props) => {
+export const MainSearchbar = ({ onSearch, currentFullTimetable, resetSearchResult }: Props) => {
   const [open, setOpen] = useState(false);
   const [searchForm, setSearchForm] = useState<SearchForm>(initialForm);
   const { year, semester } = useYearSemester();
@@ -50,8 +54,9 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable }: Props) => {
     ? dayjs(currentCourseBook.updated_at).format('YYYY. MM. DD')
     : '';
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = (e?: FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
+
     if (!year || !semester) return;
 
     const undefinedIfEmpty = <T,>(e: T[]) => (e.length === 0 ? undefined : e);
@@ -93,7 +98,7 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable }: Props) => {
 
   return (
     <Wrapper>
-      <MainSearchbarYearSemesterSelect />
+      <MainSearchbarYearSemesterSelect resetSearchResult={resetSearchResult} />
       <Form onSubmit={onSubmit}>
         <Input
           data-testid="main-searchbar-input"
@@ -107,16 +112,17 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable }: Props) => {
         <TransparentButton type="button" data-testid="layout-searchbar-filter-button" onClick={() => setOpen(true)}>
           <FilterIcon />
         </TransparentButton>
+        <MainSearchbarFilterDialog
+          open={open}
+          onSubmit={onSubmit}
+          onClose={() => setOpen(false)}
+          searchForm={searchForm}
+          onChangeCheckbox={onChangeCheckbox}
+          onChangeDepartment={(department) => setSearchForm((sf) => ({ ...sf, department }))}
+          onChangeTimeRadio={(timeType) => setSearchForm((sf) => ({ ...sf, timeType }))}
+          onChangeBitMask={onChangeBitMask}
+        />
       </Form>
-      <MainSearchbarFilterDialog
-        open={open}
-        onClose={() => setOpen(false)}
-        searchForm={searchForm}
-        onChangeCheckbox={onChangeCheckbox}
-        onChangeDepartment={(department) => setSearchForm((sf) => ({ ...sf, department }))}
-        onChangeTimeRadio={(timeType) => setSearchForm((sf) => ({ ...sf, timeType }))}
-        onChangeBitMask={onChangeBitMask}
-      />
     </Wrapper>
   );
 };
