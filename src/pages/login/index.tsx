@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from 'react-facebook-login';
+import FBLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { Link, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
@@ -7,6 +9,7 @@ import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { CoreServerError } from '@/entities/error';
 import { authService } from '@/usecases/authService';
+import { envService } from '@/usecases/envService';
 import { errorService } from '@/usecases/errorService';
 
 import { LoginFindIdDialog } from './login-find-id-dialog';
@@ -39,6 +42,21 @@ export const Login = () => {
     }
   };
 
+  const handleFacebookSignIn = async (userInfo: ReactFacebookLoginInfo) => {
+    setErrorMessage('');
+
+    try {
+      const res = await authService.signIn({ type: 'FACEBOOK', fb_id: userInfo.id, fb_token: userInfo.accessToken });
+
+      saveToken(res.token, keepSignIn);
+      navigate('/');
+    } catch (error) {
+      const errorCode = (error as CoreServerError).errcode;
+
+      setErrorMessage(errorService.getErrorMessage(errorCode));
+    }
+  };
+
   return (
     <Layout>
       <LoginWrapper>
@@ -57,9 +75,16 @@ export const Login = () => {
           <Label htmlFor="keepSignIn">로그인 유지</Label>
         </CheckboxWrapper>
         <ErrorMessage data-testid="error-message">{errorMessage}</ErrorMessage>
-        <LoginButton disabled={!(id && password)} onClick={handleSignIn} data-testid="local-signin-button">
+        <LocalSignInButton disabled={!(id && password)} onClick={handleSignIn} data-testid="local-signin-button">
           로그인
-        </LoginButton>
+        </LocalSignInButton>
+        <FBLogin
+          appId={envService.getFacebookAppId()}
+          autoLoad
+          callback={handleFacebookSignIn}
+          onFailure={({ status }: ReactFacebookFailureResponse) => setErrorMessage(status || '')}
+          render={({ onClick }) => <FBSignInButton onClick={onClick}>facebook으로 로그인</FBSignInButton>}
+        />
         <EtcWrapper>
           <FindWrapper>
             <OtherButton data-testid="login-find-id" onClick={() => setFindIdDialogOpen(true)}>
@@ -146,10 +171,6 @@ const ErrorMessage = styled.span`
   margin: 20px 0;
 `;
 
-const LoginButton = styled(Button).attrs({ size: 'big' })`
-  margin-top: 10px;
-`;
-
 const otherStyle = css`
   font-size: 14px;
   text-decoration: none;
@@ -193,4 +214,18 @@ const Divider = styled.div`
   width: 1px;
   height: 12px;
   background-color: #888888;
+`;
+
+const LocalSignInButton = styled(Button)`
+  color: #fff;
+  background-color: #1bd0c9;
+`;
+
+const FBSignInButton = styled(Button)`
+  color: #3c5dd4;
+  border: 1px solid #3c5dd4;
+
+  &:hover {
+    background-color: rgba(60, 93, 212, 0.1);
+  }
 `;

@@ -7,6 +7,7 @@ export interface EnvService {
   getBaseUrl(): string;
   getGitSha(): string;
   getGitTag(): string;
+  getFacebookAppId(): string;
 }
 
 const getEnvService = (args: { repositories: [EnvRepository] }): EnvService => {
@@ -28,6 +29,7 @@ const getEnvService = (args: { repositories: [EnvRepository] }): EnvService => {
         return 'unknown';
       }
     },
+    getFacebookAppId: () => args.repositories[0].getFacebookAppId(),
   };
 };
 
