@@ -171,11 +171,20 @@ export const handlers = [
       return res(ctx.status(200), ctx.json(mockTimeTable123));
     },
   ),
-  rest.post<never, { id: string; password: string }, SignInResponse>(`*/auth/login_local`, (req, res, ctx) => {
-    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+  rest.post<{ id: string; password: string }, never, SignInResponse | CoreServerError>(
+    `*/auth/login_local`,
+    async (req, res, ctx) => {
+      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
-    return res(ctx.json(mockSignInReponse));
-  }),
+      const id = new URLSearchParams(await req.text()).get('id');
+
+      if (id === 'fail-test-id') {
+        return res(ctx.status(403), ctx.json({ errcode: 8196, message: '', ext: {} }));
+      }
+
+      return res(ctx.json(mockSignInReponse));
+    },
+  ),
 ];
 
 const isOverlap = (

@@ -49,7 +49,7 @@ export const Login = () => {
           <Checkbox id="keepSignIn" checked={keepSignIn} onChange={(e) => setKeepSignIn(e.target.checked)} />
           <Label htmlFor="keepSignIn">로그인 유지</Label>
         </CheckboxWrapper>
-        <ErrorMessage>{errorMessage}</ErrorMessage>
+        <ErrorMessage data-testid="error-message">{errorMessage}</ErrorMessage>
         <SignInButton disabled={!(id && password)} onClick={handleSignIn} data-testid="local-signin-button">
           로그인
         </SignInButton>
