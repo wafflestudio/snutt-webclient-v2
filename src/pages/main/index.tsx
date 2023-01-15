@@ -109,7 +109,7 @@ const useCurrentFullTimetable = (id: string | undefined) => {
 };
 
 const useSearchResult = () => {
-  return useMutation((value: Partial<SearchFilter>) => searchService.search(value));
+  return useMutation(['search_query'], (value: Partial<SearchFilter>) => searchService.search(value));
 };
 
 const Wrapper = styled.div`

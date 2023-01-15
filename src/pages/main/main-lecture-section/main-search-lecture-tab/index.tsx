@@ -1,7 +1,10 @@
+import { useIsMutating } from '@tanstack/react-query';
+
+import { Loader } from '@/components/loader';
 import { SearchResultLecture } from '@/entities/search';
 import { FullTimetable } from '@/entities/timetable';
 
-import { MainLectureEmptyText } from '../main-lecture-empty-text';
+import { MainLectureEmptyWrapper } from '../main-lecture-empty-wrapper';
 import { MainLectureList } from '../main-lecture-list';
 import { MainSearchLectureListItem } from './main-search-lecture-list-item';
 
@@ -18,9 +21,18 @@ export const MainSearchLectureTab = ({
   setPreviewLectureId,
   previewLectureId,
 }: Props) => {
-  if (!searchResult) return null;
+  const isSearchResultMutating = useIsMutating(['search_query']);
 
-  if (searchResult.length === 0) return <MainLectureEmptyText>검색 결과가 없습니다.</MainLectureEmptyText>;
+  if (isSearchResultMutating)
+    return (
+      <MainLectureEmptyWrapper>
+        <Loader data-testid="ml-search-loader" />
+      </MainLectureEmptyWrapper>
+    );
+
+  if (!searchResult) return <MainLectureEmptyWrapper>강의를 검색하세요</MainLectureEmptyWrapper>;
+
+  if (searchResult.length === 0) return <MainLectureEmptyWrapper>검색 결과가 없습니다.</MainLectureEmptyWrapper>;
 
   return (
     <MainLectureList>
