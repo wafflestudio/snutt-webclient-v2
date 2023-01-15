@@ -33,7 +33,7 @@ export const Main = () => {
 
   const { data: currentFullTimetable } = useCurrentFullTimetable(currentTimetable?._id);
 
-  const { mutate, data: searchResult } = useSearchResult();
+  const { mutate, data: searchResult, reset } = useSearchResult();
 
   const dialogLecture = currentFullTimetable?.lecture_list.find((tt) => tt._id === dialogLectureId);
   const previewLecture = searchResult?.find((item) => item._id === previewLectureId);
@@ -46,7 +46,11 @@ export const Main = () => {
   };
 
   return (
-    <Layout headerChildren={<MainSearchbar onSearch={onSearch} currentFullTimetable={currentFullTimetable} />}>
+    <Layout
+      headerChildren={
+        <MainSearchbar onSearch={onSearch} currentFullTimetable={currentFullTimetable} resetSearchResult={reset} />
+      }
+    >
       <Wrapper>
         <LectureSection
           currentYearSemesterTimetables={currentYearSemesterTimetables}

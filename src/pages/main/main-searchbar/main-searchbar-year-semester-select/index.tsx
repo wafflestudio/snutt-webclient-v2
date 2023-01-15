@@ -5,7 +5,9 @@ import { useCourseBooks } from '@/hooks/useCourseBooks';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { semesterService } from '@/usecases/semesterService';
 
-export const MainSearchbarYearSemesterSelect = () => {
+type Props = { resetSearchResult: () => void };
+
+export const MainSearchbarYearSemesterSelect = ({ resetSearchResult }: Props) => {
   const { data: courseBooks } = useCourseBooks();
   const [searchParams, setSearchParams] = useSearchParams();
   const { year, semester } = useYearSemester();
@@ -13,6 +15,7 @@ export const MainSearchbarYearSemesterSelect = () => {
   const value = year && semester ? semesterService.courseBookToValue({ year, semester }) : 0;
 
   const onChangeBook = ({ year, semester }: { year: number; semester: number }) => {
+    resetSearchResult();
     const newParams = new URLSearchParams(searchParams);
     newParams.set('year', `${year}`);
     newParams.set('semester', `${semester}`);

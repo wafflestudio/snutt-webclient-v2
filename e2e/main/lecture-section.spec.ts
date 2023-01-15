@@ -113,6 +113,16 @@ test('검색 결과 탭이 정상 동작한다 (검색 전)', async ({ page }) =
   await expect(page.getByText('강의를 검색하세요')).toHaveCount(1);
 });
 
+test('학기 변경 시 검색 결과가 초기화된다', async ({ page }) => {
+  await page.goto('/?year=4001&semester=3');
+  await givenUser(page, { login: false });
+  await page.getByTestId('main-searchbar-search').click();
+  await page.getByTestId('ml-result-tab').click();
+  await expect(page.getByText('강의를 검색하세요')).toHaveCount(0);
+  await page.getByTestId('course-book-select').selectOption({ label: '2001-S' });
+  await expect(page.getByText('강의를 검색하세요')).toHaveCount(1);
+});
+
 test('검색 결과 탭에서 추가 기능이 정상 동작한다 (성공)', async ({ page }) => {
   await page.goto('/?year=2001&semester=2');
   await givenUser(page, { login: true });
