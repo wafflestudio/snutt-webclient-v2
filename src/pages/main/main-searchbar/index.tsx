@@ -54,8 +54,9 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable, resetSearchResul
     ? dayjs(currentCourseBook.updated_at).format('YYYY. MM. DD')
     : '';
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = (e?: FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
+
     if (!year || !semester) return;
 
     const undefinedIfEmpty = <T,>(e: T[]) => (e.length === 0 ? undefined : e);
@@ -111,16 +112,17 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable, resetSearchResul
         <TransparentButton type="button" data-testid="layout-searchbar-filter-button" onClick={() => setOpen(true)}>
           <FilterIcon />
         </TransparentButton>
+        <MainSearchbarFilterDialog
+          open={open}
+          onSubmit={onSubmit}
+          onClose={() => setOpen(false)}
+          searchForm={searchForm}
+          onChangeCheckbox={onChangeCheckbox}
+          onChangeDepartment={(department) => setSearchForm((sf) => ({ ...sf, department }))}
+          onChangeTimeRadio={(timeType) => setSearchForm((sf) => ({ ...sf, timeType }))}
+          onChangeBitMask={onChangeBitMask}
+        />
       </Form>
-      <MainSearchbarFilterDialog
-        open={open}
-        onClose={() => setOpen(false)}
-        searchForm={searchForm}
-        onChangeCheckbox={onChangeCheckbox}
-        onChangeDepartment={(department) => setSearchForm((sf) => ({ ...sf, department }))}
-        onChangeTimeRadio={(timeType) => setSearchForm((sf) => ({ ...sf, timeType }))}
-        onChangeBitMask={onChangeBitMask}
-      />
     </Wrapper>
   );
 };
