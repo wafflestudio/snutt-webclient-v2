@@ -1,25 +1,16 @@
-import { useQuery } from '@tanstack/react-query';
 import { PropsWithChildren, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
-import { IcAlarm } from '@/components/icons/ic-alarm';
 import { IcLogo } from '@/components/icons/ic-logo';
-import { useTokenContext } from '@/contexts/tokenContext';
 import { BREAKPOINT } from '@/styles/constants';
-import { notificationService } from '@/usecases/notificationService';
-import { userService } from '@/usecases/userService';
-import { queryKey } from '@/utils/query-key-factory';
+
+import { LayoutNotification } from './layout-notification';
+import { LayoutProfile } from './layout-profile';
 
 type Props = { headerChildren?: ReactNode };
 
 export const Layout = ({ children, headerChildren }: PropsWithChildren<Props>) => {
-  const { data: myInfo } = useMyInfo();
-  useNotificationCount();
-  useNotificationList();
-
-  const isLogged = !!useTokenContext().token;
-
   return (
     <div>
       <Header>
@@ -32,60 +23,13 @@ export const Layout = ({ children, headerChildren }: PropsWithChildren<Props>) =
           </HeaderLeft>
           <HeaderMiddle>{headerChildren}</HeaderMiddle>
           <HeaderRight>
-            <NotificationIcon />
-            {isLogged ? (
-              <ProfileText to="/mypage" data-testid="layout-my-info">
-                {myInfo?.local_id}님
-              </ProfileText>
-            ) : (
-              <ProfileText to="/login" data-testid="layout-my-info">
-                로그인
-              </ProfileText>
-            )}
+            <LayoutNotification />
+            <LayoutProfile />
           </HeaderRight>
         </HeaderInner>
       </Header>
       <Main>{children}</Main>
     </div>
-  );
-};
-
-const useMyInfo = () => {
-  const { token } = useTokenContext();
-
-  return useQuery(
-    queryKey('user/info', { token }),
-    () => {
-      if (!token) throw new Error('no token');
-      return userService.getUserInfo(token);
-    },
-    { enabled: !!token },
-  );
-};
-
-const useNotificationCount = () => {
-  const { token } = useTokenContext();
-
-  return useQuery(
-    queryKey('notifications/count', { token }),
-    () => {
-      if (!token) throw new Error('no token');
-      return notificationService.getCount(token);
-    },
-    { enabled: !!token },
-  );
-};
-
-const useNotificationList = () => {
-  const { token } = useTokenContext();
-
-  return useQuery(
-    queryKey('notifications', { token }),
-    () => {
-      if (!token) throw new Error('no token');
-      return notificationService.getList(token);
-    },
-    { enabled: !!token },
   );
 };
 
@@ -168,54 +112,4 @@ const Title = styled.h1`
 const Main = styled.main`
   max-width: ${BREAKPOINT}px;
   margin: 0 auto;
-`;
-
-const ProfileText = styled(Link)`
-  text-decoration: none;
-  color: black;
-  opacity: 0.8;
-  transition: opacity 0.2s;
-  width: 80px;
-  text-align: right;
-  font-size: 14px;
-  font-weight: 500;
-
-  &:hover {
-    opacity: 1;
-  }
-`;
-
-const shake = keyframes`
-  0% {
-    transform: rotate(0deg);
-  }
-  10% {
-    transform: rotate(-30deg);
-    opacity: 0.6;
-  }
-  30% {
-    transform: rotate(30deg);
-    opacity: 0.9;
-  }
-  50% {
-    transform: rotate(-30deg);
-  }
-  70% {
-    transform: rotate(30deg);
-    opacity: 0.5;
-  }
-  100% {
-    transform: rotate3d(1, 1, 1, 360deg);
-  }
-`;
-
-const NotificationIcon = styled(IcAlarm)`
-  opacity: 0.6;
-  cursor: pointer;
-  border-radius: 50%;
-
-  &:hover {
-    opacity: 1;
-    animation: ${shake} 1s infinite linear;
-  }
 `;
