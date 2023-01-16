@@ -28,7 +28,7 @@ export const MainLectureEditDialogColor = ({ colorList, currentColor: { bg, fg }
                 ? { border: `1px solid ${c.bg}`, backgroundColor: c.bg, color: c.fg }
                 : { border: `1px solid ${c.bg}`, color: c.bg }
             }
-            onClick={() => onChangeColor(i as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9, c)}
+            onClick={() => onChangeColor((i + 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9, c)}
           >
             {COLOR_LABEL_MAP[c.bg] ?? c.bg}
           </ColorChip>
@@ -36,6 +36,7 @@ export const MainLectureEditDialogColor = ({ colorList, currentColor: { bg, fg }
       })}
 
       <CustomColorChip
+        data-testid="main-lecture-edit-dialog-custom-color"
         style={
           isCustomColor
             ? { border: `1px solid ${bg}`, backgroundColor: `${bg}`, color: `${fg}` }
@@ -46,13 +47,13 @@ export const MainLectureEditDialogColor = ({ colorList, currentColor: { bg, fg }
         <Palette
           value={customColor}
           onChange={(e) => {
-            onChangeColor(9, { bg: e.target.value, fg: '#ffffff' });
+            onChangeColor(0, { bg: e.target.value, fg: '#ffffff' });
             setCustomColor(e.target.value);
           }}
           onClick={(e) =>
             'value' in e.target &&
             typeof e.target.value === 'string' &&
-            onChangeColor(9, { bg: e.target.value, fg: '#ffffff' })
+            onChangeColor(0, { bg: e.target.value, fg: '#ffffff' })
           }
         />
       </CustomColorChip>
