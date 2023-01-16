@@ -131,7 +131,6 @@ const Button = styled.button`
   height: 34px;
   font-size: 13px;
   background-color: transparent;
-  opacity: 1;
   cursor: pointer;
 `;
 
