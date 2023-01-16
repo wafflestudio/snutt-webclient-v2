@@ -4,6 +4,16 @@ import { expect, test } from '@playwright/test';
 // @ts-ignore
 import { givenUser } from '../utils/user.ts';
 
+test('로그인되지 않았을 경우, 로그인해야 이용할 수 있다는 ui가 보여진다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page, { login: false });
+  const tabs = page.getByTestId('mt-tab');
+  await expect(tabs).toHaveCount(0);
+  await expect(page.getByText('로그인하면 시간표를 이용할 수 있어요')).toHaveCount(1);
+  await page.getByTestId('mt-create-timetable').click();
+  await expect(page).toHaveURL('/login');
+});
+
 test('로그인되었을 경우, 시간표 목록 탭이 정상 동작한다 (시간표 2개인 학기)', async ({ page }) => {
   await page.goto('/');
   await givenUser(page);

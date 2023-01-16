@@ -1,7 +1,7 @@
 import { Loader } from '@/components/loader';
 import { FullTimetable, Timetable } from '@/entities/timetable';
 
-import { MainLectureEmptyWrapper } from '../main-lecture-empty-wrapper';
+import { MainSectionEmptyWrapper } from '../../main-section-empty-wrapper';
 import { MainLectureList } from '../main-lecture-list';
 import { MainCurrentLectureListItem } from './main-current-lecture-list-item';
 
@@ -21,18 +21,18 @@ export const MainCurrentLectureTab = ({
   setHoveredLectureId,
 }: Props) => {
   if (currentYearSemesterTimetables && currentYearSemesterTimetables.length === 0)
-    return <MainLectureEmptyWrapper data-testid="ml-current-no-timetable">시간표가 없습니다.</MainLectureEmptyWrapper>;
+    return <MainSectionEmptyWrapper data-testid="ml-current-no-timetable">시간표가 없습니다.</MainSectionEmptyWrapper>;
 
   if (!currentFullTimetable || !currentYearSemesterTimetables)
     return (
-      <MainLectureEmptyWrapper>
+      <MainSectionEmptyWrapper>
         <Loader />
-      </MainLectureEmptyWrapper>
+      </MainSectionEmptyWrapper>
     );
 
   if (currentFullTimetable.lecture_list.length === 0)
     return (
-      <MainLectureEmptyWrapper data-testid="ml-current-no-lecture">추가된 강의가 없습니다.</MainLectureEmptyWrapper>
+      <MainSectionEmptyWrapper data-testid="ml-current-no-lecture">추가된 강의가 없습니다.</MainSectionEmptyWrapper>
     );
 
   return (
