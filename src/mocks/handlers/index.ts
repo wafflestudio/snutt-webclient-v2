@@ -21,7 +21,7 @@ import {
   mockTimeTable101112,
   mockTimeTables,
 } from '@/mocks/fixtures/timetable';
-import { mockUser, mockUsers } from '@/mocks/fixtures/user';
+import { mockUsers } from '@/mocks/fixtures/user';
 import { SearchRepository } from '@/repositories/searchRepository';
 import { timetableRepository } from '@/repositories/timetableRepository';
 import { UserRepository } from '@/repositories/userRepository';
@@ -75,12 +75,20 @@ export const handlers = [
     },
   ),
 
-  rest.get<never, never, Awaited<ReturnType<UserRepository['getUserInfo']>>>(`*/user/info`, (req, res, ctx) => {
-    if (!req.headers.get('x-access-token')) return res(ctx.status(403));
-    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+  rest.get<never, never, Awaited<ReturnType<UserRepository['getUserInfo']> | CoreServerError>>(
+    `*/user/info`,
+    (req, res, ctx) => {
+      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+      const token = req.headers.get('x-access-token');
+      if (!token) return res(ctx.status(403));
 
-    return res(ctx.json(mockUser));
-  }),
+      const user = mockUsers.find((u) => u.auth.token === token);
+
+      if (!user) return res(ctx.status(403), ctx.json({ errcode: 8194, ext: {}, message: '' }));
+
+      return res(ctx.json(user.info));
+    },
+  ),
 
   rest.get<never, never, { count: number }>(`*/notification/count`, (req, res, ctx) => {
     if (!req.headers.get('x-access-token')) return res(ctx.status(403));
@@ -180,13 +188,13 @@ export const handlers = [
       const id = params.get('id');
       const password = params.get('password');
 
-      const user = mockUsers.find((mockUser) => mockUser.local_id === id);
+      const user = mockUsers.find((mockUser) => mockUser.info.local_id === id);
 
       if (!user) {
         return res(ctx.status(403), ctx.json({ errcode: 8196, message: '', ext: {} }));
       }
 
-      if (user.password != password) {
+      if (user.auth.password !== password) {
         return res(ctx.status(403), ctx.json({ errcode: 8197, message: '', ext: {} }));
       }
 

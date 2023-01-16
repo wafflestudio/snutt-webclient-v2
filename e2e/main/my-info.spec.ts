@@ -13,6 +13,24 @@ test('로그인했으면 내 정보가 보여진다', async ({ page }) => {
   await expect(page).toHaveURL('/mypage');
 });
 
+test('임시 유저로 로그인했으면 로그인 정보가 보여진다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page, { login: false, type: 'temp' });
+  const myInfoLink = page.getByTestId('layout-my-info');
+  await expect(myInfoLink).toHaveText('로그인');
+  await myInfoLink.click();
+  await expect(page).toHaveURL('/login');
+});
+
+test('페북 유저로 로그인했으면 페북 이름 정보가 보여진다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page, { login: false, type: 'fb' });
+  const myInfoLink = page.getByTestId('layout-my-info');
+  await expect(myInfoLink).toHaveText('김기완님');
+  await myInfoLink.click();
+  await expect(page).toHaveURL('/login');
+});
+
 test('로그인 안했으면 로그인 정보가 보여진다', async ({ page }) => {
   await page.goto('/');
   await givenUser(page, { login: false });
