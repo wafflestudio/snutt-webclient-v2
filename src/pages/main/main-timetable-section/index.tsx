@@ -86,7 +86,9 @@ export const MainTimetableSection = ({
             <NoTimetable onClickCreate={() => setCreateTimetableDialogOpen(true)} />
           ))
         ) : (
-          <MainSectionEmptyWrapper>로그인하면 시간표를 이용할 수 있어요</MainSectionEmptyWrapper>
+          <MainSectionEmptyWrapper data-testid="mt-not-logged-in">
+            로그인하면 시간표를 이용할 수 있어요
+          </MainSectionEmptyWrapper>
         )}
       </Content>
       <MainCreateTimetableDialog

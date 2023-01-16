@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { givenUser } from '../utils/user.ts';
+import { givenUser } from '../utils/user.js';
 
 test('강의 목록 탭이 정상 동작한다', async ({ page }) => {
   await page.goto('/');
@@ -14,6 +14,21 @@ test('강의 목록 탭이 정상 동작한다', async ({ page }) => {
   await resultTab.click();
   await expect(resultTab).toHaveAttribute('aria-selected', 'true');
   await expect(currentTab).toHaveAttribute('aria-selected', 'false');
+});
+
+test('로그인되지 않았을 경우 검색 결과 탭이 enable되어 있다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page, { login: false });
+  const resultTab = page.getByTestId('ml-result-tab');
+  await expect(resultTab).toHaveAttribute('aria-selected', 'true');
+});
+
+test('로그인되지 않았을 경우 현재 시간표 탭에 로그인 ui가 보인다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page, { login: false });
+  const currentTab = page.getByTestId('ml-current-tab');
+  await currentTab.click();
+  await expect(page.getByTestId('ml-current-not-logged-in')).toHaveCount(1);
 });
 
 test('현재 시간표 탭이 정상 동작한다 (시간표 있을 때)', async ({ page }) => {

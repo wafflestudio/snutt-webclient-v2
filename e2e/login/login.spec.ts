@@ -2,8 +2,8 @@ import { expect, test } from '@playwright/test';
 
 test('로컬 로그인이 성공적으로 동작한다.', async ({ page }) => {
   await page.goto('/login');
-  const id = 'test-id';
-  const password = 'test-password';
+  const id = 'woohm402';
+  const password = '1234';
 
   await page.getByTestId('id-input').fill(id);
   await page.getByTestId('password-input').fill(password);
@@ -15,8 +15,8 @@ test('로컬 로그인이 성공적으로 동작한다.', async ({ page }) => {
 
 test('존재하지 않는 아이디로 로컬 로그인 시, 에러메시지가 노출된다.', async ({ page }) => {
   await page.goto('/login');
-  const id = 'fail-test-id';
-  const password = 'test-password';
+  const id = 'woohm403';
+  const password = '1234';
 
   await expect(page.getByTestId('error-message')).toHaveText('');
 
@@ -30,8 +30,8 @@ test('존재하지 않는 아이디로 로컬 로그인 시, 에러메시지가 
 
 test('일치하지 않는 비밀번호로 로컬 로그인 시, 에러메시지가 노출된다.', async ({ page }) => {
   await page.goto('/login');
-  const id = 'test-id';
-  const password = 'wrong-password';
+  const id = 'woohm402';
+  const password = '7890';
 
   await expect(page.getByTestId('error-message')).toHaveText('');
 
