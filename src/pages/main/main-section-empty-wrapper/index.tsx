@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const MainLectureEmptyWrapper = styled.div`
+export const MainSectionEmptyWrapper = styled.div`
   display: flex;
   height: 100%;
   flex-direction: column;

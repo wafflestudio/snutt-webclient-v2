@@ -4,7 +4,7 @@ import { Loader } from '@/components/loader';
 import { SearchResultLecture } from '@/entities/search';
 import { FullTimetable } from '@/entities/timetable';
 
-import { MainLectureEmptyWrapper } from '../main-lecture-empty-wrapper';
+import { MainSectionEmptyWrapper } from '../../main-section-empty-wrapper';
 import { MainLectureList } from '../main-lecture-list';
 import { MainSearchLectureListItem } from './main-search-lecture-list-item';
 
@@ -25,14 +25,14 @@ export const MainSearchLectureTab = ({
 
   if (isSearchResultMutating)
     return (
-      <MainLectureEmptyWrapper>
+      <MainSectionEmptyWrapper>
         <Loader data-testid="ml-search-loader" />
-      </MainLectureEmptyWrapper>
+      </MainSectionEmptyWrapper>
     );
 
-  if (!searchResult) return <MainLectureEmptyWrapper>강의를 검색하세요</MainLectureEmptyWrapper>;
+  if (!searchResult) return <MainSectionEmptyWrapper>강의를 검색하세요</MainSectionEmptyWrapper>;
 
-  if (searchResult.length === 0) return <MainLectureEmptyWrapper>검색 결과가 없습니다.</MainLectureEmptyWrapper>;
+  if (searchResult.length === 0) return <MainSectionEmptyWrapper>검색 결과가 없습니다.</MainSectionEmptyWrapper>;
 
   return (
     <MainLectureList>

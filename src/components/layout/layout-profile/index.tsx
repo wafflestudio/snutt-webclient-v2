@@ -10,14 +10,16 @@ export const LayoutProfile = () => {
   const { data: myInfo } = useMyInfo();
 
   const isLogged = !!useTokenContext().token;
+  const isTempUser = !myInfo?.local_id && !myInfo?.fb_name;
+  const isLoginButton = !isLogged || isTempUser;
 
-  return isLogged ? (
-    <ProfileText to="/mypage" data-testid="layout-my-info">
-      {myInfo?.local_id}님
-    </ProfileText>
-  ) : (
+  return isLoginButton ? (
     <ProfileText to="/login" data-testid="layout-my-info">
       로그인
+    </ProfileText>
+  ) : (
+    <ProfileText to="/mypage" data-testid="layout-my-info">
+      {myInfo?.local_id ?? myInfo?.fb_name}님
     </ProfileText>
   );
 };

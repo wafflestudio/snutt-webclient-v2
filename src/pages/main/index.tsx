@@ -17,10 +17,11 @@ import { MainSearchbar } from './main-searchbar';
 import { MainTimetableSection } from './main-timetable-section';
 
 export const Main = () => {
+  const { token } = useTokenContext();
   const [hoveredLectureId, setHoveredLectureId] = useState<string | null>(null);
   const [previewLectureId, setPreviewLectureId] = useState<string | null>(null);
   const [dialogLectureId, setDialogLectureId] = useState<string | null>(null);
-  const [lectureTab, setLectureTab] = useState<'result' | 'current'>('current');
+  const [lectureTab, setLectureTab] = useState<'result' | 'current'>(token ? 'current' : 'result');
   const [currentTimetableId, setCurrentTimetableId] = useState<string | null>(null);
   const { year, semester } = useYearSemester();
   const { data: timetables } = useMyTimetables();
