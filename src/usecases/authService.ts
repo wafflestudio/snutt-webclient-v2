@@ -1,3 +1,5 @@
+import { AuthRepository, authRepository } from '@/repositories/authRepository';
+import { EnvRepository, envRepository } from '@/repositories/envRepository';
 import { StorageRepository, storageRepository } from '@/repositories/storageRepository';
 import { EnvService, envService } from '@/usecases/envService';
 
@@ -8,10 +10,16 @@ export interface AuthService {
   clearToken(): void;
   isValidPassword(password: string): boolean;
   changePassword(oldPassword: string, newPassword: string): Promise<{ token: string }>;
+  signIn(
+    params: { type: 'LOCAL'; id: string; password: string } | { type: 'FACEBOOK'; fb_id: string; fb_token: string },
+  ): Promise<any>;
 }
 
-const getAuthService = (args: { repositories: [StorageRepository]; services: [EnvService] }): AuthService => {
-  const [storageRepo] = args.repositories;
+const getAuthService = (args: {
+  repositories: [EnvRepository, StorageRepository, AuthRepository];
+  services: [EnvService];
+}): AuthService => {
+  const [envRepo, storageRepo, authRepo] = args.repositories;
 
   return {
     getApiKey: () => args.services[0].getApiKey(),
@@ -31,7 +39,14 @@ const getAuthService = (args: { repositories: [StorageRepository]; services: [En
       console.log(oldPassword, newPassword);
       return { token: '' };
     },
+    signIn: (params) =>
+      params.type === 'LOCAL'
+        ? authRepo.signInWithIdPassword({ ...params, baseUrl: envRepo.getBaseUrl(), apikey: envRepo.getApiKey() })
+        : authRepo.signInWithFacebook({ ...params, baseUrl: envRepo.getBaseUrl() }),
   };
 };
 
-export const authService = getAuthService({ repositories: [storageRepository], services: [envService] });
+export const authService = getAuthService({
+  repositories: [envRepository, storageRepository, authRepository],
+  services: [envService],
+});

@@ -1,12 +1,14 @@
 import dayjs from 'dayjs';
 import { rest } from 'msw';
 
+import { SignInResponse } from '@/entities/auth';
 import { Color } from '@/entities/color';
 import { CoreServerError } from '@/entities/error';
 import { Notification } from '@/entities/notification';
 import { SearchFilter, SearchResultLecture } from '@/entities/search';
 import { CourseBook, Semester } from '@/entities/semester';
 import { FullTimetable, Timetable } from '@/entities/timetable';
+import { mockSignInReponse } from '@/mocks/fixtures/auth';
 import { mockVividIos } from '@/mocks/fixtures/color';
 import { mockNotification } from '@/mocks/fixtures/notification';
 import { mockSearchResult } from '@/mocks/fixtures/search';
@@ -19,7 +21,7 @@ import {
   mockTimeTable101112,
   mockTimeTables,
 } from '@/mocks/fixtures/timetable';
-import { mockUser } from '@/mocks/fixtures/user';
+import { mockUser, mockUsers } from '@/mocks/fixtures/user';
 import { SearchRepository } from '@/repositories/searchRepository';
 import { timetableRepository } from '@/repositories/timetableRepository';
 import { UserRepository } from '@/repositories/userRepository';
@@ -167,6 +169,28 @@ export const handlers = [
         return res(ctx.status(403), ctx.json({ errcode: 12300, message: '', ext: {} }));
 
       return res(ctx.status(200), ctx.json(mockTimeTable123));
+    },
+  ),
+  rest.post<{ id: string; password: string }, never, SignInResponse | CoreServerError>(
+    `*/auth/login_local`,
+    async (req, res, ctx) => {
+      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+
+      const params = new URLSearchParams(await req.text());
+      const id = params.get('id');
+      const password = params.get('password');
+
+      const user = mockUsers.find((mockUser) => mockUser.local_id === id);
+
+      if (!user) {
+        return res(ctx.status(403), ctx.json({ errcode: 8196, message: '', ext: {} }));
+      }
+
+      if (user.password != password) {
+        return res(ctx.status(403), ctx.json({ errcode: 8197, message: '', ext: {} }));
+      }
+
+      return res(ctx.json(mockSignInReponse));
     },
   ),
 ];

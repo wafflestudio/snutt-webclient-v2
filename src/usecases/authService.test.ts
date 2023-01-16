@@ -6,6 +6,10 @@ jest.mock('@/usecases/envService', () => ({
   envService: {},
 }));
 
+jest.mock('@/repositories/envRepository', () => ({
+  envRepository: {},
+}));
+
 test('isValidPassword', () => {
   expect(authService.isValidPassword('')).toStrictEqual(false);
   expect(authService.isValidPassword('qwer')).toStrictEqual(false);
