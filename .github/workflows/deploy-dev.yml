@@ -26,6 +26,7 @@ jobs:
           yarn install
           cp .env.dev .env.production
           VITE_API_KEY=${{ secrets.API_KEY_DEV }} \
+          VITE_GIT_SHA=$(git rev-parse HEAD) \
             yarn build
 
       - name: Deploy to S3 and Invalidate Cloudfront
