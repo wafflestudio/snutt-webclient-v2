@@ -11,13 +11,18 @@ import { queryKey } from '@/utils/query-key-factory';
 import { MypageChangePassword } from './mypage-change-password';
 
 export const MyPage = () => {
-  const { token } = useTokenContext();
+  const { token, clearToken } = useTokenContext();
   const { data: myInfo } = useMyInfo();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!token) navigate('/login');
   }, [token, navigate]);
+
+  const logout = () => {
+    clearToken();
+    navigate('/');
+  };
 
   return (
     <Layout>
@@ -45,7 +50,9 @@ export const MyPage = () => {
         </Row>
         <Row>
           <RowLabel>로그아웃</RowLabel>
-          <Button $color="#000000">로그아웃하기</Button>
+          <Button onClick={logout} $color="#000000">
+            로그아웃하기
+          </Button>
         </Row>
         <Row>
           <RowLabel>회원 탈퇴</RowLabel>
