@@ -21,7 +21,7 @@ import {
   mockTimeTable101112,
   mockTimeTables,
 } from '@/mocks/fixtures/timetable';
-import { mockUser } from '@/mocks/fixtures/user';
+import { mockUser, mockUsers } from '@/mocks/fixtures/user';
 import { SearchRepository } from '@/repositories/searchRepository';
 import { timetableRepository } from '@/repositories/timetableRepository';
 import { UserRepository } from '@/repositories/userRepository';
@@ -176,10 +176,18 @@ export const handlers = [
     async (req, res, ctx) => {
       if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
-      const id = new URLSearchParams(await req.text()).get('id');
+      const params = new URLSearchParams(await req.text());
+      const id = params.get('id');
+      const password = params.get('password');
 
-      if (id === 'fail-test-id') {
+      const user = mockUsers.find((mockUser) => mockUser.local_id === id);
+
+      if (!user) {
         return res(ctx.status(403), ctx.json({ errcode: 8196, message: '', ext: {} }));
+      }
+
+      if (user.password != password) {
+        return res(ctx.status(403), ctx.json({ errcode: 8197, message: '', ext: {} }));
       }
 
       return res(ctx.json(mockSignInReponse));
