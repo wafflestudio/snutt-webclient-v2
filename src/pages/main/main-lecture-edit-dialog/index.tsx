@@ -3,10 +3,12 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Dialog } from '@/components/dialog';
+import { ErrorDialog } from '@/components/error-dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { Color } from '@/entities/color';
 import { Day } from '@/entities/day';
 import { Lecture } from '@/entities/lecture';
+import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { colorService } from '@/usecases/colorService';
 import { lectureService } from '@/usecases/lectureService';
 import { timeMaskService } from '@/usecases/timeMaskService';
@@ -23,7 +25,7 @@ type Editable = {
   credit: Lecture['credit'];
   remark: Lecture['remark'];
   color: Color;
-  colorIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+  colorIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9; // 0이면 커스텀 색
   class_time_json: (
     | ArrayElement<Lecture['class_time_json']>
     | { day: Day; len: number; place: string; start: number }
@@ -39,6 +41,7 @@ type Props = {
 
 export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: Props) => {
   const [draft, setDraft] = useState<Partial<Editable>>({});
+  const { open: openErrorDialog, isOpen: isOpenErrorDialog, onClose: onCloseErrorDialog, message } = useErrorDialog();
 
   const { data: colorList } = useColorList();
 
@@ -48,10 +51,10 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
     if (!lecture) return;
 
     const color =
-      draft.colorIndex === 9
-        ? { colorIndex: 9 as const, color: draft.color as Color }
-        : lecture.colorIndex === 9
-        ? { colorIndex: 9 as const, color: lecture.color as Color }
+      draft.colorIndex === 0
+        ? { colorIndex: 0 as const, color: draft.color as Color }
+        : lecture.colorIndex === 0
+        ? { colorIndex: 0 as const, color: lecture.color as Color }
         : { colorIndex: draft.colorIndex ?? lecture.colorIndex };
 
     mutate(
@@ -71,8 +74,7 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
             err && typeof err === 'object' && 'errcode' in err && err.errcode === 12300
               ? '강의 시간이 서로 겹칩니다.'
               : '오류가 발생했습니다.';
-          // TODO: ErrorDialog 로 마이그레이션
-          alert(message);
+          openErrorDialog(message);
         },
       },
     );
@@ -148,6 +150,7 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
           저장하기
         </button>
       </Dialog.Actions>
+      <ErrorDialog isOpen={isOpenErrorDialog} onClose={onCloseErrorDialog} message={message} />
     </EditDialog>
   );
 };
