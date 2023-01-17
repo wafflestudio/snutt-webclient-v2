@@ -1,6 +1,7 @@
 import { AuthRepository, authRepository } from '@/repositories/authRepository';
 import { EnvRepository, envRepository } from '@/repositories/envRepository';
 import { StorageRepository, storageRepository } from '@/repositories/storageRepository';
+import { UserRepository, userRepository } from '@/repositories/userRepository';
 import { EnvService, envService } from '@/usecases/envService';
 
 export interface AuthService {
@@ -14,13 +15,14 @@ export interface AuthService {
     params: { type: 'LOCAL'; id: string; password: string } | { type: 'FACEBOOK'; fb_id: string; fb_token: string },
   ): Promise<any>;
   signUp(body: { id: string; password: string }): Promise<{ message: 'ok'; token: string; user_id: string }>;
+  closeAccount(token: string): Promise<{ message: 'ok' }>;
 }
 
 const getAuthService = (args: {
-  repositories: [EnvRepository, StorageRepository, AuthRepository];
+  repositories: [EnvRepository, StorageRepository, AuthRepository, UserRepository];
   services: [EnvService];
 }): AuthService => {
-  const [envRepo, storageRepo, authRepo] = args.repositories;
+  const [envRepo, storageRepo, authRepo, userRepo] = args.repositories;
 
   return {
     getApiKey: () => args.services[0].getApiKey(),
@@ -49,10 +51,11 @@ const getAuthService = (args: {
         { baseUrl: envRepo.getBaseUrl(), apiKey: envRepo.getApiKey() },
         { id: params.id, password: params.password },
       ),
+    closeAccount: (token) => userRepo.deleteUser({ baseUrl: envRepo.getBaseUrl(), token, apikey: envRepo.getApiKey() }),
   };
 };
 
 export const authService = getAuthService({
-  repositories: [envRepository, storageRepository, authRepository],
+  repositories: [envRepository, storageRepository, authRepository, userRepository],
   services: [envService],
 });

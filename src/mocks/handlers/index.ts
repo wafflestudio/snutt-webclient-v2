@@ -219,6 +219,15 @@ export const handlers = [
 
     return res(ctx.status(200), ctx.json({ message: 'ok', token: 't1', user_id: '뭐냐이건' }));
   }),
+
+  rest.delete<never, never, { message: 'ok' }>(`*/user/account`, async (req, res, ctx) => {
+    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+    const token = req.headers.get('x-access-token');
+
+    if (mockUsers.every((u) => u.auth.token !== token)) return res(ctx.status(403));
+
+    return res(ctx.json({ message: 'ok' }));
+  }),
 ];
 
 const isOverlap = (
