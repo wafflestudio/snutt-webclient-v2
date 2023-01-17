@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-test('ui가 잘 보여진다', async ({ page }) => {
+test('로고가 잘 보여진다', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByText('SNUTT')).toHaveCount(1);
+  await expect(page.getByTestId('logo')).toHaveCount(1);
 });
 
 test('학기 목록 드롭다운이 정상 동작한다', async ({ page }) => {
