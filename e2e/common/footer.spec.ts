@@ -40,19 +40,33 @@ test('개발자 괴롭히기 기능이 잘 동작한다 (취소)', async ({ page
   await page.goto('/');
   await givenUser(page, { login: true });
   await page.getByText('개발자 괴롭히기').click();
-  // TODO:
-});
-
-test('개발자 괴롭히기 기능이 잘 동작한다 (폼 에러)', async ({ page }) => {
-  await page.goto('/');
-  await givenUser(page, { login: true });
+  await page.getByTestId('feedback-email').type('test');
+  await page.getByTestId('feedback-message').type('test');
+  await page.getByTestId('feedback-cancel').click();
   await page.getByText('개발자 괴롭히기').click();
-  // TODO:
+  await expect(page.getByTestId('feedback-email')).toHaveValue('');
 });
 
 test('개발자 괴롭히기 기능이 잘 동작한다 (정상 제출)', async ({ page }) => {
   await page.goto('/');
   await givenUser(page, { login: true });
   await page.getByText('개발자 괴롭히기').click();
-  // TODO:
+  await expect(page.getByTestId('feedback-submit')).toBeDisabled();
+  await page.getByTestId('feedback-email').type('test1');
+  await expect(page.getByTestId('feedback-submit')).toBeDisabled();
+  await page.getByTestId('feedback-message').type('test2');
+  await Promise.all([
+    page.waitForRequest(
+      (req) =>
+        req.postDataJSON().email === 'test1' &&
+        req.postDataJSON().message === 'test2' &&
+        req.url().includes('/feedback') &&
+        req.method() === 'POST',
+    ),
+    page.getByTestId('feedback-submit').click(),
+  ]);
+  await expect(page.getByTestId('feedback-close')).toHaveText('닫기');
+  await expect(page.getByText('피드백이 전달되었어요')).toHaveCount(1);
+  await page.getByTestId('feedback-close').click();
+  // TODO: 모달 닫혔는지 테스트
 });

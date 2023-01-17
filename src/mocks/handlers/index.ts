@@ -200,6 +200,10 @@ export const handlers = [
       return res(ctx.json({ user_id: '여기뭐들어오는건지모르겠음', token: user.auth.token }));
     },
   ),
+
+  rest.post<{ email: string; message: string }, never, { message: 'ok' }>(`*/feedback`, async (req, res, ctx) => {
+    return res(ctx.delay(300), ctx.json({ message: 'ok' }));
+  }),
 ];
 
 const isOverlap = (

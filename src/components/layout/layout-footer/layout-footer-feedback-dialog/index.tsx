@@ -1,28 +1,77 @@
+import { useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { Dialog } from '@/components/dialog';
+import { feedbackService } from '@/usecases/feedbackService';
 
 type Props = { isOpen: boolean; onClose: () => void };
 
 export const LayoutFooterFeedbackDialog = ({ onClose, isOpen }: Props) => {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const { mutate, isLoading, isSuccess, reset } = useSubmitFeedback();
+
+  const isValid = email && message;
+
+  const submit = () => {
+    if (!isValid) return;
+    mutate({ email, message });
+  };
+
   const close = () => {
+    setEmail('');
+    setMessage('');
+    reset();
     onClose();
   };
+
   return (
     <Dialog open={isOpen} onClose={close}>
       <Dialog.Title>피드백을 남겨주세요</Dialog.Title>
       <Content>
         <label>이메일</label>
-        <Input type="email" placeholder="이메일" />
+        <Input
+          disabled={isLoading || isSuccess}
+          data-testid="feedback-email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          type="email"
+          placeholder="이메일"
+        />
         <label>내용</label>
-        <Textarea placeholder="버그, 개선사항 등등" />
+        <Textarea
+          disabled={isLoading || isSuccess}
+          data-testid="feedback-message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="버그, 개선사항 등등"
+        />
       </Content>
-      <Dialog.Actions>
-        <button onClick={close}>취소</button>
-        <button>제출</button>
-      </Dialog.Actions>
+      {!isSuccess ? (
+        <Dialog.Actions>
+          <button data-testid="feedback-cancel" onClick={close}>
+            취소
+          </button>
+          <button data-testid="feedback-submit" onClick={submit} disabled={isLoading || !isValid}>
+            제출
+          </button>
+        </Dialog.Actions>
+      ) : (
+        <Dialog.Actions>
+          <span>피드백이 전달되었어요</span>
+          <button data-testid="feedback-close" onClick={close}>
+            닫기
+          </button>
+        </Dialog.Actions>
+      )}
     </Dialog>
   );
+};
+
+const useSubmitFeedback = () => {
+  return useMutation((body: { email: string; message: string }) => feedbackService.post(body));
 };
 
 const Content = styled(Dialog.Content)`
