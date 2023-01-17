@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { Button } from '@/components/button';
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { userService } from '@/usecases/userService';
@@ -48,17 +49,19 @@ export const MyPage = () => {
         <br />
         <Row>
           <RowLabel>페이스북</RowLabel>
-          <Button $color="#0000ff">페이스북 연동 해지하기</Button>
+          <Button variant="outlined" color="blue">
+            페이스북 연동 해지하기
+          </Button>
         </Row>
         <Row>
           <RowLabel>로그아웃</RowLabel>
-          <Button onClick={logout} $color="#000000">
+          <Button variant="outlined" onClick={logout} color="black">
             로그아웃하기
           </Button>
         </Row>
         <Row>
           <RowLabel>회원 탈퇴</RowLabel>
-          <Button data-testid="mypage-close-account" $color="#ff0000" onClick={() => setCloseOpen(true)}>
+          <Button variant="outlined" data-testid="mypage-close-account" color="red" onClick={() => setCloseOpen(true)}>
             탈퇴하기
           </Button>
         </Row>
@@ -85,25 +88,6 @@ const Wrapper = styled.div`
   width: 400px;
   margin: 0 auto;
   padding: 30px 20px 0;
-`;
-
-const Button = styled.button<{ $color: `#${string}` }>`
-  color: ${({ $color }) => $color};
-  border-color: ${({ $color }) => $color};
-  border-width: 1px;
-  padding: 0 24px;
-
-  height: 40px;
-  border-radius: 20px;
-  font-size: 14px;
-  opacity: 0.6;
-  transition: 0.2s all;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 1;
-    background-color: ${({ $color }) => `${$color}10`};
-  }
 `;
 
 const Row = styled.div`
