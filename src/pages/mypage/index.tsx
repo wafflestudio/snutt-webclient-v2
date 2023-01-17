@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -9,8 +9,10 @@ import { userService } from '@/usecases/userService';
 import { queryKey } from '@/utils/query-key-factory';
 
 import { MypageChangePassword } from './mypage-change-password';
+import { MypageCloseAccountDialog } from './mypage-close-account-dialog';
 
 export const MyPage = () => {
+  const [isCloseOpen, setCloseOpen] = useState(false);
   const { token, clearToken } = useTokenContext();
   const { data: myInfo } = useMyInfo();
   const navigate = useNavigate();
@@ -56,9 +58,12 @@ export const MyPage = () => {
         </Row>
         <Row>
           <RowLabel>회원 탈퇴</RowLabel>
-          <Button $color="#ff0000">탈퇴하기</Button>
+          <Button data-testid="mypage-close-account" $color="#ff0000" onClick={() => setCloseOpen(true)}>
+            탈퇴하기
+          </Button>
         </Row>
       </Wrapper>
+      <MypageCloseAccountDialog isOpen={isCloseOpen} onClose={() => setCloseOpen(false)} />
     </Layout>
   );
 };
