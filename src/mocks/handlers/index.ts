@@ -8,7 +8,6 @@ import { Notification } from '@/entities/notification';
 import { SearchFilter, SearchResultLecture } from '@/entities/search';
 import { CourseBook, Semester } from '@/entities/semester';
 import { FullTimetable, Timetable } from '@/entities/timetable';
-import { mockSignInReponse } from '@/mocks/fixtures/auth';
 import { mockVividIos } from '@/mocks/fixtures/color';
 import { mockNotification } from '@/mocks/fixtures/notification';
 import { mockSearchResult } from '@/mocks/fixtures/search';
@@ -198,7 +197,7 @@ export const handlers = [
         return res(ctx.status(403), ctx.json({ errcode: 8197, message: '', ext: {} }));
       }
 
-      return res(ctx.json(mockSignInReponse));
+      return res(ctx.json({ user_id: '여기뭐들어오는건지모르겠음', token: user.auth.token }));
     },
   ),
 ];
