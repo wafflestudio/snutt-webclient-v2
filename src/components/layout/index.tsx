@@ -5,6 +5,7 @@ import styled, { keyframes } from 'styled-components';
 import { IcLogo } from '@/components/icons/ic-logo';
 import { BREAKPOINT } from '@/styles/constants';
 
+import { LayoutFooter } from './layout-footer';
 import { LayoutNotification } from './layout-notification';
 import { LayoutProfile } from './layout-profile';
 
@@ -18,7 +19,7 @@ export const Layout = ({ children, headerChildren }: PropsWithChildren<Props>) =
           <HeaderLeft>
             <HomeLink to="/">
               <LogoIcon tabIndex={0} />
-              <Title>SNUTT</Title>
+              <Title data-testid="logo">SNUTT</Title>
             </HomeLink>
           </HeaderLeft>
           <HeaderMiddle>{headerChildren}</HeaderMiddle>
@@ -29,6 +30,7 @@ export const Layout = ({ children, headerChildren }: PropsWithChildren<Props>) =
         </HeaderInner>
       </Header>
       <Main>{children}</Main>
+      <LayoutFooter />
     </div>
   );
 };
