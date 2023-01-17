@@ -13,6 +13,7 @@ export interface AuthService {
   signIn(
     params: { type: 'LOCAL'; id: string; password: string } | { type: 'FACEBOOK'; fb_id: string; fb_token: string },
   ): Promise<any>;
+  signUp(body: { id: string; password: string }): Promise<{ message: 'ok'; token: string; user_id: string }>;
 }
 
 const getAuthService = (args: {
@@ -43,6 +44,11 @@ const getAuthService = (args: {
       params.type === 'LOCAL'
         ? authRepo.signInWithIdPassword({ ...params, baseUrl: envRepo.getBaseUrl(), apikey: envRepo.getApiKey() })
         : authRepo.signInWithFacebook({ ...params, baseUrl: envRepo.getBaseUrl() }),
+    signUp: (params) =>
+      authRepo.signUpWithIdPassword(
+        { baseUrl: envRepo.getBaseUrl(), apiKey: envRepo.getApiKey() },
+        { id: params.id, password: params.password },
+      ),
   };
 };
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Layout } from '@/components/layout';
@@ -53,6 +53,7 @@ export const Login = () => {
         <SignInButton disabled={!(id && password)} onClick={handleSignIn} data-testid="local-signin-button">
           로그인
         </SignInButton>
+        <SignUpLink to="/signup">회원가입</SignUpLink>
       </LoginWrapper>
     </Layout>
   );
@@ -137,4 +138,17 @@ const Button = styled.button`
 const SignInButton = styled(Button)`
   color: #fff;
   background-color: #1bd0c9;
+`;
+
+const SignUpLink = styled(Link)`
+  margin: 20px auto;
+  font-size: 14px;
+  text-decoration: none;
+  color: #000;
+  opacity: 0.6;
+  transition: 0.1s opacity;
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;

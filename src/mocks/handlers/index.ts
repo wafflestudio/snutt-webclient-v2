@@ -202,7 +202,22 @@ export const handlers = [
   ),
 
   rest.post<{ email: string; message: string }, never, { message: 'ok' }>(`*/feedback`, async (req, res, ctx) => {
+    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
     return res(ctx.delay(300), ctx.json({ message: 'ok' }));
+  }),
+
+  rest.post<
+    { id: string; password: string },
+    never,
+    { message: 'ok'; token: string; user_id: string } | CoreServerError
+  >(`*/auth/register_local`, async (req, res, ctx) => {
+    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+    const { id } = await req.json();
+
+    if (mockUsers.some((u) => u.info.local_id === id))
+      return res(ctx.status(403), ctx.json({ errcode: 12290, ext: {}, message: 'duplicate id' }));
+
+    return res(ctx.status(200), ctx.json({ message: 'ok', token: 't1', user_id: '뭐냐이건' }));
   }),
 ];
 
