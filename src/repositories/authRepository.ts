@@ -8,6 +8,10 @@ export interface AuthRepository {
     password: string;
   }): Promise<SignInResponse>;
   signInWithFacebook(args: { baseUrl: string; fb_id: string; fb_token: string }): Promise<SignInResponse>;
+  signUpWithIdPassword(
+    args: { baseUrl: string; apiKey: string },
+    body: { id: string; password: string },
+  ): Promise<{ message: 'ok'; token: string; user_id: string }>;
 }
 
 const getAuthRepository = (): AuthRepository => {
@@ -16,10 +20,7 @@ const getAuthRepository = (): AuthRepository => {
       const params = new URLSearchParams({ id, password });
 
       const response = await fetch(`${baseUrl}/auth/login_local`, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'x-access-apikey': apikey,
-        },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'x-access-apikey': apikey },
         method: 'POST',
         body: params.toString(),
       });
@@ -32,9 +33,7 @@ const getAuthRepository = (): AuthRepository => {
       const params = new URLSearchParams({ fb_id, fb_token });
 
       const response = await fetch(`${baseUrl}/auth/login_fb`, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         method: 'POST',
         body: params.toString(),
       });
@@ -42,6 +41,17 @@ const getAuthRepository = (): AuthRepository => {
       const data = await response.json().catch(() => null);
       if (!response.ok) throw data;
       return data as SignInResponse;
+    },
+    signUpWithIdPassword: async ({ baseUrl, apiKey }, body) => {
+      const response = await fetch(`${baseUrl}/auth/register_local`, {
+        headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+
+      const data = await response.json().catch(() => null);
+      if (!response.ok) throw data;
+      return data as { message: 'ok'; token: string; user_id: string };
     },
   };
 };
