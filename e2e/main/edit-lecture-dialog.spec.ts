@@ -88,3 +88,29 @@ test('강의 수정 모달이 잘 취소된다 (성공케이스, 커스텀강의
   await givenUser(page);
   // TODO:
 });
+
+test('강의가 잘 삭제된다 (취소)', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page);
+  await page.getByTestId('main-lecture-listitem').filter({ hasText: '상상력과 문화' }).click();
+  await page.getByTestId('main-lecture-edit-dialog-delete').click();
+  await page.getByTestId('ml-edit-delete-cancel').click();
+  // TODO: 닫혔는지 테스트
+});
+
+test('강의가 잘 삭제된다 (확인)', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page);
+  await page.getByTestId('main-lecture-listitem').filter({ hasText: '상상력과 문화' }).click();
+  await page.getByTestId('main-lecture-edit-dialog-delete').click();
+
+  await Promise.all([
+    page.waitForRequest(
+      (req) => req.method() === 'DELETE' && req.url().includes('/tables/123/lecture/5d43e9fb3c46177d58a540b5'),
+    ),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/tables/123')),
+    page.getByTestId('ml-edit-delete-confirm').click(),
+  ]);
+  // TODO: 강의 삭제 모달 닫혔는지 테스트
+  // TODO: 강의 수정 모달 닫혔는지 테스트
+});

@@ -17,6 +17,7 @@ import { timetableService } from '@/usecases/timetableService';
 import { ArrayElement } from '@/utils/array-element';
 import { queryKey } from '@/utils/query-key-factory';
 
+import { MainLectureDeleteDialog } from './main-lecture-delete-dialog';
 import { MainLectureEditDialogColor } from './main-lecture-edit-dialog-color';
 import { MainLectureEditDialogTime } from './main-lecture-edit-dialog-time';
 
@@ -43,6 +44,7 @@ type Props = {
 export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: Props) => {
   const [draft, setDraft] = useState<Partial<Editable>>({});
   const { open: openErrorDialog, isOpen: isOpenErrorDialog, onClose: onCloseErrorDialog, message } = useErrorDialog();
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const { data: colorList } = useColorList();
 
@@ -143,7 +145,12 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
         </EditDialogContent>
       )}
       <Actions>
-        <Button color="red" size="small">
+        <Button
+          data-testid="main-lecture-edit-dialog-delete"
+          color="red"
+          size="small"
+          onClick={() => setDeleteDialogOpen(true)}
+        >
           삭제
         </Button>
         <ActionsRight>
@@ -156,6 +163,13 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
         </ActionsRight>
       </Actions>
       <ErrorDialog isOpen={isOpenErrorDialog} onClose={onCloseErrorDialog} message={message} />
+      <MainLectureDeleteDialog
+        open={isDeleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        timetableId={timetableId}
+        lectureId={lecture?._id}
+        closeEditModal={close}
+      />
     </EditDialog>
   );
 };
