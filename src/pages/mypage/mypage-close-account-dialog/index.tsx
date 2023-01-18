@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { authService } from '@/usecases/authService';
@@ -50,12 +51,12 @@ export const MypageCloseAccountDialog = ({ onClose, isOpen }: Props) => {
         <Caption>위 입력창에 "탈퇴" 라고 입력해 주세요.</Caption>
       </Dialog.Content>
       <Dialog.Actions>
-        <button data-testid="mypage-close-account-cancel" onClick={close}>
+        <Button color="gray" size="small" data-testid="mypage-close-account-cancel" onClick={close}>
           취소
-        </button>
-        <button data-testid="mypage-close-account-submit" onClick={onSubmit} disabled={!isValid}>
+        </Button>
+        <Button size="small" data-testid="mypage-close-account-submit" onClick={onSubmit} disabled={!isValid}>
           탈퇴
-        </button>
+        </Button>
       </Dialog.Actions>
     </Dialog>
   );

@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 
 type Variant = 'contained' | 'outlined' | 'text';
 type Size = 'big' | 'small';
-type Color = 'mint' | 'blue' | 'black' | 'red';
+type Color = 'mint' | 'blue' | 'black' | 'red' | 'gray';
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
@@ -22,13 +22,14 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
   },
 );
 
-const buttonColor = { mint: '#1bd0c9', blue: '#1414c3', black: '#323232', red: '#ec3030' } as const;
+const buttonColor = { mint: '#1bd0c9', blue: '#1414c3', black: '#323232', red: '#ec3030', gray: '#9a9a9a' } as const;
 
 const commonStyle = css`
   cursor: pointer;
   font-size: 14px;
   opacity: 0.8;
   transition: opacity 0.2s, background-color 0.1s;
+  line-height: 100%;
 
   &:hover {
     opacity: 1;
@@ -45,12 +46,15 @@ const bigSize = css`
   height: 36px;
   border-radius: 18px;
 `;
-const mediumSize = css``;
-const smallSize = css``;
+const smallSize = css`
+  padding: 0 12px;
+  height: 24px;
+  border-radius: 12px;
+`;
 
 const Contained = styled.button<{ $size: Size; $color: Color }>`
   ${commonStyle}
-  ${({ $size }) => ({ big: bigSize, medium: mediumSize, small: smallSize }[$size])}
+  ${({ $size }) => ({ big: bigSize, small: smallSize }[$size])}
   border: none;
   color: #fff;
   background-color: ${({ $color }) => buttonColor[$color]};
@@ -62,7 +66,7 @@ const Contained = styled.button<{ $size: Size; $color: Color }>`
 
 const Outlined = styled.button<{ $size: Size; $color: Color }>`
   ${commonStyle}
-  ${({ $size }) => ({ big: bigSize, medium: mediumSize, small: smallSize }[$size])}
+  ${({ $size }) => ({ big: bigSize, small: smallSize }[$size])}
   border: 1px solid ${({ $color }) => buttonColor[$color]};
   color: ${({ $color }) => buttonColor[$color]};
   background-color: transparent;
@@ -75,5 +79,5 @@ const Outlined = styled.button<{ $size: Size; $color: Color }>`
 
 const Text = styled.button<{ $size: Size; $color: string }>`
   ${commonStyle}
-  ${({ $size }) => ({ big: bigSize, medium: mediumSize, small: smallSize }[$size])}
+  ${({ $size }) => ({ big: bigSize, small: smallSize }[$size])}
 `;

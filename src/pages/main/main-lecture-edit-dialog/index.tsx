@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import styled from 'styled-components';
 
+import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { ErrorDialog } from '@/components/error-dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
@@ -141,15 +142,19 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
           </Row>
         </EditDialogContent>
       )}
-      <Dialog.Actions>
-        <button>삭제</button>
-        <button data-testid="main-lecture-edit-dialog-cancel" onClick={close}>
-          취소
-        </button>
-        <button data-testid="main-lecture-edit-dialog-submit" onClick={submit}>
-          저장하기
-        </button>
-      </Dialog.Actions>
+      <Actions>
+        <Button color="red" size="small">
+          삭제
+        </Button>
+        <ActionsRight>
+          <Button color="gray" size="small" data-testid="main-lecture-edit-dialog-cancel" onClick={close}>
+            취소
+          </Button>
+          <Button size="small" data-testid="main-lecture-edit-dialog-submit" onClick={submit}>
+            저장하기
+          </Button>
+        </ActionsRight>
+      </Actions>
       <ErrorDialog isOpen={isOpenErrorDialog} onClose={onCloseErrorDialog} message={message} />
     </EditDialog>
   );
@@ -203,4 +208,13 @@ const Input = styled.input`
   outline: none;
   border: none;
   border-bottom: 2px solid #ddd;
+`;
+
+const Actions = styled(Dialog.Actions)`
+  justify-content: space-between;
+`;
+
+const ActionsRight = styled.div`
+  display: flex;
+  gap: 4px;
 `;

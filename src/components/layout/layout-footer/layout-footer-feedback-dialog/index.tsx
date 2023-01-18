@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
+import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { feedbackService } from '@/usecases/feedbackService';
 
@@ -51,19 +52,19 @@ export const LayoutFooterFeedbackDialog = ({ onClose, isOpen }: Props) => {
       </Content>
       {!isSuccess ? (
         <Dialog.Actions>
-          <button data-testid="feedback-cancel" onClick={close}>
+          <Button size="small" color="gray" data-testid="feedback-cancel" onClick={close}>
             취소
-          </button>
-          <button data-testid="feedback-submit" onClick={submit} disabled={isLoading || !isValid}>
+          </Button>
+          <Button size="small" data-testid="feedback-submit" onClick={submit} disabled={isLoading || !isValid}>
             제출
-          </button>
+          </Button>
         </Dialog.Actions>
       ) : (
         <Dialog.Actions>
           <span>피드백이 전달되었어요</span>
-          <button data-testid="feedback-close" onClick={close}>
+          <Button size="small" data-testid="feedback-close" onClick={close}>
             닫기
-          </button>
+          </Button>
         </Dialog.Actions>
       )}
     </Dialog>

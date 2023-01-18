@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
+import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { dayArray } from '@/entities/day';
 import { CellStatus, Position } from '@/entities/timeMask';
@@ -80,10 +81,17 @@ export const MainSearchbarFilterTimeSelectDialog = ({ open, onClose, onChangeBit
         </Table>
       </StyledDialog.Content>
       <StyledDialog.Actions>
-        <button data-testid="layout-searchbar-filter-time-select-dialog-cancel" onClick={onClose}>
+        <Button
+          size="small"
+          color="gray"
+          data-testid="layout-searchbar-filter-time-select-dialog-cancel"
+          onClick={onClose}
+        >
           취소
-        </button>
-        <button onClick={onConfirm}>확인</button>
+        </Button>
+        <Button size="small" onClick={onConfirm}>
+          확인
+        </Button>
       </StyledDialog.Actions>
     </StyledDialog>
   );
