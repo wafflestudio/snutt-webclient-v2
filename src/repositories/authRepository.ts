@@ -12,6 +12,7 @@ export interface AuthRepository {
     args: { baseUrl: string; apiKey: string },
     body: { id: string; password: string },
   ): Promise<{ message: 'ok'; token: string; user_id: string }>;
+  findId(args: { baseUrl: string; apiKey: string }, body: { email: string }): Promise<{ message: 'ok' }>;
 }
 
 const getAuthRepository = (): AuthRepository => {
@@ -52,6 +53,17 @@ const getAuthRepository = (): AuthRepository => {
       const data = await response.json().catch(() => null);
       if (!response.ok) throw data;
       return data as { message: 'ok'; token: string; user_id: string };
+    },
+    findId: async ({ baseUrl, apiKey }, body) => {
+      const response = await fetch(`${baseUrl}/auth/id/find`, {
+        headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+
+      const data = await response.json().catch(() => null);
+      if (!response.ok) throw data;
+      return data as { message: 'ok' };
     },
   };
 };

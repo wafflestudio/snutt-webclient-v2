@@ -9,9 +9,13 @@ import { CoreServerError } from '@/entities/error';
 import { authService } from '@/usecases/authService';
 import { errorService } from '@/usecases/errorService';
 
+import { LoginFindIdDialog } from './login-find-id-dialog';
+
 export const Login = () => {
   const navigate = useNavigate();
   const { saveToken } = useTokenContext();
+
+  const [findIdDialogOpen, setFindIdDialogOpen] = useState(false);
 
   const [id, setId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -56,7 +60,9 @@ export const Login = () => {
         </LoginButton>
         <EtcWrapper>
           <FindWrapper>
-            <OtherButton>아이디 찾기</OtherButton>
+            <OtherButton data-testid="login-find-id" onClick={() => setFindIdDialogOpen(true)}>
+              아이디 찾기
+            </OtherButton>
             <Divider />
             <OtherButton>비밀번호 재설정</OtherButton>
           </FindWrapper>
@@ -65,6 +71,7 @@ export const Login = () => {
           </OtherLink>
         </EtcWrapper>
       </LoginWrapper>
+      <LoginFindIdDialog open={findIdDialogOpen} onClose={() => setFindIdDialogOpen(false)} />
     </Layout>
   );
 };

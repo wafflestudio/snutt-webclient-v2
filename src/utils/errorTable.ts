@@ -48,15 +48,12 @@ const errorTable = [
   { code: 12299, message: '강의가 custom lecture가 아닙니다.' },
   { code: 12300, message: '강의 시간이 서로 겹칩니다.' },
   { code: 12301, message: '강의가 custom lecture입니다.' },
-  {
-    code: 12302,
-    message: '(서버 내부 전용) 유저에게 등록된 fcm key가 없습니다.',
-  },
+  { code: 12302, message: '유저에게 등록된 fcm key가 없습니다.' },
   { code: 16384, message: 'Tag를 찾을 수 없습니다.' },
   { code: 16385, message: 'Timetable을 찾을 수 없습니다.' },
   { code: 16386, message: 'Lecture를 찾을 수 없습니다.' },
   { code: 16387, message: '편람 상의 lecture를 찾을 수 없습니다.' },
-  { code: 16388, message: '(서버 내부 전용) 유저를 찾을 수 없습니다' },
+  { code: 16388, message: '유저를 찾을 수 없습니다' },
   { code: 16389, message: '서버에서 색깔 테마를 찾을 수 없습니다' },
 ];
 

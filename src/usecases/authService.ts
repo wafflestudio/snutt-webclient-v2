@@ -16,6 +16,7 @@ export interface AuthService {
   ): Promise<any>;
   signUp(body: { id: string; password: string }): Promise<{ message: 'ok'; token: string; user_id: string }>;
   closeAccount(token: string): Promise<{ message: 'ok' }>;
+  findIdByEmail(body: { email: string }): Promise<{ message: 'ok' }>;
 }
 
 const getAuthService = (args: {
@@ -52,6 +53,7 @@ const getAuthService = (args: {
         { id: params.id, password: params.password },
       ),
     closeAccount: (token) => userRepo.deleteUser({ baseUrl: envRepo.getBaseUrl(), token, apikey: envRepo.getApiKey() }),
+    findIdByEmail: (body) => authRepo.findId({ baseUrl: envRepo.getBaseUrl(), apiKey: envRepo.getApiKey() }, body),
   };
 };
 

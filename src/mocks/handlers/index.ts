@@ -178,6 +178,7 @@ export const handlers = [
       return res(ctx.status(200), ctx.json(mockTimeTable123));
     },
   ),
+
   rest.post<{ id: string; password: string }, never, SignInResponse | CoreServerError>(
     `*/auth/login_local`,
     async (req, res, ctx) => {
@@ -225,6 +226,19 @@ export const handlers = [
     const token = req.headers.get('x-access-token');
 
     if (mockUsers.every((u) => u.auth.token !== token)) return res(ctx.status(403));
+
+    return res(ctx.json({ message: 'ok' }));
+  }),
+
+  rest.post<{ email: string }, never, { message: 'ok' } | CoreServerError>(`*/auth/id/find`, async (req, res, ctx) => {
+    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+    const { email } = await req.json();
+    if (!email) return res(ctx.status(400), ctx.json({ errcode: 0x1018, message: '이메일을 입력해주세요.', ext: {} }));
+    if (mockUsers.every((u) => u.info.email !== email))
+      return res(
+        ctx.status(404),
+        ctx.json({ errcode: 0x4004, message: '해당 이메일로 가입된 사용자가 없습니다.', ext: {} }),
+      );
 
     return res(ctx.json({ message: 'ok' }));
   }),
