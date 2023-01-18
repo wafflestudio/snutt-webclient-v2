@@ -80,7 +80,6 @@ export const Login = () => {
         </LocalSignInButton>
         <FBLogin
           appId={envService.getFacebookAppId()}
-          autoLoad
           callback={handleFacebookSignIn}
           onFailure={({ status }: ReactFacebookFailureResponse) => setErrorMessage(status || '')}
           render={({ onClick }) => <FBSignInButton onClick={onClick}>facebook으로 로그인</FBSignInButton>}
@@ -217,11 +216,26 @@ const Divider = styled.div`
 `;
 
 const LocalSignInButton = styled(Button)`
+  border-radius: 21px;
+  border: none;
+  width: 100%;
+  margin-top: 10px;
+  height: 34px;
+  font-size: 13px;
+  background-color: transparent;
+
   color: #fff;
   background-color: #1bd0c9;
 `;
 
 const FBSignInButton = styled(Button)`
+  border-radius: 21px;
+  border: none;
+  width: 100%;
+  margin-top: 10px;
+  height: 34px;
+  font-size: 13px;
+  background-color: transparent;
   color: #3c5dd4;
   border: 1px solid #3c5dd4;
 
