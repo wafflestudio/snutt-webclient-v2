@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
+import { Button } from '@/components/button';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { authService } from '@/usecases/authService';
 import { get } from '@/utils/object/get';
@@ -85,23 +86,4 @@ const PasswordWrapper = styled.div`
   width: 100%;
   flex-direction: column;
   align-items: end;
-`;
-
-const Button = styled.button`
-  color: #fff;
-  border: none;
-  padding: 0 24px;
-  width: 100px;
-  background-color: #1bd0c9;
-
-  height: 36px;
-  border-radius: 20px;
-  font-size: 14px;
-  cursor: pointer;
-
-  transition: 0.2s background-color;
-
-  &:disabled {
-    background-color: #ddd;
-  }
 `;

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { Button } from '@/components/button';
 import { ErrorDialog } from '@/components/error-dialog';
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
@@ -112,23 +113,4 @@ const PasswordWrapper = styled.form`
   width: 400px;
   margin: 0 auto;
   padding: 100px 20px 200px;
-`;
-
-const Button = styled.button`
-  color: #fff;
-  border: none;
-  padding: 0 24px;
-  width: 100%;
-  background-color: #1bd0c9;
-
-  height: 36px;
-  border-radius: 20px;
-  font-size: 14px;
-  cursor: pointer;
-
-  transition: 0.2s background-color;
-
-  &:disabled {
-    background-color: #ddd;
-  }
 `;

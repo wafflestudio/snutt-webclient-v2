@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { Button } from '@/components/button';
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { CoreServerError } from '@/entities/error';
@@ -50,9 +51,9 @@ export const Login = () => {
           <Label htmlFor="keepSignIn">로그인 유지</Label>
         </CheckboxWrapper>
         <ErrorMessage data-testid="error-message">{errorMessage}</ErrorMessage>
-        <SignInButton disabled={!(id && password)} onClick={handleSignIn} data-testid="local-signin-button">
+        <LoginButton disabled={!(id && password)} onClick={handleSignIn} data-testid="local-signin-button">
           로그인
-        </SignInButton>
+        </LoginButton>
         <SignUpLink to="/signup">회원가입</SignUpLink>
       </LoginWrapper>
     </Layout>
@@ -124,20 +125,8 @@ const ErrorMessage = styled.span`
   margin: 20px 0;
 `;
 
-const Button = styled.button`
-  border-radius: 21px;
-  border: none;
-  width: 100%;
+const LoginButton = styled(Button).attrs({ size: 'big' })`
   margin-top: 10px;
-  height: 34px;
-  font-size: 13px;
-  background-color: transparent;
-  cursor: pointer;
-`;
-
-const SignInButton = styled(Button)`
-  color: #fff;
-  background-color: #1bd0c9;
 `;
 
 const SignUpLink = styled(Link)`
