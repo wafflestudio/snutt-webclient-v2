@@ -41,6 +41,7 @@ const Actions = styled.div`
   display: flex;
   justify-content: flex-end;
   padding: 8px 16px;
+  gap: 4px;
 `;
 
 const Content = styled.div`

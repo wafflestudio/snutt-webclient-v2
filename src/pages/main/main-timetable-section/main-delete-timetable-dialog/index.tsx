@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import styled from 'styled-components';
 
+import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { FullTimetable } from '@/entities/timetable';
@@ -42,7 +43,9 @@ export const MainDeleteTimetableDialog = ({ isOpen, close, onDelete, timetable }
       </Dialog.Content>
 
       <Dialog.Actions>
-        <button
+        <Button
+          size="small"
+          color="red"
           data-testid="mt-tt-delete-submit"
           onClick={() =>
             mutate(undefined, {
@@ -55,7 +58,7 @@ export const MainDeleteTimetableDialog = ({ isOpen, close, onDelete, timetable }
           disabled={!isDeletable}
         >
           확인
-        </button>
+        </Button>
       </Dialog.Actions>
     </StyledDialog>
   );

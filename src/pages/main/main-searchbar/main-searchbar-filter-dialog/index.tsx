@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import styled from 'styled-components';
 
+import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { searchService } from '@/usecases/searchService';
@@ -192,19 +193,21 @@ export const MainSearchbarFilterDialog = ({
                   onChange={() => onChangeTimeRadio('manual')}
                 />
               </label>
-              <button
+              <Button
+                size="small"
+                color="black"
                 type="button"
                 disabled={searchForm.timeType !== 'manual'}
                 data-testid="layout-searchbar-filter-dialog-form-time-manual-button"
                 onClick={() => setTimeModalOpen(true)}
               >
                 선택창 열기
-              </button>
+              </Button>
             </RowContent>
           </Row>
         </form>
       </StyledContent>
-      <button
+      <Button
         data-testid="main-searchbar-filter-dialog-submit"
         type="submit"
         onClick={() => {
@@ -213,7 +216,7 @@ export const MainSearchbarFilterDialog = ({
         }}
       >
         검색하기
-      </button>
+      </Button>
       <MainSearchbarFilterTimeSelectDialog
         open={isTimeModalOpen}
         onClose={() => setTimeModalOpen(false)}

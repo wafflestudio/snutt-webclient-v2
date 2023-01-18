@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
 
+import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { BaseLecture } from '@/entities/lecture';
@@ -23,14 +24,16 @@ export const MainCurrentLectureDeleteDialog = ({ isOpen, close, timetableId, lec
 
       <Dialog.Actions>
         {isOpen && (
-          <button
+          <Button
+            color="red"
+            size="small"
             disabled={!isOpen}
             aria-disabled={!isOpen}
             data-testid="ml-lecture-delete-submit"
             onClick={() => mutate(undefined, { onSuccess: close })}
           >
             확인
-          </button>
+          </Button>
         )}
       </Dialog.Actions>
     </StyledDialog>

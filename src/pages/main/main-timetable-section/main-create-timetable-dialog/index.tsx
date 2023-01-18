@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import styled from 'styled-components';
 
+import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { useYearSemester } from '@/hooks/useYearSemester';
@@ -47,12 +48,12 @@ export const MainCreateTimetableDialog = ({ isOpen, close, setCurrentTimetable }
         <ErrorMessage data-testid="mt-create-timetable-error">{errorMessage}</ErrorMessage>
       </Dialog.Content>
       <Dialog.Actions>
-        <button data-testid="mt-create-timetable-cancel" onClick={onClose}>
+        <Button color="gray" size="small" data-testid="mt-create-timetable-cancel" onClick={onClose}>
           취소
-        </button>
-        <button data-testid="mt-create-timetable-confirm" disabled={!title} onClick={() => create(title)}>
+        </Button>
+        <Button size="small" data-testid="mt-create-timetable-confirm" disabled={!title} onClick={() => create(title)}>
           확인
-        </button>
+        </Button>
       </Dialog.Actions>
     </StyledDialog>
   );
@@ -91,6 +92,8 @@ const ErrorMessage = styled.p`
   height: 20px;
   color: #ff0000;
   opacity: 0.8;
+  margin: 4px 0;
+  font-size: 14px;
 `;
 
 const StyledDialog = styled(Dialog)`
