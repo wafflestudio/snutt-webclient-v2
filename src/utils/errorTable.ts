@@ -31,6 +31,9 @@ const errorTable = [
   { code: 8197, message: '잘못된 password입니다.' },
   { code: 8198, message: '잘못된 페이스북 token입니다.' },
   { code: 8199, message: '(deprecated) 알 수 없는 app입니다.' },
+  { code: 8201, message: '비밀번호 재설정을 다시 시도해주세요.' },
+  { code: 8208, message: '만료된 인증코드입니다.' },
+  { code: 8209, message: '잘못된 인증코드입니다.' },
   { code: 12288, message: '조건에 맞지 않는 ID입니다. (api 설명 참조)' },
   { code: 12289, message: '조건에 맞지 않는 password입니다. (api 설명 참조)' },
   { code: 12290, message: '이미 해당 ID가 존재합니다.' },
@@ -55,6 +58,7 @@ const errorTable = [
   { code: 16387, message: '편람 상의 lecture를 찾을 수 없습니다.' },
   { code: 16388, message: '유저를 찾을 수 없습니다' },
   { code: 16389, message: '서버에서 색깔 테마를 찾을 수 없습니다' },
+  { code: 16390, message: '등록된 이메일이 없습니다' },
 ];
 
 export default errorTable;

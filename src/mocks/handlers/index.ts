@@ -242,6 +242,66 @@ export const handlers = [
 
     return res(ctx.json({ message: 'ok' }));
   }),
+
+  rest.post<{ user_id: string }, never, { email: string } | CoreServerError>(
+    `*/auth/password/reset/email/check`,
+    async (req, res, ctx) => {
+      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+      const userId = (await req.json()).user_id;
+
+      if (!userId)
+        return res(ctx.status(400), ctx.json({ errcode: 0x1015, message: '등록된 이메일이 없습니다.', ext: {} }));
+
+      const foundUser = mockUsers.find((u) => u.info.local_id === userId);
+
+      if (!foundUser)
+        return res(
+          ctx.status(404),
+          ctx.json({ errcode: 0x4004, message: '해당 아이디로 가입된 사용자가 없습니다.', ext: {} }),
+        );
+
+      const email = foundUser.info.email;
+
+      if (!email)
+        return res(ctx.status(404), ctx.json({ errcode: 0x4006, message: '등록된 이메일이 없습니다.', ext: {} }));
+
+      return res(ctx.json({ email }));
+    },
+  ),
+
+  rest.post<{ user_email: string }, never, { message: 'ok' } | CoreServerError>(
+    `*/auth/password/reset/email/send`,
+    async (req, res, ctx) => {
+      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+
+      return res(ctx.json({ message: 'ok' }));
+    },
+  ),
+
+  rest.post<{ user_email: string }, never, { message: 'ok' } | CoreServerError>(
+    `*/auth/password/reset/verification/code`,
+    async (req, res, ctx) => {
+      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+      type Status = 'expired' | 'no' | 'wrong' | 'success';
+
+      const status = (req.cookies.TEST_AUTH_PASSWORD_RESET_STATUS ?? 'success') as Status;
+
+      if (status === 'no') return res(ctx.status(409), ctx.json({ errcode: 0x2009, message: '', ext: {} }));
+      if (status === 'expired') return res(ctx.status(401), ctx.json({ errcode: 0x2010, message: '', ext: {} }));
+      if (status === 'wrong') return res(ctx.status(401), ctx.json({ errcode: 0x2011, message: '', ext: {} }));
+
+      return res(ctx.json({ message: 'ok' }));
+    },
+  ),
+
+  rest.post<{ user_id: string; password: string }, never, { message: 'ok' } | CoreServerError>(
+    `*/auth/password/reset`,
+    async (req, res, ctx) => {
+      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+
+      return res(ctx.json({ message: 'ok' }));
+    },
+  ),
 ];
 
 const isOverlap = (

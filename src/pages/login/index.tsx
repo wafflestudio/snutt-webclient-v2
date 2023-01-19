@@ -10,12 +10,14 @@ import { authService } from '@/usecases/authService';
 import { errorService } from '@/usecases/errorService';
 
 import { LoginFindIdDialog } from './login-find-id-dialog';
+import { LoginResetPasswordDialog } from './login-reset-password-dialog';
 
 export const Login = () => {
   const navigate = useNavigate();
   const { saveToken } = useTokenContext();
 
   const [findIdDialogOpen, setFindIdDialogOpen] = useState(false);
+  const [resetPasswordDialogOpen, setResetPasswordDialogOpen] = useState(false);
 
   const [id, setId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -64,7 +66,9 @@ export const Login = () => {
               아이디 찾기
             </OtherButton>
             <Divider />
-            <OtherButton>비밀번호 재설정</OtherButton>
+            <OtherButton data-testid="login-reset-password" onClick={() => setResetPasswordDialogOpen(true)}>
+              비밀번호 재설정
+            </OtherButton>
           </FindWrapper>
           <OtherLink data-testid="login-signup-link" to="/signup">
             회원가입
@@ -72,6 +76,7 @@ export const Login = () => {
         </EtcWrapper>
       </LoginWrapper>
       <LoginFindIdDialog open={findIdDialogOpen} onClose={() => setFindIdDialogOpen(false)} />
+      <LoginResetPasswordDialog open={resetPasswordDialogOpen} onClose={() => setResetPasswordDialogOpen(false)} />
     </Layout>
   );
 };
