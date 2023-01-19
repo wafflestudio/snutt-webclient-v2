@@ -1,9 +1,13 @@
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Button } from '@/components/button';
+import { ErrorDialog } from '@/components/error-dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
+import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { authService } from '@/usecases/authService';
+import { errorService } from '@/usecases/errorService';
 import { get } from '@/utils/object/get';
 
 export const MypageChangePassword = () => {
@@ -12,26 +16,34 @@ export const MypageChangePassword = () => {
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const { saveToken } = useTokenContext();
 
+  const { isOpen, message, onClose, open } = useErrorDialog();
+
+  const { mutate } = useChangePassword();
+
   const onSubmit = async () => {
     if (newPassword !== newPasswordConfirm) {
-      // TODO: ErrorDialog 로 마이그레이션
-      alert('비밀번호 확인이 일치하지 않습니다.');
+      open('비밀번호 확인이 일치하지 않습니다.');
       return;
     }
 
     if (!authService.isValidPassword(newPassword)) {
-      // TODO: ErrorDialog 로 마이그레이션
-      alert('비밀번호는 영문자, 숫자가 조합된 6자리 이상 20자리 이하여야 합니다.');
+      open('비밀번호는 영문자, 숫자가 조합된 6자리 이상 20자리 이하여야 합니다.');
       return;
     }
 
-    try {
-      const { token } = await authService.changePassword(currentPassword, newPassword);
-      saveToken(token, false);
-    } catch (err) {
-      const errcode = get(err, ['errcode']);
-      console.log(errcode);
-    }
+    mutate(
+      { old_password: currentPassword, new_password: newPassword },
+      {
+        onSuccess: ({ token }) => {
+          alert('비밀번호가 변경되었습니다.');
+          setCurrentPassword('');
+          setNewPassword('');
+          setNewPasswordConfirm('');
+          saveToken(token, false);
+        },
+        onError: (err) => open(errorService.getErrorMessage(get(err, ['errcode']) as number)),
+      },
+    );
   };
 
   return (
@@ -61,8 +73,17 @@ export const MypageChangePassword = () => {
       >
         변경하기
       </Button>
+      <ErrorDialog isOpen={isOpen} onClose={onClose} message={message} />
     </PasswordWrapper>
   );
+};
+
+const useChangePassword = () => {
+  const { token } = useTokenContext();
+  return useMutation((body: { old_password: string; new_password: string }) => {
+    if (!token) throw new Error('no token');
+    return authService.changePassword(token, body);
+  });
 };
 
 const PasswordInput = styled.input.attrs({ type: 'password' })`

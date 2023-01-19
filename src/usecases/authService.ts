@@ -9,7 +9,7 @@ export interface AuthService {
   saveToken(token: string, persist: boolean): void;
   clearToken(): void;
   isValidPassword(password: string): boolean;
-  changePassword(oldPassword: string, newPassword: string): Promise<{ token: string }>;
+  changePassword(token: string, body: { old_password: string; new_password: string }): Promise<{ token: string }>;
   signIn(
     params: { type: 'LOCAL'; id: string; password: string } | { type: 'FACEBOOK'; fb_id: string; fb_token: string },
   ): Promise<any>;
@@ -45,11 +45,7 @@ const getAuthService = (args: {
       password.split('').some((item) => /[a-zA-Z]+/.test(item)) &&
       password.length >= 6 &&
       password.length <= 20,
-    changePassword: async (oldPassword, newPassword) => {
-      console.log('not implemented');
-      console.log(oldPassword, newPassword);
-      return { token: '' };
-    },
+    changePassword: async (token, body) => userRepo.changePassword({ baseUrl, apiKey, token }, body),
     signIn: (params) =>
       params.type === 'LOCAL'
         ? authRepo.signInWithIdPassword({ ...params, baseUrl, apikey: apiKey })
