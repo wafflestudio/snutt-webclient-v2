@@ -3,11 +3,7 @@ import { expect, jest, test } from '@jest/globals';
 import { authService } from '@/usecases/authService';
 
 jest.mock('@/usecases/envService', () => ({
-  envService: {},
-}));
-
-jest.mock('@/repositories/envRepository', () => ({
-  envRepository: {},
+  envService: { getBaseUrl: () => '', getApiKey: () => '' },
 }));
 
 test('isValidPassword', () => {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { Button } from '@/components/button';
 import { Layout } from '@/components/layout';
@@ -9,9 +9,15 @@ import { CoreServerError } from '@/entities/error';
 import { authService } from '@/usecases/authService';
 import { errorService } from '@/usecases/errorService';
 
+import { LoginFindIdDialog } from './login-find-id-dialog';
+import { LoginResetPasswordDialog } from './login-reset-password-dialog';
+
 export const Login = () => {
   const navigate = useNavigate();
   const { saveToken } = useTokenContext();
+
+  const [findIdDialogOpen, setFindIdDialogOpen] = useState(false);
+  const [resetPasswordDialogOpen, setResetPasswordDialogOpen] = useState(false);
 
   const [id, setId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -54,8 +60,23 @@ export const Login = () => {
         <LoginButton disabled={!(id && password)} onClick={handleSignIn} data-testid="local-signin-button">
           로그인
         </LoginButton>
-        <SignUpLink to="/signup">회원가입</SignUpLink>
+        <EtcWrapper>
+          <FindWrapper>
+            <OtherButton data-testid="login-find-id" onClick={() => setFindIdDialogOpen(true)}>
+              아이디 찾기
+            </OtherButton>
+            <Divider />
+            <OtherButton data-testid="login-reset-password" onClick={() => setResetPasswordDialogOpen(true)}>
+              비밀번호 재설정
+            </OtherButton>
+          </FindWrapper>
+          <OtherLink data-testid="login-signup-link" to="/signup">
+            회원가입
+          </OtherLink>
+        </EtcWrapper>
       </LoginWrapper>
+      <LoginFindIdDialog open={findIdDialogOpen} onClose={() => setFindIdDialogOpen(false)} />
+      <LoginResetPasswordDialog open={resetPasswordDialogOpen} onClose={() => setResetPasswordDialogOpen(false)} />
     </Layout>
   );
 };
@@ -129,8 +150,7 @@ const LoginButton = styled(Button).attrs({ size: 'big' })`
   margin-top: 10px;
 `;
 
-const SignUpLink = styled(Link)`
-  margin: 20px auto;
+const otherStyle = css`
   font-size: 14px;
   text-decoration: none;
   color: #000;
@@ -139,5 +159,37 @@ const SignUpLink = styled(Link)`
 
   &:hover {
     opacity: 0.8;
+    text-decoration: underline;
   }
+`;
+
+const OtherLink = styled(Link)`
+  ${otherStyle};
+`;
+
+const OtherButton = styled.button`
+  ${otherStyle};
+  background: transparent;
+  border: none;
+  cursor: pointer;
+`;
+
+const EtcWrapper = styled.div`
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+`;
+
+const FindWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+`;
+
+const Divider = styled.div`
+  width: 1px;
+  height: 12px;
+  background-color: #888888;
 `;

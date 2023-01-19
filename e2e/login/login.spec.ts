@@ -42,3 +42,9 @@ test('일치하지 않는 비밀번호로 로컬 로그인 시, 에러메시지�
 
   await expect(page.getByTestId('error-message')).toHaveText('잘못된 password입니다.');
 });
+
+test('회원가입 링크가 잘 동작한다', async ({ page }) => {
+  await page.goto('/login');
+  await page.getByTestId('login-signup-link').click();
+  await expect(page).toHaveURL('/signup');
+});

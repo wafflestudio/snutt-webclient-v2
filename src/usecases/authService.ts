@@ -1,5 +1,4 @@
 import { AuthRepository, authRepository } from '@/repositories/authRepository';
-import { EnvRepository, envRepository } from '@/repositories/envRepository';
 import { StorageRepository, storageRepository } from '@/repositories/storageRepository';
 import { UserRepository, userRepository } from '@/repositories/userRepository';
 import { EnvService, envService } from '@/usecases/envService';
@@ -16,13 +15,22 @@ export interface AuthService {
   ): Promise<any>;
   signUp(body: { id: string; password: string }): Promise<{ message: 'ok'; token: string; user_id: string }>;
   closeAccount(token: string): Promise<{ message: 'ok' }>;
+  findIdByEmail(body: { email: string }): Promise<{ message: 'ok' }>;
+  passwordResetCheckEmail(body: { user_id: string }): Promise<{ email: string }>;
+  sendPasswordResetVerificationEmail(body: { user_email: string }): Promise<{ message: 'ok' }>;
+  verifyPasswordResetCode(body: { user_id: string; code: string }): Promise<{ message: 'ok' }>;
+  resetPassword(body: { user_id: string; password: string }): Promise<{ message: 'ok' }>;
 }
 
 const getAuthService = (args: {
-  repositories: [EnvRepository, StorageRepository, AuthRepository, UserRepository];
+  repositories: [StorageRepository, AuthRepository, UserRepository];
   services: [EnvService];
 }): AuthService => {
-  const [envRepo, storageRepo, authRepo, userRepo] = args.repositories;
+  const [storageRepo, authRepo, userRepo] = args.repositories;
+  const [envService] = args.services;
+
+  const baseUrl = envService.getBaseUrl();
+  const apiKey = envService.getApiKey();
 
   return {
     getApiKey: () => args.services[0].getApiKey(),
@@ -44,18 +52,21 @@ const getAuthService = (args: {
     },
     signIn: (params) =>
       params.type === 'LOCAL'
-        ? authRepo.signInWithIdPassword({ ...params, baseUrl: envRepo.getBaseUrl(), apikey: envRepo.getApiKey() })
-        : authRepo.signInWithFacebook({ ...params, baseUrl: envRepo.getBaseUrl() }),
+        ? authRepo.signInWithIdPassword({ ...params, baseUrl, apikey: apiKey })
+        : authRepo.signInWithFacebook({ ...params, baseUrl }),
     signUp: (params) =>
-      authRepo.signUpWithIdPassword(
-        { baseUrl: envRepo.getBaseUrl(), apiKey: envRepo.getApiKey() },
-        { id: params.id, password: params.password },
-      ),
-    closeAccount: (token) => userRepo.deleteUser({ baseUrl: envRepo.getBaseUrl(), token, apikey: envRepo.getApiKey() }),
+      authRepo.signUpWithIdPassword({ baseUrl, apiKey }, { id: params.id, password: params.password }),
+    closeAccount: (token) => userRepo.deleteUser({ baseUrl, token, apikey: apiKey }),
+    findIdByEmail: (body) => authRepo.findId({ baseUrl, apiKey }, body),
+    passwordResetCheckEmail: (body) => authRepo.passwordResetCheckEmail({ baseUrl, apiKey }, body),
+    sendPasswordResetVerificationEmail: (body) =>
+      authRepo.sendPasswordResetVerificationEmail({ baseUrl, apiKey }, body),
+    verifyPasswordResetCode: (body) => authRepo.verifyPasswordResetCode({ baseUrl, apiKey }, body),
+    resetPassword: (body) => authRepo.resetPassword({ baseUrl, apiKey }, body),
   };
 };
 
 export const authService = getAuthService({
-  repositories: [envRepository, storageRepository, authRepository, userRepository],
+  repositories: [storageRepository, authRepository, userRepository],
   services: [envService],
 });
