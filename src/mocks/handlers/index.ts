@@ -302,6 +302,23 @@ export const handlers = [
       return res(ctx.json({ message: 'ok' }));
     },
   ),
+
+  rest.put<{ old_password: string; new_password: string }, never, { token: string } | CoreServerError>(
+    `*/user/password`,
+    async (req, res, ctx) => {
+      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+      const token = req.headers.get('x-access-token');
+      if (!token) return res(ctx.status(403));
+
+      const { old_password } = await req.json();
+
+      const user = mockUsers.find((u) => u.auth.token === token);
+      if (!user) return res(ctx.status(403));
+      if (user.auth.password !== old_password) return res(ctx.status(403));
+
+      return res(ctx.json({ token }));
+    },
+  ),
 ];
 
 const isOverlap = (
