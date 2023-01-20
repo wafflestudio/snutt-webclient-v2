@@ -23,9 +23,11 @@ test('로그인되었을 경우, 시간표 목록 탭이 정상 동작한다 (�
   const tab2 = tabs.filter({ hasText: '나무의 시간표' });
   await expect(tab1).toHaveAttribute('aria-selected', `${true}`);
   await expect(tab2).toHaveAttribute('aria-selected', `${false}`);
+  await expect(page.getByTestId('main-timetable-credit')).toHaveText('18학점');
   await tab2.click();
   await expect(tab1).toHaveAttribute('aria-selected', `${false}`);
   await expect(tab2).toHaveAttribute('aria-selected', `${true}`);
+  await expect(page.getByTestId('main-timetable-credit')).toHaveText('16학점');
 });
 
 test('로그인되었을 경우, 시간표 목록 탭이 정상 동작한다 (시간표 1개인 학기)', async ({ page }) => {
