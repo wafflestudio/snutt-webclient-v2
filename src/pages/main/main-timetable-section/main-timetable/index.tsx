@@ -30,6 +30,7 @@ export const MainTimeTable = ({
 
   const maxDay = Math.max(...timetable.lecture_list.flatMap((l) => l.class_time_json).map((item) => item.day));
   const days = allDays.slice(0, Math.max(4, maxDay) + 1);
+  const totalCredit = timetable.lecture_list.reduce((acc, cur) => acc + cur.credit, 0);
 
   return (
     <Wrapper className={className} $columnCount={days.length} $rowCount={times.length * 2} data-testid="main-timetable">
@@ -106,6 +107,9 @@ export const MainTimeTable = ({
           </Item>
         );
       })}
+      <p data-testid="main-timetable-credit" style={{ gridRowEnd: -1, gridColumnEnd: -1 }}>
+        {totalCredit}학점
+      </p>
     </Wrapper>
   );
 };
@@ -115,7 +119,7 @@ const useColorList = () => useQuery(['colors'], () => colorService.getColorList(
 const Wrapper = styled.div<{ $columnCount: number; $rowCount: number }>`
   display: grid;
   grid-template-columns: 45px repeat(${({ $columnCount }) => $columnCount}, 1fr);
-  grid-template-rows: 40px repeat(${({ $rowCount }) => $rowCount}, 20px);
+  grid-template-rows: 40px repeat(${({ $rowCount }) => $rowCount}, 20px) 1fr;
 
   height: 100%;
 `;
