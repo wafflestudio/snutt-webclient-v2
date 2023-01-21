@@ -12,7 +12,7 @@ export interface UserRepository {
 const getUserRepository = (): UserRepository => {
   return {
     getUserInfo: async ({ baseUrl, apikey, token }) => {
-      const response = await fetch(`${baseUrl}/user/info`, {
+      const response = await fetch(`${baseUrl}/v1/user/info`, {
         headers: { 'x-access-apikey': apikey, 'x-access-token': token },
       });
       const data = await response.json().catch(() => null);
@@ -20,7 +20,7 @@ const getUserRepository = (): UserRepository => {
       return data as User;
     },
     deleteUser: async ({ baseUrl, apikey, token }) => {
-      const response = await fetch(`${baseUrl}/user/account`, {
+      const response = await fetch(`${baseUrl}/v1/user/account`, {
         headers: { 'x-access-apikey': apikey, 'x-access-token': token },
         method: 'DELETE',
       });
@@ -29,7 +29,7 @@ const getUserRepository = (): UserRepository => {
       return data as { message: 'ok' };
     },
     changePassword: async ({ baseUrl, apiKey, token }, body) => {
-      const response = await fetch(`${baseUrl}/user/password`, {
+      const response = await fetch(`${baseUrl}/v1/user/password`, {
         headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey, 'x-access-token': token },
         method: 'PUT',
         body: JSON.stringify(body),

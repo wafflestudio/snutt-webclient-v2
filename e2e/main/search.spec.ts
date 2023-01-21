@@ -32,7 +32,7 @@ test('검색 폼이 잘 보여진다', async ({ page }) => {
 test('검색 기능이 정상 동작한다 (검색 결과 있을 때)', async ({ page }) => {
   await page.goto('/?year=2001&semester=2');
   await givenUser(page, { login: true });
-  await page.waitForResponse((res) => res.url().includes('/tables/789'));
+  await page.waitForResponse((res) => res.url().includes('/v1/tables/789'));
   await page.getByTestId('layout-searchbar-filter-button').click();
   await page.getByTestId('layout-searchbar-filter-dialog-form-time-check').click();
   await page.getByTestId('layout-searchbar-filter-dialog-form-time-radio-auto').click();
@@ -40,7 +40,7 @@ test('검색 기능이 정상 동작한다 (검색 결과 있을 때)', async ({
   await Promise.all([
     page.waitForRequest(
       (req) =>
-        req.url().includes('/search_query') &&
+        req.url().includes('/v1/search_query') &&
         req.postDataJSON().year === 2001 &&
         req.postDataJSON().limit === 200 &&
         req.postDataJSON().time_mask[0] === 671024127 &&

@@ -32,7 +32,7 @@ test('Step 1: 아이디로 이메일이 잘 찾아진다 (기본)', async ({ pag
     page.waitForRequest(
       (req) =>
         req.method() === 'POST' &&
-        req.url().includes('/auth/password/reset/email/check') &&
+        req.url().includes('/v1/auth/password/reset/email/check') &&
         req.postDataJSON().user_id === 'hey',
     ),
     page.getByTestId(testIds['버튼']).click(),
@@ -78,7 +78,7 @@ test('Step 2: 아이디로 이메일이 잘 찾아진다 (기본)', async ({ pag
     page.waitForRequest(
       (req) =>
         req.method() === 'POST' &&
-        req.url().includes('/auth/password/reset/email/send') &&
+        req.url().includes('/v1/auth/password/reset/email/send') &&
         req.postDataJSON().user_email === 'woohm402@snu.ac.kr',
     ),
     page.getByTestId(testIds['버튼']).click(),
@@ -106,7 +106,7 @@ test('Step 3: 코드 입력이 잘 된다 (기본)', async ({ page }) => {
     page.waitForRequest(
       (req) =>
         req.method() === 'POST' &&
-        req.url().includes('/auth/password/reset/verification/code') &&
+        req.url().includes('/v1/auth/password/reset/verification/code') &&
         req.postDataJSON().code === '코드' &&
         req.postDataJSON().user_id === 'woohm402',
     ),
@@ -197,7 +197,7 @@ test('Step 4: 비밀번호 변경이 잘 된다 (기본)', async ({ page }) => {
     page.waitForRequest(
       (req) =>
         req.method() === 'POST' &&
-        req.url().includes('/auth/password/reset') &&
+        req.url().includes('/v1/auth/password/reset') &&
         req.postDataJSON().password === 'qwerqwer' &&
         req.postDataJSON().user_id === 'woohm402',
     ),

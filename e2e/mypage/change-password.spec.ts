@@ -41,7 +41,7 @@ test('비밀번호 변경 기능이 정상 동작한다 (기존 비밀번호 틀
     page.waitForRequest(
       (req) =>
         req.method() === 'PUT' &&
-        req.url().includes('/user/password') &&
+        req.url().includes('/v1/user/password') &&
         req.postDataJSON().old_password === '123' &&
         req.postDataJSON().new_password === 'snuttSNUTT1!',
     ),
@@ -60,7 +60,7 @@ test('비밀번호 변경 기능이 정상 동작한다 (정상 케이스)', asy
     page.waitForRequest(
       (req) =>
         req.method() === 'PUT' &&
-        req.url().includes('/user/password') &&
+        req.url().includes('/v1/user/password') &&
         req.postDataJSON().old_password === '1234' &&
         req.postDataJSON().new_password === 'snuttSNUTT1!',
     ),

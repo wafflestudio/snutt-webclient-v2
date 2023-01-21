@@ -26,7 +26,7 @@ import { timetableRepository } from '@/repositories/timetableRepository';
 import { UserRepository } from '@/repositories/userRepository';
 
 export const handlers = [
-  rest.get<never, never, CourseBook[]>(`*/course_books`, (req, res, ctx) => {
+  rest.get<never, never, CourseBook[]>(`*/v1/course_books`, (req, res, ctx) => {
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
     return res(
@@ -39,14 +39,14 @@ export const handlers = [
     );
   }),
 
-  rest.get<never, never, Timetable[]>(`*/tables`, (req, res, ctx) => {
+  rest.get<never, never, Timetable[]>(`*/v1/tables`, (req, res, ctx) => {
     if (!req.headers.get('x-access-token')) return res(ctx.status(403));
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
     return res(ctx.json(mockTimeTables));
   }),
 
-  rest.get<never, { id: string }, FullTimetable>(`*/tables/:id`, (req, res, ctx) => {
+  rest.get<never, { id: string }, FullTimetable>(`*/v1/tables/:id`, (req, res, ctx) => {
     if (!req.headers.get('x-access-token')) return res(ctx.status(403));
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
@@ -59,14 +59,17 @@ export const handlers = [
     return res(ctx.json(mockTimeTable));
   }),
 
-  rest.get<never, never, { message: 'ok'; colors: Color[]; names: string[] }>(`*/colors/vivid_ios`, (req, res, ctx) => {
-    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+  rest.get<never, never, { message: 'ok'; colors: Color[]; names: string[] }>(
+    `*/v1/colors/vivid_ios`,
+    (req, res, ctx) => {
+      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
-    return res(ctx.json(mockVividIos));
-  }),
+      return res(ctx.json(mockVividIos));
+    },
+  ),
 
   rest.get<never, { year: string; semester: `${1 | 2 | 3 | 4}` }, Awaited<ReturnType<SearchRepository['getTags']>>>(
-    `*/tags/:year/:semester`,
+    `*/v1/tags/:year/:semester`,
     (req, res, ctx) => {
       if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
@@ -75,7 +78,7 @@ export const handlers = [
   ),
 
   rest.get<never, never, Awaited<ReturnType<UserRepository['getUserInfo']> | CoreServerError>>(
-    `*/user/info`,
+    `*/v1/user/info`,
     (req, res, ctx) => {
       if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
       const token = req.headers.get('x-access-token');
@@ -89,28 +92,28 @@ export const handlers = [
     },
   ),
 
-  rest.get<never, never, { count: number }>(`*/notification/count`, (req, res, ctx) => {
+  rest.get<never, never, { count: number }>(`*/v1/notification/count`, (req, res, ctx) => {
     if (!req.headers.get('x-access-token')) return res(ctx.status(403));
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
     return res(ctx.json({ count: 3 }));
   }),
 
-  rest.get<never, never, Notification[]>(`*/notification`, (req, res, ctx) => {
+  rest.get<never, never, Notification[]>(`*/v1/notification`, (req, res, ctx) => {
     if (!req.headers.get('x-access-token')) return res(ctx.status(403));
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
     return res(ctx.json(mockNotification));
   }),
 
-  rest.post<Partial<SearchFilter>, never, SearchResultLecture[]>(`*/search_query`, (req, res, ctx) => {
+  rest.post<Partial<SearchFilter>, never, SearchResultLecture[]>(`*/v1/search_query`, (req, res, ctx) => {
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
     return res(ctx.json(mockSearchResult));
   }),
 
   rest.post<{ title: string; year: number; semester: Semester }, never, Timetable[] | CoreServerError>(
-    `*/tables`,
+    `*/v1/tables`,
     async (req, res, ctx) => {
       if (!req.headers.get('x-access-token')) return res(ctx.status(403));
       if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
@@ -135,7 +138,7 @@ export const handlers = [
     Parameters<typeof timetableRepository['updateLecture']>[2],
     Parameters<typeof timetableRepository['updateLecture']>[1],
     FullTimetable | CoreServerError
-  >(`*/tables/:id/lecture/:lecture_id`, async (req, res, ctx) => {
+  >(`*/v1/tables/:id/lecture/:lecture_id`, async (req, res, ctx) => {
     // TODO: 시간표 validation ?
     const { class_time_json } = await req.json();
     if (!class_time_json || !Array.isArray(class_time_json)) return res(ctx.status(400));
@@ -150,19 +153,19 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(mockTimeTable123));
   }),
 
-  rest.delete<never, { id: string }, Timetable[] | CoreServerError>(`*/tables/:id`, async (req, res, ctx) => {
+  rest.delete<never, { id: string }, Timetable[] | CoreServerError>(`*/v1/tables/:id`, async (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(mockTimeTables));
   }),
 
   rest.delete<never, { id: string; lectureId: string }, FullTimetable>(
-    `*/tables/:id/lecture/:lectureId`,
+    `*/v1/tables/:id/lecture/:lectureId`,
     async (req, res, ctx) => {
       return res(ctx.status(200), ctx.json(mockTimeTable123));
     },
   ),
 
   rest.post<never, { id: string; lectureId: string }, FullTimetable | CoreServerError>(
-    `*/tables/:id/lecture/:lectureId`,
+    `*/v1/tables/:id/lecture/:lectureId`,
     async (req, res, ctx) => {
       const table =
         req.params.id === '123' ? mockTimeTable123 : req.params.id === '456' ? mockTimeTable456 : mockTimeTable789;
@@ -180,7 +183,7 @@ export const handlers = [
   ),
 
   rest.post<{ id: string; password: string }, never, SignInResponse | CoreServerError>(
-    `*/auth/login_local`,
+    `*/v1/auth/login_local`,
     async (req, res, ctx) => {
       if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
@@ -202,7 +205,7 @@ export const handlers = [
     },
   ),
 
-  rest.post<{ email: string; message: string }, never, { message: 'ok' }>(`*/feedback`, async (req, res, ctx) => {
+  rest.post<{ email: string; message: string }, never, { message: 'ok' }>(`*/v1/feedback`, async (req, res, ctx) => {
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
     return res(ctx.delay(300), ctx.json({ message: 'ok' }));
   }),
@@ -211,7 +214,7 @@ export const handlers = [
     { id: string; password: string },
     never,
     { message: 'ok'; token: string; user_id: string } | CoreServerError
-  >(`*/auth/register_local`, async (req, res, ctx) => {
+  >(`*/v1/auth/register_local`, async (req, res, ctx) => {
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
     const { id } = await req.json();
 
@@ -221,7 +224,7 @@ export const handlers = [
     return res(ctx.status(200), ctx.json({ message: 'ok', token: 't1', user_id: '뭐냐이건' }));
   }),
 
-  rest.delete<never, never, { message: 'ok' }>(`*/user/account`, async (req, res, ctx) => {
+  rest.delete<never, never, { message: 'ok' }>(`*/v1/user/account`, async (req, res, ctx) => {
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
     const token = req.headers.get('x-access-token');
 
@@ -230,21 +233,25 @@ export const handlers = [
     return res(ctx.json({ message: 'ok' }));
   }),
 
-  rest.post<{ email: string }, never, { message: 'ok' } | CoreServerError>(`*/auth/id/find`, async (req, res, ctx) => {
-    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
-    const { email } = await req.json();
-    if (!email) return res(ctx.status(400), ctx.json({ errcode: 0x1018, message: '이메일을 입력해주세요.', ext: {} }));
-    if (mockUsers.every((u) => u.info.email !== email))
-      return res(
-        ctx.status(404),
-        ctx.json({ errcode: 0x4004, message: '해당 이메일로 가입된 사용자가 없습니다.', ext: {} }),
-      );
+  rest.post<{ email: string }, never, { message: 'ok' } | CoreServerError>(
+    `*/v1/auth/id/find`,
+    async (req, res, ctx) => {
+      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+      const { email } = await req.json();
+      if (!email)
+        return res(ctx.status(400), ctx.json({ errcode: 0x1018, message: '이메일을 입력해주세요.', ext: {} }));
+      if (mockUsers.every((u) => u.info.email !== email))
+        return res(
+          ctx.status(404),
+          ctx.json({ errcode: 0x4004, message: '해당 이메일로 가입된 사용자가 없습니다.', ext: {} }),
+        );
 
-    return res(ctx.json({ message: 'ok' }));
-  }),
+      return res(ctx.json({ message: 'ok' }));
+    },
+  ),
 
   rest.post<{ user_id: string }, never, { email: string } | CoreServerError>(
-    `*/auth/password/reset/email/check`,
+    `*/v1/auth/password/reset/email/check`,
     async (req, res, ctx) => {
       if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
       const userId = (await req.json()).user_id;
@@ -270,7 +277,7 @@ export const handlers = [
   ),
 
   rest.post<{ user_email: string }, never, { message: 'ok' } | CoreServerError>(
-    `*/auth/password/reset/email/send`,
+    `*/v1/auth/password/reset/email/send`,
     async (req, res, ctx) => {
       if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
@@ -279,7 +286,7 @@ export const handlers = [
   ),
 
   rest.post<{ user_email: string }, never, { message: 'ok' } | CoreServerError>(
-    `*/auth/password/reset/verification/code`,
+    `*/v1/auth/password/reset/verification/code`,
     async (req, res, ctx) => {
       if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
       type Status = 'expired' | 'no' | 'wrong' | 'success';
@@ -295,7 +302,7 @@ export const handlers = [
   ),
 
   rest.post<{ user_id: string; password: string }, never, { message: 'ok' } | CoreServerError>(
-    `*/auth/password/reset`,
+    `*/v1/auth/password/reset`,
     async (req, res, ctx) => {
       if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
@@ -304,7 +311,7 @@ export const handlers = [
   ),
 
   rest.put<{ old_password: string; new_password: string }, never, { token: string } | CoreServerError>(
-    `*/user/password`,
+    `*/v1/user/password`,
     async (req, res, ctx) => {
       if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
       const token = req.headers.get('x-access-token');

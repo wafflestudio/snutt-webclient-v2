@@ -46,7 +46,7 @@ export interface TimetableRepository {
 const getTimetableRepository = (): TimetableRepository => {
   return {
     getTimetables: async ({ baseUrl, apikey, token }) => {
-      const response = await fetch(`${baseUrl}/tables`, {
+      const response = await fetch(`${baseUrl}/v1/tables`, {
         headers: { 'x-access-apikey': apikey, 'x-access-token': token },
       });
       const data = await response.json().catch(() => null);
@@ -54,7 +54,7 @@ const getTimetableRepository = (): TimetableRepository => {
       return data as Timetable[];
     },
     getFullTimetable: async ({ baseUrl, apikey, token }, { id }) => {
-      const response = await fetch(`${baseUrl}/tables/${id}`, {
+      const response = await fetch(`${baseUrl}/v1/tables/${id}`, {
         headers: { 'x-access-apikey': apikey, 'x-access-token': token, accept: 'application/json' },
       });
       const data = await response.json().catch(() => null);
@@ -62,7 +62,7 @@ const getTimetableRepository = (): TimetableRepository => {
       return data as FullTimetable;
     },
     deleteTimetable: async ({ baseUrl, apikey, token }, { id }) => {
-      const response = await fetch(`${baseUrl}/tables/${id}`, {
+      const response = await fetch(`${baseUrl}/v1/tables/${id}`, {
         headers: { 'x-access-apikey': apikey, 'x-access-token': token },
         method: 'DELETE',
       });
@@ -71,7 +71,7 @@ const getTimetableRepository = (): TimetableRepository => {
       return data as Timetable[];
     },
     createTimetable: async ({ baseUrl, apikey, token }, { title, year, semester }) => {
-      const response = await fetch(`${baseUrl}/tables`, {
+      const response = await fetch(`${baseUrl}/v1/tables`, {
         headers: {
           'x-access-apikey': apikey,
           'x-access-token': token,
@@ -85,7 +85,7 @@ const getTimetableRepository = (): TimetableRepository => {
       return data as Timetable[];
     },
     updateLecture: async ({ baseUrl, apikey, token }, { id, lecture_id }, body) => {
-      const response = await fetch(`${baseUrl}/tables/${id}/lecture/${lecture_id}`, {
+      const response = await fetch(`${baseUrl}/v1/tables/${id}/lecture/${lecture_id}`, {
         headers: {
           'x-access-apikey': apikey,
           'x-access-token': token,
@@ -99,7 +99,7 @@ const getTimetableRepository = (): TimetableRepository => {
       return data as FullTimetable;
     },
     deleteLecture: async ({ baseUrl, apikey, token }, { id, lecture_id }) => {
-      const response = await fetch(`${baseUrl}/tables/${id}/lecture/${lecture_id}`, {
+      const response = await fetch(`${baseUrl}/v1/tables/${id}/lecture/${lecture_id}`, {
         headers: { 'x-access-apikey': apikey, 'x-access-token': token },
         method: 'DELETE',
       });
@@ -108,7 +108,7 @@ const getTimetableRepository = (): TimetableRepository => {
       return data as FullTimetable;
     },
     addLecture: async ({ baseUrl, apikey, token }, { id, lecture_id }) => {
-      const response = await fetch(`${baseUrl}/tables/${id}/lecture/${lecture_id}`, {
+      const response = await fetch(`${baseUrl}/v1/tables/${id}/lecture/${lecture_id}`, {
         headers: {
           'x-access-apikey': apikey,
           'x-access-token': token,

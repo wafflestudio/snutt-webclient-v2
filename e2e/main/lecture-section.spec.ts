@@ -82,9 +82,9 @@ test('강의 삭제 기능이 정상 동작한다', async ({ page }) => {
   await lectureItem.filter({ hasText: '고급수학 2' }).getByTestId('main-lecture-listitem-delete').click();
   await Promise.all([
     page.waitForRequest(
-      (req) => req.method() === 'DELETE' && req.url().includes('/tables/123/lecture/5d1a0132db261b554d5d0078'),
+      (req) => req.method() === 'DELETE' && req.url().includes('/v1/tables/123/lecture/5d1a0132db261b554d5d0078'),
     ),
-    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/tables/123')),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/v1/tables/123')),
     page.getByTestId('ml-lecture-delete-submit').click(),
   ]);
 });
@@ -97,7 +97,7 @@ test('검색 결과 탭이 정상 동작한다', async ({ page }) => {
     page.waitForRequest(
       (req) =>
         req.method() === 'POST' &&
-        req.url().includes('/search_query') &&
+        req.url().includes('/v1/search_query') &&
         req.postDataJSON().title === '컴' &&
         req.postDataJSON().limit === 200 &&
         req.postDataJSON().semester === 1 &&
@@ -150,9 +150,9 @@ test('검색 결과 탭에서 추가 기능이 정상 동작한다 (성공)', as
 
   await Promise.all([
     page.waitForRequest(
-      (req) => req.method() === 'POST' && req.url().includes('tables/789/lecture/6329ab4fcb360c002b6efbf8'),
+      (req) => req.method() === 'POST' && req.url().includes('/v1/tables/789/lecture/6329ab4fcb360c002b6efbf8'),
     ),
-    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('tables/789')),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/v1/tables/789')),
     page.getByTestId('main-lecture-listitem').nth(10).getByText('추가').click(),
   ]);
 });

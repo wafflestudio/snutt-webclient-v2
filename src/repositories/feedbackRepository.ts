@@ -5,7 +5,7 @@ export interface FeedbackRepository {
 const getFeedbackRepository = (): FeedbackRepository => {
   return {
     post: async ({ baseUrl, apikey }, body) => {
-      const response = await fetch(`${baseUrl}/feedback`, {
+      const response = await fetch(`${baseUrl}/v1/feedback`, {
         headers: { 'x-access-apikey': apikey, 'content-type': 'application/json' },
         body: JSON.stringify(body),
         method: 'POST',
