@@ -88,6 +88,7 @@ const LectureHeader = styled.div`
 
 const LectureHeaderLeft = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 const LectureTitle = styled.div`
@@ -101,12 +102,14 @@ const LectureInstructor = styled.div`
   opacity: 0.6;
   font-size: 13px;
   line-height: 18px;
+  white-space: nowrap;
 `;
 
 const LectureHeaderRight = styled.div`
   display: flex;
   font-size: 13px;
   line-height: 18px;
+  min-width: 130px;
 `;
 
 const LectureButton = styled.button<{ $color?: `#${string}` }>`

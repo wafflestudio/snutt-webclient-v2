@@ -116,7 +116,8 @@ export const mockSearchResult: SearchResultLecture[] = [
     classification: '전선',
     department: '전기·정보공학부',
     academic_year: '4학년',
-    course_title: '컴파일러의 기초',
+    course_title:
+      '컴파일러의 기초였지만 강의 제목이 엄청 길어지면 어떻게 되는지 확인하기 위해 희생된 불쌍한 강의이고 새로운 이름은 선풍기',
     credit: 3,
     class_time: '월(6-1.5)/수(6-1.5)',
     real_class_time: '월(14:00~15:15)/수(14:00~15:15)',
