@@ -1,6 +1,6 @@
 declare global {
   interface Window {
-    git: string;
+    git: { sha: string; tag: string };
   }
 }
 

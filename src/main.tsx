@@ -7,7 +7,7 @@ import { envService } from '@/usecases/envService';
 
 import App from './App';
 
-window.git = envService.getGitSha();
+window.git = { sha: envService.getGitSha(), tag: envService.getGitTag() };
 const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false } } });
 
 function startApp() {
