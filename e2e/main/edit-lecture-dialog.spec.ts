@@ -35,10 +35,9 @@ test('강의 수정 모달이 잘 보여진다 (성공케이스)', async ({ page
     page.getByTestId('main-lecture-edit-dialog-submit').click(),
   ]);
   // TODO: 모달 닫히는거 확인
-  // TODO: 커스텀 색깔 고르는거 잘 되는지
 });
 
-test('커스텀 색이 잘 수정된다', async ({ page }) => {
+test('커스텀 색으로 잘 수정된다', async ({ page }) => {
   await page.goto('/');
   await givenUser(page);
   const lectureItem = page.getByTestId('main-lecture-listitem');
@@ -55,6 +54,20 @@ test('커스텀 색이 잘 수정된다', async ({ page }) => {
         req.postDataJSON().color.fg === '#ffffff' &&
         req.method() === 'PUT',
     ),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('tables/123')),
+    page.getByTestId('main-lecture-edit-dialog-submit').click(),
+  ]);
+});
+
+test('커스텀 색에서 잘 수정된다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page);
+  const lectureItem = page.getByTestId('main-lecture-listitem');
+  await expect(page.getByTestId('main-lecture-edit-dialog-content')).toHaveCount(0);
+  await lectureItem.filter({ hasText: '진화와 인간사회' }).click();
+  await page.getByTestId('main-lecture-edit-dialog-color').filter({ hasText: '비취' }).click();
+  await Promise.all([
+    page.waitForRequest((req) => req.postDataJSON().colorIndex === 5 && req.postDataJSON().color === undefined),
     page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('tables/123')),
     page.getByTestId('main-lecture-edit-dialog-submit').click(),
   ]);

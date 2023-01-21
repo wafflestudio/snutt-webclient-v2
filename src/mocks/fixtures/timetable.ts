@@ -278,8 +278,8 @@ export const mockTimeTable123: FullTimetable = {
       lecture_number: '003',
       created_at: '2019-09-03T06:27:18.790Z',
       updated_at: '2019-09-03T06:27:18.790Z',
-      color: {},
-      colorIndex: 3,
+      color: { bg: '#000000', fg: '#ffffff' },
+      colorIndex: 0,
     },
     {
       _id: '5d6fbcf33c46177d58adff73',
