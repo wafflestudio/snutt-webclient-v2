@@ -110,6 +110,7 @@ const LectureHeaderRight = styled.div`
   font-size: 13px;
   line-height: 18px;
   min-width: 130px;
+  justify-content: flex-end;
 `;
 
 const LectureButton = styled.button<{ $color?: `#${string}` }>`
