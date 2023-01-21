@@ -136,6 +136,7 @@ export const LoginResetPasswordDialog = ({ open, onClose }: Props) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={resetPasswordMutation.isLoading}
+                  type="password"
                 />
                 <Error data-testid="login-reset-password-error" />
                 <NextButton
