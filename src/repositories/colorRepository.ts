@@ -10,7 +10,7 @@ export interface ColorRepository {
 const getColorRepository = (): ColorRepository => {
   return {
     getColorPalette: async ({ baseUrl, apikey }) => {
-      const response = await fetch(`${baseUrl}/colors/vivid_ios`, {
+      const response = await fetch(`${baseUrl}/v1/colors/vivid_ios`, {
         headers: { 'x-access-apikey': apikey },
       });
       const data = await response.json().catch(() => null);

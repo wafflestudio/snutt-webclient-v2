@@ -30,7 +30,7 @@ test('탈퇴 기능이 정상 동작한다 (성공)', async ({ page }) => {
   await expect(page.getByTestId(testIds['탈퇴 확인 버튼'])).toBeDisabled();
   await page.getByTestId(testIds['탈퇴 입력창']).type('탈퇴');
   await Promise.all([
-    page.waitForRequest((req) => req.method() === 'DELETE' && req.url().includes('/user/account')),
+    page.waitForRequest((req) => req.method() === 'DELETE' && req.url().includes('/v1/user/account')),
     page.getByTestId(testIds['탈퇴 확인 버튼']).click(),
   ]);
   await expect(page).toHaveURL('/');

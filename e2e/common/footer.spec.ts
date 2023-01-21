@@ -60,7 +60,7 @@ test('개발자 괴롭히기 기능이 잘 동작한다 (정상 제출)', async 
       (req) =>
         req.postDataJSON().email === 'test1' &&
         req.postDataJSON().message === 'test2' &&
-        req.url().includes('/feedback') &&
+        req.url().includes('/v1/feedback') &&
         req.method() === 'POST',
     ),
     page.getByTestId('feedback-submit').click(),

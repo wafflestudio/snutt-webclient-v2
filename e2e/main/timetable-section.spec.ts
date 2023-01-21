@@ -87,7 +87,7 @@ test('로그인되었을 경우, 시간표 생성 기능이 정상 동작한다 
   await Promise.all([
     page.waitForRequest(
       (req) =>
-        req.url().includes('/tables') &&
+        req.url().includes('/v1/tables') &&
         req.method() === 'POST' &&
         req.postDataJSON().semester === 1 &&
         req.postDataJSON().year === 1001 &&
@@ -126,8 +126,8 @@ test('로그인되었을 경우, 시간표 삭제 기능이 정상 동작한다'
   await expect(page.getByTestId('mt-tt-delete-submit')).toBeDisabled();
   await page.getByTestId('mt-tt-delete-input').type('18학점');
   await Promise.all([
-    page.waitForRequest((req) => req.method() === 'DELETE' && req.url().includes('/tables/456')),
-    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/tables')),
+    page.waitForRequest((req) => req.method() === 'DELETE' && req.url().includes('/v1/tables/456')),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/v1/tables')),
     page.getByTestId('mt-tt-delete-submit').click(),
   ]);
   await expect(tabs.filter({ hasText: '나의 시간표' })).toHaveAttribute('aria-selected', `${true}`);

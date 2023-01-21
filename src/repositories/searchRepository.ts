@@ -20,7 +20,7 @@ export interface SearchRepository {
 const getSearchRepository = (): SearchRepository => {
   return {
     getTags: async ({ baseUrl, apikey }, { year, semester }) => {
-      const response = await fetch(`${baseUrl}/tags/${year}/${semester}`, {
+      const response = await fetch(`${baseUrl}/v1/tags/${year}/${semester}`, {
         headers: { 'x-access-apikey': apikey },
       });
       const data = await response.json().catch(() => null);
@@ -28,7 +28,7 @@ const getSearchRepository = (): SearchRepository => {
       return data as Awaited<ReturnType<SearchRepository['getTags']>>;
     },
     search: async ({ baseUrl, apikey }, params) => {
-      const response = await fetch(`${baseUrl}/search_query`, {
+      const response = await fetch(`${baseUrl}/v1/search_query`, {
         headers: { 'x-access-apikey': apikey, 'content-type': 'application/json;charset=UTF-8' },
         method: 'POST',
         body: JSON.stringify(params),

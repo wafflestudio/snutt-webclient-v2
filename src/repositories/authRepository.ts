@@ -36,7 +36,7 @@ const getAuthRepository = (): AuthRepository => {
     signInWithIdPassword: async ({ baseUrl, apikey, id, password }) => {
       const params = new URLSearchParams({ id, password });
 
-      const response = await fetch(`${baseUrl}/auth/login_local`, {
+      const response = await fetch(`${baseUrl}/v1/auth/login_local`, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'x-access-apikey': apikey },
         method: 'POST',
         body: params.toString(),
@@ -49,7 +49,7 @@ const getAuthRepository = (): AuthRepository => {
     signInWithFacebook: async ({ baseUrl, fb_id, fb_token }) => {
       const params = new URLSearchParams({ fb_id, fb_token });
 
-      const response = await fetch(`${baseUrl}/auth/login_fb`, {
+      const response = await fetch(`${baseUrl}/v1/auth/login_fb`, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         method: 'POST',
         body: params.toString(),
@@ -60,7 +60,7 @@ const getAuthRepository = (): AuthRepository => {
       return data as SignInResponse;
     },
     signUpWithIdPassword: async ({ baseUrl, apiKey }, body) => {
-      const response = await fetch(`${baseUrl}/auth/register_local`, {
+      const response = await fetch(`${baseUrl}/v1/auth/register_local`, {
         headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
         method: 'POST',
         body: JSON.stringify(body),
@@ -71,7 +71,7 @@ const getAuthRepository = (): AuthRepository => {
       return data as { message: 'ok'; token: string; user_id: string };
     },
     findId: async ({ baseUrl, apiKey }, body) => {
-      const response = await fetch(`${baseUrl}/auth/id/find`, {
+      const response = await fetch(`${baseUrl}/v1/auth/id/find`, {
         headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
         method: 'POST',
         body: JSON.stringify(body),
@@ -82,7 +82,7 @@ const getAuthRepository = (): AuthRepository => {
       return data as { message: 'ok' };
     },
     passwordResetCheckEmail: async ({ baseUrl, apiKey }, body) => {
-      const response = await fetch(`${baseUrl}/auth/password/reset/email/check`, {
+      const response = await fetch(`${baseUrl}/v1/auth/password/reset/email/check`, {
         headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
         method: 'POST',
         body: JSON.stringify(body),
@@ -93,7 +93,7 @@ const getAuthRepository = (): AuthRepository => {
       return data as { email: string };
     },
     sendPasswordResetVerificationEmail: async ({ baseUrl, apiKey }, body) => {
-      const response = await fetch(`${baseUrl}/auth/password/reset/email/send`, {
+      const response = await fetch(`${baseUrl}/v1/auth/password/reset/email/send`, {
         headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
         method: 'POST',
         body: JSON.stringify(body),
@@ -104,7 +104,7 @@ const getAuthRepository = (): AuthRepository => {
       return data as { message: 'ok' };
     },
     verifyPasswordResetCode: async ({ baseUrl, apiKey }, body) => {
-      const response = await fetch(`${baseUrl}/auth/password/reset/verification/code`, {
+      const response = await fetch(`${baseUrl}/v1/auth/password/reset/verification/code`, {
         headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
         method: 'POST',
         body: JSON.stringify(body),
@@ -115,7 +115,7 @@ const getAuthRepository = (): AuthRepository => {
       return data as { message: 'ok' };
     },
     resetPassword: async ({ baseUrl, apiKey }, body) => {
-      const response = await fetch(`${baseUrl}/auth/password/reset`, {
+      const response = await fetch(`${baseUrl}/v1/auth/password/reset`, {
         headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
         method: 'POST',
         body: JSON.stringify(body),

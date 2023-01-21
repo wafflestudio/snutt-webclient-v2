@@ -20,7 +20,7 @@ test('강의 수정 모달이 잘 보여진다 (성공케이스)', async ({ page
     page.waitForRequest(
       (req) =>
         req.method() === 'PUT' &&
-        req.url().includes('tables/123/lecture/5d1decbddb261b554d609dcc') &&
+        req.url().includes('/v1/tables/123/lecture/5d1decbddb261b554d609dcc') &&
         req.postDataJSON().class_time_json[0].place === '낙아치' &&
         req.postDataJSON().class_time_json[2].place === '302-208' &&
         req.postDataJSON().course_title === '컴퓨터프로그래밍' &&
@@ -31,7 +31,7 @@ test('강의 수정 모달이 잘 보여진다 (성공케이스)', async ({ page
         req.postDataJSON().class_time_mask[2] === 240 &&
         req.postDataJSON().colorIndex === 8,
     ),
-    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('tables/123')),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/v1/tables/123')),
     page.getByTestId('main-lecture-edit-dialog-submit').click(),
   ]);
   // TODO: 모달 닫히는거 확인
@@ -48,13 +48,13 @@ test('커스텀 색으로 잘 수정된다', async ({ page }) => {
   await Promise.all([
     page.waitForRequest(
       (req) =>
-        req.url().includes('tables/123/lecture/5d1a0132db261b554d5d0078') &&
+        req.url().includes('/v1/tables/123/lecture/5d1a0132db261b554d5d0078') &&
         req.postDataJSON().colorIndex === 0 &&
         req.postDataJSON().color.bg === '#1a1a1a' &&
         req.postDataJSON().color.fg === '#ffffff' &&
         req.method() === 'PUT',
     ),
-    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('tables/123')),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/v1/tables/123')),
     page.getByTestId('main-lecture-edit-dialog-submit').click(),
   ]);
 });
@@ -68,7 +68,7 @@ test('커스텀 색에서 잘 수정된다', async ({ page }) => {
   await page.getByTestId('main-lecture-edit-dialog-color').filter({ hasText: '비취' }).click();
   await Promise.all([
     page.waitForRequest((req) => req.postDataJSON().colorIndex === 5 && req.postDataJSON().color === undefined),
-    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('tables/123')),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/v1/tables/123')),
     page.getByTestId('main-lecture-edit-dialog-submit').click(),
   ]);
 });
@@ -119,9 +119,9 @@ test('강의가 잘 삭제된다 (확인)', async ({ page }) => {
 
   await Promise.all([
     page.waitForRequest(
-      (req) => req.method() === 'DELETE' && req.url().includes('/tables/123/lecture/5d43e9fb3c46177d58a540b5'),
+      (req) => req.method() === 'DELETE' && req.url().includes('/v1/tables/123/lecture/5d43e9fb3c46177d58a540b5'),
     ),
-    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/tables/123')),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/v1/tables/123')),
     page.getByTestId('ml-edit-delete-confirm').click(),
   ]);
   // TODO: 강의 삭제 모달 닫혔는지 테스트
