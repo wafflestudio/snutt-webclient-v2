@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 import { BREAKPOINT } from '@/styles/constants';
@@ -15,9 +14,9 @@ export const LayoutFooter = () => {
   return (
     <Wrapper>
       <Left>
-        <SLink to={`${baseUrl}/member`} target="_blank">
+        <SLinkExternal href={`${baseUrl}/member`} target="_blank">
           WaffleStudio SNUTT 팀
-        </SLink>
+        </SLinkExternal>
         <Divider />
         <SLinkExternal href={`https://github.com/wafflestudio/snutt-webclient-v2`} target="_blank">
           SNUTT Github
@@ -28,13 +27,13 @@ export const LayoutFooter = () => {
         </SButton>
       </Left>
       <Right>
-        <SLink to={`${baseUrl}/terms-of-service`} target="_blank">
+        <SLinkExternal href={`${baseUrl}/terms_of_service`} target="_blank">
           약관
-        </SLink>
+        </SLinkExternal>
         <Divider />
-        <SLink to={`${baseUrl}/privacy_policy`} target="_blank">
+        <SLinkExternal href={`${baseUrl}/privacy_policy`} target="_blank">
           개인정보 처리방침
-        </SLink>
+        </SLinkExternal>
       </Right>
       <LayoutFooterFeedbackDialog isOpen={feedbackDialogOpen} onClose={() => setFeedbackDialogOpen(false)} />
     </Wrapper>
@@ -74,10 +73,6 @@ const footerItem = css`
     color: #23527c;
     text-decoration: underline;
   }
-`;
-
-const SLink = styled(Link)`
-  ${footerItem}
 `;
 
 const SLinkExternal = styled.a`
