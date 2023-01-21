@@ -56,9 +56,11 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
     const color =
       draft.colorIndex === 0
         ? { colorIndex: 0 as const, color: draft.color as Color }
+        : draft.colorIndex
+        ? { colorIndex: draft.colorIndex }
         : lecture.colorIndex === 0
         ? { colorIndex: 0 as const, color: lecture.color as Color }
-        : { colorIndex: draft.colorIndex ?? lecture.colorIndex };
+        : { colorIndex: lecture.colorIndex };
 
     mutate(
       {
