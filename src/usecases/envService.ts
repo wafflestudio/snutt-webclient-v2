@@ -6,6 +6,7 @@ export interface EnvService {
   getApiKey(): string;
   getBaseUrl(): string;
   getGitSha(): string;
+  getGitTag(): string;
 }
 
 const getEnvService = (args: { repositories: [EnvRepository] }): EnvService => {
@@ -16,6 +17,13 @@ const getEnvService = (args: { repositories: [EnvRepository] }): EnvService => {
     getGitSha: () => {
       try {
         return args.repositories[0].getGitSha();
+      } catch (err) {
+        return 'unknown';
+      }
+    },
+    getGitTag: () => {
+      try {
+        return args.repositories[0].getGitTag();
       } catch (err) {
         return 'unknown';
       }

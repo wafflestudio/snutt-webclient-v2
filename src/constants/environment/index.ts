@@ -6,6 +6,7 @@
 export interface EnvironmentVariables {
   APP_ENV?: string;
   GIT_SHA?: string;
+  GIT_TAG?: string;
   API_BASE_URL?: string;
   API_KEY?: string;
 }
@@ -13,6 +14,7 @@ export interface EnvironmentVariables {
 export const viteEnvironmentVariables: EnvironmentVariables = {
   APP_ENV: import.meta.env.VITE_APP_ENV,
   GIT_SHA: import.meta.env.VITE_GIT_SHA,
+  GIT_TAG: import.meta.env.VITE_GIT_TAG,
   API_BASE_URL: import.meta.env.VITE_BASE_URL,
   API_KEY: import.meta.env.VITE_API_KEY,
 };
