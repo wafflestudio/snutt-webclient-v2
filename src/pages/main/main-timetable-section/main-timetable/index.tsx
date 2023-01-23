@@ -84,6 +84,8 @@ export const MainTimeTable = ({
               onClick={() => onClickLecture(lecture._id)}
             >
               {lecture.course_title}
+              <br />
+              {time.place}
             </Item>
           );
         });
