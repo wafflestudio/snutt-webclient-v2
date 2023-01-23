@@ -27,8 +27,13 @@ const getLectureService = (): SemesterService => {
     getLectureTimeTexts: (lecture) =>
       lecture.class_time_json.map((t) => `${DAY_LABEL_MAP[t.day]}(${t.start_time}~${t.end_time})`),
     getLectureColor: (lecture, colorList) => {
-      const bg = lecture.color.bg ?? colorList?.[lecture.colorIndex - 1]?.bg ?? '#94E6FE';
-      const fg = lecture.color.fg ?? colorList?.[lecture.colorIndex - 1]?.fg ?? '#1579C2';
+      const fallback = { bg: '#94e6fe', fg: '#1579c2' };
+
+      if (lecture.colorIndex === 0) return { bg: lecture.color.bg ?? fallback.bg, fg: lecture.color.fg ?? fallback.fg };
+
+      const bg = colorList?.[lecture.colorIndex - 1]?.bg ?? fallback.bg;
+      const fg = colorList?.[lecture.colorIndex - 1]?.fg ?? fallback.fg;
+
       return { bg, fg };
     },
     getEmptyClassTime: () => ({ day: 0, len: 0.5, place: '', start: 0, __id__: createRandomId() }),
