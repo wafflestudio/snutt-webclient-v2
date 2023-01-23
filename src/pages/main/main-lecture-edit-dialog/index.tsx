@@ -78,7 +78,7 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
       <Dialog.Title>강의 편집</Dialog.Title>
       {lecture && (
         <EditDialogContent data-testid="main-lecture-edit-dialog-content">
-          {open && <MainLectureEditForm defaultState={lecture} draft={draft} setDraft={setDraft} />}
+          <MainLectureEditForm defaultState={lecture} draft={draft} setDraft={setDraft} />
         </EditDialogContent>
       )}
       <Actions>

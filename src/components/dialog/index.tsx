@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Backdrop } from '@/components/backdrop';
@@ -8,9 +8,28 @@ interface Props {
   className?: string;
   open?: boolean;
   onClose?: () => void;
+  /**
+   * true 이면 close 되었을 때도 content 를 마운트된 상태로 유지한다. default: false
+   */
+  keepMountOnClose?: boolean;
 }
 
-export const Dialog = ({ children, open = true, onClose = () => null, className }: PropsWithChildren<Props>) => {
+export const Dialog = ({
+  children,
+  open = true,
+  onClose = () => null,
+  className,
+  keepMountOnClose = false,
+}: PropsWithChildren<Props>) => {
+  const [mount, setMount] = useState(false);
+
+  useEffect(() => {
+    if (open) setMount(true);
+    else setTimeout(() => setMount(false), 200);
+  }, [open]);
+
+  const showChildren = open || mount;
+
   return (
     <Portal>
       <Dimmer
@@ -21,7 +40,7 @@ export const Dialog = ({ children, open = true, onClose = () => null, className 
         }}
       >
         <Container className={className} onClick={(e) => e.stopPropagation()}>
-          {children}
+          {(showChildren || keepMountOnClose) && children}
         </Container>
       </Dimmer>
     </Portal>
@@ -57,6 +76,7 @@ const Dimmer = styled(Backdrop)`
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: opacity 0.2s;
 `;
 
 const Container = styled.div`

@@ -24,7 +24,7 @@ test('시간대 선택 기능이 정상 동작한다', async ({ page }) => {
 test('검색 폼이 잘 보여진다', async ({ page }) => {
   await page.goto('/');
   await givenUser(page, { login: true });
-  await expect(page.getByText('교양')).toHaveCount(1);
+  await page.getByTestId('layout-searchbar-filter-button').click();
   await expect(page.getByText('영어진행 강의')).toHaveCount(1);
   await expect(page.getByText('시간대 검색')).toHaveCount(2);
 });

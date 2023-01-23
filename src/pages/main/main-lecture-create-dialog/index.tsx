@@ -70,7 +70,7 @@ export const MainLectureCreateDialog = ({ open, onClose, timetableId }: Props) =
       <Dialog.Title>강의 생성</Dialog.Title>
 
       <EditDialogContent data-testid="main-lecture-create-dialog-content">
-        {open && <MainLectureEditForm draft={draft} setDraft={setDraft} />}
+        <MainLectureEditForm draft={draft} setDraft={setDraft} />
       </EditDialogContent>
 
       <Actions>
