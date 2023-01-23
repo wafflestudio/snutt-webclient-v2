@@ -4,6 +4,12 @@ import { expect, test } from '@playwright/test';
 // @ts-ignore
 import { givenUser } from '../utils/user.ts';
 
+const testIds = {
+  선생님: 'main-lecture-edit-dialog-instructor',
+  '강의 시간 추가 버튼': 'main-lecture-edit-dialog-add-time',
+  '강의 시간 제거 버튼': 'main-lecture-edit-dialog-delete-time',
+};
+
 test('강의 수정 모달이 잘 보여진다 (성공케이스)', async ({ page }) => {
   await page.goto('/');
   await givenUser(page);
@@ -11,7 +17,7 @@ test('강의 수정 모달이 잘 보여진다 (성공케이스)', async ({ page
   await expect(page.getByTestId('main-lecture-edit-dialog-content')).toHaveCount(0);
   await lectureItem.filter({ hasText: '컴퓨터공학부, 2학년' }).click();
   await expect(page.getByTestId('main-lecture-edit-dialog-title')).toHaveValue('컴퓨터프로그래밍');
-  await page.getByTestId('main-lecture-edit-dialog-instructor').fill('떡볶이맛 아몬드');
+  await page.getByTestId(testIds['선생님']).fill('떡볶이맛 아몬드');
   await page.getByTestId('main-lecture-edit-dialog-color').filter({ hasText: '라벤더' }).click();
   await page.getByTestId('main-lecture-edit-dialog-time').nth(0).locator('input').fill('낙아치');
   await page.getByTestId('main-lecture-edit-dialog-time').nth(1).locator('select').nth(1).selectOption('11');
@@ -59,6 +65,31 @@ test('커스텀 색으로 잘 수정된다', async ({ page }) => {
   ]);
 });
 
+test('강의 시간 추가/제거가 잘 된다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page);
+  await page.getByTestId('main-lecture-listitem').filter({ hasText: '김우찬 / 2학점' }).click();
+  await page.getByTestId(testIds['강의 시간 추가 버튼']).click();
+  await page.getByTestId('main-lecture-edit-dialog-time').nth(2).locator('input').type('박사');
+  await page.getByTestId('main-lecture-edit-dialog-time').nth(1).getByTestId(testIds['강의 시간 제거 버튼']).click();
+  await page.getByTestId('main-lecture-edit-dialog-time').nth(1).locator('input').type('문도 ');
+  await page.getByTestId('main-lecture-edit-dialog-time').nth(1).locator('select').nth(1).selectOption('12');
+
+  await Promise.all([
+    page.waitForRequest(
+      (req) =>
+        req.postDataJSON().class_time_json[1].place === '문도 박사' &&
+        req.postDataJSON().class_time_json[1].start === 12 &&
+        req.postDataJSON().class_time_json[1].len === 0.5 &&
+        req.postDataJSON().class_time_json[1].day === 0 &&
+        req.url().includes('/v1/tables/123/lecture/5d1a0132db261b554d5d0078') &&
+        req.method() === 'PUT',
+    ),
+    page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/v1/tables/123')),
+    page.getByTestId('main-lecture-edit-dialog-submit').click(),
+  ]);
+});
+
 test('커스텀 색에서 잘 수정된다', async ({ page }) => {
   await page.goto('/');
   await givenUser(page);
@@ -79,10 +110,10 @@ test('강의 수정 모달이 잘 취소된다', async ({ page }) => {
   const lectureItem = page.getByTestId('main-lecture-listitem');
   await expect(page.getByTestId('main-lecture-edit-dialog-content')).toHaveCount(0);
   await lectureItem.filter({ hasText: '컴퓨터공학부, 2학년' }).click();
-  await page.getByTestId('main-lecture-edit-dialog-instructor').type('떡볶이맛 아몬드');
+  await page.getByTestId(testIds['선생님']).type('떡볶이맛 아몬드');
   await page.getByTestId('main-lecture-edit-dialog-cancel').click();
   await lectureItem.filter({ hasText: '컴퓨터공학부, 2학년' }).click();
-  await expect(page.getByTestId('main-lecture-edit-dialog-instructor')).toHaveValue('이영기');
+  await expect(page.getByTestId(testIds['선생님'])).toHaveValue('이영기');
 });
 
 test('강의 수정 모달이 잘 취소된다 (실패케이스)', async ({ page }) => {

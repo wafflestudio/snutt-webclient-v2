@@ -144,7 +144,7 @@ export const handlers = [
     if (!class_time_json || !Array.isArray(class_time_json)) return res(ctx.status(400));
 
     const classTimeJson = class_time_json as { start: number; len: number; day: number }[];
-    if (classTimeJson.some((c1) => classTimeJson.some((c2) => isOverlap(c1, c2))))
+    if (classTimeJson.some((c1, i1) => classTimeJson.some((c2, i2) => i1 !== i2 && isOverlap(c1, c2))))
       return res(
         ctx.status(403),
         ctx.json({ errcode: 12300, message: 'Lecture time overlapped', ext: { confirm_message: '' } }),
@@ -174,7 +174,7 @@ export const handlers = [
       if (
         table.lecture_list
           .flatMap((ll) => ll.class_time_json)
-          .some((t1) => lecture?.class_time_json.some((t2) => isOverlap(t1, t2)))
+          .some((t1, i1) => lecture?.class_time_json.some((t2, i2) => i1 !== i2 && isOverlap(t1, t2)))
       )
         return res(ctx.status(403), ctx.json({ errcode: 12300, message: '', ext: {} }));
 
@@ -332,6 +332,5 @@ const isOverlap = (
   c1: { start: number; len: number; day: number; _id?: string }, // c1 이 c2 보다 빠른 경우만 확인
   c2: { start: number; len: number; day: number; _id?: string }, // c1 < c2
 ) => {
-  if (c1._id && c2._id && c1._id === c2._id) return false;
   return c1.day === c2.day && c1.start <= c2.start && c1.start + c1.len > c2.start;
 };

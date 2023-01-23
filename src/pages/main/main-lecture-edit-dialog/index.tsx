@@ -7,8 +7,7 @@ import { Dialog } from '@/components/dialog';
 import { ErrorDialog } from '@/components/error-dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { Color } from '@/entities/color';
-import { Day } from '@/entities/day';
-import { Lecture } from '@/entities/lecture';
+import { AddedLectureTime, Lecture } from '@/entities/lecture';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { colorService } from '@/usecases/colorService';
 import { lectureService } from '@/usecases/lectureService';
@@ -28,10 +27,7 @@ type Editable = {
   remark: Lecture['remark'];
   color: Color;
   colorIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9; // 0이면 커스텀 색
-  class_time_json: (
-    | ArrayElement<Lecture['class_time_json']>
-    | { day: Day; len: number; place: string; start: number }
-  )[];
+  class_time_json: (ArrayElement<Lecture['class_time_json']> | AddedLectureTime)[];
 };
 
 type Props = {
@@ -64,7 +60,9 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
 
     mutate(
       {
-        class_time_json: draft.class_time_json ?? lecture.class_time_json,
+        class_time_json: draft.class_time_json
+          ? draft.class_time_json.map((t) => ('_id' in t ? t : lectureService.emptyClassTimeToRequest(t)))
+          : lecture.class_time_json,
         course_title: draft.course_title ?? lecture.course_title,
         credit: draft.credit ?? lecture.credit,
         instructor: draft.instructor ?? lecture.instructor,
