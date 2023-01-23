@@ -1,12 +1,15 @@
 import { Color } from '@/entities/color';
 import { DAY_LABEL_MAP } from '@/entities/day';
-import { BaseLecture, Lecture } from '@/entities/lecture';
+import { AddedLectureTime, BaseLecture, Lecture } from '@/entities/lecture';
 import { CourseBook } from '@/entities/semester';
+import { createRandomId } from '@/utils/random-id';
 
 export interface SemesterService {
   getLectureDetailUrl(lecture: BaseLecture, courseBook: Omit<CourseBook, 'updated_at'>): string;
   getLectureTimeTexts(lecture: BaseLecture): string[];
   getLectureColor(lecture: Lecture, colorList: Color[]): Color;
+  getEmptyClassTime(): AddedLectureTime;
+  emptyClassTimeToRequest(time: AddedLectureTime): Omit<AddedLectureTime, '__id__'>;
 }
 
 const getLectureService = (): SemesterService => {
@@ -28,6 +31,8 @@ const getLectureService = (): SemesterService => {
       const fg = lecture.color.fg ?? colorList?.[lecture.colorIndex - 1]?.fg ?? '#1579C2';
       return { bg, fg };
     },
+    getEmptyClassTime: () => ({ day: 0, len: 0.5, place: '', start: 0, __id__: createRandomId() }),
+    emptyClassTimeToRequest: (time) => ({ day: time.day, len: time.len, place: time.place, start: time.start }),
   };
 };
 

@@ -6,11 +6,11 @@ import { Portal } from '@/components/portal';
 
 interface Props {
   className?: string;
-  open: boolean;
-  onClose: () => void;
+  open?: boolean;
+  onClose?: () => void;
 }
 
-export const Dialog = ({ children, open, onClose, className }: PropsWithChildren<Props>) => {
+export const Dialog = ({ children, open = true, onClose = () => null, className }: PropsWithChildren<Props>) => {
   return (
     <Portal>
       <Dimmer

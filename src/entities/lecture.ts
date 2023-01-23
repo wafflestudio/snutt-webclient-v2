@@ -34,3 +34,7 @@ export interface Lecture extends BaseLecture {
   color: Color | Record<string, never>;
   colorIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 }
+
+// 커스텀 시간으로 새로 추가된 것
+// __id__ 필드는 internal 용이고, 서버로 보낼 땐 제거되어야 한다
+export type AddedLectureTime = { __id__: string; day: Day; len: number; place: string; start: number };
