@@ -6,22 +6,22 @@ import { Color } from '@/entities/color';
 
 type Props = {
   colorList: Color[];
-  currentColor: Color;
+  currentColor?: Color;
   onChangeColor: (index: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9, color: Color) => void;
 };
 
-export const MainLectureEditDialogColor = ({ colorList, currentColor: { bg, fg }, onChangeColor }: Props) => {
-  const isCustomColor = colorList.every((c) => c.bg !== bg);
+export const MainLectureEditFormColor = ({ colorList, currentColor, onChangeColor }: Props) => {
+  const isCustomColor = currentColor && colorList.every((c) => c.bg !== currentColor.bg);
   const [customColor, setCustomColor] = useState('#888888');
 
   return (
     <ColorChipsWrapper>
       {colorList.map((c, i) => {
-        const isSelected = bg === c.bg;
+        const isSelected = currentColor?.bg === c.bg;
 
         return (
           <ColorChip
-            data-testid="main-lecture-edit-dialog-color"
+            data-testid="main-lecture-edit-form-color"
             key={c.bg}
             style={
               isSelected
@@ -36,10 +36,14 @@ export const MainLectureEditDialogColor = ({ colorList, currentColor: { bg, fg }
       })}
 
       <CustomColorChip
-        data-testid="main-lecture-edit-dialog-custom-color"
+        data-testid="main-lecture-edit-form-custom-color"
         style={
           isCustomColor
-            ? { border: `1px solid ${bg}`, backgroundColor: `${bg}`, color: `${fg}` }
+            ? {
+                border: `1px solid ${currentColor?.bg}`,
+                backgroundColor: `${currentColor?.bg}`,
+                color: `${currentColor?.fg}`,
+              }
             : { border: `1px solid rgb(183, 195, 206)`, color: 'rgb(183, 195, 206)' }
         }
       >

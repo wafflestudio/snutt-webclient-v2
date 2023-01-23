@@ -7,7 +7,7 @@ import { createRandomId } from '@/utils/random-id';
 export interface SemesterService {
   getLectureDetailUrl(lecture: BaseLecture, courseBook: Omit<CourseBook, 'updated_at'>): string;
   getLectureTimeTexts(lecture: BaseLecture): string[];
-  getLectureColor(lecture: Lecture, colorList: Color[]): Color;
+  getLectureColor(lecture: Pick<Lecture, 'color' | 'colorIndex'>, colorList: Color[]): Color;
   getEmptyClassTime(): AddedLectureTime;
   emptyClassTimeToRequest(time: AddedLectureTime): Omit<AddedLectureTime, '__id__'>;
 }

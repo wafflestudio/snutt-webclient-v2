@@ -12,7 +12,7 @@ type Props = {
   onChangeLectureTime: (lectureTime: (ArrayElement<Lecture['class_time_json']> | AddedLectureTime)[]) => void;
 };
 
-export const MainLectureEditDialogTime = ({ lectureTime, onChangeLectureTime }: Props) => {
+export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Props) => {
   const handleAddTime = () => onChangeLectureTime([...lectureTime, lectureService.getEmptyClassTime()]);
 
   const handleDeleteLectureTime = (_id: string) =>
@@ -39,7 +39,7 @@ export const MainLectureEditDialogTime = ({ lectureTime, onChangeLectureTime }: 
           onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, place } : _lt)));
 
         return (
-          <TimeItem key={isAddedTime ? lt.__id__ : lt._id} data-testid="main-lecture-edit-dialog-time">
+          <TimeItem key={isAddedTime ? lt.__id__ : lt._id} data-testid="main-lecture-edit-form-time">
             <Select value={lt.day} onChange={(e) => onChangeDay(Number(e.target.value) as Day)}>
               {([0, 1, 2, 3, 4, 5, 6] as const).map((item) => (
                 <option key={item} value={item}>
@@ -70,13 +70,13 @@ export const MainLectureEditDialogTime = ({ lectureTime, onChangeLectureTime }: 
 
             <Input value={lt.place} onChange={(e) => onChangePlace(e.target.value)} />
             <CloseIcon
-              data-testid="main-lecture-edit-dialog-delete-time"
+              data-testid="main-lecture-edit-form-delete-time"
               onClick={() => (isAddedTime ? handleDeleteAddedTime(lt.__id__) : handleDeleteLectureTime(lt._id))}
             />
           </TimeItem>
         );
       })}
-      <AddButton data-testid="main-lecture-edit-dialog-add-time" onClick={handleAddTime}>
+      <AddButton data-testid="main-lecture-edit-form-add-time" onClick={handleAddTime}>
         시간 추가
       </AddButton>
     </Wrapper>

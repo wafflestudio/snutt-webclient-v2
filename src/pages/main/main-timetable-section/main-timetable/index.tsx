@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import styled, { css, keyframes } from 'styled-components';
 
+import { Button } from '@/components/button';
 import { BaseLecture } from '@/entities/lecture';
 import { FullTimetable } from '@/entities/timetable';
 import { colorService } from '@/usecases/colorService';
@@ -16,6 +17,7 @@ type Props = {
   setHoveredLectureId: (id: string | null) => void;
   onClickLecture: (id: string) => void;
   previewLecture?: BaseLecture;
+  openCreateLectureDialog: () => void;
 };
 
 export const MainTimeTable = ({
@@ -25,6 +27,7 @@ export const MainTimeTable = ({
   setHoveredLectureId,
   onClickLecture,
   previewLecture,
+  openCreateLectureDialog,
 }: Props) => {
   const { data: colorList } = useColorList();
 
@@ -109,9 +112,10 @@ export const MainTimeTable = ({
           </Item>
         );
       })}
-      <p data-testid="main-timetable-credit" style={{ gridRowEnd: -1, gridColumnEnd: -1 }}>
-        {totalCredit}학점
-      </p>
+      <AddLectureButton onClick={openCreateLectureDialog} data-testid="mt-add-custom-lecture">
+        직접 추가하기
+      </AddLectureButton>
+      <TotalCredit data-testid="main-timetable-credit">{totalCredit}학점</TotalCredit>
     </Wrapper>
   );
 };
@@ -161,6 +165,19 @@ const flash = keyframes`
   to {
     opacity: 0.8;
   }
+`;
+
+const TotalCredit = styled.p`
+  margin-top: 13px;
+  grid-row-end: -1;
+  grid-column-end: -1;
+  text-align: center;
+`;
+
+const AddLectureButton = styled(Button).attrs({ variant: 'outlined', size: 'small' })`
+  grid-column: 2 / -2;
+  grid-row-end: -1;
+  margin-top: 10px;
 `;
 
 const Item = styled.div<{

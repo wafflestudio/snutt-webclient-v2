@@ -153,6 +153,25 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(mockTimeTable123));
   }),
 
+  rest.post<
+    Parameters<typeof timetableRepository['updateLecture']>[2],
+    Parameters<typeof timetableRepository['updateLecture']>[1],
+    FullTimetable | CoreServerError
+  >(`*/v1/tables/:id/lecture`, async (req, res, ctx) => {
+    // TODO: 시간표 validation ?
+    const { class_time_json } = await req.json();
+    if (!class_time_json || !Array.isArray(class_time_json)) return res(ctx.status(400));
+
+    const classTimeJson = class_time_json as { start: number; len: number; day: number }[];
+    if (classTimeJson.some((c1, i1) => classTimeJson.some((c2, i2) => i1 !== i2 && isOverlap(c1, c2))))
+      return res(
+        ctx.status(403),
+        ctx.json({ errcode: 12300, message: 'Lecture time overlapped', ext: { confirm_message: '' } }),
+      );
+
+    return res(ctx.status(200), ctx.json(mockTimeTable123));
+  }),
+
   rest.delete<never, { id: string }, Timetable[] | CoreServerError>(`*/v1/tables/:id`, async (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(mockTimeTables));
   }),
