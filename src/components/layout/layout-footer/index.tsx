@@ -14,11 +14,11 @@ export const LayoutFooter = () => {
   return (
     <Wrapper>
       <Left>
-        <SLinkExternal href={`${baseUrl}/member`} target="_blank">
+        <SLinkExternal key="member" href={`${baseUrl}/member`} target="_blank">
           WaffleStudio SNUTT 팀
         </SLinkExternal>
         <Divider />
-        <SLinkExternal href={`https://github.com/wafflestudio/snutt-webclient-v2`} target="_blank">
+        <SLinkExternal key="github" href={`https://github.com/wafflestudio/snutt-webclient-v2`} target="_blank">
           SNUTT Github
         </SLinkExternal>
         <Divider />

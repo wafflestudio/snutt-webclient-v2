@@ -25,5 +25,4 @@ const Wrapper = styled.div<{ $visible: boolean }>`
   pointer-events: ${({ $visible }) => ($visible ? 'auto' : 'none')};
   touch-action: ${({ $visible }) => ($visible ? 'auto' : 'none')};
   opacity: ${({ $visible }) => ($visible ? 1 : 0)};
-  transition: opacity 0.2s;
 `;
