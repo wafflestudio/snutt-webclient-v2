@@ -11,11 +11,13 @@ export const ErrorDialog = ({ isOpen, onClose, message }: Props) => {
     <StyledDialog open={isOpen} onClose={onClose}>
       <Dialog.Title>!</Dialog.Title>
       {message && <StyledContent data-testid="error-dialog-message">{message}</StyledContent>}
-      <Dialog.Actions>
-        <Button size="small" color="gray" onClick={onClose}>
-          확인
-        </Button>
-      </Dialog.Actions>
+      {isOpen && (
+        <Dialog.Actions data-testid="error-dialog-confirm">
+          <Button size="small" color="gray" onClick={onClose}>
+            확인
+          </Button>
+        </Dialog.Actions>
+      )}
     </StyledDialog>
   );
 };

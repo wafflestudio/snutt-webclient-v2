@@ -26,6 +26,7 @@ type Props = {
   onClickLecture: (id: string) => void;
   setCurrentTimetable: (id: string | null) => void;
   previewLecture?: BaseLecture;
+  openCreateLectureDialog: () => void;
 };
 
 export const MainTimetableSection = ({
@@ -39,6 +40,7 @@ export const MainTimetableSection = ({
   onClickLecture,
   previewLecture,
   setCurrentTimetable,
+  openCreateLectureDialog,
 }: Props) => {
   const { token } = useTokenContext();
   const navigate = useNavigate();
@@ -80,6 +82,7 @@ export const MainTimetableSection = ({
                 hoveredLectureId={hoveredLectureId}
                 setHoveredLectureId={setHoveredLectureId}
                 onClickLecture={onClickLecture}
+                openCreateLectureDialog={openCreateLectureDialog}
               />
             )
           ) : (

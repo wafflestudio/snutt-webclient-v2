@@ -11,6 +11,7 @@ import { searchService } from '@/usecases/searchService';
 import { timetableService } from '@/usecases/timetableService';
 import { queryKey } from '@/utils/query-key-factory';
 
+import { MainLectureCreateDialog } from './main-lecture-create-dialog';
 import { MainLectureEditDialog } from './main-lecture-edit-dialog';
 import { MainLectureSection } from './main-lecture-section';
 import { MainSearchbar } from './main-searchbar';
@@ -21,6 +22,7 @@ export const Main = () => {
   const [hoveredLectureId, setHoveredLectureId] = useState<string | null>(null);
   const [previewLectureId, setPreviewLectureId] = useState<string | null>(null);
   const [dialogLectureId, setDialogLectureId] = useState<string | null>(null);
+  const [isCreateLectureDialog, setCreateLectureDialog] = useState(false);
   const [lectureTab, setLectureTab] = useState<'result' | 'current'>(token ? 'current' : 'result');
   const [currentTimetableId, setCurrentTimetableId] = useState<string | null>(null);
   const { year, semester } = useYearSemester();
@@ -75,6 +77,7 @@ export const Main = () => {
           setHoveredLectureId={setHoveredLectureId}
           onClickLecture={onClickLecture}
           setCurrentTimetable={(id) => setCurrentTimetableId(id)}
+          openCreateLectureDialog={() => setCreateLectureDialog(true)}
         />
       </Wrapper>
       <MainLectureEditDialog
@@ -82,6 +85,11 @@ export const Main = () => {
         open={dialogLectureId !== null}
         onClose={() => setDialogLectureId(null)}
         lecture={dialogLecture}
+      />
+      <MainLectureCreateDialog
+        open={isCreateLectureDialog}
+        onClose={() => setCreateLectureDialog(false)}
+        timetableId={currentFullTimetable?._id}
       />
     </Layout>
   );

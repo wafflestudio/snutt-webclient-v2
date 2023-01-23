@@ -27,6 +27,21 @@ export interface TimetableService {
       credit: number;
     } & ({ colorIndex: 0; color: Color } | { colorIndex: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 }),
   ): Promise<FullTimetable>;
+  createLecture(
+    token: string,
+    params: { id: string },
+    data: {
+      course_title: string;
+      instructor: string;
+      class_time_mask: TimeMask;
+      class_time_json: (
+        | { _id: string; day: Day; start: number; start_time: string; end_time: string; len: number; place: string }
+        | { day: Day; start: number; len: number; place: string }
+      )[];
+      remark: string;
+      credit: number;
+    } & ({ colorIndex: 0; color: Color } | { colorIndex: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 }),
+  ): Promise<FullTimetable>;
   deleteLecture(token: string, params: { id: string; lecture_id: string }): Promise<FullTimetable>;
   addLecture(token: string, params: { id: string; lecture_id: string }): Promise<FullTimetable>;
 }
@@ -46,6 +61,8 @@ const getTimetableService = (args: {
       args.repositories[0].createTimetable({ baseUrl, apikey, token }, { title, year, semester }),
     updateLecture: async (token, params, body) =>
       args.repositories[0].updateLecture({ baseUrl, apikey, token }, params, body),
+    createLecture: async (token, params, body) =>
+      args.repositories[0].createLecture({ baseUrl, apikey, token }, params, body),
     deleteLecture: async (token, params) => args.repositories[0].deleteLecture({ baseUrl, apikey, token }, params),
     addLecture: async (token, params) => args.repositories[0].addLecture({ baseUrl, apikey, token }, params),
   };

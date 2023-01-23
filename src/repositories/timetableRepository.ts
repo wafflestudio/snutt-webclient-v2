@@ -33,6 +33,21 @@ export interface TimetableRepository {
       credit: number;
     } & ({ colorIndex: 0; color: Color } | { colorIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 }),
   ): Promise<FullTimetable>;
+  createLecture(
+    args: { baseUrl: string; apikey: string; token: string },
+    params: { id: string },
+    data: {
+      course_title: string;
+      instructor: string;
+      class_time_mask: TimeMask;
+      class_time_json: (
+        | { _id: string; day: Day; start: number; start_time: string; end_time: string; len: number; place: string }
+        | { day: Day; start: number; len: number; place: string }
+      )[];
+      remark: string;
+      credit: number;
+    } & ({ colorIndex: 0; color: Color } | { colorIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 }),
+  ): Promise<FullTimetable>;
   deleteLecture(
     args: { baseUrl: string; apikey: string; token: string },
     params: { id: string; lecture_id: string },
@@ -92,6 +107,20 @@ const getTimetableRepository = (): TimetableRepository => {
           'content-type': 'application/json;charset=UTF-8',
         },
         method: 'PUT',
+        body: JSON.stringify(body),
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok) throw data;
+      return data as FullTimetable;
+    },
+    createLecture: async ({ baseUrl, apikey, token }, { id }, body) => {
+      const response = await fetch(`${baseUrl}/v1/tables/${id}/lecture`, {
+        headers: {
+          'x-access-apikey': apikey,
+          'x-access-token': token,
+          'content-type': 'application/json;charset=UTF-8',
+        },
+        method: 'POST',
         body: JSON.stringify(body),
       });
       const data = await response.json().catch(() => null);
