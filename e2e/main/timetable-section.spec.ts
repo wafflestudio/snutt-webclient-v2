@@ -63,6 +63,14 @@ test('로그인되었을 경우, 시간표 내용이 잘 보여진다 (월~금 �
   await expect(lecture.filter({ hasText: '생물학실험' })).toHaveCSS('grid-row', '16 / 20');
 });
 
+test('시간표 장소가 잘 보여진다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page);
+  await expect(page.getByTestId('main-timetable-lecture').filter({ hasText: '상상력과 문화' }).first()).toContainText(
+    '014-203',
+  );
+});
+
 test('로그인되었을 경우, 시간표 내용이 잘 보여진다 (월~일 시간표)', async ({ page }) => {
   await page.goto('/?year=2001&semester=2');
   await givenUser(page);
