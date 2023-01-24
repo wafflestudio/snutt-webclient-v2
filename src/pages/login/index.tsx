@@ -168,6 +168,7 @@ const OtherLink = styled(Link)`
 `;
 
 const OtherButton = styled.button`
+  padding: 0;
   ${otherStyle};
   background: transparent;
   border: none;
