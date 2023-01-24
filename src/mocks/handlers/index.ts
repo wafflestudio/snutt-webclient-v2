@@ -206,10 +206,7 @@ export const handlers = [
     async (req, res, ctx) => {
       if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
-      const params = new URLSearchParams(await req.text());
-      const id = params.get('id');
-      const password = params.get('password');
-
+      const { id, password } = await req.json();
       const user = mockUsers.find((mockUser) => mockUser.info.local_id === id);
 
       if (!user) {

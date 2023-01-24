@@ -34,12 +34,10 @@ export interface AuthRepository {
 const getAuthRepository = (): AuthRepository => {
   return {
     signInWithIdPassword: async ({ baseUrl, apikey, id, password }) => {
-      const params = new URLSearchParams({ id, password });
-
       const response = await fetch(`${baseUrl}/v1/auth/login_local`, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'x-access-apikey': apikey },
+        headers: { 'content-type': 'application/json', 'x-access-apikey': apikey },
         method: 'POST',
-        body: params.toString(),
+        body: JSON.stringify({ id, password }),
       });
 
       const data = await response.json().catch(() => null);
@@ -47,12 +45,10 @@ const getAuthRepository = (): AuthRepository => {
       return data as SignInResponse;
     },
     signInWithFacebook: async ({ baseUrl, fb_id, fb_token }) => {
-      const params = new URLSearchParams({ fb_id, fb_token });
-
       const response = await fetch(`${baseUrl}/v1/auth/login_fb`, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: { 'content-type': 'application/json' },
         method: 'POST',
-        body: params.toString(),
+        body: JSON.stringify({ fb_id, fb_token }),
       });
 
       const data = await response.json().catch(() => null);
