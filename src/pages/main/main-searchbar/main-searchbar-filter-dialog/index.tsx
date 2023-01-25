@@ -48,7 +48,7 @@ export const MainSearchbarFilterDialog = ({
             <RowLabel>학과명 선택</RowLabel>
             <RowContent>
               <label>
-                <input
+                <DepartmentInput
                   list="department"
                   value={searchForm.department}
                   onChange={(e) => onChangeDepartment([e.target.value])}
@@ -278,7 +278,7 @@ const StyledContent = styled(StyledDialog.Content)`
 
 const Row = styled.div`
   display: flex;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   font-size: 14px;
 `;
 
@@ -292,6 +292,10 @@ const RowLabel = styled.div`
 
 const RowContent = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 16px;
   flex-wrap: wrap;
+`;
+
+const DepartmentInput = styled.input`
+  outline: none;
 `;
