@@ -9,11 +9,12 @@ export interface EnvRepository {
   getBaseUrl(): string;
   getGitSha(): string;
   getGitTag(): string;
+  getFacebookAppId(): string;
 }
 
 type Dependencies = { external: [EnvironmentVariables] };
 const getEnvRepository = ({ external: [envVariables] }: Dependencies): EnvRepository => {
-  const { API_BASE_URL, API_KEY, APP_ENV, GIT_SHA, GIT_TAG } = envVariables;
+  const { API_BASE_URL, API_KEY, APP_ENV, GIT_SHA, GIT_TAG, FACEBOOK_APP_ID } = envVariables;
   return {
     getAppEnv: () => {
       if (APP_ENV === undefined) throw new Error('APP_ENV not provided');
@@ -34,6 +35,10 @@ const getEnvRepository = ({ external: [envVariables] }: Dependencies): EnvReposi
     getGitTag: () => {
       if (GIT_TAG === undefined) throw new Error('GIT_TAG not provided');
       return GIT_TAG;
+    },
+    getFacebookAppId: () => {
+      if (FACEBOOK_APP_ID === undefined) throw new Error('FACEBOOK_APP_ID not provided');
+      return FACEBOOK_APP_ID;
     },
   };
 };

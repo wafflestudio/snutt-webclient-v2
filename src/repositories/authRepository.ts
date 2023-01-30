@@ -7,7 +7,12 @@ export interface AuthRepository {
     id: string;
     password: string;
   }): Promise<SignInResponse>;
-  signInWithFacebook(args: { baseUrl: string; fb_id: string; fb_token: string }): Promise<SignInResponse>;
+  signInWithFacebook(args: {
+    baseUrl: string;
+    apikey: string;
+    fb_id: string;
+    fb_token: string;
+  }): Promise<SignInResponse>;
   signUpWithIdPassword(
     args: { baseUrl: string; apiKey: string },
     body: { id: string; password: string },
@@ -44,9 +49,12 @@ const getAuthRepository = (): AuthRepository => {
       if (!response.ok) throw data;
       return data as SignInResponse;
     },
-    signInWithFacebook: async ({ baseUrl, fb_id, fb_token }) => {
-      const response = await fetch(`${baseUrl}/v1/auth/login_fb`, {
-        headers: { 'content-type': 'application/json' },
+    signInWithFacebook: async ({ baseUrl, apikey, fb_id, fb_token }) => {
+      const response = await fetch(`${baseUrl}/auth/login_fb`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-apikey': apikey,
+        },
         method: 'POST',
         body: JSON.stringify({ fb_id, fb_token }),
       });

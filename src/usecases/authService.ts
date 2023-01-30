@@ -1,3 +1,4 @@
+import { SignInResponse } from '@/entities/auth';
 import { AuthRepository, authRepository } from '@/repositories/authRepository';
 import { StorageRepository, storageRepository } from '@/repositories/storageRepository';
 import { UserRepository, userRepository } from '@/repositories/userRepository';
@@ -12,7 +13,7 @@ export interface AuthService {
   changePassword(token: string, body: { old_password: string; new_password: string }): Promise<{ token: string }>;
   signIn(
     params: { type: 'LOCAL'; id: string; password: string } | { type: 'FACEBOOK'; fb_id: string; fb_token: string },
-  ): Promise<any>;
+  ): Promise<SignInResponse>;
   signUp(body: { id: string; password: string }): Promise<{ message: 'ok'; token: string; user_id: string }>;
   closeAccount(token: string): Promise<{ message: 'ok' }>;
   findIdByEmail(body: { email: string }): Promise<{ message: 'ok' }>;
@@ -49,7 +50,7 @@ const getAuthService = (args: {
     signIn: (params) =>
       params.type === 'LOCAL'
         ? authRepo.signInWithIdPassword({ ...params, baseUrl, apikey: apiKey })
-        : authRepo.signInWithFacebook({ ...params, baseUrl }),
+        : authRepo.signInWithFacebook({ ...params, baseUrl, apikey: apiKey }),
     signUp: (params) =>
       authRepo.signUpWithIdPassword({ baseUrl, apiKey }, { id: params.id, password: params.password }),
     closeAccount: (token) => userRepo.deleteUser({ baseUrl, token, apikey: apiKey }),
