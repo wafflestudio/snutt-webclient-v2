@@ -52,7 +52,7 @@ const getAuthRepository = (): AuthRepository => {
     signInWithFacebook: async ({ baseUrl, apikey, fb_id, fb_token }) => {
       const response = await fetch(`${baseUrl}/auth/login_fb`, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
           'x-access-apikey': apikey,
         },
         method: 'POST',
