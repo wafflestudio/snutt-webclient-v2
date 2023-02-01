@@ -7,6 +7,14 @@ export interface UserRepository {
     args: { baseUrl: string; apiKey: string; token: string },
     body: { old_password: string; new_password: string },
   ): Promise<{ token: string }>;
+  attachFacebookAccount(
+    args: {
+      baseUrl: string;
+      apikey: string;
+      token: string;
+    },
+    body: { fb_id: string; fb_token: string },
+  ): Promise<{ token: string }>;
   detachFacebookAccount(args: { baseUrl: string; apikey: string; token: string }): Promise<{ token: string }>;
 }
 
@@ -39,6 +47,17 @@ const getUserRepository = (): UserRepository => {
       const data = await response.json().catch(() => null);
       if (!response.ok) throw data;
       return data as { token: string };
+    },
+    attachFacebookAccount: async ({ baseUrl, apikey, token }, body) => {
+      const response = await fetch(`${baseUrl}/v1/user/facebook`, {
+        headers: { 'Content-Type': 'application/json', 'x-access-apikey': apikey, 'x-access-token': token },
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+
+      const data = await response.json().catch(() => null);
+      if (!response.ok) throw data;
+      return data;
     },
     detachFacebookAccount: async ({ baseUrl, apikey, token }) => {
       const response = await fetch(`${baseUrl}/v1/user/facebook`, {
