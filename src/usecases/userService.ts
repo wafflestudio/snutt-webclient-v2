@@ -5,6 +5,7 @@ import { EnvService, envService } from '@/usecases/envService';
 
 export interface UserService {
   getUserInfo(token: string): Promise<User>;
+  detachFacebookAccount(token: string): Promise<{ token: string }>;
 }
 
 const getUserService = (args: { services: [AuthService, EnvService]; repositories: [UserRepository] }): UserService => {
@@ -13,6 +14,7 @@ const getUserService = (args: { services: [AuthService, EnvService]; repositorie
 
   return {
     getUserInfo: (token: string) => args.repositories[0].getUserInfo({ baseUrl, apikey, token }),
+    detachFacebookAccount: (token: string) => args.repositories[0].detachFacebookAccount({ baseUrl, apikey, token }),
   };
 };
 
