@@ -5,6 +5,7 @@ import { EnvService, envService } from '@/usecases/envService';
 
 export interface UserService {
   getUserInfo(token: string): Promise<User>;
+  attachFacebookAccount(token: string, body: { fb_id: string; fb_token: string }): Promise<{ token: string }>;
   detachFacebookAccount(token: string): Promise<{ token: string }>;
 }
 
@@ -14,6 +15,8 @@ const getUserService = (args: { services: [AuthService, EnvService]; repositorie
 
   return {
     getUserInfo: (token: string) => args.repositories[0].getUserInfo({ baseUrl, apikey, token }),
+    attachFacebookAccount: (token: string, body: { fb_id: string; fb_token: string }) =>
+      args.repositories[0].attachFacebookAccount({ baseUrl, apikey, token }, body),
     detachFacebookAccount: (token: string) => args.repositories[0].detachFacebookAccount({ baseUrl, apikey, token }),
   };
 };

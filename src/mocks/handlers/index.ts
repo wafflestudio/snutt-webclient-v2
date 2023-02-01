@@ -351,8 +351,22 @@ export const handlers = [
     const user = mockUsers.find((u) => u.auth.token === token);
     if (!user) return res(ctx.status(403));
 
-    return res(ctx.json({ token: 't5_facebook_detach' }));
+    return res(ctx.json({ token: 't1' }));
   }),
+
+  rest.post<{ fb_id: string; fb_token: string }, never, { token: string }>(
+    `*/v1/user/facebook`,
+    async (req, res, ctx) => {
+      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+      const token = req.headers.get('x-access-token');
+      if (!token) return res(ctx.status(403));
+
+      const user = mockUsers.find((u) => u.auth.token === token);
+      if (!user) return res(ctx.status(403));
+
+      return res(ctx.json({ token: 't5' }));
+    },
+  ),
 ];
 
 const isOverlap = (

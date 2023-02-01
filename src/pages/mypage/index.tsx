@@ -9,7 +9,6 @@ import { Button } from '@/components/button';
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { CoreServerError } from '@/entities/error';
-import { authService } from '@/usecases/authService';
 import { envService } from '@/usecases/envService';
 import { errorService } from '@/usecases/errorService';
 import { userService } from '@/usecases/userService';
@@ -34,8 +33,13 @@ export const MyPage = () => {
   };
 
   const attachFacebookAccount = async (userInfo: ReactFacebookLoginInfo) => {
+    if (!token) return;
+
     try {
-      const res = await authService.signIn({ type: 'FACEBOOK', fb_id: userInfo.id, fb_token: userInfo.accessToken });
+      const res = await userService.attachFacebookAccount(token, {
+        fb_id: userInfo.id,
+        fb_token: userInfo.accessToken,
+      });
 
       saveToken(res.token, false);
     } catch (error) {
