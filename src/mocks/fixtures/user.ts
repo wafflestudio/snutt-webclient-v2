@@ -47,4 +47,30 @@ export const mockUsers = [
     },
     auth: { password: 'test-password', token: 't3' },
   },
+
+  // 로컬 로그인, 페이스북 연동 유저
+  {
+    info: {
+      isAdmin: false,
+      regDate: '2019-02-05T07:12:55.970Z',
+      notificationCheckedAt: '2022-12-28T10:51:17.530Z',
+      email: 'dkwanm1@snu.ac.kr',
+      local_id: 'dkwanm1',
+      fb_name: '김기완',
+    },
+    auth: { password: '1234', token: 't5' },
+  },
+
+  // 로컬 로그인, 페이스북 연동 유저
+  {
+    info: {
+      isAdmin: false,
+      regDate: '2019-02-05T07:12:55.970Z',
+      notificationCheckedAt: '2022-12-28T10:51:17.530Z',
+      email: 'dkwanm1@snu.ac.kr',
+      local_id: 'dkwanm1',
+      fb_name: null,
+    },
+    auth: { password: '1234', token: 't5_facebook_detach' },
+  },
 ];
