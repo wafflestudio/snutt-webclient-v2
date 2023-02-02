@@ -59,6 +59,17 @@ export const handlers = [
     return res(ctx.json(mockTimeTable));
   }),
 
+  rest.put<{ title: string }, { id: string }, Timetable[]>(`*/v1/tables/:id`, async (req, res, ctx) => {
+    if (!req.headers.get('x-access-token')) return res(ctx.status(403));
+    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+
+    const { title } = await req.json();
+    const { id } = req.params;
+
+    if (mockTimeTables.every((t) => t._id !== id)) return res(ctx.status(404));
+    return res(ctx.json(mockTimeTables.map((t) => (t._id === id ? { ...t, title } : t))));
+  }),
+
   rest.get<never, never, { message: 'ok'; colors: Color[]; names: string[] }>(
     `*/v1/colors/vivid_ios`,
     (req, res, ctx) => {

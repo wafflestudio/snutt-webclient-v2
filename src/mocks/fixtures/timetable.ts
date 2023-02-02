@@ -433,7 +433,7 @@ export const mockTimeTable456: FullTimetable = {
   user_id: '5c59377722ac5f0f310df48b',
   year: 2019,
   semester: 1,
-  title: '18학점',
+  title: '나무의 시간표',
   lecture_list: [
     {
       _id: '5c59396a22ac5f0f310df4ba',

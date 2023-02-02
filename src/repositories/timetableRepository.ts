@@ -56,6 +56,11 @@ export interface TimetableRepository {
     args: { baseUrl: string; apikey: string; token: string },
     params: { id: string; lecture_id: string },
   ): Promise<FullTimetable>;
+  updateTimetable(
+    args: { baseUrl: string; apikey: string; token: string },
+    params: { id: string },
+    data: { title: string },
+  ): Promise<Timetable[]>;
 }
 
 const getTimetableRepository = (): TimetableRepository => {
@@ -148,6 +153,20 @@ const getTimetableRepository = (): TimetableRepository => {
       const data = await response.json().catch(() => null);
       if (!response.ok) throw data;
       return data as FullTimetable;
+    },
+    updateTimetable: async ({ baseUrl, apikey, token }, { id }, body) => {
+      const response = await fetch(`${baseUrl}/v1/tables/${id}`, {
+        headers: {
+          'x-access-apikey': apikey,
+          'x-access-token': token,
+          'content-type': 'application/json;charset=UTF-8',
+        },
+        method: 'PUT',
+        body: JSON.stringify(body),
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok) throw data;
+      return data as Timetable[];
     },
   };
 };
