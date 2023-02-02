@@ -8,6 +8,7 @@ export interface UserService {
   addIdPassword(token: string, body: { id: string; password: string }): Promise<{ token: string }>;
   attachFacebookAccount(token: string, body: { fb_id: string; fb_token: string }): Promise<{ token: string }>;
   detachFacebookAccount(token: string): Promise<{ token: string }>;
+  isFbOnlyUser(user: User): boolean;
 }
 
 const getUserService = (args: { services: [AuthService, EnvService]; repositories: [UserRepository] }): UserService => {
@@ -20,6 +21,7 @@ const getUserService = (args: { services: [AuthService, EnvService]; repositorie
     attachFacebookAccount: (token: string, body: { fb_id: string; fb_token: string }) =>
       args.repositories[0].attachFacebookAccount({ baseUrl, apikey, token }, body),
     detachFacebookAccount: (token: string) => args.repositories[0].detachFacebookAccount({ baseUrl, apikey, token }),
+    isFbOnlyUser: (user) => !!user.fb_name && !user.local_id,
   };
 };
 
