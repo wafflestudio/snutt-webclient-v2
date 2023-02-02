@@ -20,38 +20,22 @@ import { MypageRegisterId } from './mypage-register-id';
 
 export const MyPage = () => {
   const [isCloseOpen, setCloseOpen] = useState(false);
-  const { token, clearToken, saveToken } = useTokenContext();
+  const { token, clearToken } = useTokenContext();
   const { data: myInfo } = useMyInfo();
   const navigate = useNavigate();
 
+  const { mutate: attach } = useAttachFacebook();
   const { mutate: detach } = useDetachFacebook();
 
   useEffect(() => {
     if (!token) navigate('/login');
   }, [token, navigate]);
 
-  const isFbOnlyUser = myInfo?.fb_name && !myInfo.local_id;
+  const isFbOnlyUser = myInfo && userService.isFbOnlyUser(myInfo);
 
   const logout = () => {
     clearToken();
     navigate('/');
-  };
-
-  const attachFacebookAccount = async (userInfo: ReactFacebookLoginInfo) => {
-    if (!token) return;
-
-    try {
-      const res = await userService.attachFacebookAccount(token, {
-        fb_id: userInfo.id,
-        fb_token: userInfo.accessToken,
-      });
-
-      saveToken(res.token, false);
-    } catch (error) {
-      const errorCode = (error as CoreServerError).errcode;
-
-      alert(errorService.getErrorMessage(errorCode));
-    }
   };
 
   return (
@@ -93,7 +77,7 @@ export const MyPage = () => {
             ) : (
               <FBLogin
                 appId={envService.getFacebookAppId()}
-                callback={attachFacebookAccount}
+                callback={attach}
                 onFailure={({ status }: ReactFacebookFailureResponse) => alert(status || '')}
                 render={({ onClick }) => (
                   <Button variant="outlined" color="blue" data-testid="facebook-attach-button" onClick={onClick}>
@@ -132,6 +116,21 @@ const useMyInfo = () => {
       return userService.getUserInfo(token);
     },
     { enabled: !!token },
+  );
+};
+
+const useAttachFacebook = () => {
+  const { token, saveToken } = useTokenContext();
+
+  return useMutation(
+    (userInfo: ReactFacebookLoginInfo) => {
+      if (!token) throw new Error('no token');
+      return userService.attachFacebookAccount(token, { fb_id: userInfo.id, fb_token: userInfo.accessToken });
+    },
+    {
+      onSuccess: ({ token }) => saveToken(token, false),
+      onError: (error) => alert(errorService.getErrorMessage((error as CoreServerError).errcode)),
+    },
   );
 };
 
