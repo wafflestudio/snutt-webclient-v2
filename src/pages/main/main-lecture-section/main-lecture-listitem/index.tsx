@@ -64,7 +64,7 @@ export const MainLectureListItem = ({ lecture, cta }: Props) => {
       </LectureDescription>
 
       {lecture.remark && (
-        <LectureDescription data-testid="main-lecture-listitem-remark" style={{ fontSize: 12, opacity: 0.6 }}>
+        <LectureDescription data-testid="main-lecture-listitem-remark" style={{ fontSize: 11, opacity: 0.6 }}>
           <DotsIcon />
           {lecture.remark}
         </LectureDescription>
@@ -74,8 +74,8 @@ export const MainLectureListItem = ({ lecture, cta }: Props) => {
 };
 
 const LectureInner = styled.div`
-  margin: 0 30px;
-  padding: 20px 0 14px;
+  margin: 0 24px;
+  padding: 8px 0 12px;
   border-bottom: 1px solid #ebeef2;
 `;
 
@@ -83,7 +83,7 @@ const LectureHeader = styled.div`
   justify-content: space-between;
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
 `;
 
 const LectureHeaderLeft = styled.div`
@@ -109,7 +109,7 @@ const LectureHeaderRight = styled.div`
   display: flex;
   font-size: 13px;
   line-height: 18px;
-  min-width: 130px;
+  min-width: 150px;
   justify-content: flex-end;
 `;
 
@@ -136,8 +136,8 @@ const LectureButton = styled.button<{ $color?: `#${string}` }>`
 
 const LectureDescription = styled.div`
   opacity: 0.8;
-  margin-bottom: 5px;
-  font-size: 14px;
+  margin-bottom: 2px;
+  font-size: 12px;
   line-height: 18px;
   display: flex;
 `;

@@ -38,10 +38,15 @@ export const MainSearchbarYearSemesterSelect = ({ resetSearchResult }: Props) =>
 };
 
 const Select = styled.select`
-  width: 80px;
+  width: 72px;
   height: 30px;
   cursor: pointer;
-  border: 1px solid #888;
-  border-radius: 4px;
+  border: none;
   outline: none;
+  opacity: 0.8;
+  transition: all 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
