@@ -13,6 +13,7 @@ import { MainSectionEmptyWrapper } from '../main-section-empty-wrapper';
 import { MainCreateTimetableDialog } from './main-create-timetable-dialog';
 import { MainDeleteTimetableDialog } from './main-delete-timetable-dialog';
 import { MainNoTimetable } from './main-no-timetable';
+import { MainRenameTimetableDialog } from './main-rename-timetable-dialog';
 import { MainTimeTable } from './main-timetable';
 
 type Props = {
@@ -46,6 +47,7 @@ export const MainTimetableSection = ({
   const navigate = useNavigate();
   const [isCreateTimetableDialogOpen, setCreateTimetableDialogOpen] = useState(false);
   const [deleteTimetableDialogId, setDeleteTimetableDialogId] = useState<string | null>(null);
+  const [renameTimetableDialogId, setRenameTimetableDialogId] = useState<string | null>(null);
 
   const isLoggedIn = !!token;
 
@@ -57,18 +59,21 @@ export const MainTimetableSection = ({
   return (
     <Wrapper className={className}>
       <Tabs value={currentTimetable?._id}>
-        {currentYearSemesterTimetables?.map(({ _id: id, title }) => (
-          <Tabs.Tab
-            data-testid="mt-tab"
-            data-id={id}
-            value={id}
-            aria-selected={id === currentTimetable?._id}
-            key={id}
-            onClick={() => changeCurrentTimetable(id)}
-          >
-            {title} <CloseIcon data-testid="mt-tab-delete" onClick={() => setDeleteTimetableDialogId(id)} />
-          </Tabs.Tab>
-        ))}
+        {currentYearSemesterTimetables?.map(({ _id: id, title }) => {
+          const isActive = id === currentTimetable?._id;
+          return (
+            <Tabs.Tab
+              data-testid="mt-tab"
+              data-id={id}
+              value={id}
+              aria-selected={isActive}
+              key={id}
+              onClick={() => (isActive ? setRenameTimetableDialogId(id) : changeCurrentTimetable(id))}
+            >
+              {title} <CloseIcon data-testid="mt-tab-delete" onClick={() => setDeleteTimetableDialogId(id)} />
+            </Tabs.Tab>
+          );
+        })}
         <AddIcon data-testid="mt-create-timetable" onClick={onClickCreate} />
       </Tabs>
       <Content>
@@ -104,6 +109,11 @@ export const MainTimetableSection = ({
         close={() => setDeleteTimetableDialogId(null)}
         timetable={currentFullTimetable}
         onDelete={() => setCurrentTimetable(null)}
+      />
+      <MainRenameTimetableDialog
+        isOpen={renameTimetableDialogId !== null}
+        close={() => setRenameTimetableDialogId(null)}
+        timetable={currentFullTimetable}
       />
     </Wrapper>
   );

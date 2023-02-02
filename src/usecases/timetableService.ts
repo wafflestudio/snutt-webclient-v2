@@ -11,6 +11,7 @@ export interface TimetableService {
   getTimetables(token: string): Promise<Timetable[]>;
   getFullTimetable(token: string, id: string): Promise<FullTimetable>;
   createTimetable(token: string, info: { title: string; year: number; semester: Semester }): Promise<Timetable[]>;
+  renameTimetable(token: string, id: string, title: string): Promise<Timetable[]>;
   deleteTimetable(token: string, id: string): Promise<Timetable[]>;
   updateLecture(
     token: string,
@@ -57,6 +58,8 @@ const getTimetableService = (args: {
     getTimetables: (token) => args.repositories[0].getTimetables({ baseUrl, apikey, token }),
     getFullTimetable: (token, id) => args.repositories[0].getFullTimetable({ baseUrl, apikey, token }, { id }),
     deleteTimetable: (token, id) => args.repositories[0].deleteTimetable({ baseUrl, apikey, token }, { id }),
+    renameTimetable: (token, id, title) =>
+      args.repositories[0].updateTimetable({ baseUrl, apikey, token }, { id }, { title }),
     createTimetable: async (token, { title, year, semester }) =>
       args.repositories[0].createTimetable({ baseUrl, apikey, token }, { title, year, semester }),
     updateLecture: async (token, params, body) =>

@@ -7,7 +7,6 @@ import { givenUser } from '../utils/user.ts';
 test('snutt 팀 링크로 잘 이동한다', async ({ page, context, baseURL }) => {
   await page.goto('/');
   await givenUser(page, { login: true });
-  await page.getByText('WaffleStudio SNUTT 팀').click();
   const [newPage] = await Promise.all([context.waitForEvent('page'), page.getByText('WaffleStudio SNUTT 팀').click()]);
   await expect(newPage).toHaveURL(`${baseURL}/member`);
 });
@@ -15,7 +14,6 @@ test('snutt 팀 링크로 잘 이동한다', async ({ page, context, baseURL }) 
 test('snutt github 링크로 잘 이동한다', async ({ page, context }) => {
   await page.goto('/');
   await givenUser(page, { login: true });
-  await page.getByText('WaffleStudio SNUTT 팀').click();
   const [newPage] = await Promise.all([context.waitForEvent('page'), page.getByText('SNUTT Github').click()]);
   await expect(newPage).toHaveURL(`https://github.com/wafflestudio/snutt-webclient-v2`);
 });
