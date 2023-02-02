@@ -1,11 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from 'react-facebook-login';
+import FBLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
+import { CoreServerError } from '@/entities/error';
+import { envService } from '@/usecases/envService';
+import { errorService } from '@/usecases/errorService';
 import { userService } from '@/usecases/userService';
 import { queryKey } from '@/utils/query-key-factory';
 
@@ -14,7 +19,7 @@ import { MypageCloseAccountDialog } from './mypage-close-account-dialog';
 
 export const MyPage = () => {
   const [isCloseOpen, setCloseOpen] = useState(false);
-  const { token, clearToken } = useTokenContext();
+  const { token, clearToken, saveToken } = useTokenContext();
   const { data: myInfo } = useMyInfo();
   const navigate = useNavigate();
 
@@ -25,6 +30,37 @@ export const MyPage = () => {
   const logout = () => {
     clearToken();
     navigate('/');
+  };
+
+  const attachFacebookAccount = async (userInfo: ReactFacebookLoginInfo) => {
+    if (!token) return;
+
+    try {
+      const res = await userService.attachFacebookAccount(token, {
+        fb_id: userInfo.id,
+        fb_token: userInfo.accessToken,
+      });
+
+      saveToken(res.token, false);
+    } catch (error) {
+      const errorCode = (error as CoreServerError).errcode;
+
+      alert(errorService.getErrorMessage(errorCode));
+    }
+  };
+
+  const detachFacebookAccount = async () => {
+    if (!token) return;
+
+    try {
+      const res = await userService.detachFacebookAccount(token);
+
+      saveToken(res.token, false);
+    } catch (error) {
+      const errorCode = (error as CoreServerError).errcode;
+
+      alert(errorService.getErrorMessage(errorCode));
+    }
   };
 
   return (
@@ -47,12 +83,32 @@ export const MyPage = () => {
         </Row>
         <br />
         <br />
-        <Row>
-          <RowLabel>페이스북</RowLabel>
-          <Button variant="outlined" color="blue">
-            페이스북 연동 해지하기
-          </Button>
-        </Row>
+        {myInfo?.local_id && (
+          <Row data-testid="facebook-row">
+            <RowLabel>페이스북</RowLabel>
+            {myInfo?.fb_name ? (
+              <Button
+                variant="outlined"
+                color="blue"
+                data-testid="facebook-detach-button"
+                onClick={detachFacebookAccount}
+              >
+                페이스북 연동 해지하기
+              </Button>
+            ) : (
+              <FBLogin
+                appId={envService.getFacebookAppId()}
+                callback={attachFacebookAccount}
+                onFailure={({ status }: ReactFacebookFailureResponse) => alert(status || '')}
+                render={({ onClick }) => (
+                  <Button variant="outlined" color="blue" data-testid="facebook-attach-button" onClick={onClick}>
+                    페이스북 연동 하기
+                  </Button>
+                )}
+              />
+            )}
+          </Row>
+        )}
         <Row>
           <RowLabel>로그아웃</RowLabel>
           <Button variant="outlined" onClick={logout} color="black">
