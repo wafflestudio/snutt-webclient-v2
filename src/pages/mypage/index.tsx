@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from 'react-facebook-login';
 import FBLogin from 'react-facebook-login/dist/facebook-login-render-props';
@@ -24,6 +24,8 @@ export const MyPage = () => {
   const { data: myInfo } = useMyInfo();
   const navigate = useNavigate();
 
+  const { mutate: detach } = useDetachFacebook();
+
   useEffect(() => {
     if (!token) navigate('/login');
   }, [token, navigate]);
@@ -43,20 +45,6 @@ export const MyPage = () => {
         fb_id: userInfo.id,
         fb_token: userInfo.accessToken,
       });
-
-      saveToken(res.token, false);
-    } catch (error) {
-      const errorCode = (error as CoreServerError).errcode;
-
-      alert(errorService.getErrorMessage(errorCode));
-    }
-  };
-
-  const detachFacebookAccount = async () => {
-    if (!token) return;
-
-    try {
-      const res = await userService.detachFacebookAccount(token);
 
       saveToken(res.token, false);
     } catch (error) {
@@ -99,12 +87,7 @@ export const MyPage = () => {
           <Row data-testid="facebook-row">
             <RowLabel>페이스북</RowLabel>
             {myInfo?.fb_name ? (
-              <Button
-                variant="outlined"
-                color="blue"
-                data-testid="facebook-detach-button"
-                onClick={detachFacebookAccount}
-              >
+              <Button variant="outlined" color="blue" data-testid="facebook-detach-button" onClick={() => detach()}>
                 페이스북 연동 해지하기
               </Button>
             ) : (
@@ -149,6 +132,21 @@ const useMyInfo = () => {
       return userService.getUserInfo(token);
     },
     { enabled: !!token },
+  );
+};
+
+const useDetachFacebook = () => {
+  const { token, saveToken } = useTokenContext();
+
+  return useMutation(
+    () => {
+      if (!token) throw new Error('no token');
+      return userService.detachFacebookAccount(token);
+    },
+    {
+      onSuccess: ({ token }) => saveToken(token, false),
+      onError: (error) => alert(errorService.getErrorMessage((error as CoreServerError).errcode)),
+    },
   );
 };
 
