@@ -8,14 +8,14 @@ export interface UserRepository {
     body: { old_password: string; new_password: string },
   ): Promise<{ token: string }>;
   attachFacebookAccount(
-    args: {
-      baseUrl: string;
-      apikey: string;
-      token: string;
-    },
+    args: { baseUrl: string; apikey: string; token: string },
     body: { fb_id: string; fb_token: string },
   ): Promise<{ token: string }>;
   detachFacebookAccount(args: { baseUrl: string; apikey: string; token: string }): Promise<{ token: string }>;
+  addIdPassword(
+    args: { baseUrl: string; apiKey: string; token: string },
+    body: { id: string; password: string },
+  ): Promise<{ token: string }>;
 }
 
 const getUserRepository = (): UserRepository => {
@@ -41,6 +41,17 @@ const getUserRepository = (): UserRepository => {
       const response = await fetch(`${baseUrl}/v1/user/password`, {
         headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey, 'x-access-token': token },
         method: 'PUT',
+        body: JSON.stringify(body),
+      });
+
+      const data = await response.json().catch(() => null);
+      if (!response.ok) throw data;
+      return data as { token: string };
+    },
+    addIdPassword: async ({ baseUrl, apiKey, token }, body) => {
+      const response = await fetch(`${baseUrl}/v1/user/password`, {
+        headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey, 'x-access-token': token },
+        method: 'POST',
         body: JSON.stringify(body),
       });
 

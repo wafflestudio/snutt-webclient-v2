@@ -16,6 +16,7 @@ import { queryKey } from '@/utils/query-key-factory';
 
 import { MypageChangePassword } from './mypage-change-password';
 import { MypageCloseAccountDialog } from './mypage-close-account-dialog';
+import { MypageRegisterId } from './mypage-register-id';
 
 export const MyPage = () => {
   const [isCloseOpen, setCloseOpen] = useState(false);
@@ -26,6 +27,8 @@ export const MyPage = () => {
   useEffect(() => {
     if (!token) navigate('/login');
   }, [token, navigate]);
+
+  const isFbOnlyUser = myInfo?.fb_name && !myInfo.local_id;
 
   const logout = () => {
     clearToken();
@@ -68,19 +71,28 @@ export const MyPage = () => {
       <Wrapper>
         <h1>내 정보</h1>
         <br />
-        <p data-testid="mypage-my-id">
-          SNUTT 아이디는{' '}
-          {myInfo && (
-            <>
-              <strong>{myInfo.local_id}</strong>입니다.
-            </>
-          )}
-        </p>
+        {!isFbOnlyUser && (
+          <p data-testid="mypage-my-id">
+            SNUTT 아이디는{' '}
+            {myInfo && (
+              <>
+                <strong>{myInfo.local_id ?? myInfo.fb_name}</strong>입니다.
+              </>
+            )}
+          </p>
+        )}
         <br />
-        <Row>
-          <RowLabel>비밀번호 관리</RowLabel>
-          <MypageChangePassword />
-        </Row>
+        {isFbOnlyUser ? (
+          <Row>
+            <RowLabel>아이디 만들기</RowLabel>
+            <MypageRegisterId />
+          </Row>
+        ) : (
+          <Row>
+            <RowLabel>비밀번호 관리</RowLabel>
+            <MypageChangePassword />
+          </Row>
+        )}
         <br />
         <br />
         {myInfo?.local_id && (

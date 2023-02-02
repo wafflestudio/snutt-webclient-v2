@@ -343,6 +343,23 @@ export const handlers = [
     },
   ),
 
+  rest.post<{ id: string; password: string }, never, { token: string } | CoreServerError>(
+    `*/v1/user/password`,
+    async (req, res, ctx) => {
+      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+      const token = req.headers.get('x-access-token');
+      if (!token) return res(ctx.status(403));
+
+      const { id } = await req.json();
+
+      if (mockUsers.every((u) => u.auth.token !== token)) return res(ctx.status(403));
+      if (mockUsers.some((u) => u.info.local_id === id))
+        return res(ctx.status(403), ctx.json({ errcode: 12290, message: 'duplicate id', ext: {} }));
+
+      return res(ctx.json({ token }));
+    },
+  ),
+
   rest.delete<never, never, { token: string }>(`*/v1/user/facebook`, async (req, res, ctx) => {
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
     const token = req.headers.get('x-access-token');
