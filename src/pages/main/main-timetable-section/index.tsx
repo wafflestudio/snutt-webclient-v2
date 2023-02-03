@@ -68,9 +68,10 @@ export const MainTimetableSection = ({
               value={id}
               aria-selected={isActive}
               key={id}
-              onClick={() => (isActive ? setRenameTimetableDialogId(id) : changeCurrentTimetable(id))}
+              onClick={() => changeCurrentTimetable(id)}
             >
-              {title} <CloseIcon data-testid="mt-tab-delete" onClick={() => setDeleteTimetableDialogId(id)} />
+              <span onClick={() => isActive && setRenameTimetableDialogId(id)}>{title}</span>
+              <CloseIcon data-testid="mt-tab-delete" onClick={() => isActive && setDeleteTimetableDialogId(id)} />
             </Tabs.Tab>
           );
         })}
@@ -129,6 +130,7 @@ const Content = styled.div`
 `;
 
 const CloseIcon = styled(IcClose)`
+  margin-left: 4px;
   opacity: 0.6;
   transition: opacity 0.1s;
 

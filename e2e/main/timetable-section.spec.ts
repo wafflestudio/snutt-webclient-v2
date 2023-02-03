@@ -128,9 +128,14 @@ test('로그인되었을 경우, 시간표 생성 기능이 정상 동작한다 
 test('로그인되었을 경우, 시간표 삭제 기능이 정상 동작한다', async ({ page }) => {
   await page.goto('/?year=1001&semester=1');
   await givenUser(page, { login: true });
-
   const tabs = page.getByTestId('mt-tab');
+
   await tabs.filter({ hasText: '나무의 시간표' }).locator('[data-testid=mt-tab-delete]').click();
+  await expect(page.getByText('삭제하시겠습니까?')).toHaveCount(0); // 현재 active 한 것만 삭제 가능
+
+  await tabs.filter({ hasText: '나무의 시간표' }).click();
+  await tabs.filter({ hasText: '나무의 시간표' }).locator('[data-testid=mt-tab-delete]').click();
+  await expect(page.getByText('시간표 이름을 변경합니다')).toHaveCount(0); // 시간표 이름 변경 모달이 같이 뜨는 이슈가 있어서 추가된 tc
   await expect(page.getByTestId('mt-tt-delete-submit')).toBeDisabled();
   await page.getByTestId('mt-tt-delete-input').type('나무의 시간표');
   await Promise.all([
