@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const MainLectureEditFormColor = ({ colorList, currentColor, onChangeColor }: Props) => {
-  const isCustomColor = currentColor && colorList.every((c) => c.bg !== currentColor.bg);
+  const isCustomColor = !!currentColor && colorList.every((c) => c.bg !== currentColor.bg);
   const [customColor, setCustomColor] = useState('#888888');
 
   return (
@@ -22,6 +22,7 @@ export const MainLectureEditFormColor = ({ colorList, currentColor, onChangeColo
         return (
           <ColorChip
             data-testid="main-lecture-edit-form-color"
+            aria-selected={isSelected}
             key={c.bg}
             style={
               isSelected
@@ -37,6 +38,7 @@ export const MainLectureEditFormColor = ({ colorList, currentColor, onChangeColo
 
       <CustomColorChip
         data-testid="main-lecture-edit-form-custom-color"
+        aria-selected={isCustomColor}
         style={
           isCustomColor
             ? {
