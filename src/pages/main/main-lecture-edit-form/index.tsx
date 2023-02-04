@@ -31,7 +31,7 @@ export const MainLectureEditForm = ({ draft, defaultState = {}, setDraft }: Prop
 
   const currentColor =
     draft.color ??
-    (defaultState.color && defaultState.colorIndex && colorList
+    (defaultState.color && colorList && defaultState.colorIndex !== undefined
       ? lectureService.getLectureColor(defaultState as Pick<Lecture, 'color' | 'colorIndex'>, colorList)
       : undefined);
 

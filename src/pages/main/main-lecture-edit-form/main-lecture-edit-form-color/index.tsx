@@ -10,9 +10,12 @@ type Props = {
   onChangeColor: (index: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9, color: Color) => void;
 };
 
+const defaultCustomColor = '#888888';
+
 export const MainLectureEditFormColor = ({ colorList, currentColor, onChangeColor }: Props) => {
+  const [customValue, setCustomValue] = useState<string>();
+
   const isCustomColor = !!currentColor && colorList.every((c) => c.bg !== currentColor.bg);
-  const [customColor, setCustomColor] = useState('#888888');
 
   return (
     <ColorChipsWrapper>
@@ -29,7 +32,10 @@ export const MainLectureEditFormColor = ({ colorList, currentColor, onChangeColo
                 ? { border: `1px solid ${c.bg}`, backgroundColor: c.bg, color: c.fg }
                 : { border: `1px solid ${c.bg}`, color: c.bg }
             }
-            onClick={() => onChangeColor((i + 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9, c)}
+            onClick={() => {
+              if (!customValue && isCustomColor) setCustomValue(currentColor.bg);
+              onChangeColor((i + 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9, c);
+            }}
           >
             {COLOR_LABEL_MAP[c.bg] ?? c.bg}
           </ColorChip>
@@ -51,10 +57,10 @@ export const MainLectureEditFormColor = ({ colorList, currentColor, onChangeColo
       >
         나만의 색
         <Palette
-          value={customColor}
+          value={customValue ?? (isCustomColor ? currentColor.bg : defaultCustomColor)}
           onChange={(e) => {
             onChangeColor(0, { bg: e.target.value, fg: '#ffffff' });
-            setCustomColor(e.target.value);
+            setCustomValue(e.target.value);
           }}
           onClick={(e) =>
             'value' in e.target &&
