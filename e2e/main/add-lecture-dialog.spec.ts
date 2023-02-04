@@ -78,3 +78,25 @@ test('강의 생성 모달이 잘 실패된다 (색 없을 때)', async ({ page 
   await page.getByTestId(testIds['강의 생성 제출 버튼']).click();
   await expect(page.getByTestId(testIds['에러 모달 메세지'])).toHaveText('강의 색을 지정해 주세요');
 });
+
+test('커스텀 색 관련 ui가 잘 보여진다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page);
+  await page.getByTestId(testIds['강의 추가하기 버튼']).click();
+  const cLabels = {
+    커스텀: page.getByTestId('main-lecture-edit-form-custom-color'),
+    하늘: page.getByTestId('main-lecture-edit-form-color').filter({ hasText: '하늘' }),
+    감귤: page.getByTestId('main-lecture-edit-form-color').filter({ hasText: '감귤' }),
+  };
+
+  await expect(cLabels['커스텀']).toHaveValue('#888888');
+  await expect(cLabels['커스텀']).toHaveAttribute('aria-selected', 'false');
+  await expect(cLabels['감귤']).toHaveAttribute('aria-selected', 'false');
+  await cLabels['하늘'].click();
+  await expect(cLabels['하늘']).toHaveAttribute('aria-selected', 'true');
+  await expect(cLabels['감귤']).toHaveAttribute('aria-selected', 'false');
+  await cLabels['커스텀'].click();
+  await expect(cLabels['커스텀']).toHaveValue('#888888');
+  await expect(cLabels['커스텀']).toHaveAttribute('aria-selected', 'true');
+  await expect(cLabels['하늘']).toHaveAttribute('aria-selected', 'false');
+});
