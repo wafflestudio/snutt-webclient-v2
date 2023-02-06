@@ -26,6 +26,7 @@ jobs:
           yarn install
           cp .env.dev .env.production
           VITE_API_KEY=${{ secrets.API_KEY_DEV }} \
+          VITE_TRUFFLE_API_KEY=${{ secrets.TRUFFLE_API_KEY }} \
           VITE_GIT_SHA=$(git rev-parse HEAD) \
           VITE_GIT_TAG=$(git describe --tags) \
             yarn build
