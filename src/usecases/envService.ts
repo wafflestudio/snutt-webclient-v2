@@ -8,6 +8,8 @@ export interface EnvService {
   getGitSha(): string;
   getGitTag(): string;
   getFacebookAppId(): string;
+  getTruffleApiKey(): string;
+  getNodeEnv(): string;
 }
 
 const getEnvService = (args: { repositories: [EnvRepository] }): EnvService => {
@@ -30,6 +32,8 @@ const getEnvService = (args: { repositories: [EnvRepository] }): EnvService => {
       }
     },
     getFacebookAppId: () => args.repositories[0].getFacebookAppId(),
+    getTruffleApiKey: () => args.repositories[0].getTruffleApiKey(),
+    getNodeEnv: () => args.repositories[0].getNodeEnv(),
   };
 };
 

@@ -10,6 +10,8 @@ export interface EnvironmentVariables {
   API_BASE_URL?: string;
   API_KEY?: string;
   FACEBOOK_APP_ID?: string;
+  TRUFFLE_API_KEY?: string;
+  NODE_ENV?: string;
 }
 
 export const viteEnvironmentVariables: EnvironmentVariables = {
@@ -19,4 +21,6 @@ export const viteEnvironmentVariables: EnvironmentVariables = {
   API_BASE_URL: import.meta.env.VITE_BASE_URL,
   API_KEY: import.meta.env.VITE_API_KEY,
   FACEBOOK_APP_ID: import.meta.env.VITE_FACEBOOK_APP_ID,
+  TRUFFLE_API_KEY: import.meta.env.VITE_TRUFFLE_API_KEY,
+  NODE_ENV: process.env.NODE_ENV,
 };

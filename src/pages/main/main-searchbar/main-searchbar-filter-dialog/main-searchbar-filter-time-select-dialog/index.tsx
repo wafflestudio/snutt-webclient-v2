@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
+import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { dayArray } from '@/entities/day';
@@ -30,7 +31,7 @@ export const MainSearchbarFilterTimeSelectDialog = ({ open, onClose, onChangeBit
 
   const endDrag = () => {
     try {
-      if (!dragStart || !currentDrag) throw new Error('cannot reach here');
+      if (!dragStart || !currentDrag) return truffleClient.capture(new Error('endDrag no dragStart no currentDrag'));
       setCellStatus(timeMaskService.getUpdatedCellStatus(cellStatus, dragStart, currentDrag));
     } catch (err) {
       // TODO: capture sentry
