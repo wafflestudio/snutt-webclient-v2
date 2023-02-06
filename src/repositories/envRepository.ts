@@ -1,7 +1,7 @@
 // 이 파일은 전체 프로젝트에서 유일하게 @/constants/environment 에 접근할 수 있습니다.
 // eslint-disable-next-line no-restricted-imports
 import { EnvironmentVariables, viteEnvironmentVariables } from '@/constants/environment';
-import { AppEnv } from '@/entities/env';
+import { AppEnv, NodeEnv } from '@/entities/env';
 
 export interface EnvRepository {
   getAppEnv(): AppEnv;
@@ -10,11 +10,13 @@ export interface EnvRepository {
   getGitSha(): string;
   getGitTag(): string;
   getFacebookAppId(): string;
+  getTruffleApiKey(): string;
+  getNodeEnv(): NodeEnv;
 }
 
 type Dependencies = { external: [EnvironmentVariables] };
 const getEnvRepository = ({ external: [envVariables] }: Dependencies): EnvRepository => {
-  const { API_BASE_URL, API_KEY, APP_ENV, GIT_SHA, GIT_TAG, FACEBOOK_APP_ID } = envVariables;
+  const { API_BASE_URL, API_KEY, APP_ENV, GIT_SHA, GIT_TAG, FACEBOOK_APP_ID, TRUFFLE_API_KEY, NODE_ENV } = envVariables;
   return {
     getAppEnv: () => {
       if (APP_ENV === undefined) throw new Error('APP_ENV not provided');
@@ -39,6 +41,14 @@ const getEnvRepository = ({ external: [envVariables] }: Dependencies): EnvReposi
     getFacebookAppId: () => {
       if (FACEBOOK_APP_ID === undefined) throw new Error('FACEBOOK_APP_ID not provided');
       return FACEBOOK_APP_ID;
+    },
+    getTruffleApiKey: () => {
+      if (TRUFFLE_API_KEY === undefined) throw new Error('TRUFFLE_API_KEY not provided');
+      return TRUFFLE_API_KEY;
+    },
+    getNodeEnv: () => {
+      if (NODE_ENV === undefined) throw new Error('NODE_ENV not provided');
+      return NODE_ENV as NodeEnv;
     },
   };
 };
