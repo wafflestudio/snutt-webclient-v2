@@ -7,11 +7,18 @@ import { Main } from '@/pages/main';
 import { MyPage } from '@/pages/mypage';
 import { SignUp } from '@/pages/signup';
 
+import { ErrorPage } from './pages/error';
+
 const router = createBrowserRouter([
-  { path: '/', element: <Main /> },
-  { path: '/login', element: <Login /> },
-  { path: '/signup', element: <SignUp /> },
-  { path: '/mypage', element: <MyPage /> },
+  {
+    children: [
+      { path: '/', element: <Main /> },
+      { path: '/login', element: <Login /> },
+      { path: '/signup', element: <SignUp /> },
+      { path: '/mypage', element: <MyPage /> },
+    ],
+    errorElement: <ErrorPage />,
+  },
 ]);
 
 function App() {
