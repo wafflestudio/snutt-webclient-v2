@@ -7,9 +7,9 @@ const PORT = 4174;
 
 const config: PlaywrightTestConfig = {
   testDir: './e2e',
-  timeout: 10 * 1000,
+  timeout: 3000,
 
-  expect: { timeout: 5000 },
+  expect: { timeout: 1000 },
 
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
