@@ -17,8 +17,8 @@ const getLectureService = (): SemesterService => {
     getLectureDetailUrl: ({ course_number, lecture_number }, { year, semester }) => {
       const { openShtmFg, openDetaShtmFg } = {
         1: { openShtmFg: 'U000200001', openDetaShtmFg: 'U000300001' },
-        2: { openShtmFg: 'U000200002', openDetaShtmFg: 'U000300001' },
-        3: { openShtmFg: 'U000200001', openDetaShtmFg: 'U000300002' },
+        2: { openShtmFg: 'U000200001', openDetaShtmFg: 'U000300002' },
+        3: { openShtmFg: 'U000200002', openDetaShtmFg: 'U000300001' },
         4: { openShtmFg: 'U000200002', openDetaShtmFg: 'U000300002' },
       }[semester];
 
