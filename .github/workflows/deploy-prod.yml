@@ -1,9 +1,9 @@
-name: deploy-dev
+name: deploy-prod
 
 on:
   push:
     tags:
-      - dev/*
+      - prod/*
 
 jobs:
   deploy:
@@ -24,7 +24,7 @@ jobs:
       - name: Build & Export
         run: |
           yarn install
-          cp .env.dev .env.production
+          cp .env.prod .env.production
           VITE_API_KEY=${{ secrets.API_KEY }} \
           VITE_TRUFFLE_API_KEY=${{ secrets.TRUFFLE_API_KEY }} \
           VITE_GIT_SHA=$(git rev-parse HEAD) \
@@ -34,8 +34,8 @@ jobs:
       - name: Deploy to S3 and Invalidate Cloudfront
         id: deploy-s3
         env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_DEV }}
-          AWS_CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID_DEV }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_PROD }}
+          AWS_CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID_PROD }}
         run: |
           aws s3 sync ./dist s3://$AWS_S3_BUCKET --delete
           aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
