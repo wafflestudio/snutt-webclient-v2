@@ -102,7 +102,7 @@ const LectureInstructor = styled.div`
   opacity: 0.6;
   font-size: 13px;
   line-height: 18px;
-  white-space: nowrap;
+  min-width: 100px;
 `;
 
 const LectureHeaderRight = styled.div`
