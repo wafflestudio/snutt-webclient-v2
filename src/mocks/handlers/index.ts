@@ -9,6 +9,7 @@ import { SearchFilter, SearchResultLecture } from '@/entities/search';
 import { CourseBook, Semester } from '@/entities/semester';
 import { FullTimetable, Timetable } from '@/entities/timetable';
 import { mockVividIos } from '@/mocks/fixtures/color';
+import { mockCourseBooks } from '@/mocks/fixtures/courseBook';
 import { mockNotification } from '@/mocks/fixtures/notification';
 import { mockSearchResult } from '@/mocks/fixtures/search';
 import { mockTags } from '@/mocks/fixtures/tag';
@@ -29,14 +30,7 @@ export const handlers = [
   rest.get<never, never, CourseBook[]>(`*/v1/course_books`, (req, res, ctx) => {
     if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
-    return res(
-      ctx.json([
-        { year: 1001, semester: 1, updated_at: '2022-12-28T12:45:17.509Z' },
-        { year: 2001, semester: 2, updated_at: '2022-12-28T12:45:17.509Z' },
-        { year: 3001, semester: 4, updated_at: '2022-12-28T12:45:17.509Z' },
-        { year: 4001, semester: 3, updated_at: '2022-12-28T12:45:17.509Z' },
-      ]),
-    );
+    return res(ctx.json(mockCourseBooks));
   }),
 
   rest.get<never, never, Timetable[]>(`*/v1/tables`, (req, res, ctx) => {
@@ -79,14 +73,20 @@ export const handlers = [
     },
   ),
 
-  rest.get<never, { year: string; semester: `${1 | 2 | 3 | 4}` }, Awaited<ReturnType<SearchRepository['getTags']>>>(
-    `*/v1/tags/:year/:semester`,
-    (req, res, ctx) => {
-      if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
+  rest.get<
+    never,
+    { year: string; semester: `${1 | 2 | 3 | 4}` },
+    Awaited<ReturnType<SearchRepository['getTags']> | CoreServerError>
+  >(`*/v1/tags/:year/:semester`, (req, res, ctx) => {
+    if (!req.headers.get('x-access-apikey')) return res(ctx.status(403));
 
-      return res(ctx.json(mockTags));
-    },
-  ),
+    const { year, semester } = req.params;
+
+    if (!mockCourseBooks.some((cb) => cb.year === Number(year) && cb.semester === Number(semester)))
+      return res(ctx.status(404), ctx.json({ errcode: 16384, message: 'not found', ext: {} }));
+
+    return res(ctx.json(mockTags));
+  }),
 
   rest.get<never, never, Awaited<ReturnType<UserRepository['getUserInfo']> | CoreServerError>>(
     `*/v1/user/info`,
