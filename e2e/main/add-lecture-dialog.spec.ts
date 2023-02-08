@@ -52,7 +52,7 @@ test('강의 생성 모달이 잘 취소된다', async ({ page }) => {
 
   await page.getByTestId(testIds['강의 추가하기 버튼']).click();
   await page.getByTestId(testIds['강의명 필드']).fill('떡볶이맛 아몬드');
-  await page.getByTestId(testIds['강의 생성 취소 버튼']).click();
+  await page.keyboard.up('Escape');
 
   await page.getByTestId(testIds['강의 추가하기 버튼']).click();
   await expect(page.getByTestId(testIds['강의명 필드'])).toHaveValue('');

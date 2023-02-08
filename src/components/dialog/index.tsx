@@ -8,10 +8,16 @@ interface Props {
   className?: string;
   open?: boolean;
   onClose?: () => void;
+
   /**
    * true 이면 close 되었을 때도 content 를 마운트된 상태로 유지한다. default: false
    */
   keepMountOnClose?: boolean;
+
+  /**
+   * esc 키 눌렀을 때 닫힘 여부
+   */
+  closeOnEsc?: boolean;
 }
 
 export const Dialog = ({
@@ -20,6 +26,7 @@ export const Dialog = ({
   onClose = () => null,
   className,
   keepMountOnClose = false,
+  closeOnEsc = true,
 }: PropsWithChildren<Props>) => {
   const [mount, setMount] = useState(false);
 
@@ -27,6 +34,14 @@ export const Dialog = ({
     if (open) setMount(true);
     else setTimeout(() => setMount(false), 200);
   }, [open]);
+
+  useEffect(() => {
+    if (!open || !closeOnEsc) return;
+    const handler = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+
+    document.addEventListener('keyup', handler);
+    return () => document.removeEventListener('keyup', handler);
+  }, [open, onClose, closeOnEsc]);
 
   const showChildren = open || mount;
 
