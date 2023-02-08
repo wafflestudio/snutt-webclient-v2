@@ -39,3 +39,14 @@ jobs:
         run: |
           aws s3 sync ./dist s3://$AWS_S3_BUCKET --delete
           aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
+
+      - name: Slack Notify
+        uses: rtCamp/action-slack-notify@v2.1.2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: team-snutt-deploy
+          SLACK_TITLE: NEW RELEASE
+          SLACK_USERNAME: snutt-webclient
+          SLACK_ICON: https://user-images.githubusercontent.com/39977696/191924403-3a26618c-5568-4c22-b592-aedc77323e8d.png
+          SLACK_MESSAGE: Deployed Tag [$(git describe --tags)]
+          SLACK_FOOTER: https://snutt.wafflestudio.com
