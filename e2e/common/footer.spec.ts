@@ -40,7 +40,7 @@ test('개발자 괴롭히기 기능이 잘 동작한다 (취소)', async ({ page
   await page.getByText('개발자 괴롭히기').click();
   await page.getByTestId('feedback-email').type('test');
   await page.getByTestId('feedback-message').type('test');
-  await page.getByTestId('feedback-cancel').click();
+  await page.keyboard.up('Escape');
   await page.getByText('개발자 괴롭히기').click();
   await expect(page.getByTestId('feedback-email')).toHaveValue('');
 });
