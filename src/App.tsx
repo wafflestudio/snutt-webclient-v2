@@ -1,3 +1,6 @@
+import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
@@ -7,6 +10,9 @@ import { Main } from '@/pages/main';
 import { MyPage } from '@/pages/mypage';
 import { SignUp } from '@/pages/signup';
 
+import { truffleClient } from './clients/truffle';
+import { ErrorDialog } from './components/error-dialog';
+import { useErrorDialog } from './hooks/useErrorDialog';
 import { ErrorPage } from './pages/error';
 
 const router = createBrowserRouter([
@@ -22,11 +28,34 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  const { message, isOpen, onClose } = useErrorDialog();
+
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        queryCache: new QueryCache({
+          onError: (error) => {
+            console.log(error);
+          },
+        }),
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            onError: (err) => truffleClient.capture(new Error(JSON.stringify(err))),
+          },
+        },
+      }),
+  );
+
   return (
-    <TokenContextProvider>
-      <RouterProvider router={router} />
-      <GlobalStyles />
-    </TokenContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <TokenContextProvider>
+        <RouterProvider router={router} />
+        <GlobalStyles />
+        <ErrorDialog message={message} onClose={onClose} isOpen={isOpen} />
+      </TokenContextProvider>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   );
 }
 
