@@ -4,16 +4,17 @@ import { useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
-import { TokenContextProvider } from '@/contexts/tokenContext';
+import { truffleClient } from '@/clients/truffle';
+import { Button } from '@/components/button';
+import { Dialog } from '@/components/dialog';
+import { ErrorPage } from '@/pages/error';
 import { Login } from '@/pages/login';
 import { Main } from '@/pages/main';
 import { MyPage } from '@/pages/mypage';
 import { SignUp } from '@/pages/signup';
+import { get } from '@/utils/object/get';
 
-import { truffleClient } from './clients/truffle';
-import { ErrorDialog } from './components/error-dialog';
-import { useErrorDialog } from './hooks/useErrorDialog';
-import { ErrorPage } from './pages/error';
+import { useTokenContext } from './contexts/tokenContext';
 
 const router = createBrowserRouter([
   {
@@ -28,33 +29,44 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const { message, isOpen, onClose } = useErrorDialog();
+  const { clearToken } = useTokenContext();
+  const [isWrongTokenDialogOpen, setWrongTokenDialogOpen] = useState(false);
 
   const [queryClient] = useState(
     () =>
       new QueryClient({
         queryCache: new QueryCache({
-          onError: (error) => {
-            console.log(error);
-          },
+          onError: (error) => get(error, ['errcode']) === 8194 && setWrongTokenDialogOpen(true),
         }),
         defaultOptions: {
           queries: {
             refetchOnWindowFocus: false,
             onError: (err) => truffleClient.capture(new Error(JSON.stringify(err))),
+            retry: false,
           },
         },
       }),
   );
 
+  const onClickLogout = () => {
+    clearToken();
+    setWrongTokenDialogOpen(false);
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
-      <TokenContextProvider>
-        <RouterProvider router={router} />
-        <GlobalStyles />
-        <ErrorDialog message={message} onClose={onClose} isOpen={isOpen} />
-      </TokenContextProvider>
+      <RouterProvider router={router} />
+      <GlobalStyles />
       <ReactQueryDevtools />
+      <Dialog open={isWrongTokenDialogOpen}>
+        <Dialog.Title>인증정보가 올바르지 않아요</Dialog.Title>
+        <Dialog.Content>다시 로그인해 주세요</Dialog.Content>
+        <Dialog.Actions>
+          <Button data-testid="wrong-token-dialog-logout" onClick={onClickLogout}>
+            로그아웃하기
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
     </QueryClientProvider>
   );
 }

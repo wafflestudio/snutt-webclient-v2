@@ -4,7 +4,7 @@ import { Button } from '@/components/button';
 
 import { Dialog } from '../dialog';
 
-type Props = { isOpen: boolean; onClose: () => void; message: string | null };
+type Props = { isOpen: boolean; onClose?: () => void; message: string | null };
 
 export const ErrorDialog = ({ isOpen, onClose, message }: Props) => {
   return (
