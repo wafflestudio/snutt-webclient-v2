@@ -257,7 +257,7 @@ const useSearchFilterTags = () => {
   return useQuery(
     ['tags', year, semester],
     () => {
-      if (!year || !semester) throw Error();
+      if (!year || !semester) throw Error('no year or semester');
       return searchService.getTags({ year, semester });
     },
     { enabled: !!(year && semester), staleTime: Infinity },
