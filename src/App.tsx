@@ -15,6 +15,7 @@ import { SignUp } from '@/pages/signup';
 import { get } from '@/utils/object/get';
 
 import { useTokenContext } from './contexts/tokenContext';
+import { NotFoundPage } from './pages/not-found';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
       { path: '/login', element: <Login /> },
       { path: '/signup', element: <SignUp /> },
       { path: '/mypage', element: <MyPage /> },
+      { path: '/*', element: <NotFoundPage /> },
     ],
     errorElement: <ErrorPage />,
   },
