@@ -66,7 +66,7 @@ const useCreateTimetable = (onSuccess: (createdId?: string) => void) => {
 
   return useMutation(
     (title: string) => {
-      if (!token || !year || !semester) throw new Error();
+      if (!token || !year || !semester) throw new Error('no token | year | semester');
       return timetableService.createTimetable(token, { year, semester, title });
     },
     {

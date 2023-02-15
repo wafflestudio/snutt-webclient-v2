@@ -114,7 +114,7 @@ const useCurrentFullTimetable = (id: string | undefined) => {
   return useQuery(
     queryKey(`tables/${id}`, { token }),
     () => {
-      if (!id || !token) throw new Error();
+      if (!id || !token) throw new Error('no id | token');
       return timetableService.getFullTimetable(token, id);
     },
     { enabled: !!id && !!token },
