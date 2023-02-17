@@ -66,9 +66,11 @@ export const MainLectureEditForm = ({ draft, defaultState = {}, setDraft }: Prop
       <Row>
         <RowLabel>학점</RowLabel>
         <Input
-          value={draft.credit ?? defaultState.credit ?? ''}
-          onChange={(e) => setDraft({ ...draft, credit: Number(e.target.value) })}
+          data-testid="main-lecture-edit-form-credit"
+          value={`${draft.credit ?? defaultState.credit ?? ''}`}
+          onChange={(e) => setDraft({ ...draft, credit: Number(e.target.value.replace('.', '')) })}
           type="number"
+          min="0"
         />
       </Row>
       <Row>
