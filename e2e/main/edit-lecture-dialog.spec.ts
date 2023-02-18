@@ -153,6 +153,26 @@ test('강의 시간 추가/제거가 잘 된다', async ({ page }) => {
   ]);
 });
 
+test('음수 학점은 입력할 수 없다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page);
+  const lectureItem = page.getByTestId('main-lecture-listitem');
+  await lectureItem.filter({ hasText: '컴퓨터공학부, 2학년' }).click();
+  await page.getByTestId('main-lecture-edit-form-credit').clear();
+  await page.getByTestId('main-lecture-edit-form-credit').type('-1');
+  await expect(page.getByTestId('main-lecture-edit-form-credit')).toHaveValue('1');
+});
+
+test('소수 학점은 입력할 수 없다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page);
+  const lectureItem = page.getByTestId('main-lecture-listitem');
+  await lectureItem.filter({ hasText: '컴퓨터공학부, 2학년' }).click();
+  await page.getByTestId('main-lecture-edit-form-credit').clear();
+  await page.getByTestId('main-lecture-edit-form-credit').type('1234.1234');
+  await expect(page.getByTestId('main-lecture-edit-form-credit')).toHaveValue('12341234');
+});
+
 test('강의 수정 모달이 잘 취소된다', async ({ page }) => {
   await page.goto('/');
   await givenUser(page);
