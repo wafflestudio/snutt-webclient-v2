@@ -3,7 +3,7 @@
 ## Deployment
 
 - dev: https://snutt-dev.wafflestudio.com
-- prod: (v1 이 올라가 있습니다.)
+- prod: https://snutt.wafflestudio.com
 
 ## Environments
 
