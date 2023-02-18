@@ -75,7 +75,7 @@ export const MainLectureEditForm = ({ draft, defaultState = {}, setDraft }: Prop
       </Row>
       <Row>
         <RowLabel>비고</RowLabel>
-        <Input
+        <Textarea
           data-testid="main-lecture-edit-form-remark"
           value={draft.remark ?? defaultState.remark ?? ''}
           onChange={(e) => setDraft({ ...draft, remark: e.target.value })}
@@ -113,4 +113,13 @@ const Input = styled.input`
   outline: none;
   border: none;
   border-bottom: 2px solid #ddd;
+`;
+
+const Textarea = styled.textarea`
+  width: 100%;
+  height: 30px;
+  outline: none;
+  border: none;
+  border-bottom: 2px solid #ddd;
+  resize: none;
 `;
