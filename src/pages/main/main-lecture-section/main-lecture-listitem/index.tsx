@@ -60,7 +60,7 @@ export const MainLectureListItem = ({ lecture, cta }: Props) => {
 
       <LectureDescription data-testid="main-lecture-listitem-place">
         <MapIcon />
-        {places.some(Boolean) ? places.join(', ') : emptyText}
+        {places.some(Boolean) ? places.map((v) => v || '-').join(', ') : emptyText}
       </LectureDescription>
 
       {lecture.remark && (

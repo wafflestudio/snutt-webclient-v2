@@ -40,6 +40,7 @@ test('현재 시간표 탭이 정상 동작한다 (시간표 있을 때)', async
   const lectureItem = page.getByTestId('main-lecture-listitem');
   await expect(lectureItem.nth(0).getByTestId('main-lecture-listitem-title')).toHaveText('고급수학 2');
   await expect(lectureItem.nth(1).getByTestId('main-lecture-listitem-instructor')).toHaveText('이영기 / 4학점');
+  await expect(lectureItem.nth(1).getByTestId('main-lecture-listitem-place')).toHaveText('302-208, -, 302-208');
   await expect(lectureItem.nth(3).getByTestId('main-lecture-listitem-department')).toHaveText('생명과학부, 1학년');
   await expect(lectureItem.nth(4).getByTestId('main-lecture-listitem-time')).toHaveText(
     '화(12:30~13:45), 목(12:30~13:45)',
