@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { IcClock } from '@/components/icons/ic-clock';
 import { IcDots } from '@/components/icons/ic-dots';
@@ -142,22 +142,24 @@ const LectureDescription = styled.div`
   display: flex;
 `;
 
-const LabelIcon = styled(IcLabel).attrs({ width: 14, height: 14 })`
+const iconStyle = css`
   margin-right: 10px;
   min-width: 14px;
+  margin-top: 1px;
+`;
+
+const LabelIcon = styled(IcLabel).attrs({ width: 14, height: 14 })`
+  ${iconStyle}
 `;
 
 const ClockIcon = styled(IcClock).attrs({ width: 14, height: 14 })`
-  margin-right: 10px;
-  min-width: 14px;
+  ${iconStyle}
 `;
 
 const MapIcon = styled(IcMap).attrs({ width: 14, height: 14 })`
-  margin-right: 10px;
-  min-width: 14px;
+  ${iconStyle}
 `;
 
 const DotsIcon = styled(IcDots).attrs({ width: 14, height: 14 })`
-  margin-right: 10px;
-  min-width: 14px;
+  ${iconStyle}
 `;
