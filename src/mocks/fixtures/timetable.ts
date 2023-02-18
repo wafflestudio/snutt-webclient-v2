@@ -108,7 +108,7 @@ export const mockTimeTable123: FullTimetable = {
           day: 2,
           start: 10.5,
           len: 2,
-          place: '044-1-206/044-1-207',
+          place: '',
           start_time: '18:30',
           end_time: '20:20',
         },
