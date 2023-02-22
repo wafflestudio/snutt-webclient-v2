@@ -31,7 +31,10 @@ export const MainTimeTable = ({
 }: Props) => {
   const { data: colorList } = useColorList();
 
-  const maxDay = Math.max(...timetable.lecture_list.flatMap((l) => l.class_time_json).map((item) => item.day));
+  const allClassTimes = timetable.lecture_list
+    .flatMap((l) => l.class_time_json)
+    .concat(...(previewLecture?.class_time_json ?? []));
+  const maxDay = Math.max(...allClassTimes.map((item) => item.day));
   const days = allDays.slice(0, Math.max(4, maxDay) + 1);
   const totalCredit = timetable.lecture_list.reduce((acc, cur) => acc + cur.credit, 0);
 
@@ -40,7 +43,7 @@ export const MainTimeTable = ({
       {
         // 상단 월화수목금토일
         days.map((d, i) => (
-          <Day $colStart={i + 2} key={d}>
+          <Day $colStart={i + 2} key={d} data-testid="main-timetable-day">
             {d}
           </Day>
         ))

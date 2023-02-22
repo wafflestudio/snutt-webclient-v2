@@ -92,7 +92,7 @@ export const mockSearchResult: SearchResultLecture[] = [
     class_time_json: [
       {
         _id: '6329ab4ecb360c002b6ee0e3',
-        day: 3,
+        day: 6,
         start: 6,
         len: 4,
         place: '16-M209',

@@ -57,3 +57,21 @@ test('검색 기능이 정상 동작한다 (검색 결과 없을 때)', async ({
   await givenUser(page, { login: true });
   // TODO:
 });
+
+test('미리보기가 정상 동작한다 (평일 강의)', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page, { login: true });
+  // TODO:
+});
+
+test('미리보기가 정상 동작한다 (주말 강의)', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page, { login: true });
+  await page.getByTestId('main-searchbar-search').click();
+
+  await expect(page.getByTestId('main-timetable-day')).toHaveCount(5);
+  await expect(page.getByTestId('main-timetable-preview-lecture')).toHaveCount(0);
+  await page.getByTestId('main-lecture-listitem').nth(2).hover(); // 일요일 강의 호버해서 미리보기
+  await expect(page.getByTestId('main-timetable-day')).toHaveCount(7);
+  await expect(page.getByTestId('main-timetable-preview-lecture')).toHaveCount(1);
+});
