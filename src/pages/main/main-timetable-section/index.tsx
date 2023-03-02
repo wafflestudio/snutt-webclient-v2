@@ -58,11 +58,11 @@ export const MainTimetableSection = ({
 
   return (
     <Wrapper className={className}>
-      <Tabs value={currentTimetable?._id}>
+      <TTTabs value={currentTimetable?._id}>
         {currentYearSemesterTimetables?.map(({ _id: id, title }) => {
           const isActive = id === currentTimetable?._id;
           return (
-            <Tabs.Tab
+            <TTTabs.Tab
               data-testid="mt-tab"
               data-id={id}
               value={id}
@@ -72,11 +72,11 @@ export const MainTimetableSection = ({
             >
               <span onClick={() => isActive && setRenameTimetableDialogId(id)}>{title}</span>
               <CloseIcon data-testid="mt-tab-delete" onClick={() => isActive && setDeleteTimetableDialogId(id)} />
-            </Tabs.Tab>
+            </TTTabs.Tab>
           );
         })}
         <AddIcon data-testid="mt-create-timetable" onClick={onClickCreate} />
-      </Tabs>
+      </TTTabs>
       <Content>
         {isLoggedIn ? (
           currentYearSemesterTimetables &&
@@ -153,4 +153,9 @@ const AddIcon = styled(IcPlus)`
 
 const NoTimetable = styled(MainNoTimetable)`
   height: 100%;
+`;
+
+const TTTabs = styled(Tabs)`
+  // 시간표가 많을 경우 다음 줄로 넘어가도록 해서 사용자 경험 개선
+  flex-wrap: wrap;
 `;
