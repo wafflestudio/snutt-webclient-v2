@@ -132,7 +132,6 @@ const Wrapper = styled.div`
 
 const sectionStyle = css`
   width: 50%;
-  height: 780px;
   margin: 0 auto;
 
   @media (max-width: ${BREAKPOINT}px) {
@@ -143,6 +142,7 @@ const sectionStyle = css`
 
 const LectureSection = styled(MainLectureSection)`
   ${sectionStyle};
+  height: 780px;
   @media (max-width: ${BREAKPOINT}px) {
     height: 400px;
   }
