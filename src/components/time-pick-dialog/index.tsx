@@ -46,9 +46,14 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime }: Props
 
   const handleSubmit = () => {
     if (!isValid) return;
-    const submitHour = hour ? hour + (typeWithDefault === Type.PM ? 12 : 0) : defaultTime?.hour;
+    const submitHour =
+      hour !== undefined
+        ? hour + (typeWithDefault === Type.PM ? 12 : 0)
+        : defaultTime
+        ? (defaultTime.hour % 12) + (typeWithDefault === Type.PM ? 12 : 0)
+        : undefined;
     const submitMinute = minute ?? defaultTime?.minute;
-    if (!submitHour || !submitMinute) return; // cannot reach here
+    if (submitHour === undefined || submitMinute === undefined) return; // cannot reach here
     onSubmit?.(submitHour, submitMinute);
     handleClose();
   };
