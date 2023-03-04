@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { IcClose } from '@/components/icons/ic-close';
+import { TimePickDialog } from '@/components/time-pick-dialog';
 import { AddedLectureTime, Lecture } from '@/entities/lecture';
 import { Day, DAY_LABEL_MAP } from '@/entities/time';
 import { lectureService } from '@/usecases/lectureService';
+import { timetableViewService } from '@/usecases/timetableViewService';
 import { ArrayElement } from '@/utils/array-element';
 
 type Props = {
@@ -13,6 +16,11 @@ type Props = {
 };
 
 export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Props) => {
+  const [openTimeDialog, setOpenTimeDialog] = useState<{
+    id: string;
+    type: 'start' | 'end';
+    defaultTime: { hour: number; minute: number };
+  } | null>(null);
   const handleAddTime = () => onChangeLectureTime([...lectureTime, lectureService.getEmptyClassTime()]);
 
   const handleDeleteLectureTime = (_id: string) =>
@@ -25,6 +33,7 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
     <Wrapper>
       {lectureTime.map((lt, i) => {
         const isAddedTime = '__id__' in lt;
+        const id = isAddedTime ? lt.__id__ : lt._id;
 
         const onChangeDay = (day: Day) =>
           onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, day } : _lt)));
@@ -39,7 +48,7 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
           onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, place } : _lt)));
 
         return (
-          <TimeItem key={isAddedTime ? lt.__id__ : lt._id} data-testid="main-lecture-edit-form-time">
+          <TimeItem key={id} data-testid="main-lecture-edit-form-time">
             <Select value={lt.day} onChange={(e) => onChangeDay(Number(e.target.value) as Day)}>
               {([0, 1, 2, 3, 4, 5, 6] as const).map((item) => (
                 <option key={item} value={item}>
@@ -48,15 +57,39 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
               ))}
             </Select>
 
-            <Input value={lt.start_time} onChange={(e) => onChangeStartTime(e.target.value)} />
+            <Input
+              readOnly
+              value={lt.start_time}
+              onClick={() =>
+                setOpenTimeDialog({ id, type: 'start', defaultTime: timetableViewService.parseTime(lt.start_time) })
+              }
+            />
 
-            <Input value={lt.end_time} onChange={(e) => onChangeEndTime(e.target.value)} />
+            <Input
+              readOnly
+              value={lt.end_time}
+              onClick={() =>
+                setOpenTimeDialog({ id, type: 'end', defaultTime: timetableViewService.parseTime(lt.end_time) })
+              }
+            />
 
             <Input style={{ width: 'auto' }} value={lt.place} onChange={(e) => onChangePlace(e.target.value)} />
 
             <CloseIcon
               data-testid="main-lecture-edit-form-delete-time"
               onClick={() => (isAddedTime ? handleDeleteAddedTime(lt.__id__) : handleDeleteLectureTime(lt._id))}
+            />
+            <TimePickDialog
+              isOpen={openTimeDialog?.id === id && openTimeDialog.type === 'start'}
+              onClose={() => setOpenTimeDialog(null)}
+              onSubmit={(hour, minute) => onChangeStartTime(timetableViewService.formatTime(hour, minute))}
+              defaultTime={openTimeDialog?.defaultTime}
+            />
+            <TimePickDialog
+              isOpen={openTimeDialog?.id === id && openTimeDialog.type === 'end'}
+              onClose={() => setOpenTimeDialog(null)}
+              onSubmit={(hour, minute) => onChangeEndTime(timetableViewService.formatTime(hour, minute))}
+              defaultTime={openTimeDialog?.defaultTime}
             />
           </TimeItem>
         );

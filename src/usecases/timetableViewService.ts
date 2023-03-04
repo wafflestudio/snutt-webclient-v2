@@ -13,6 +13,7 @@ export interface TimetableViewService {
   ) => { col: [number, number]; row: [number, number] };
 
   parseTime: (time: string) => { hour: number; minute: number }; // 11:55 => { hour: 11, minute: 55 }
+  formatTime: (hour: number, minute: number) => string; // { hour: 11, minute: 55 } => 11:55
 }
 
 export const getTimetableViewService = ({
@@ -22,10 +23,10 @@ export const getTimetableViewService = ({
 }): TimetableViewService => {
   const getDisplayMode = () => (repositories[0].get('timetable_display_mode', true) === 'full' ? 'full' : 'real');
   const parseTime = (time: string) => ({ hour: +time.split(':')[0], minute: +time.split(':')[1] });
+  const formatTime = (hour: number, minute: number) => `${`${hour}`.padStart(2, '0')}:${`${minute}`.padStart(2, '0')}`;
 
   return {
     getDisplayMode,
-    parseTime,
     setDisplayMode: (mode) => repositories[0].set('timetable_display_mode', mode, false),
     getGridPos: (time, isCustomLecture = false) => {
       const displayMode = getDisplayMode();
@@ -47,6 +48,8 @@ export const getTimetableViewService = ({
 
       return { col: [colStart, colEnd], row: [rowStart, rowEnd] };
     },
+    parseTime,
+    formatTime,
   };
 };
 
