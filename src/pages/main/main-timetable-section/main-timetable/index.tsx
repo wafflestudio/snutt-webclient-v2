@@ -8,7 +8,7 @@ import { timeMaskHours } from '@/entities/timeMask';
 import { FullTimetable } from '@/entities/timetable';
 import { colorService } from '@/usecases/colorService';
 import { lectureService } from '@/usecases/lectureService';
-import { ArrayElement } from '@/utils/array-element';
+import { timetableViewService } from '@/usecases/timetableViewService';
 
 type Props = {
   timetable: FullTimetable;
@@ -74,9 +74,13 @@ export const MainTimeTable = ({
 
         const { bg: backgroundColor, fg: color } = lectureService.getLectureColor(lecture, colorList);
         const isHovered = lecture._id === hoveredLectureId;
+        const isCustomLecture = lectureService.isCustomLecture(lecture);
 
         return lecture.class_time_json.map((time) => {
-          const { colEnd, colStart, rowEnd, rowStart } = getGridPos(time);
+          const {
+            col: [colStart, colEnd],
+            row: [rowStart, rowEnd],
+          } = timetableViewService.getGridPos(time, isCustomLecture);
 
           return (
             <Item
@@ -101,7 +105,10 @@ export const MainTimeTable = ({
       })}
 
       {previewLecture?.class_time_json.map((time) => {
-        const { colEnd, colStart, rowEnd, rowStart } = getGridPos(time);
+        const {
+          col: [colStart, colEnd],
+          row: [rowStart, rowEnd],
+        } = timetableViewService.getGridPos(time);
 
         return (
           <Item
@@ -123,20 +130,6 @@ export const MainTimeTable = ({
       <TotalCredit data-testid="main-timetable-credit">{totalCredit}학점</TotalCredit>
     </Wrapper>
   );
-};
-
-const getGridPos = (time: ArrayElement<BaseLecture['class_time_json']>) => {
-  // 요일
-  const colStart = time.day + 2;
-  const colEnd = colStart + 1;
-
-  // 시간
-  const parseTime = (timeStr: string) => timeStr.split(':').map(Number) as [number, number];
-  const timeToGridRow = (...[hour, minute]: [number, number]) => (hour - 8) * 12 + minute / 5 + 2;
-  const rowStart = timeToGridRow(...parseTime(time.start_time));
-  const rowEnd = timeToGridRow(...parseTime(time.end_time));
-
-  return { colStart, colEnd, rowStart, rowEnd };
 };
 
 const useColorList = () => useQuery(['colors'], () => colorService.getColorList(), { staleTime: Infinity });

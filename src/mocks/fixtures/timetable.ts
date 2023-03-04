@@ -373,11 +373,11 @@ export const mockTimeTable123: FullTimetable = {
         {
           _id: '5dc2ca043c46177d58b4e410',
           day: 0,
-          len: 2.5,
+          len: 2.75,
           place: '',
           start: 9.5,
           start_time: '17:30',
-          end_time: '20:00',
+          end_time: '20:15',
         },
         {
           _id: '5dc2ca043c46177d58b4e40f',
