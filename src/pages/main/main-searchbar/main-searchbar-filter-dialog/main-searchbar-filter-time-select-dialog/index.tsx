@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
-import { dayArray } from '@/entities/day';
+import { DAY_LABEL_MAP, dayList } from '@/entities/day';
 import { CellStatus, Position } from '@/entities/timeMask';
 import { timeMaskService } from '@/usecases/timeMaskService';
 
@@ -21,7 +21,7 @@ export const MainSearchbarFilterTimeSelectDialog = ({ open, onClose, onChangeBit
   const [dragStart, setDragStart] = useState<Position | null>(null);
   const [currentDrag, setCurrentDrag] = useState<Position | null>(null);
   const [cellStatus, setCellStatus] = useState<CellStatus>(
-    timeMaskService.getInitialCellStatus(times.length * 2, dayArray.length),
+    timeMaskService.getInitialCellStatus(times.length * 2, dayList.length),
   );
 
   const onConfirm = () => {
@@ -49,8 +49,8 @@ export const MainSearchbarFilterTimeSelectDialog = ({ open, onClose, onChangeBit
           <thead>
             <tr>
               <th />
-              {dayArray.map((d) => (
-                <Day key={d}>{d}</Day>
+              {dayList.map((d) => (
+                <Day key={d}>{DAY_LABEL_MAP[d]}</Day>
               ))}
             </tr>
           </thead>
@@ -60,7 +60,7 @@ export const MainSearchbarFilterTimeSelectDialog = ({ open, onClose, onChangeBit
               .map((t, i) => (
                 <tr key={i}>
                   <Time>{t}</Time>
-                  {dayArray.map((d, j) => (
+                  {dayList.map((d, j) => (
                     <MainSearchbarFilterTimeSelectCell
                       i={i}
                       j={j}

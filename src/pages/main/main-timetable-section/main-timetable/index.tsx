@@ -2,12 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import styled, { css, keyframes } from 'styled-components';
 
 import { Button } from '@/components/button';
+import { Day, DAY_LABEL_MAP, dayList } from '@/entities/day';
 import { BaseLecture } from '@/entities/lecture';
 import { FullTimetable } from '@/entities/timetable';
 import { colorService } from '@/usecases/colorService';
 import { lectureService } from '@/usecases/lectureService';
 
-const allDays = ['월', '화', '수', '목', '금', '토', '일'];
 const times = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
 type Props = {
@@ -34,8 +34,7 @@ export const MainTimeTable = ({
   const allClassTimes = timetable.lecture_list
     .flatMap((l) => l.class_time_json)
     .concat(...(previewLecture?.class_time_json ?? []));
-  const maxDay = Math.max(...allClassTimes.map((item) => item.day));
-  const days = allDays.slice(0, Math.max(4, maxDay) + 1);
+  const days = dayList.slice(0, Math.max(4, Math.max(...allClassTimes.map((item) => item.day))) + 1);
   const totalCredit = timetable.lecture_list.reduce((acc, cur) => acc + cur.credit, 0);
 
   return (
@@ -44,7 +43,7 @@ export const MainTimeTable = ({
         // 상단 월화수목금토일
         days.map((d, i) => (
           <Day $colStart={i + 2} key={d} data-testid="main-timetable-day">
-            {d}
+            {DAY_LABEL_MAP[d]}
           </Day>
         ))
       }
