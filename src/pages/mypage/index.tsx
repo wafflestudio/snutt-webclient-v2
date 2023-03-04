@@ -48,6 +48,7 @@ export const MyPage = () => {
         <Row>
           <RowLabel>시간표 모드</RowLabel>
           <Button
+            data-testid="display-mode-toggle"
             variant="outlined"
             onClick={() => {
               const newMode = ({ full: 'real', real: 'full' } as const)[displayMode];
