@@ -61,7 +61,7 @@ test('로그인되었을 경우, 시간표 내용이 잘 보여진다 (월~금 �
     'background-color: rgb(166, 217, 48); color: rgb(255, 255, 255);',
   );
   await expect(lecture.filter({ hasText: '생물학실험' })).toHaveCSS('grid-column', '2 / 3');
-  await expect(lecture.filter({ hasText: '생물학실험' })).toHaveCSS('grid-row', '16 / 20');
+  await expect(lecture.filter({ hasText: '생물학실험' })).toHaveCSS('grid-row', '86 / 108');
 });
 
 test('시간표 장소가 잘 보여진다', async ({ page }) => {

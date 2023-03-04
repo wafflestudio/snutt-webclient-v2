@@ -15,7 +15,7 @@ export const Clock = <T extends Key>({ list, size = 200, onSelect, selected, ...
   const selectedItem = list.find((item) => selected === item.value);
 
   return (
-    <Wrapper $size={size} {...props}>
+    <Wrapper $size={size} data-testid="clock" {...props}>
       {list.map(({ label, degree, value }) => (
         <Label
           key={value}

@@ -46,7 +46,7 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime }: Props
 
   const handleSubmit = () => {
     if (!isValid) return;
-    const submitHour = hour ? hour + (type === Type.PM ? 12 : 0) : defaultTime?.hour;
+    const submitHour = hour ? hour + (typeWithDefault === Type.PM ? 12 : 0) : defaultTime?.hour;
     const submitMinute = minute ?? defaultTime?.minute;
     if (!submitHour || !submitMinute) return; // cannot reach here
     onSubmit?.(submitHour, submitMinute);
@@ -90,16 +90,15 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime }: Props
           <TimeClock list={clockMinutes} onSelect={(v) => setMinute(v as Minute)} selected={minuteWithDefault} />
         </ClockWrapper>
       </StyledContent>
-      {isOpen && (
-        <Dialog.Actions>
-          <Button size="small" color="gray" onClick={handleClose}>
-            취소
-          </Button>
-          <Button size="small" disabled={!isValid} onClick={handleSubmit}>
-            확인
-          </Button>
-        </Dialog.Actions>
-      )}
+
+      <Dialog.Actions>
+        <Button size="small" color="gray" onClick={handleClose}>
+          취소
+        </Button>
+        <Button size="small" disabled={!isValid} onClick={handleSubmit} data-testid="time-pick-dialog-submit">
+          확인
+        </Button>
+      </Dialog.Actions>
     </StyledDialog>
   );
 };

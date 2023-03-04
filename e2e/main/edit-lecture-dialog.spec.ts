@@ -19,8 +19,10 @@ test('강의 수정 모달이 잘 보여진다 (성공케이스)', async ({ page
   await expect(page.getByTestId('main-lecture-edit-form-title')).toHaveValue('컴퓨터프로그래밍');
   await page.getByTestId(testIds['선생님']).fill('떡볶이맛 아몬드');
   await page.getByTestId('main-lecture-edit-form-color').filter({ hasText: '라벤더' }).click();
-  await page.getByTestId('main-lecture-edit-form-time').nth(0).locator('input').fill('낙아치');
-  await page.getByTestId('main-lecture-edit-form-time').nth(1).locator('select').nth(1).selectOption('11');
+  await page.getByTestId('main-lecture-edit-form-time').nth(0).locator('input').nth(2).fill('낙아치');
+  await page.getByTestId('main-lecture-edit-form-time').nth(1).locator('input').nth(0).click();
+  await page.getByTestId('clock').getByText('11').click();
+  await page.getByTestId('time-pick-dialog-submit').click();
   await page.getByTestId('main-lecture-edit-form-remark').clear();
   await Promise.all([
     page.waitForRequest(
@@ -28,13 +30,13 @@ test('강의 수정 모달이 잘 보여진다 (성공케이스)', async ({ page
         req.method() === 'PUT' &&
         req.url().includes('/v1/tables/123/lecture/5d1decbddb261b554d609dcc') &&
         req.postDataJSON().class_time_json[0].place === '낙아치' &&
+        req.postDataJSON().class_time_json[1].start_time === '23:30' &&
+        req.postDataJSON().class_time_json[1].end_time === '20:20' &&
         req.postDataJSON().class_time_json[2].place === '302-208' &&
-        req.postDataJSON().course_title === '컴퓨터프로그래밍' &&
-        req.postDataJSON().credit === 4 &&
+        req.postDataJSON().course_title === undefined &&
+        req.postDataJSON().credit === undefined &&
         req.postDataJSON().instructor === '떡볶이맛 아몬드' &&
         req.postDataJSON().remark === '' &&
-        req.postDataJSON().class_time_mask[1] === 14680064 &&
-        req.postDataJSON().class_time_mask[2] === 240 &&
         req.postDataJSON().colorIndex === 8,
     ),
     page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/v1/tables/123')),
@@ -133,17 +135,19 @@ test('강의 시간 추가/제거가 잘 된다', async ({ page }) => {
   await givenUser(page);
   await page.getByTestId('main-lecture-listitem').filter({ hasText: '김우찬 / 2학점' }).click();
   await page.getByTestId(testIds['강의 시간 추가 버튼']).click();
-  await page.getByTestId('main-lecture-edit-form-time').nth(2).locator('input').type('박사');
+  await page.getByTestId('main-lecture-edit-form-time').nth(2).locator('input').nth(2).type('박사');
   await page.getByTestId('main-lecture-edit-form-time').nth(1).getByTestId(testIds['강의 시간 제거 버튼']).click();
-  await page.getByTestId('main-lecture-edit-form-time').nth(1).locator('input').type('문도 ');
-  await page.getByTestId('main-lecture-edit-form-time').nth(1).locator('select').nth(1).selectOption('12');
+  await page.getByTestId('main-lecture-edit-form-time').nth(1).locator('input').nth(2).type('문도 ');
+  await page.getByTestId('main-lecture-edit-form-time').nth(1).locator('input').nth(1).click();
+  await page.getByTestId('clock').getByText('9').click();
+  await page.getByTestId('time-pick-dialog-submit').click();
 
   await Promise.all([
     page.waitForRequest(
       (req) =>
         req.postDataJSON().class_time_json[1].place === '문도 박사' &&
-        req.postDataJSON().class_time_json[1].start === 12 &&
-        req.postDataJSON().class_time_json[1].len === 0.5 &&
+        req.postDataJSON().class_time_json[1].start_time === '08:00' &&
+        req.postDataJSON().class_time_json[1].end_time === '09:30' &&
         req.postDataJSON().class_time_json[1].day === 0 &&
         req.url().includes('/v1/tables/123/lecture/5d1a0132db261b554d5d0078') &&
         req.method() === 'PUT',
