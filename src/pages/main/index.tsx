@@ -142,7 +142,7 @@ const sectionStyle = css`
 
 const LectureSection = styled(MainLectureSection)`
   ${sectionStyle};
-  height: 740px;
+  height: 680px;
   @media (max-width: ${BREAKPOINT}px) {
     height: 400px;
   }
