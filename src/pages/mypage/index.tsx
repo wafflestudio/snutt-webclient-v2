@@ -11,6 +11,7 @@ import { useTokenContext } from '@/contexts/tokenContext';
 import { CoreServerError } from '@/entities/error';
 import { envService } from '@/usecases/envService';
 import { errorService } from '@/usecases/errorService';
+import { timetableViewService } from '@/usecases/timetableViewService';
 import { userService } from '@/usecases/userService';
 import { queryKey } from '@/utils/query-key-factory';
 
@@ -23,6 +24,7 @@ export const MyPage = () => {
   const { token, clearToken } = useTokenContext();
   const { data: myInfo } = useMyInfo();
   const navigate = useNavigate();
+  const [displayMode, setDisplayMode] = useState(timetableViewService.getDisplayMode());
 
   const { mutate: attach } = useAttachFacebook();
   const { mutate: detach } = useDetachFacebook();
@@ -41,18 +43,21 @@ export const MyPage = () => {
   return (
     <Layout>
       <Wrapper>
-        <h1>내 정보</h1>
+        <h1>마이페이지</h1>
         <br />
-        {!isFbOnlyUser && (
-          <p data-testid="mypage-my-id">
-            SNUTT 아이디는{' '}
-            {myInfo && (
-              <>
-                <strong>{myInfo.local_id ?? myInfo.fb_name}</strong>입니다.
-              </>
-            )}
-          </p>
-        )}
+        <Row>
+          <RowLabel>시간표 모드</RowLabel>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              const newMode = ({ full: 'real', real: 'full' } as const)[displayMode];
+              setDisplayMode(newMode);
+              timetableViewService.setDisplayMode(newMode);
+            }}
+          >
+            {displayMode === 'full' ? '실제 시간으로 보기' : '꽉 찬 시간표로 보기'}
+          </Button>
+        </Row>
         <br />
         {isFbOnlyUser ? (
           <Row>

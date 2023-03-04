@@ -27,7 +27,7 @@ export const getTimetableViewService = ({
 
   return {
     getDisplayMode,
-    setDisplayMode: (mode) => repositories[0].set('timetable_display_mode', mode, false),
+    setDisplayMode: (mode) => repositories[0].set('timetable_display_mode', mode, true),
     getGridPos: (time, isCustomLecture = false) => {
       const displayMode = getDisplayMode();
 
