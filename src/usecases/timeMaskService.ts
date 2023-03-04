@@ -1,4 +1,4 @@
-import { Day, dayList } from '@/entities/time';
+import { dayList } from '@/entities/time';
 import { CellStatus, DragMode, Position, TimeMask, timeMaskHours } from '@/entities/timeMask';
 import { FullTimetable } from '@/entities/timetable';
 
@@ -9,7 +9,6 @@ export interface TimeMaskService {
   getDragMode(cellStatus: CellStatus, dragStart: Position): DragMode;
   getBitMask(cellStatus: CellStatus): TimeMask;
   getTimetableEmptyTimeBitMask(timetable?: FullTimetable): TimeMask;
-  getLectureFullTimeBitMask(classTimeJson: { day: Day; start: number; len: number }[]): TimeMask;
 }
 
 const getTimeMaskService = (): TimeMaskService => {
@@ -48,19 +47,6 @@ const getTimeMaskService = (): TimeMaskService => {
             cellStatus[i + t.start * 2][t.day] = false;
           }
         });
-
-      return timeMaskService.getBitMask(cellStatus);
-    },
-    getLectureFullTimeBitMask: (classTimeJson) => {
-      const cellStatus = Array(timeMaskHours.length * 2)
-        .fill(0)
-        .map(() => Array(dayList.length).fill(false));
-
-      classTimeJson.forEach((t) => {
-        for (let i = 0; i < t.len * 2; i++) {
-          cellStatus[i + t.start * 2][t.day] = true;
-        }
-      });
 
       return timeMaskService.getBitMask(cellStatus);
     },

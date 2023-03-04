@@ -29,11 +29,11 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
         const onChangeDay = (day: Day) =>
           onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, day } : _lt)));
 
-        const onChangeStart = (start: number) =>
-          onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, start } : _lt)));
+        const onChangeStartTime = (start_time: string) =>
+          onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, start_time } : _lt)));
 
-        const onChangeLen = (len: number) =>
-          onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, len } : _lt)));
+        const onChangeEndTime = (end_time: string) =>
+          onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, end_time } : _lt)));
 
         const onChangePlace = (place: string) =>
           onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, place } : _lt)));
@@ -48,27 +48,12 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
               ))}
             </Select>
 
-            <Select value={lt.start} onChange={(e) => onChangeStart(Number(e.target.value) as Day)}>
-              {Array(29)
-                .fill(0)
-                .map((item, i) => (
-                  <option key={i / 2} value={i / 2}>
-                    {i % 2 === 0 ? `${i / 2 + 8}:00` : `${parseInt(`${i / 2}`) + 8}:30`}
-                  </option>
-                ))}
-            </Select>
+            <Input value={lt.start_time} onChange={(e) => onChangeStartTime(e.target.value)} />
 
-            <Select value={lt.len} onChange={(e) => onChangeLen(Number(e.target.value) as Day)}>
-              {Array((15 - lt.start) * 2)
-                .fill(0)
-                .map((item, i) => (
-                  <option key={i} value={(i + 1) / 2}>
-                    {(i + 1) / 2}
-                  </option>
-                ))}
-            </Select>
+            <Input value={lt.end_time} onChange={(e) => onChangeEndTime(e.target.value)} />
 
-            <Input value={lt.place} onChange={(e) => onChangePlace(e.target.value)} />
+            <Input style={{ width: 'auto' }} value={lt.place} onChange={(e) => onChangePlace(e.target.value)} />
+
             <CloseIcon
               data-testid="main-lecture-edit-form-delete-time"
               onClick={() => (isAddedTime ? handleDeleteAddedTime(lt.__id__) : handleDeleteLectureTime(lt._id))}
@@ -103,6 +88,7 @@ const Select = styled.select`
 `;
 
 const Input = styled.input`
+  width: 60px;
   outline: none;
   height: 100%;
 `;

@@ -25,6 +25,7 @@ export interface BaseLecture {
   remark: string;
   category?: string;
   course_number?: string;
+  lecture_id?: string;
   lecture_number?: string;
 }
 
@@ -37,4 +38,4 @@ export interface Lecture extends BaseLecture {
 
 // 커스텀 시간으로 새로 추가된 것
 // __id__ 필드는 internal 용이고, 서버로 보낼 땐 제거되어야 한다
-export type AddedLectureTime = { __id__: string; day: Day; len: number; place: string; start: number };
+export type AddedLectureTime = { __id__: string; day: Day; start_time: string; end_time: string; place: string };

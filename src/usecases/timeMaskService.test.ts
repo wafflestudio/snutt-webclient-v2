@@ -75,11 +75,3 @@ test('getTimetableEmptyTimeBitMask', () => {
     } as unknown as FullTimetable),
   ).toStrictEqual([1073741823, 536870911, 1073741823, 1073741823, 1073741823, 1073741823, 1073741823]);
 });
-
-test('getLectureFullTimeBitMask', () => {
-  expect(timeMaskService.getLectureFullTimeBitMask([])).toStrictEqual([0, 0, 0, 0, 0, 0, 0]);
-
-  expect(timeMaskService.getLectureFullTimeBitMask([{ day: 1, start: 0, len: 0.5 }])).toStrictEqual([
-    0, 536870912, 0, 0, 0, 0, 0,
-  ]);
-});

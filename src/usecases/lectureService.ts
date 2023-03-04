@@ -37,9 +37,14 @@ const getLectureService = (): LectureService => {
 
       return { bg, fg };
     },
-    getEmptyClassTime: () => ({ day: 0, len: 0.5, place: '', start: 0, __id__: createRandomId() }),
-    emptyClassTimeToRequest: (time) => ({ day: time.day, len: time.len, place: time.place, start: time.start }),
-    isCustomLecture: (lecture) => !lecture.course_number && !lecture.lecture_number,
+    getEmptyClassTime: () => ({ day: 0, start_time: '08:00', end_time: '08:30', place: '', __id__: createRandomId() }),
+    emptyClassTimeToRequest: (time) => ({
+      day: time.day,
+      start_time: time.start_time,
+      end_time: time.end_time,
+      place: time.place,
+    }),
+    isCustomLecture: (lecture) => lecture.lecture_id == undefined,
   };
 };
 

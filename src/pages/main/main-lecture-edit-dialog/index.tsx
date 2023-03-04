@@ -10,7 +10,6 @@ import { Color } from '@/entities/color';
 import { Lecture } from '@/entities/lecture';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { lectureService } from '@/usecases/lectureService';
-import { timeMaskService } from '@/usecases/timeMaskService';
 import { timetableService } from '@/usecases/timetableService';
 import { queryKey } from '@/utils/query-key-factory';
 
@@ -48,11 +47,10 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
         class_time_json: draft.class_time_json
           ? draft.class_time_json.map((t) => ('_id' in t ? t : lectureService.emptyClassTimeToRequest(t)))
           : lecture.class_time_json,
-        course_title: draft.course_title ?? lecture.course_title,
-        credit: draft.credit ?? lecture.credit,
-        instructor: draft.instructor ?? lecture.instructor,
-        remark: draft.remark ?? lecture.remark,
-        class_time_mask: timeMaskService.getLectureFullTimeBitMask(draft.class_time_json ?? lecture.class_time_json),
+        course_title: draft.course_title,
+        credit: draft.credit,
+        instructor: draft.instructor,
+        remark: draft.remark,
         ...color,
       },
       {
