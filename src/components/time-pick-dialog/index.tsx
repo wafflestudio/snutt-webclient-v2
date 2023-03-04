@@ -67,7 +67,7 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime }: Props
             </TypeBox>
           </TypeWrapper>
           <TimeBox
-            value={hourWithDefault !== undefined ? `${hourWithDefault}`.padStart(2, '0') : '--'}
+            value={hourWithDefault !== undefined ? `${hourWithDefault || 12}`.padStart(2, '0') : '--'}
             $active={step === Step.HOUR}
             onClick={() => setStep(Step.HOUR)}
           />
