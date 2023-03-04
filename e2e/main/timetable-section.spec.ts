@@ -54,6 +54,7 @@ test('로그인되었을 경우, 시간표 내용이 잘 보여진다 (월~금 �
   const lecture = page.getByTestId('main-timetable-lecture');
   await expect(table).not.toContainText('토');
   await expect(lecture).toHaveCount(18);
+  await expect(page.getByTestId('hour-label')).toHaveCount(15);
   await expect(lecture.filter({ hasText: '고급수학 2' })).toHaveCount(2);
   await expect(lecture.filter({ hasText: '상상력과 문화' }).first()).toHaveAttribute(
     'style',

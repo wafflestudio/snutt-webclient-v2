@@ -1,7 +1,7 @@
 import { Color } from '@/entities/color';
-import { DAY_LABEL_MAP } from '@/entities/day';
 import { AddedLectureTime, BaseLecture, Lecture } from '@/entities/lecture';
 import { CourseBook } from '@/entities/semester';
+import { DAY_LABEL_MAP } from '@/entities/time';
 import { createRandomId } from '@/utils/random-id';
 
 export interface SemesterService {
