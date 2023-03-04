@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { IcClose } from '@/components/icons/ic-close';
-import { Day, DAY_LABEL_MAP } from '@/entities/day';
 import { AddedLectureTime, Lecture } from '@/entities/lecture';
+import { Day, DAY_LABEL_MAP } from '@/entities/time';
 import { lectureService } from '@/usecases/lectureService';
 import { ArrayElement } from '@/utils/array-element';
 

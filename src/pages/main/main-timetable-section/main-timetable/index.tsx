@@ -2,13 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import styled, { css, keyframes } from 'styled-components';
 
 import { Button } from '@/components/button';
-import { Day, DAY_LABEL_MAP, dayList } from '@/entities/day';
 import { BaseLecture } from '@/entities/lecture';
+import { DAY_LABEL_MAP, dayList } from '@/entities/time';
+import { timeMaskHours } from '@/entities/timeMask';
 import { FullTimetable } from '@/entities/timetable';
 import { colorService } from '@/usecases/colorService';
 import { lectureService } from '@/usecases/lectureService';
-
-const times = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
 type Props = {
   timetable: FullTimetable;
@@ -38,19 +37,24 @@ export const MainTimeTable = ({
   const totalCredit = timetable.lecture_list.reduce((acc, cur) => acc + cur.credit, 0);
 
   return (
-    <Wrapper className={className} $columnCount={days.length} $rowCount={times.length * 2} data-testid="main-timetable">
+    <Wrapper
+      className={className}
+      $columnCount={days.length}
+      $rowCount={timeMaskHours.length * 2}
+      data-testid="main-timetable"
+    >
       {
         // 상단 월화수목금토일
         days.map((d, i) => (
-          <Day $colStart={i + 2} key={d} data-testid="main-timetable-day">
+          <DayLabel $colStart={i + 2} key={d} data-testid="main-timetable-day">
             {DAY_LABEL_MAP[d]}
-          </Day>
+          </DayLabel>
         ))
       }
 
       {
-        // 좌측 8 ~ 23
-        times.map((t, i) => (
+        // 좌측 8 ~ 22
+        timeMaskHours.map((t, i) => (
           <Time $rowStart={i * 2 + 2} key={t}>
             {t}
           </Time>
@@ -59,7 +63,7 @@ export const MainTimeTable = ({
 
       {
         // 가운데 시간표 가로줄들
-        times.map((_, i) => (
+        timeMaskHours.map((_, i) => (
           <TimeLine $rowStart={i * 2 + 2} key={_} />
         ))
       }
@@ -132,7 +136,7 @@ const Wrapper = styled.div<{ $columnCount: number; $rowCount: number }>`
   height: 100%;
 `;
 
-const Day = styled.div<{ $colStart: number }>`
+const DayLabel = styled.div<{ $colStart: number }>`
   grid-column: ${({ $colStart }) => `${$colStart} / ${$colStart + 1}`};
   grid-row: 1 / 2;
   display: flex;
