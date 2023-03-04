@@ -131,8 +131,10 @@ const getGridPos = (time: ArrayElement<BaseLecture['class_time_json']>) => {
   const colEnd = colStart + 1;
 
   // 시간
-  const rowStart = time.start * 12 + 2;
-  const rowEnd = rowStart + time.len * 12;
+  const parseTime = (timeStr: string) => timeStr.split(':').map(Number) as [number, number];
+  const timeToGridRow = (...[hour, minute]: [number, number]) => (hour - 8) * 12 + minute / 5 + 2;
+  const rowStart = timeToGridRow(...parseTime(time.start_time));
+  const rowEnd = timeToGridRow(...parseTime(time.end_time));
 
   return { colStart, colEnd, rowStart, rowEnd };
 };
