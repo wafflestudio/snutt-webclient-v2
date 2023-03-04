@@ -1,6 +1,6 @@
 import { Color } from '@/entities/color';
-import { Day } from '@/entities/day';
 import { Semester } from '@/entities/semester';
+import { Day } from '@/entities/time';
 import { TimeMask } from '@/entities/timeMask';
 import { FullTimetable, Timetable } from '@/entities/timetable';
 import { TimetableRepository, timetableRepository } from '@/repositories/timetableRepository';

@@ -4,15 +4,13 @@ import styled from 'styled-components';
 import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
-import { dayArray } from '@/entities/day';
-import { CellStatus, Position } from '@/entities/timeMask';
+import { DAY_LABEL_MAP, dayList } from '@/entities/time';
+import { CellStatus, Position, timeMaskHours } from '@/entities/timeMask';
 import { timeMaskService } from '@/usecases/timeMaskService';
 
 import { MainSearchbarFilterTimeSelectCell } from './main-searchbar-filter-time-select-cell';
 
 type Props = { open: boolean; onClose: () => void; onChangeBitMask: (bm: number[]) => void };
-
-const times = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
 
 /**
  * @note 테스트코드가 붙어있지 않습니다. 수정할 때 주의해 주세요!
@@ -21,7 +19,7 @@ export const MainSearchbarFilterTimeSelectDialog = ({ open, onClose, onChangeBit
   const [dragStart, setDragStart] = useState<Position | null>(null);
   const [currentDrag, setCurrentDrag] = useState<Position | null>(null);
   const [cellStatus, setCellStatus] = useState<CellStatus>(
-    timeMaskService.getInitialCellStatus(times.length * 2, dayArray.length),
+    timeMaskService.getInitialCellStatus(timeMaskHours.length * 2, dayList.length),
   );
 
   const onConfirm = () => {
@@ -49,18 +47,18 @@ export const MainSearchbarFilterTimeSelectDialog = ({ open, onClose, onChangeBit
           <thead>
             <tr>
               <th />
-              {dayArray.map((d) => (
-                <Day key={d}>{d}</Day>
+              {dayList.map((d) => (
+                <Day key={d}>{DAY_LABEL_MAP[d]}</Day>
               ))}
             </tr>
           </thead>
           <tbody>
-            {times
+            {timeMaskHours
               .flatMap((t) => [t, ''])
               .map((t, i) => (
                 <tr key={i}>
                   <Time>{t}</Time>
-                  {dayArray.map((d, j) => (
+                  {dayList.map((d, j) => (
                     <MainSearchbarFilterTimeSelectCell
                       i={i}
                       j={j}

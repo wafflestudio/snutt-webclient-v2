@@ -1,5 +1,5 @@
-import { Day, dayArray } from '@/entities/day';
-import { CellStatus, DragMode, Position, TimeMask } from '@/entities/timeMask';
+import { Day, dayList } from '@/entities/time';
+import { CellStatus, DragMode, Position, TimeMask, timeMaskHours } from '@/entities/timeMask';
 import { FullTimetable } from '@/entities/timetable';
 
 export interface TimeMaskService {
@@ -37,9 +37,9 @@ const getTimeMaskService = (): TimeMaskService => {
       return transposed.map((row) => row.map(Number).reduce((acc, cur) => acc * 2 + cur, 0)) as TimeMask;
     },
     getTimetableEmptyTimeBitMask: (timetable) => {
-      const cellStatus = Array([8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22].length * 2)
+      const cellStatus = Array(timeMaskHours.length * 2)
         .fill(0)
-        .map(() => Array(dayArray.length).fill(true));
+        .map(() => Array(dayList.length).fill(true));
 
       timetable?.lecture_list
         .flatMap((l) => l.class_time_json)
@@ -52,9 +52,9 @@ const getTimeMaskService = (): TimeMaskService => {
       return timeMaskService.getBitMask(cellStatus);
     },
     getLectureFullTimeBitMask: (classTimeJson) => {
-      const cellStatus = Array([8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22].length * 2)
+      const cellStatus = Array(timeMaskHours.length * 2)
         .fill(0)
-        .map(() => Array(dayArray.length).fill(false));
+        .map(() => Array(dayList.length).fill(false));
 
       classTimeJson.forEach((t) => {
         for (let i = 0; i < t.len * 2; i++) {

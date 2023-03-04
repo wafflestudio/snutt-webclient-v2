@@ -1,5 +1,5 @@
 import { Color } from './color';
-import { Day } from './day';
+import { Day } from './time';
 
 export interface BaseLecture {
   _id: string;
