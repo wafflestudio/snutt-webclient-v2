@@ -4,7 +4,7 @@ import styled from 'styled-components';
 type Props<T> = {
   className?: string;
   'data-testid'?: string;
-  list: { label: ReactNode; degree: number; value: T }[];
+  list: { label: ReactNode; degree: number; value: T; disabled: boolean }[];
   size?: number;
   selected: T | undefined;
   onSelect?: (value: T) => void;

@@ -1,4 +1,5 @@
 import { BaseLecture } from '@/entities/lecture';
+import { AmPm } from '@/entities/time';
 import { TimetableDisplayMode } from '@/entities/timetableView';
 import { StorageRepository, storageRepository } from '@/repositories/storageRepository';
 import { ArrayElement } from '@/utils/array-element';
@@ -14,6 +15,7 @@ export interface TimetableViewService {
 
   parseTime: (time: string) => { hour: number; minute: number }; // 11:55 => { hour: 11, minute: 55 }
   formatTime: (hour: number, minute: number) => string; // { hour: 11, minute: 55 } => 11:55
+  clock12To24: (hour: number, type: AmPm) => number;
 }
 
 export const getTimetableViewService = ({
@@ -50,6 +52,7 @@ export const getTimetableViewService = ({
     },
     parseTime,
     formatTime,
+    clock12To24: (hour, type) => hour + (type === AmPm.PM ? 12 : 0),
   };
 };
 

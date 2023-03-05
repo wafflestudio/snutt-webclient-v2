@@ -2,7 +2,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Button } from '@/components/button';
-import { Hour } from '@/entities/time';
+import { AmPm, Hour } from '@/entities/time';
+import { timetableViewService } from '@/usecases/timetableViewService';
 
 import { Clock } from '../clock';
 import { Dialog } from '../dialog';
@@ -15,11 +16,6 @@ type Props = {
   defaultTime?: { hour: number; minute: number };
 };
 
-enum Type {
-  AM = '오전',
-  PM = '오후',
-}
-
 enum Step {
   HOUR = 'hour',
   MINUTE = 'minute',
@@ -27,14 +23,14 @@ enum Step {
 
 export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime }: Props) => {
   const [step, setStep] = useState(Step.HOUR);
-  const [type, setType] = useState<Type>();
+  const [type, setType] = useState<AmPm>();
   const [hour, setHour] = useState<Hour>();
   const [minute, setMinute] = useState<Minute>();
 
-  const isValid = defaultTime || (hour !== undefined && minute !== undefined);
-  const typeWithDefault = type ?? (defaultTime ? (defaultTime.hour >= 12 ? Type.PM : Type.AM) : undefined);
+  const typeWithDefault = type ?? (defaultTime ? (defaultTime.hour >= 12 ? AmPm.PM : AmPm.AM) : undefined);
   const hourWithDefault = hour ?? (defaultTime ? defaultTime.hour % 12 : undefined);
   const minuteWithDefault = minute ?? defaultTime?.minute;
+  const isValid = typeWithDefault && hourWithDefault && minuteWithDefault;
 
   const handleClose = () => {
     onClose?.();
@@ -48,9 +44,9 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime }: Props
     if (!isValid) return;
     const submitHour =
       hour !== undefined
-        ? hour + (typeWithDefault === Type.PM ? 12 : 0)
+        ? timetableViewService.clock12To24(hour, typeWithDefault)
         : defaultTime
-        ? (defaultTime.hour % 12) + (typeWithDefault === Type.PM ? 12 : 0)
+        ? timetableViewService.clock12To24(defaultTime.hour % 12, typeWithDefault)
         : undefined;
     const submitMinute = minute ?? defaultTime?.minute;
     if (submitHour === undefined || submitMinute === undefined) return; // cannot reach here
@@ -64,10 +60,10 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime }: Props
       <StyledContent>
         <TimeWrapper>
           <TypeWrapper>
-            <TypeBox $selected={typeWithDefault === Type.AM} onClick={() => setType(Type.AM)}>
+            <TypeBox $selected={typeWithDefault === AmPm.AM} onClick={() => setType(AmPm.AM)}>
               오전
             </TypeBox>
-            <TypeBox $selected={typeWithDefault === Type.PM} onClick={() => setType(Type.PM)}>
+            <TypeBox $selected={typeWithDefault === AmPm.PM} onClick={() => setType(AmPm.PM)}>
               오후
             </TypeBox>
           </TypeWrapper>
@@ -85,14 +81,28 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime }: Props
         </TimeWrapper>
         <ClockWrapper $step={step}>
           <TimeClock
-            list={clockHours}
+            list={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((h, i) => ({
+              label: h === 0 ? 12 : h,
+              degree: i * 30,
+              value: h,
+              disabled: true,
+            }))}
             onSelect={(v) => {
               setHour(v as Hour);
               setStep(Step.MINUTE);
             }}
             selected={hourWithDefault}
           />
-          <TimeClock list={clockMinutes} onSelect={(v) => setMinute(v as Minute)} selected={minuteWithDefault} />
+          <TimeClock
+            list={[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map((m, i) => ({
+              label: m,
+              degree: i * 30,
+              value: m,
+              disabled: true,
+            }))}
+            onSelect={(v) => setMinute(v as Minute)}
+            selected={minuteWithDefault}
+          />
         </ClockWrapper>
       </StyledContent>
 
@@ -107,18 +117,6 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime }: Props
     </StyledDialog>
   );
 };
-
-const clockHours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((h, i) => ({
-  label: h === 0 ? 12 : h,
-  degree: i * 30,
-  value: h,
-}));
-
-const clockMinutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map((m, i) => ({
-  label: m,
-  degree: i * 30,
-  value: m,
-}));
 
 const StyledDialog = styled(Dialog)`
   width: 300px;
