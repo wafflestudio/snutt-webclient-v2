@@ -2,6 +2,9 @@ import { expect, test } from '@playwright/test';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+import { givenTimetableDisplayMode } from '../utils/timetable.ts';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { givenUser } from '../utils/user.js';
 
 test('로그인되지 않았을 경우, 로그인해야 이용할 수 있다는 ui가 보여진다', async ({ page }) => {
@@ -47,7 +50,7 @@ test('로그인되었을 경우, 시간표 목록 탭이 정상 동작한다 (�
   await expect(page.getByTestId('mt-empty-create-timetable')).toHaveCount(1);
 });
 
-test('로그인되었을 경우, 시간표 내용이 잘 보여진다 (월~금 시간표)', async ({ page }) => {
+test('로그인되었을 경우, 시간표 내용이 보인다 (월~금 시간표)', async ({ page }) => {
   await page.goto('/');
   await givenUser(page);
   const table = page.getByTestId('main-timetable');
@@ -64,7 +67,7 @@ test('로그인되었을 경우, 시간표 내용이 잘 보여진다 (월~금 �
   await expect(lecture.filter({ hasText: '생물학실험' })).toHaveCSS('grid-row', '86 / 108');
 });
 
-test('시간표 장소가 잘 보여진다', async ({ page }) => {
+test('시간표 장소가 보인다', async ({ page }) => {
   await page.goto('/');
   await givenUser(page);
   await expect(page.getByTestId('main-timetable-lecture').filter({ hasText: '상상력과 문화' }).first()).toContainText(
@@ -72,13 +75,16 @@ test('시간표 장소가 잘 보여진다', async ({ page }) => {
   );
 });
 
-test('로그인되었을 경우, 시간표 내용이 잘 보여진다 (월~일 시간표)', async ({ page }) => {
+test('로그인되었을 경우, 시간표 내용이 보인다 (월~일 시간표)', async ({ page }) => {
   await page.goto('/?year=2001&semester=2');
   await givenUser(page);
+  await givenTimetableDisplayMode(page, { type: 'full' });
   const table = page.getByTestId('main-timetable');
   const lecture = page.getByTestId('main-timetable-lecture');
   await expect(table).toContainText('일');
   await expect(lecture.filter({ hasText: '헬스' })).toHaveCount(7);
+  await expect(lecture.filter({ hasText: '물리학실험' })).toHaveCSS('grid-column', '5 / 6');
+  await expect(lecture.filter({ hasText: '물리학실험' })).toHaveCSS('grid-row', '62 / 86');
 });
 
 test('로그인되지 않았을 경우, 시간표 목록 탭이 정상 동작한다 (시간표 없는 학기)', async ({ page }) => {
