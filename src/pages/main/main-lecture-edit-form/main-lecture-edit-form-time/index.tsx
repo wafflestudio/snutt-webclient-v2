@@ -5,7 +5,7 @@ import { Button } from '@/components/button';
 import { IcClose } from '@/components/icons/ic-close';
 import { TimePickDialog } from '@/components/time-pick-dialog';
 import { AddedLectureTime, Lecture } from '@/entities/lecture';
-import { Day, DAY_LABEL_MAP } from '@/entities/time';
+import { Day, DAY_LABEL_MAP, HourMinute } from '@/entities/time';
 import { lectureService } from '@/usecases/lectureService';
 import { timetableViewService } from '@/usecases/timetableViewService';
 import { ArrayElement } from '@/utils/array-element';
@@ -15,11 +15,14 @@ type Props = {
   onChangeLectureTime: (lectureTime: (ArrayElement<Lecture['class_time_json']> | AddedLectureTime)[]) => void;
 };
 
+const startBound = { hour: 8, minute: 0 };
+const endBound = { hour: 22, minute: 55 };
+
 export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Props) => {
   const [openTimeDialog, setOpenTimeDialog] = useState<{
     id: string;
     type: 'start' | 'end';
-    defaultTime: { hour: number; minute: number };
+    defaultTime: HourMinute;
   } | null>(null);
   const handleAddTime = () => onChangeLectureTime([...lectureTime, lectureService.getEmptyClassTime()]);
 
@@ -82,14 +85,30 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
             <TimePickDialog
               isOpen={openTimeDialog?.id === id && openTimeDialog.type === 'start'}
               onClose={() => setOpenTimeDialog(null)}
-              onSubmit={(hour, minute) => onChangeStartTime(timetableViewService.formatTime(hour, minute))}
+              onSubmit={(hour, minute) => {
+                if (timetableViewService.isBefore(timetableViewService.parseTime(lt.end_time), { hour, minute }))
+                  onChangeLectureTime(
+                    lectureTime.map((_lt, _i) =>
+                      _i === i
+                        ? {
+                            ..._lt,
+                            start_time: timetableViewService.formatTime(hour, minute),
+                            end_time: timetableViewService.formatTime(hour, minute),
+                          }
+                        : _lt,
+                    ),
+                  );
+                else onChangeStartTime(timetableViewService.formatTime(hour, minute));
+              }}
               defaultTime={openTimeDialog?.defaultTime}
+              range={{ start: startBound, end: endBound }}
             />
             <TimePickDialog
               isOpen={openTimeDialog?.id === id && openTimeDialog.type === 'end'}
               onClose={() => setOpenTimeDialog(null)}
               onSubmit={(hour, minute) => onChangeEndTime(timetableViewService.formatTime(hour, minute))}
               defaultTime={openTimeDialog?.defaultTime}
+              range={{ start: timetableViewService.parseTime(lt.start_time), end: endBound }}
             />
           </TimeItem>
         );

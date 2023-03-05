@@ -83,7 +83,7 @@ test('로그인되었을 경우, 시간표 내용이 보인다 (월~일 시간�
   const lecture = page.getByTestId('main-timetable-lecture');
   await expect(table).toContainText('일');
   await expect(lecture.filter({ hasText: '헬스' })).toHaveCount(7);
-  await expect(lecture.filter({ hasText: '물리학실험' })).toHaveCSS('grid-column', '5 / 6');
+  await expect(lecture.filter({ hasText: '물리학실험' })).toHaveCSS('grid-column', '4 / 5');
   await expect(lecture.filter({ hasText: '물리학실험' })).toHaveCSS('grid-row', '62 / 86');
 });
 

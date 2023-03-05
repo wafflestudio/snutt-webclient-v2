@@ -1,5 +1,5 @@
 import { BaseLecture } from '@/entities/lecture';
-import { AmPm } from '@/entities/time';
+import { AmPm, HourMinute } from '@/entities/time';
 import { TimetableDisplayMode } from '@/entities/timetableView';
 import { StorageRepository, storageRepository } from '@/repositories/storageRepository';
 import { ArrayElement } from '@/utils/array-element';
@@ -13,9 +13,10 @@ export interface TimetableViewService {
     isCustomLecture?: boolean,
   ) => { col: [number, number]; row: [number, number] };
 
-  parseTime: (time: string) => { hour: number; minute: number }; // 11:55 => { hour: 11, minute: 55 }
+  parseTime: (time: string) => HourMinute; // 11:55 => { hour: 11, minute: 55 }
   formatTime: (hour: number, minute: number) => string; // { hour: 11, minute: 55 } => 11:55
   clock12To24: (hour: number, type: AmPm) => number;
+  isBefore: (hm1: HourMinute, hm2: HourMinute) => boolean;
 }
 
 export const getTimetableViewService = ({
@@ -53,6 +54,7 @@ export const getTimetableViewService = ({
     parseTime,
     formatTime,
     clock12To24: (hour, type) => hour + (type === AmPm.PM ? 12 : 0),
+    isBefore: (hm1, hm2) => hm1.hour * 60 + hm1.minute < hm2.hour * 60 + hm2.minute,
   };
 };
 
