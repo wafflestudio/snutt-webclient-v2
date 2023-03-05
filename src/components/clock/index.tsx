@@ -16,15 +16,18 @@ export const Clock = <T extends Key>({ list, size = 200, onSelect, selected, ...
 
   return (
     <Wrapper $size={size} data-testid="clock" {...props}>
-      {list.map(({ label, degree, value }) => (
+      {list.map(({ label, degree, value, disabled }) => (
         <Label
           key={value}
+          data-value={value}
           $selected={selectedItem?.value === value}
+          $disabled={disabled}
           style={{
             top: radius - Math.cos((degree * Math.PI) / 180) * (radius - 20),
             left: radius + Math.sin((degree * Math.PI) / 180) * (radius - 20),
           }}
-          onClick={() => onSelect?.(value)}
+          onClick={() => !disabled && onSelect?.(value)}
+          title={disabled ? '선택할 수 없는 시간입니다' : undefined}
         >
           {label}
         </Label>
@@ -78,7 +81,7 @@ const Selector = styled.div<{ $size: number }>`
   }
 `;
 
-const Label = styled.div<{ $selected: boolean }>`
+const Label = styled.div<{ $selected: boolean; $disabled: boolean }>`
   position: absolute;
   transform: translate(-50%, -50%);
   z-index: 2;
@@ -93,5 +96,6 @@ const Label = styled.div<{ $selected: boolean }>`
   border-radius: 50%;
 
   color: ${({ $selected }) => ($selected ? 'white' : 'black')};
-  cursor: pointer;
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${({ $disabled }) => ($disabled ? '0.2' : '1')};
 `;

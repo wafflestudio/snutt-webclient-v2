@@ -13,3 +13,6 @@ export enum AmPm {
   AM = 'a.m',
   PM = 'p.m',
 }
+
+// 시 + 분
+export type HourMinute = { hour: number; minute: number };

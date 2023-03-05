@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Button } from '@/components/button';
-import { AmPm, Hour } from '@/entities/time';
+import { AmPm, Hour, HourMinute } from '@/entities/time';
 import { timetableViewService } from '@/usecases/timetableViewService';
 
 import { Clock } from '../clock';
@@ -13,7 +13,8 @@ type Props = {
   isOpen: boolean;
   onClose?: () => void;
   onSubmit?: (hour: number, minute: number) => void;
-  defaultTime?: { hour: number; minute: number };
+  defaultTime?: HourMinute;
+  range?: { start: HourMinute; end: HourMinute };
 };
 
 enum Step {
@@ -21,7 +22,7 @@ enum Step {
   MINUTE = 'minute',
 }
 
-export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime }: Props) => {
+export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime, range }: Props) => {
   const [step, setStep] = useState(Step.HOUR);
   const [type, setType] = useState<AmPm>();
   const [hour, setHour] = useState<Hour>();
@@ -30,7 +31,7 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime }: Props
   const typeWithDefault = type ?? (defaultTime ? (defaultTime.hour >= 12 ? AmPm.PM : AmPm.AM) : undefined);
   const hourWithDefault = hour ?? (defaultTime ? defaultTime.hour % 12 : undefined);
   const minuteWithDefault = minute ?? defaultTime?.minute;
-  const isValid = typeWithDefault && hourWithDefault && minuteWithDefault;
+  const isValid = typeWithDefault !== undefined && hourWithDefault !== undefined && minuteWithDefault !== undefined;
 
   const handleClose = () => {
     onClose?.();
@@ -79,13 +80,20 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime }: Props
             onClick={() => setStep(Step.MINUTE)}
           />
         </TimeWrapper>
+
         <ClockWrapper $step={step}>
           <TimeClock
             list={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((h, i) => ({
               label: h === 0 ? 12 : h,
               degree: i * 30,
               value: h,
-              disabled: true,
+              disabled:
+                typeWithDefault === undefined ||
+                (!!range &&
+                  (() => {
+                    const h24 = timetableViewService.clock12To24(h, typeWithDefault);
+                    return h24 < range.start.hour || h24 > range.end.hour;
+                  })()),
             }))}
             onSelect={(v) => {
               setHour(v as Hour);
@@ -98,7 +106,19 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime }: Props
               label: m,
               degree: i * 30,
               value: m,
-              disabled: true,
+              disabled:
+                typeWithDefault === undefined ||
+                hourWithDefault === undefined ||
+                (!!range &&
+                  (() => {
+                    const h24 = timetableViewService.clock12To24(hourWithDefault, typeWithDefault);
+                    return (
+                      h24 < range.start.hour ||
+                      (h24 === range.start.hour && m < range.start.minute) ||
+                      h24 > range.end.hour ||
+                      (h24 === range.end.hour && m > range.end.minute)
+                    );
+                  })()),
             }))}
             onSelect={(v) => setMinute(v as Minute)}
             selected={minuteWithDefault}
