@@ -145,7 +145,7 @@ export const handlers = [
       const { class_time_json } = await req.json();
       if (!class_time_json || !Array.isArray(class_time_json)) return res(ctx.status(400));
 
-      const classTimeJson = class_time_json as { start: number; len: number; day: number }[];
+      const classTimeJson = class_time_json as { start_time: string; end_time: string; day: number }[];
       if (classTimeJson.some((c1, i1) => classTimeJson.some((c2, i2) => i1 !== i2 && isOverlap(c1, c2))))
         return res(
           ctx.status(403),
@@ -167,7 +167,7 @@ export const handlers = [
       const { class_time_json } = await req.json();
       if (!class_time_json || !Array.isArray(class_time_json)) return res(ctx.status(400));
 
-      const classTimeJson = class_time_json as { start: number; len: number; day: number }[];
+      const classTimeJson = class_time_json as { start_time: string; end_time: string; day: number }[];
       if (classTimeJson.some((c1, i1) => classTimeJson.some((c2, i2) => i1 !== i2 && isOverlap(c1, c2))))
         return res(
           ctx.status(403),
@@ -393,8 +393,16 @@ export const handlers = [
 ];
 
 const isOverlap = (
-  c1: { start: number; len: number; day: number; _id?: string }, // c1 이 c2 보다 빠른 경우만 확인
-  c2: { start: number; len: number; day: number; _id?: string }, // c1 < c2
+  c1: { start_time: string; end_time: string; day: number },
+  c2: { start_time: string; end_time: string; day: number },
 ) => {
-  return c1.day === c2.day && c1.start <= c2.start && c1.start + c1.len > c2.start;
+  const toNumber = (time: string) => {
+    const [hour, minute] = time.split(':').map(Number);
+    return hour * 60 + minute;
+  };
+
+  return (
+    c1.day === c2.day &&
+    (toNumber(c1.start_time) - toNumber(c2.end_time)) * (toNumber(c1.end_time) - toNumber(c2.start_time)) < 0
+  );
 };

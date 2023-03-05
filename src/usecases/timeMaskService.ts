@@ -43,9 +43,7 @@ const getTimeMaskService = (): TimeMaskService => {
       timetable?.lecture_list
         .flatMap((l) => l.class_time_json)
         .forEach((t) => {
-          for (let i = 0; i < t.len * 2; i++) {
-            cellStatus[i + t.start * 2][t.day] = false;
-          }
+          for (let i = 0; i < t.len * 2; i++) cellStatus[i + t.start * 2][t.day] = false;
         });
 
       return timeMaskService.getBitMask(cellStatus);
