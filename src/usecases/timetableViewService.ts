@@ -1,5 +1,5 @@
 import { BaseLecture } from '@/entities/lecture';
-import { AmPm, HourMinute } from '@/entities/time';
+import { AmPm, Hour, HourMinute, Minute } from '@/entities/time';
 import { TimetableDisplayMode } from '@/entities/timetableView';
 import { StorageRepository, storageRepository } from '@/repositories/storageRepository';
 import { ArrayElement } from '@/utils/array-element';
@@ -15,8 +15,7 @@ export interface TimetableViewService {
 
   parseTime: (time: string) => HourMinute; // 11:55 => { hour: 11, minute: 55 }
   formatTime: (hour: number, minute: number) => string; // { hour: 11, minute: 55 } => 11:55
-  clock12To24: (hour: number, type: AmPm) => number;
-  isBefore: (hm1: HourMinute, hm2: HourMinute) => boolean;
+  clock12To24: (hour: Hour, type: AmPm) => Hour;
 }
 
 export const getTimetableViewService = ({
@@ -25,7 +24,7 @@ export const getTimetableViewService = ({
   repositories: [StorageRepository];
 }): TimetableViewService => {
   const getDisplayMode = () => (repositories[0].get('timetable_display_mode', true) === 'full' ? 'full' : 'real');
-  const parseTime = (time: string) => ({ hour: +time.split(':')[0], minute: +time.split(':')[1] });
+  const parseTime = (time: string) => ({ hour: +time.split(':')[0] as Hour, minute: +time.split(':')[1] as Minute });
   const formatTime = (hour: number, minute: number) => `${`${hour}`.padStart(2, '0')}:${`${minute}`.padStart(2, '0')}`;
 
   return {
@@ -53,8 +52,7 @@ export const getTimetableViewService = ({
     },
     parseTime,
     formatTime,
-    clock12To24: (hour, type) => hour + (type === AmPm.PM ? 12 : 0),
-    isBefore: (hm1, hm2) => hm1.hour * 60 + hm1.minute < hm2.hour * 60 + hm2.minute,
+    clock12To24: (hour, type) => (hour + (type === AmPm.PM ? 12 : 0)) as Hour,
   };
 };
 

@@ -1,11 +1,12 @@
-import { AmPm, HourMinute } from '@/entities/time';
+import { AmPm, Hour, HourMinute, Minute } from '@/entities/time';
 
+import { HourMinuteService, hourMinuteService } from './hourMinuteService';
 import { TimetableViewService, timetableViewService } from './timetableViewService';
 
 type State = {
   amPm: AmPm | undefined;
-  hour: number | undefined;
-  minute: number | undefined;
+  hour: Hour | undefined;
+  minute: Minute | undefined;
 };
 
 type Props = {
@@ -27,26 +28,34 @@ export interface HourMinutePickerService {
     props: Pick<Props, 'range' | 'defaultHourMinute'>,
   ) => { label: number; degree: number; value: number; disabled: boolean }[];
 
+  getUpdatedStateOnAmPmChange: (
+    state: Pick<State, 'amPm' | 'hour' | 'minute'>,
+    props: Pick<Props, 'range' | 'defaultHourMinute'>,
+    updatedAmPm: AmPm,
+  ) => State;
+
   getSubmitHourMinute: (
     state: Pick<State, 'amPm' | 'hour' | 'minute'>,
     props: Pick<Props, 'defaultHourMinute'>,
   ) => HourMinute | null;
 
   getAmPmWithDefault: (amPm: AmPm | undefined, defaultHourMinute: HourMinute | undefined) => AmPm | undefined;
-  getHourWithDefault: (hour: number | undefined, defaultHourMinute: HourMinute | undefined) => number | undefined;
-  getMinuteWithDefault: (minute: number | undefined, defaultHourMinute: HourMinute | undefined) => number | undefined;
+  getHourWithDefault: (hour: Hour | undefined, defaultHourMinute: HourMinute | undefined) => Hour | undefined;
+  getMinuteWithDefault: (minute: Minute | undefined, defaultHourMinute: HourMinute | undefined) => Minute | undefined;
 }
 
-type Deps = { services: [TimetableViewService] };
+type Deps = { services: [TimetableViewService, HourMinuteService] };
 const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService => {
-  const getAmPmWithDefault = (amPm: AmPm | undefined, defaultHourMinute: HourMinute | undefined) =>
+  const getAmPmWithDefault = (amPm: AmPm | undefined, defaultHourMinute: HourMinute | undefined): AmPm | undefined =>
     amPm ?? (defaultHourMinute ? (defaultHourMinute.hour >= 12 ? AmPm.PM : AmPm.AM) : undefined);
 
-  const getHourWithDefault = (hour: number | undefined, defaultHourMinute: HourMinute | undefined) =>
-    hour ?? (defaultHourMinute ? defaultHourMinute.hour % 12 : undefined);
+  const getHourWithDefault = (hour: Hour | undefined, defaultHourMinute: HourMinute | undefined): Hour | undefined =>
+    hour ?? (defaultHourMinute ? ((defaultHourMinute.hour % 12) as Hour) : undefined);
 
-  const getMinuteWithDefault = (minute: number | undefined, defaultHourMinute: HourMinute | undefined) =>
-    minute ?? defaultHourMinute?.minute;
+  const getMinuteWithDefault = (
+    minute: Minute | undefined,
+    defaultHourMinute: HourMinute | undefined,
+  ): Minute | undefined => minute ?? defaultHourMinute?.minute;
 
   return {
     getAmPmList: ({}, { range }) => {
@@ -57,7 +66,8 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
     },
     getHourList: ({ amPm }, { range, defaultHourMinute }) => {
       const amPmWithDefault = getAmPmWithDefault(amPm, defaultHourMinute);
-      return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((h, i) => ({
+
+      return ([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const).map((h, i) => ({
         label: h === 0 ? 12 : h,
         degree: i * 30,
         value: h,
@@ -83,7 +93,7 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
           hourWithDefault === undefined ||
           (!!range &&
             (() => {
-              const h24 = timetableViewService.clock12To24(hourWithDefault, amPmWithDefault);
+              const h24 = services[0].clock12To24(hourWithDefault, amPmWithDefault);
               return (
                 h24 < range.start.hour ||
                 (h24 === range.start.hour && m < range.start.minute) ||
@@ -93,6 +103,28 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
             })()),
       }));
     },
+    getUpdatedStateOnAmPmChange: ({ hour, minute }, { range, defaultHourMinute }, updatedAmPm) => {
+      const hourWithDefault = hourMinutePickerService.getHourWithDefault(hour, defaultHourMinute);
+      const minuteWithDefault = hourMinutePickerService.getMinuteWithDefault(minute, defaultHourMinute);
+
+      if (!range) return { amPm: updatedAmPm, hour, minute };
+
+      if (hourWithDefault === undefined || minuteWithDefault === undefined) {
+        const minHourMinuteInAmPm =
+          updatedAmPm === AmPm.AM ? ({ hour: 0, minute: 0 } as const) : ({ hour: 12, minute: 0 } as const);
+        return { amPm: updatedAmPm, ...services[1].min(minHourMinuteInAmPm, range.start) };
+      }
+
+      const orgHourMinute = { hour: services[0].clock12To24(hourWithDefault, updatedAmPm), minute: minuteWithDefault };
+
+      if (services[1].isAfter(orgHourMinute, range.end))
+        return { amPm: updatedAmPm, ...services[1].clock24To12(range.end) };
+
+      if (services[1].isBefore(orgHourMinute, range.start))
+        return { amPm: updatedAmPm, ...services[1].clock24To12(range.start) };
+
+      return { amPm: updatedAmPm, hour, minute };
+    },
     getSubmitHourMinute: ({ amPm, hour, minute }, { defaultHourMinute }) => {
       const amPmWithDefault = getAmPmWithDefault(amPm, defaultHourMinute);
 
@@ -100,9 +132,9 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
 
       const submitHour =
         hour !== undefined
-          ? timetableViewService.clock12To24(hour, amPmWithDefault)
+          ? services[0].clock12To24(hour, amPmWithDefault)
           : defaultHourMinute
-          ? timetableViewService.clock12To24(defaultHourMinute.hour % 12, amPmWithDefault)
+          ? services[0].clock12To24((defaultHourMinute.hour % 12) as Hour, amPmWithDefault)
           : undefined;
       const submitMinute = minute ?? defaultHourMinute?.minute;
 
@@ -116,4 +148,6 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
   };
 };
 
-export const hourMinutePickerService = getHourMinutePickerService({ services: [timetableViewService] });
+export const hourMinutePickerService = getHourMinutePickerService({
+  services: [timetableViewService, hourMinuteService],
+});

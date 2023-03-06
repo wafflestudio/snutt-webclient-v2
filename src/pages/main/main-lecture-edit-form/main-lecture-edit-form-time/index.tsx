@@ -6,6 +6,7 @@ import { HourMinutePickDialog } from '@/components/hour-minute-pick-dialog';
 import { IcClose } from '@/components/icons/ic-close';
 import { AddedLectureTime, Lecture } from '@/entities/lecture';
 import { Day, DAY_LABEL_MAP, HourMinute } from '@/entities/time';
+import { hourMinuteService } from '@/usecases/hourMinuteService';
 import { lectureService } from '@/usecases/lectureService';
 import { timetableViewService } from '@/usecases/timetableViewService';
 import { ArrayElement } from '@/utils/array-element';
@@ -15,8 +16,8 @@ type Props = {
   onChangeLectureTime: (lectureTime: (ArrayElement<Lecture['class_time_json']> | AddedLectureTime)[]) => void;
 };
 
-const startBound = { hour: 8, minute: 0 };
-const endBound = { hour: 22, minute: 55 };
+const startBound = { hour: 8, minute: 0 } as const;
+const endBound = { hour: 22, minute: 55 } as const;
 
 export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Props) => {
   const [openTimeDialog, setOpenTimeDialog] = useState<{
@@ -86,7 +87,7 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
               isOpen={openTimeDialog?.id === id && openTimeDialog.type === 'start'}
               onClose={() => setOpenTimeDialog(null)}
               onSubmit={(hour, minute) => {
-                if (timetableViewService.isBefore(timetableViewService.parseTime(lt.end_time), { hour, minute }))
+                if (hourMinuteService.isBefore(timetableViewService.parseTime(lt.end_time), { hour, minute }))
                   onChangeLectureTime(
                     lectureTime.map((_lt, _i) =>
                       _i === i

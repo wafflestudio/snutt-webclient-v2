@@ -3,17 +3,16 @@ import styled from 'styled-components';
 
 import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
-import { AmPm, Hour, HourMinute } from '@/entities/time';
+import { AmPm, Hour, HourMinute, Minute } from '@/entities/time';
 import { hourMinutePickerService } from '@/usecases/hourMinutePickerService';
 
 import { Clock } from '../clock';
 import { Dialog } from '../dialog';
 
-type Minute = 0 | 5 | 10 | 15 | 20 | 25 | 30 | 35 | 40 | 45 | 50 | 55;
 type Props = {
   isOpen: boolean;
   onClose?: () => void;
-  onSubmit?: (hour: number, minute: number) => void;
+  onSubmit?: (hour: Hour, minute: Minute) => void;
   defaultHourMinute?: HourMinute;
   range?: { start: HourMinute; end: HourMinute };
 };
@@ -25,10 +24,9 @@ enum Step {
 
 export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMinute, range }: Props) => {
   const [step, setStep] = useState(Step.HOUR);
-  const [amPm, setAmPm] = useState<AmPm>();
-  const [hour, setHour] = useState<Hour>();
-  const [minute, setMinute] = useState<Minute>();
+  const [state, setState] = useState<{ amPm?: AmPm; hour?: Hour; minute?: Minute }>({});
 
+  const { amPm, hour, minute } = state;
   const ampmWithDefault = hourMinutePickerService.getAmPmWithDefault(amPm, defaultHourMinute);
   const hourWithDefault = hourMinutePickerService.getHourWithDefault(hour, defaultHourMinute);
   const minuteWithDefault = hourMinutePickerService.getMinuteWithDefault(minute, defaultHourMinute);
@@ -37,9 +35,7 @@ export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMin
   const handleClose = () => {
     onClose?.();
     setStep(Step.HOUR);
-    setAmPm(undefined);
-    setHour(undefined);
-    setMinute(undefined);
+    setState({});
   };
 
   const handleSubmit = () => {
@@ -61,7 +57,16 @@ export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMin
             {hourMinutePickerService.getAmPmList({}, { range }).map(({ value, label, disabled }) => (
               <TypeBox
                 $selected={ampmWithDefault === value}
-                onClick={() => !disabled && setAmPm(value)}
+                onClick={() =>
+                  !disabled &&
+                  setState(
+                    hourMinutePickerService.getUpdatedStateOnAmPmChange(
+                      { amPm, hour, minute },
+                      { range, defaultHourMinute },
+                      value,
+                    ),
+                  )
+                }
                 key={value}
                 $disabled={disabled}
               >
@@ -86,14 +91,14 @@ export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMin
           <TimeClock
             list={hourMinutePickerService.getHourList({ amPm }, { range, defaultHourMinute })}
             onSelect={(v) => {
-              setHour(v as Hour);
+              setState({ ...state, hour: v as Hour });
               setStep(Step.MINUTE);
             }}
             selected={hourWithDefault}
           />
           <TimeClock
             list={hourMinutePickerService.getMinuteList({ amPm, hour }, { range, defaultHourMinute })}
-            onSelect={(v) => setMinute(v as Minute)}
+            onSelect={(v) => setState({ ...state, minute: v as Minute })}
             selected={minuteWithDefault}
           />
         </ClockWrapper>
