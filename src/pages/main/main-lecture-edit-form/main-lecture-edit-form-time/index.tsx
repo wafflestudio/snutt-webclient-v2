@@ -5,7 +5,7 @@ import { Button } from '@/components/button';
 import { HourMinutePickDialog } from '@/components/hour-minute-pick-dialog';
 import { IcClose } from '@/components/icons/ic-close';
 import { AddedLectureTime, Lecture } from '@/entities/lecture';
-import { Day, DAY_LABEL_MAP, HourMinute } from '@/entities/time';
+import { Day, DAY_LABEL_MAP, HourMinute24 } from '@/entities/time';
 import { hourMinuteService } from '@/usecases/hourMinuteService';
 import { lectureService } from '@/usecases/lectureService';
 import { timetableViewService } from '@/usecases/timetableViewService';
@@ -23,7 +23,7 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
   const [openTimeDialog, setOpenTimeDialog] = useState<{
     id: string;
     type: 'start' | 'end';
-    defaultTime: HourMinute;
+    defaultTime: HourMinute24;
   } | null>(null);
   const handleAddTime = () => onChangeLectureTime([...lectureTime, lectureService.getEmptyClassTime()]);
 

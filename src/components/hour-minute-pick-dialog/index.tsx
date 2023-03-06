@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
-import { AmPm, Hour, HourMinute, Minute } from '@/entities/time';
+import { Hour12, Hour24, HourMinute12, HourMinute24, Minute } from '@/entities/time';
 import { hourMinutePickerService } from '@/usecases/hourMinutePickerService';
 
 import { Clock } from '../clock';
@@ -12,9 +12,9 @@ import { Dialog } from '../dialog';
 type Props = {
   isOpen: boolean;
   onClose?: () => void;
-  onSubmit?: (hour: Hour, minute: Minute) => void;
-  defaultHourMinute?: HourMinute;
-  range?: { start: HourMinute; end: HourMinute };
+  onSubmit?: (hour: Hour24, minute: Minute) => void;
+  defaultHourMinute?: HourMinute24;
+  range?: { start: HourMinute24; end: HourMinute24 };
 };
 
 enum Step {
@@ -24,11 +24,11 @@ enum Step {
 
 export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMinute, range }: Props) => {
   const [step, setStep] = useState(Step.HOUR);
-  const [state, setState] = useState<{ amPm?: AmPm; hour?: Hour; minute?: Minute }>({});
+  const [state, setState] = useState<Partial<HourMinute12>>({});
 
   const { amPm, hour, minute } = state;
   const ampmWithDefault = hourMinutePickerService.getAmPmWithDefault(amPm, defaultHourMinute);
-  const hourWithDefault = hourMinutePickerService.getHourWithDefault(hour, defaultHourMinute);
+  const hourWithDefault = hourMinutePickerService.getHour12WithDefault(hour, defaultHourMinute);
   const minuteWithDefault = hourMinutePickerService.getMinuteWithDefault(minute, defaultHourMinute);
   const isValid = ampmWithDefault !== undefined && hourWithDefault !== undefined && minuteWithDefault !== undefined;
 
@@ -91,7 +91,7 @@ export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMin
           <TimeClock
             list={hourMinutePickerService.getHourList({ amPm }, { range, defaultHourMinute })}
             onSelect={(v) => {
-              setState({ ...state, hour: v as Hour });
+              setState({ ...state, hour: v as Hour12 });
               setStep(Step.MINUTE);
             }}
             selected={hourWithDefault}

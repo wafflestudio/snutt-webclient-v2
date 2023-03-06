@@ -1,17 +1,12 @@
-import { AmPm, Hour, HourMinute, Minute } from '@/entities/time';
+import { AmPm, Hour12, HourMinute12, HourMinute24, Minute } from '@/entities/time';
 
 import { HourMinuteService, hourMinuteService } from './hourMinuteService';
-import { TimetableViewService, timetableViewService } from './timetableViewService';
 
-type State = {
-  amPm: AmPm | undefined;
-  hour: Hour | undefined;
-  minute: Minute | undefined;
-};
+type State = Partial<HourMinute12>;
 
 type Props = {
-  range: { start: HourMinute; end: HourMinute } | undefined;
-  defaultHourMinute: HourMinute | undefined;
+  range: { start: HourMinute24; end: HourMinute24 } | undefined;
+  defaultHourMinute: HourMinute24 | undefined;
 };
 
 export interface HourMinutePickerService {
@@ -37,24 +32,26 @@ export interface HourMinutePickerService {
   getSubmitHourMinute: (
     state: Pick<State, 'amPm' | 'hour' | 'minute'>,
     props: Pick<Props, 'defaultHourMinute'>,
-  ) => HourMinute | null;
+  ) => HourMinute24 | null;
 
-  getAmPmWithDefault: (amPm: AmPm | undefined, defaultHourMinute: HourMinute | undefined) => AmPm | undefined;
-  getHourWithDefault: (hour: Hour | undefined, defaultHourMinute: HourMinute | undefined) => Hour | undefined;
-  getMinuteWithDefault: (minute: Minute | undefined, defaultHourMinute: HourMinute | undefined) => Minute | undefined;
+  getAmPmWithDefault: (amPm: AmPm | undefined, defaultHourMinute: HourMinute24 | undefined) => AmPm | undefined;
+  getHour12WithDefault: (hour: Hour12 | undefined, defaultHourMinute: HourMinute24 | undefined) => Hour12 | undefined;
+  getMinuteWithDefault: (minute: Minute | undefined, defaultHourMinute: HourMinute24 | undefined) => Minute | undefined;
 }
 
-type Deps = { services: [TimetableViewService, HourMinuteService] };
+type Deps = { services: [HourMinuteService] };
 const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService => {
-  const getAmPmWithDefault = (amPm: AmPm | undefined, defaultHourMinute: HourMinute | undefined): AmPm | undefined =>
+  const getAmPmWithDefault = (amPm: AmPm | undefined, defaultHourMinute: HourMinute24 | undefined): AmPm | undefined =>
     amPm ?? (defaultHourMinute ? (defaultHourMinute.hour >= 12 ? AmPm.PM : AmPm.AM) : undefined);
 
-  const getHourWithDefault = (hour: Hour | undefined, defaultHourMinute: HourMinute | undefined): Hour | undefined =>
-    hour ?? (defaultHourMinute ? ((defaultHourMinute.hour % 12) as Hour) : undefined);
+  const getHour12WithDefault = (
+    hour: Hour12 | undefined,
+    defaultHourMinute: HourMinute24 | undefined,
+  ): Hour12 | undefined => hour ?? (defaultHourMinute ? ((defaultHourMinute.hour % 12) as Hour12) : undefined);
 
   const getMinuteWithDefault = (
     minute: Minute | undefined,
-    defaultHourMinute: HourMinute | undefined,
+    defaultHourMinute: HourMinute24 | undefined,
   ): Minute | undefined => minute ?? defaultHourMinute?.minute;
 
   return {
@@ -75,14 +72,14 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
           amPmWithDefault === undefined ||
           (!!range &&
             (() => {
-              const h24 = services[0].clock12To24(h, amPmWithDefault);
+              const h24 = services[0].toHour24(h, amPmWithDefault);
               return h24 < range.start.hour || h24 > range.end.hour;
             })()),
       }));
     },
     getMinuteList: ({ amPm, hour }, { range, defaultHourMinute }) => {
       const amPmWithDefault = getAmPmWithDefault(amPm, defaultHourMinute);
-      const hourWithDefault = getHourWithDefault(hour, defaultHourMinute);
+      const hourWithDefault = getHour12WithDefault(hour, defaultHourMinute);
 
       return [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map((m, i) => ({
         label: m,
@@ -93,7 +90,7 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
           hourWithDefault === undefined ||
           (!!range &&
             (() => {
-              const h24 = services[0].clock12To24(hourWithDefault, amPmWithDefault);
+              const h24 = services[0].toHour24(hourWithDefault, amPmWithDefault);
               return (
                 h24 < range.start.hour ||
                 (h24 === range.start.hour && m < range.start.minute) ||
@@ -104,7 +101,7 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
       }));
     },
     getUpdatedStateOnAmPmChange: ({ hour, minute }, { range, defaultHourMinute }, updatedAmPm) => {
-      const hourWithDefault = hourMinutePickerService.getHourWithDefault(hour, defaultHourMinute);
+      const hourWithDefault = hourMinutePickerService.getHour12WithDefault(hour, defaultHourMinute);
       const minuteWithDefault = hourMinutePickerService.getMinuteWithDefault(minute, defaultHourMinute);
 
       if (!range) return { amPm: updatedAmPm, hour, minute };
@@ -112,16 +109,14 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
       if (hourWithDefault === undefined || minuteWithDefault === undefined) {
         const minHourMinuteInAmPm =
           updatedAmPm === AmPm.AM ? ({ hour: 0, minute: 0 } as const) : ({ hour: 12, minute: 0 } as const);
-        return { amPm: updatedAmPm, ...services[1].min(minHourMinuteInAmPm, range.start) };
+        return services[0].toHourMinute12(services[0].min(minHourMinuteInAmPm, range.start));
       }
 
-      const orgHourMinute = { hour: services[0].clock12To24(hourWithDefault, updatedAmPm), minute: minuteWithDefault };
+      const orgHourMinute = { updatedAmPm, hour: hourWithDefault, minute: minuteWithDefault };
 
-      if (services[1].isAfter(orgHourMinute, range.end))
-        return { amPm: updatedAmPm, ...services[1].clock24To12(range.end) };
+      if (services[0].isAfter(orgHourMinute, range.end)) return services[0].toHourMinute12(range.end);
 
-      if (services[1].isBefore(orgHourMinute, range.start))
-        return { amPm: updatedAmPm, ...services[1].clock24To12(range.start) };
+      if (services[0].isBefore(orgHourMinute, range.start)) return services[0].toHourMinute12(range.start);
 
       return { amPm: updatedAmPm, hour, minute };
     },
@@ -132,9 +127,9 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
 
       const submitHour =
         hour !== undefined
-          ? services[0].clock12To24(hour, amPmWithDefault)
+          ? services[0].toHour24(hour, amPmWithDefault)
           : defaultHourMinute
-          ? services[0].clock12To24((defaultHourMinute.hour % 12) as Hour, amPmWithDefault)
+          ? services[0].toHour24((defaultHourMinute.hour % 12) as Hour12, amPmWithDefault)
           : undefined;
       const submitMinute = minute ?? defaultHourMinute?.minute;
 
@@ -143,11 +138,11 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
       return { hour: submitHour, minute: submitMinute };
     },
     getAmPmWithDefault,
-    getHourWithDefault,
+    getHour12WithDefault,
     getMinuteWithDefault,
   };
 };
 
 export const hourMinutePickerService = getHourMinutePickerService({
-  services: [timetableViewService, hourMinuteService],
+  services: [hourMinuteService],
 });
