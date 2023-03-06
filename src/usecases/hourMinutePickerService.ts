@@ -24,9 +24,14 @@ export interface HourMinutePickerService {
   ) => { label: number; degree: number; value: number; disabled: boolean }[];
 
   getUpdatedStateOnAmPmChange: (
-    state: Pick<State, 'amPm' | 'hour' | 'minute'>,
+    state: Pick<State, 'hour' | 'minute'>,
     props: Pick<Props, 'range' | 'defaultHourMinute'>,
-    updatedAmPm: AmPm,
+    updatedAmPm: HourMinute12['amPm'],
+  ) => State;
+  getUpdatedStateOnHourChange: (
+    state: Pick<State, 'amPm' | 'minute'>,
+    props: Pick<Props, 'range' | 'defaultHourMinute'>,
+    updatedHour: HourMinute12['hour'],
   ) => State;
 
   getSubmitHourMinute: (
@@ -101,8 +106,8 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
       }));
     },
     getUpdatedStateOnAmPmChange: ({ hour, minute }, { range, defaultHourMinute }, updatedAmPm) => {
-      const hourWithDefault = hourMinutePickerService.getHour12WithDefault(hour, defaultHourMinute);
-      const minuteWithDefault = hourMinutePickerService.getMinuteWithDefault(minute, defaultHourMinute);
+      const hourWithDefault = getHour12WithDefault(hour, defaultHourMinute);
+      const minuteWithDefault = getMinuteWithDefault(minute, defaultHourMinute);
 
       if (!range) return { amPm: updatedAmPm, hour, minute };
 
@@ -119,6 +124,25 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
       if (services[0].isBefore(orgHourMinute, range.start)) return services[0].toHourMinute12(range.start);
 
       return { amPm: updatedAmPm, hour, minute };
+    },
+    getUpdatedStateOnHourChange: ({ amPm, minute }, { range, defaultHourMinute }, updatedHour) => {
+      const amPmWithDefault = getAmPmWithDefault(amPm, defaultHourMinute);
+      const minuteWithDefault = getMinuteWithDefault(minute, defaultHourMinute);
+
+      if (!range) return { amPm, hour: updatedHour, minute };
+
+      if (amPmWithDefault === undefined || minuteWithDefault === undefined) {
+        const minHourMinuteInHour = { hour: updatedHour, minute: 0 } as const;
+        return services[0].toHourMinute12(services[0].min(minHourMinuteInHour, range.start));
+      }
+
+      const orgHourMinute = { amPm: amPmWithDefault, hour: updatedHour, minute: minuteWithDefault };
+
+      if (services[0].isAfter(orgHourMinute, range.end)) return services[0].toHourMinute12(range.end);
+
+      if (services[0].isBefore(orgHourMinute, range.start)) return services[0].toHourMinute12(range.start);
+
+      return { amPm, hour: updatedHour, minute };
     },
     getSubmitHourMinute: ({ amPm, hour, minute }, { defaultHourMinute }) => {
       const amPmWithDefault = getAmPmWithDefault(amPm, defaultHourMinute);

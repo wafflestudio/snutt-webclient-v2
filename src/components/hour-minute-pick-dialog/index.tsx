@@ -60,11 +60,7 @@ export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMin
                 onClick={() =>
                   !disabled &&
                   setState(
-                    hourMinutePickerService.getUpdatedStateOnAmPmChange(
-                      { amPm, hour, minute },
-                      { range, defaultHourMinute },
-                      value,
-                    ),
+                    hourMinutePickerService.getUpdatedStateOnAmPmChange(state, { range, defaultHourMinute }, value),
                   )
                 }
                 key={value}
@@ -91,7 +87,9 @@ export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMin
           <TimeClock
             list={hourMinutePickerService.getHourList({ amPm }, { range, defaultHourMinute })}
             onSelect={(v) => {
-              setState({ ...state, hour: v as Hour12 });
+              setState(
+                hourMinutePickerService.getUpdatedStateOnHourChange(state, { range, defaultHourMinute }, v as Hour12),
+              );
               setStep(Step.MINUTE);
             }}
             selected={hourWithDefault}
