@@ -10,7 +10,7 @@ const testIds = {
   '강의 시간 제거 버튼': 'main-lecture-edit-form-delete-time',
 };
 
-test('강의 수정 모달이 잘 보여진다 (성공케이스)', async ({ page }) => {
+test('강의 수정 모달이 잘 보인다 (성공케이스)', async ({ page }) => {
   await page.goto('/');
   await givenUser(page);
   const lectureItem = page.getByTestId('main-lecture-listitem');
@@ -21,7 +21,7 @@ test('강의 수정 모달이 잘 보여진다 (성공케이스)', async ({ page
   await page.getByTestId('main-lecture-edit-form-color').filter({ hasText: '라벤더' }).click();
   await page.getByTestId('main-lecture-edit-form-time').nth(0).locator('input').nth(2).fill('낙아치');
   await page.getByTestId('main-lecture-edit-form-time').nth(1).locator('input').nth(0).click();
-  await page.getByTestId('clock').getByText('4', { exact: true }).click();
+  await page.getByTestId('hour-clock').getByText('4', { exact: true }).click();
   await page.getByTestId('time-pick-dialog-submit').click();
   await page.getByTestId('main-lecture-edit-form-remark').clear();
   await Promise.all([
@@ -45,7 +45,7 @@ test('강의 수정 모달이 잘 보여진다 (성공케이스)', async ({ page
   // TODO: 모달 닫히는거 확인
 });
 
-test('커스텀 색 관련 ui가 잘 보여진다 (커스텀 색인 강의)', async ({ page }) => {
+test('커스텀 색 관련 ui가 잘 보인다 (커스텀 색인 강의)', async ({ page }) => {
   await page.goto('/');
   await givenUser(page);
   await page.getByTestId('main-lecture-listitem').filter({ hasText: '진화와 인간사회' }).click();
@@ -72,7 +72,7 @@ test('커스텀 색 관련 ui가 잘 보여진다 (커스텀 색인 강의)', as
   await expect(cLabels['하늘']).toHaveAttribute('aria-selected', 'false');
 });
 
-test('커스텀 색 관련 ui가 잘 보여진다 (커스텀 색이 아닌 강의)', async ({ page }) => {
+test('커스텀 색 관련 ui가 잘 보인다 (커스텀 색이 아닌 강의)', async ({ page }) => {
   await page.goto('/');
   await givenUser(page);
   await page.getByTestId('main-lecture-listitem').filter({ hasText: '컴퓨터프로그래밍' }).click();
@@ -139,7 +139,7 @@ test('강의 시간 추가/제거가 잘 된다', async ({ page }) => {
   await page.getByTestId('main-lecture-edit-form-time').nth(1).getByTestId(testIds['강의 시간 제거 버튼']).click();
   await page.getByTestId('main-lecture-edit-form-time').nth(1).locator('input').nth(2).type('문도 ');
   await page.getByTestId('main-lecture-edit-form-time').nth(1).locator('input').nth(0).click();
-  await page.getByTestId('clock').getByText('9').click();
+  await page.getByTestId('hour-clock').getByText('9').click();
   await page.getByTestId('time-pick-dialog-submit').click();
 
   await Promise.all([

@@ -1,0 +1,116 @@
+import { expect, Page, test } from '@playwright/test';
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { givenUser } from '../utils/user.ts';
+
+test('강의 시간 수정 선택 기능이 엄청 잘 동작한다 (컴프)', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page);
+  await page.getByTestId(testIds['강의']).filter({ hasText: '컴퓨터공학부, 2학년' }).click();
+
+  const times = [0, 1, 2].map((i) => ({
+    start: page.getByTestId(testIds['강의 시간 행']).nth(i).locator('input').nth(0),
+    end: page.getByTestId(testIds['강의 시간 행']).nth(i).locator('input').nth(1),
+  }));
+
+  await expect(times[1].start).toHaveValue('18:30');
+
+  await times[1].end.click();
+  await (async () => {
+    const [am, pm, hBox, mBox, hClock, mClock] = getPickerElements(page);
+    await expect(am).toBeDisabled();
+    await expect(pm).toHaveAttribute('aria-selected', 'true');
+    await expect(hBox).toHaveValue('08');
+    await expect(mBox).toHaveValue('20');
+    await expect(hClock.getByText('5', { exact: true })).toBeDisabled();
+    await expect(hClock.getByText('11', { exact: true })).toBeDisabled();
+    await expect(hClock.getByText('8', { exact: true })).toHaveAttribute('aria-selected', 'true');
+    await hClock.getByText('6', { exact: true }).click();
+    await expect(hBox).toHaveValue('06');
+    await expect(mClock.getByText('30', { exact: true })).toHaveAttribute('aria-selected', 'true');
+    await mClock.getByText('45', { exact: true }).click();
+    await page.getByTestId(testIds['시간 저장']).click();
+  })();
+  await expect(times[1].end).toHaveValue('18:45');
+
+  await times[1].start.click();
+  await waitDialog(page);
+  await (async () => {
+    const [am, pm, hBox, , hClock, mClock] = getPickerElements(page);
+    await expect(am).toBeEnabled();
+    await expect(pm).toHaveAttribute('aria-selected', 'true');
+    await hClock.getByText('9', { exact: true }).click();
+    await expect(hBox).toHaveValue('09');
+    await mClock.getByText('0', { exact: true }).click();
+    await expect(mClock.getByText('0', { exact: true })).toHaveAttribute('aria-selected', 'true');
+    await hBox.click();
+    await expect(hClock.getByText('9', { exact: true })).toHaveAttribute('aria-selected', 'true');
+    await hClock.getByText('8', { exact: true }).click();
+    await page.getByTestId(testIds['시간 저장']).click();
+  })();
+  await expect(times[1].start).toHaveValue('20:00');
+  await expect(times[1].end).toHaveValue('20:00');
+
+  await times[0].start.click();
+  await waitDialog(page);
+  await (async () => {
+    const [am, pm, hBox, mBox, hClock, mClock] = getPickerElements(page);
+    await expect(am).toHaveAttribute('aria-selected', 'true');
+    await pm.click();
+    await expect(pm).toHaveAttribute('aria-selected', 'true');
+    await expect(hBox).toHaveValue('10');
+    await expect(mBox).toHaveValue('55');
+    await hClock.getByText('3', { exact: true }).click();
+    await am.click();
+    await expect(hBox).toHaveValue('08');
+    await expect(mBox).toHaveValue('00');
+    await mClock.getByText('25', { exact: true }).click();
+    await page.getByTestId(testIds['시간 저장']).click();
+  })();
+  await expect(times[0].start).toHaveValue('08:25');
+
+  await times[0].end.click();
+  await waitDialog(page);
+  await (async () => {
+    const [am, , hBox, mBox, hClock, mClock] = getPickerElements(page);
+    await hClock.getByText('8', { exact: true }).click();
+    await expect(hBox).toHaveValue('08');
+    await expect(mBox).toHaveValue('15');
+    await am.click();
+    await expect(mBox).toHaveValue('25');
+    await expect(mClock.getByText('20', { exact: true })).toBeDisabled();
+    await hBox.click();
+    await hClock.getByText('11', { exact: true }).click();
+    await page.getByTestId(testIds['시간 저장']).click();
+  })();
+  await expect(times[0].end).toHaveValue('11:25');
+});
+
+const getPickerElements = (page: Page) => [
+  page.getByTestId(testIds['오전']),
+  page.getByTestId(testIds['오후']),
+  page.getByTestId(testIds['시 박스']),
+  page.getByTestId(testIds['분 박스']),
+  page.getByTestId(testIds['시 시계']),
+  page.getByTestId(testIds['분 시계']),
+];
+
+const waitDialog = (page: Page) =>
+  page.waitForFunction((testid) => document.querySelectorAll(`[data-testid=${testid}]`).length === 1, testIds['피커']);
+
+const testIds = {
+  강의: 'main-lecture-listitem',
+  '강의 시간 행': 'main-lecture-edit-form-time',
+
+  피커: 'hour-minute-pick-dialog',
+
+  오전: 'a.m-box',
+  오후: 'p.m-box',
+  '시 박스': 'hour-box',
+  '분 박스': 'minute-box',
+  '시 시계': 'hour-clock',
+  '분 시계': 'minute-clock',
+
+  '시간 저장': 'time-pick-dialog-submit',
+};
