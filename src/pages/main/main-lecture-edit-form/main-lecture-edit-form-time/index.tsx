@@ -2,8 +2,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Button } from '@/components/button';
+import { HourMinutePickDialog } from '@/components/hour-minute-pick-dialog';
 import { IcClose } from '@/components/icons/ic-close';
-import { TimePickDialog } from '@/components/time-pick-dialog';
 import { AddedLectureTime, Lecture } from '@/entities/lecture';
 import { Day, DAY_LABEL_MAP, HourMinute } from '@/entities/time';
 import { lectureService } from '@/usecases/lectureService';
@@ -82,7 +82,7 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
               data-testid="main-lecture-edit-form-delete-time"
               onClick={() => (isAddedTime ? handleDeleteAddedTime(lt.__id__) : handleDeleteLectureTime(lt._id))}
             />
-            <TimePickDialog
+            <HourMinutePickDialog
               isOpen={openTimeDialog?.id === id && openTimeDialog.type === 'start'}
               onClose={() => setOpenTimeDialog(null)}
               onSubmit={(hour, minute) => {
@@ -100,14 +100,14 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
                   );
                 else onChangeStartTime(timetableViewService.formatTime(hour, minute));
               }}
-              defaultTime={openTimeDialog?.defaultTime}
+              defaultHourMinute={openTimeDialog?.defaultTime}
               range={{ start: startBound, end: endBound }}
             />
-            <TimePickDialog
+            <HourMinutePickDialog
               isOpen={openTimeDialog?.id === id && openTimeDialog.type === 'end'}
               onClose={() => setOpenTimeDialog(null)}
               onSubmit={(hour, minute) => onChangeEndTime(timetableViewService.formatTime(hour, minute))}
-              defaultTime={openTimeDialog?.defaultTime}
+              defaultHourMinute={openTimeDialog?.defaultTime}
               range={{ start: timetableViewService.parseTime(lt.start_time), end: endBound }}
             />
           </TimeItem>

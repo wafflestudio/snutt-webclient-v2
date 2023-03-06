@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
+import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
 import { AmPm, Hour, HourMinute } from '@/entities/time';
-import { timetableViewService } from '@/usecases/timetableViewService';
+import { hourMinutePickerService } from '@/usecases/hourMinutePickerService';
 
 import { Clock } from '../clock';
 import { Dialog } from '../dialog';
@@ -13,7 +14,7 @@ type Props = {
   isOpen: boolean;
   onClose?: () => void;
   onSubmit?: (hour: number, minute: number) => void;
-  defaultTime?: HourMinute;
+  defaultHourMinute?: HourMinute;
   range?: { start: HourMinute; end: HourMinute };
 };
 
@@ -22,36 +23,32 @@ enum Step {
   MINUTE = 'minute',
 }
 
-export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime, range }: Props) => {
+export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMinute, range }: Props) => {
   const [step, setStep] = useState(Step.HOUR);
-  const [type, setType] = useState<AmPm>();
+  const [amPm, setAmPm] = useState<AmPm>();
   const [hour, setHour] = useState<Hour>();
   const [minute, setMinute] = useState<Minute>();
 
-  const typeWithDefault = type ?? (defaultTime ? (defaultTime.hour >= 12 ? AmPm.PM : AmPm.AM) : undefined);
-  const hourWithDefault = hour ?? (defaultTime ? defaultTime.hour % 12 : undefined);
-  const minuteWithDefault = minute ?? defaultTime?.minute;
-  const isValid = typeWithDefault !== undefined && hourWithDefault !== undefined && minuteWithDefault !== undefined;
+  const ampmWithDefault = hourMinutePickerService.getAmPmWithDefault(amPm, defaultHourMinute);
+  const hourWithDefault = hourMinutePickerService.getHourWithDefault(hour, defaultHourMinute);
+  const minuteWithDefault = hourMinutePickerService.getMinuteWithDefault(minute, defaultHourMinute);
+  const isValid = ampmWithDefault !== undefined && hourWithDefault !== undefined && minuteWithDefault !== undefined;
 
   const handleClose = () => {
     onClose?.();
     setStep(Step.HOUR);
-    setType(undefined);
+    setAmPm(undefined);
     setHour(undefined);
     setMinute(undefined);
   };
 
   const handleSubmit = () => {
     if (!isValid) return;
-    const submitHour =
-      hour !== undefined
-        ? timetableViewService.clock12To24(hour, typeWithDefault)
-        : defaultTime
-        ? timetableViewService.clock12To24(defaultTime.hour % 12, typeWithDefault)
-        : undefined;
-    const submitMinute = minute ?? defaultTime?.minute;
-    if (submitHour === undefined || submitMinute === undefined) return; // cannot reach here
-    onSubmit?.(submitHour, submitMinute);
+
+    const submitHourMinute = hourMinutePickerService.getSubmitHourMinute({ amPm, hour, minute }, { defaultHourMinute });
+    if (submitHourMinute === null) return truffleClient.capture(new Error('submitHourMinute is null'));
+
+    onSubmit?.(submitHourMinute.hour, submitHourMinute.minute);
     handleClose();
   };
 
@@ -61,12 +58,11 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime, range }
       <StyledContent>
         <TimeWrapper>
           <TypeWrapper>
-            <TypeBox $selected={typeWithDefault === AmPm.AM} onClick={() => setType(AmPm.AM)}>
-              오전
-            </TypeBox>
-            <TypeBox $selected={typeWithDefault === AmPm.PM} onClick={() => setType(AmPm.PM)}>
-              오후
-            </TypeBox>
+            {hourMinutePickerService.getAmPmList().map(({ value, label }) => (
+              <TypeBox $selected={ampmWithDefault === value} onClick={() => setAmPm(value)} key={value}>
+                {label}
+              </TypeBox>
+            ))}
           </TypeWrapper>
           <TimeBox
             value={hourWithDefault !== undefined ? `${hourWithDefault || 12}`.padStart(2, '0') : '--'}
@@ -83,18 +79,7 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime, range }
 
         <ClockWrapper $step={step}>
           <TimeClock
-            list={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((h, i) => ({
-              label: h === 0 ? 12 : h,
-              degree: i * 30,
-              value: h,
-              disabled:
-                typeWithDefault === undefined ||
-                (!!range &&
-                  (() => {
-                    const h24 = timetableViewService.clock12To24(h, typeWithDefault);
-                    return h24 < range.start.hour || h24 > range.end.hour;
-                  })()),
-            }))}
+            list={hourMinutePickerService.getHourList({ amPm }, { range, defaultHourMinute })}
             onSelect={(v) => {
               setHour(v as Hour);
               setStep(Step.MINUTE);
@@ -102,24 +87,7 @@ export const TimePickDialog = ({ isOpen, onClose, onSubmit, defaultTime, range }
             selected={hourWithDefault}
           />
           <TimeClock
-            list={[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map((m, i) => ({
-              label: m,
-              degree: i * 30,
-              value: m,
-              disabled:
-                typeWithDefault === undefined ||
-                hourWithDefault === undefined ||
-                (!!range &&
-                  (() => {
-                    const h24 = timetableViewService.clock12To24(hourWithDefault, typeWithDefault);
-                    return (
-                      h24 < range.start.hour ||
-                      (h24 === range.start.hour && m < range.start.minute) ||
-                      h24 > range.end.hour ||
-                      (h24 === range.end.hour && m > range.end.minute)
-                    );
-                  })()),
-            }))}
+            list={hourMinutePickerService.getMinuteList({ amPm, hour }, { range, defaultHourMinute })}
             onSelect={(v) => setMinute(v as Minute)}
             selected={minuteWithDefault}
           />
@@ -178,11 +146,11 @@ const TypeBox = styled.div<{ $selected: boolean }>`
   background-color: ${({ $selected }) => ($selected ? '#1bd0c930' : '#fff')};
   transition: background-color 0.2s;
 
-  &:first-of-type {
-    border-bottom: 1px solid #ccc;
-  }
-  &:last-of-type {
+  &:not(:first-of-type) {
     border-top: 1px solid #ccc;
+  }
+  &:not(:last-of-type) {
+    border-bottom: 1px solid #ccc;
   }
 `;
 
