@@ -4,10 +4,10 @@ import { HourMinuteService, hourMinuteService } from './hourMinuteService';
 
 type State = Partial<HourMinute12>;
 
-type Props = {
+type Props = Partial<{
   range: { start: HourMinute24; end: HourMinute24 } | undefined;
   defaultHourMinute: HourMinute24 | undefined;
-};
+}>;
 
 export interface HourMinutePickerService {
   getAmPmList: (
@@ -117,7 +117,7 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
         return services[0].toHourMinute12(services[0].min(minHourMinuteInAmPm, range.start));
       }
 
-      const orgHourMinute = { updatedAmPm, hour: hourWithDefault, minute: minuteWithDefault };
+      const orgHourMinute: HourMinute12 = { amPm: updatedAmPm, hour: hourWithDefault, minute: minuteWithDefault };
 
       if (services[0].isAfter(orgHourMinute, range.end)) return services[0].toHourMinute12(range.end);
 
@@ -136,7 +136,7 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
         return services[0].toHourMinute12(services[0].min(minHourMinuteInHour, range.start));
       }
 
-      const orgHourMinute = { amPm: amPmWithDefault, hour: updatedHour, minute: minuteWithDefault };
+      const orgHourMinute: HourMinute12 = { amPm: amPmWithDefault, hour: updatedHour, minute: minuteWithDefault };
 
       if (services[0].isAfter(orgHourMinute, range.end)) return services[0].toHourMinute12(range.end);
 
