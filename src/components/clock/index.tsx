@@ -19,9 +19,9 @@ export const Clock = <T extends Key>({ list, size = 200, onSelect, selected, ...
       {list.map(({ label, degree, value, disabled }) => (
         <Label
           key={value}
-          data-value={value}
           $selected={selectedItem?.value === value}
-          $disabled={disabled}
+          aria-selected={selectedItem?.value === value}
+          disabled={disabled}
           style={{
             top: radius - Math.cos((degree * Math.PI) / 180) * (radius - 20),
             left: radius + Math.sin((degree * Math.PI) / 180) * (radius - 20),
@@ -81,21 +81,30 @@ const Selector = styled.div<{ $size: number }>`
   }
 `;
 
-const Label = styled.div<{ $selected: boolean; $disabled: boolean }>`
+const Label = styled.button<{ $selected: boolean }>`
   position: absolute;
   transform: translate(-50%, -50%);
   z-index: 2;
 
   width: 30px;
   height: 30px;
-  padding: 7px;
+  padding: 8px 0;
   line-height: 16px;
   font-size: 16px;
   text-align: center;
 
   border-radius: 50%;
+  border: none;
+  outline: none;
+  background-color: transparent;
 
   color: ${({ $selected }) => ($selected ? 'white' : 'black')};
-  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
-  opacity: ${({ $disabled }) => ($disabled ? '0.2' : '1')};
+
+  cursor: pointer;
+  opacity: 1;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.2;
+  }
 `;

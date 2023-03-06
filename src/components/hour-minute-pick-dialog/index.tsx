@@ -51,11 +51,13 @@ export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMin
   return (
     <StyledDialog open={isOpen} onClose={handleClose}>
       <Dialog.Title>시간 선택</Dialog.Title>
-      <StyledContent>
+      <StyledContent data-testid="hour-minute-pick-dialog">
         <TimeWrapper>
           <TypeWrapper>
             {hourMinutePickerService.getAmPmList({}, { range }).map(({ value, label, disabled }) => (
               <TypeBox
+                data-testid={`${value}-box`}
+                aria-selected={ampmWithDefault === value}
                 $selected={ampmWithDefault === value}
                 onClick={() =>
                   !disabled &&
@@ -64,19 +66,21 @@ export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMin
                   )
                 }
                 key={value}
-                $disabled={disabled}
+                disabled={disabled}
               >
                 {label}
               </TypeBox>
             ))}
           </TypeWrapper>
           <TimeBox
+            data-testid="hour-box"
             value={hourWithDefault !== undefined ? `${hourWithDefault || 12}`.padStart(2, '0') : '--'}
             $active={step === Step.HOUR}
             onClick={() => setStep(Step.HOUR)}
           />
           :
           <TimeBox
+            data-testid="minute-box"
             value={minuteWithDefault !== undefined ? `${minuteWithDefault}`.padStart(2, '0') : '--'}
             $active={step === Step.MINUTE}
             onClick={() => setStep(Step.MINUTE)}
@@ -85,6 +89,7 @@ export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMin
 
         <ClockWrapper $step={step}>
           <TimeClock
+            data-testid="hour-clock"
             list={hourMinutePickerService.getHourList({ amPm }, { range, defaultHourMinute })}
             onSelect={(v) => {
               setState(
@@ -95,6 +100,7 @@ export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMin
             selected={hourWithDefault}
           />
           <TimeClock
+            data-testid="minute-clock"
             list={hourMinutePickerService.getMinuteList({ amPm, hour }, { range, defaultHourMinute })}
             onSelect={(v) => setState({ ...state, minute: v as Minute })}
             selected={minuteWithDefault}
@@ -142,24 +148,37 @@ const TypeWrapper = styled.div`
   overflow: hidden;
 `;
 
-const TypeBox = styled.div<{ $selected: boolean; $disabled: boolean }>`
+const TypeBox = styled.button<{ $selected: boolean }>`
   font-size: 14px;
   height: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  width: 100%;
 
   color: ${({ $selected }) => ($selected ? '#337972' : '#1f1f1f')};
   background-color: ${({ $selected }) => ($selected ? '#1bd0c930' : '#fff')};
   transition: background-color 0.2s;
-  opacity: ${({ $disabled }) => ($disabled ? 0.2 : 1)};
+
+  border-color: #ccc;
+  border-style: solid;
+  box-sizing: border-box;
+  border-width: 0px;
+  outline: none;
+  cursor: pointer;
+  font-weight: 700;
+  opacity: 1;
 
   &:not(:first-of-type) {
-    border-top: 1px solid #ccc;
+    border-top-width: 1px;
   }
   &:not(:last-of-type) {
-    border-bottom: 1px solid #ccc;
+    border-bottom-width: 1px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.2;
   }
 `;
 
