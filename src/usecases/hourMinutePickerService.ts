@@ -14,7 +14,10 @@ type Props = {
 };
 
 export interface HourMinutePickerService {
-  getAmPmList: () => { value: AmPm; label: string }[];
+  getAmPmList: (
+    state: Pick<State, never>,
+    props: Pick<Props, 'range'>,
+  ) => { value: AmPm; label: string; disabled: boolean }[];
   getHourList: (
     state: Pick<State, 'amPm'>,
     props: Pick<Props, 'range' | 'defaultHourMinute'>,
@@ -46,10 +49,10 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
     minute ?? defaultHourMinute?.minute;
 
   return {
-    getAmPmList: () => {
+    getAmPmList: ({}, { range }) => {
       return [
-        { value: AmPm.AM, label: '오전' },
-        { value: AmPm.PM, label: '오후' },
+        { value: AmPm.AM, label: '오전', disabled: !!range && range.start.hour >= 12 },
+        { value: AmPm.PM, label: '오후', disabled: !!range && range.end.hour < 12 },
       ];
     },
     getHourList: ({ amPm }, { range, defaultHourMinute }) => {

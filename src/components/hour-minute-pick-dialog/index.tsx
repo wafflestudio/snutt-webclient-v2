@@ -58,8 +58,13 @@ export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMin
       <StyledContent>
         <TimeWrapper>
           <TypeWrapper>
-            {hourMinutePickerService.getAmPmList().map(({ value, label }) => (
-              <TypeBox $selected={ampmWithDefault === value} onClick={() => setAmPm(value)} key={value}>
+            {hourMinutePickerService.getAmPmList({}, { range }).map(({ value, label, disabled }) => (
+              <TypeBox
+                $selected={ampmWithDefault === value}
+                onClick={() => !disabled && setAmPm(value)}
+                key={value}
+                $disabled={disabled}
+              >
                 {label}
               </TypeBox>
             ))}
@@ -134,17 +139,18 @@ const TypeWrapper = styled.div`
   overflow: hidden;
 `;
 
-const TypeBox = styled.div<{ $selected: boolean }>`
+const TypeBox = styled.div<{ $selected: boolean; $disabled: boolean }>`
   font-size: 14px;
   height: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
 
   color: ${({ $selected }) => ($selected ? '#337972' : '#1f1f1f')};
   background-color: ${({ $selected }) => ($selected ? '#1bd0c930' : '#fff')};
   transition: background-color 0.2s;
+  opacity: ${({ $disabled }) => ($disabled ? 0.2 : 1)};
 
   &:not(:first-of-type) {
     border-top: 1px solid #ccc;
