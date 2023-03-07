@@ -17,7 +17,7 @@ export const LayoutFooterFeedbackDialog = ({ onClose, isOpen }: Props) => {
   const isValid = email && message;
 
   const submit = () => {
-    if (!isValid) return;
+    if (!isValid || isLoading) return;
     mutate({ email, message });
   };
 
@@ -55,7 +55,7 @@ export const LayoutFooterFeedbackDialog = ({ onClose, isOpen }: Props) => {
           <Button size="small" color="gray" data-testid="feedback-cancel" onClick={close}>
             취소
           </Button>
-          <Button size="small" data-testid="feedback-submit" onClick={submit} disabled={isLoading || !isValid}>
+          <Button loading={isLoading} size="small" data-testid="feedback-submit" onClick={submit} disabled={!isValid}>
             제출
           </Button>
         </Dialog.Actions>

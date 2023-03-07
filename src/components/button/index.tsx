@@ -1,22 +1,27 @@
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 
+import { Loader } from '../loader';
+
 type Variant = 'contained' | 'outlined' | 'text';
 type Size = 'big' | 'small';
 type Color = 'mint' | 'blue' | 'black' | 'red' | 'gray';
+
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
   color?: Color;
+  loading?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, Props>(
-  ({ children, variant = 'contained', size = 'big', color = 'mint', ...props }, ref) => {
+  ({ children, loading = false, variant = 'contained', size = 'big', color = 'mint', ...props }, ref) => {
     const Component = { contained: Contained, outlined: Outlined, text: Text }[variant];
 
     return (
       <Component $size={size} $color={color} ref={ref} {...props}>
-        {children}
+        <ButtonText $loading={loading}>{children}</ButtonText>
+        {loading && <ButtonLoader $size={size} />}
       </Component>
     );
   },
@@ -25,6 +30,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
 const buttonColor = { mint: '#1bd0c9', blue: '#1414c3', black: '#323232', red: '#ec3030', gray: '#9a9a9a' } as const;
 
 const commonStyle = css`
+  position: relative;
   cursor: pointer;
   font-size: 14px;
   opacity: 0.8;
@@ -80,4 +86,25 @@ const Outlined = styled.button<{ $size: Size; $color: Color }>`
 const Text = styled.button<{ $size: Size; $color: string }>`
   ${commonStyle}
   ${({ $size }) => ({ big: bigSize, small: smallSize }[$size])}
+`;
+
+const ButtonText = styled.span<{ $loading: boolean }>`
+  ${({ $loading }) =>
+    $loading &&
+    css`
+      color: transparent;
+    `}
+`;
+
+const ButtonLoader = styled(Loader)<{ $size: Size }>`
+  position: absolute;
+  ${({ $size }) => {
+    const size = { big: 20, small: 14 }[$size];
+    return css`
+      width: ${size}px;
+      height: ${size}px;
+      top: calc(50% - ${size / 2}px);
+      left: calc(50% - ${size / 2}px);
+    `;
+  }}
 `;
