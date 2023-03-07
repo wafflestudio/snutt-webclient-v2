@@ -25,7 +25,7 @@ test('강의 생성 모달이 잘 보여진다 (성공 케이스)', async ({ pag
   await page.getByTestId(testIds['강의명 필드']).fill('떡볶이맛 아몬드');
   await page.getByTestId(testIds['강의 색 칩']).filter({ hasText: '라벤더' }).click();
   await page.getByTestId(testIds['강의 시간 추가 버튼']).click();
-  await page.getByTestId(testIds['강의 시간 행']).nth(0).locator('input').fill('낙아치');
+  await page.getByTestId(testIds['강의 시간 행']).nth(0).locator('input').nth(2).fill('낙아치');
   await Promise.all([
     page.waitForRequest(
       (req) =>
@@ -37,7 +37,6 @@ test('강의 생성 모달이 잘 보여진다 (성공 케이스)', async ({ pag
         req.postDataJSON().credit === 0 &&
         req.postDataJSON().instructor === '' &&
         req.postDataJSON().remark === '' &&
-        req.postDataJSON().class_time_mask[0] === 536870912 &&
         req.postDataJSON().colorIndex === 8,
     ),
     page.waitForRequest((req) => req.method() === 'GET' && req.url().includes('/v1/tables/123')),

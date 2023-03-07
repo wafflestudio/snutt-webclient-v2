@@ -1,10 +1,14 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Button } from '@/components/button';
+import { HourMinutePickDialog } from '@/components/hour-minute-pick-dialog';
 import { IcClose } from '@/components/icons/ic-close';
 import { AddedLectureTime, Lecture } from '@/entities/lecture';
-import { Day, DAY_LABEL_MAP } from '@/entities/time';
+import { Day, DAY_LABEL_MAP, HourMinute24 } from '@/entities/time';
+import { hourMinuteService } from '@/usecases/hourMinuteService';
 import { lectureService } from '@/usecases/lectureService';
+import { timetableViewService } from '@/usecases/timetableViewService';
 import { ArrayElement } from '@/utils/array-element';
 
 type Props = {
@@ -12,7 +16,15 @@ type Props = {
   onChangeLectureTime: (lectureTime: (ArrayElement<Lecture['class_time_json']> | AddedLectureTime)[]) => void;
 };
 
+const startBound = { hour: 8, minute: 0 } as const;
+const endBound = { hour: 22, minute: 55 } as const;
+
 export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Props) => {
+  const [openTimeDialog, setOpenTimeDialog] = useState<{
+    id: string;
+    type: 'start' | 'end';
+    defaultTime: HourMinute24;
+  } | null>(null);
   const handleAddTime = () => onChangeLectureTime([...lectureTime, lectureService.getEmptyClassTime()]);
 
   const handleDeleteLectureTime = (_id: string) =>
@@ -25,21 +37,27 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
     <Wrapper>
       {lectureTime.map((lt, i) => {
         const isAddedTime = '__id__' in lt;
+        const id = isAddedTime ? lt.__id__ : lt._id;
 
         const onChangeDay = (day: Day) =>
           onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, day } : _lt)));
 
-        const onChangeStart = (start: number) =>
-          onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, start } : _lt)));
+        const onChangeStartTime = (start_time: string) =>
+          onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, start_time } : _lt)));
 
-        const onChangeLen = (len: number) =>
-          onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, len } : _lt)));
+        const onChangeEndTime = (end_time: string) =>
+          onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, end_time } : _lt)));
+
+        const onChangeStartEndTime = (time: string) =>
+          onChangeLectureTime(
+            lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, start_time: time, end_time: time } : _lt)),
+          );
 
         const onChangePlace = (place: string) =>
           onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, place } : _lt)));
 
         return (
-          <TimeItem key={isAddedTime ? lt.__id__ : lt._id} data-testid="main-lecture-edit-form-time">
+          <TimeItem key={id} data-testid="main-lecture-edit-form-time">
             <Select value={lt.day} onChange={(e) => onChangeDay(Number(e.target.value) as Day)}>
               {([0, 1, 2, 3, 4, 5, 6] as const).map((item) => (
                 <option key={item} value={item}>
@@ -48,30 +66,46 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
               ))}
             </Select>
 
-            <Select value={lt.start} onChange={(e) => onChangeStart(Number(e.target.value) as Day)}>
-              {Array(29)
-                .fill(0)
-                .map((item, i) => (
-                  <option key={i / 2} value={i / 2}>
-                    {i % 2 === 0 ? `${i / 2 + 8}:00` : `${parseInt(`${i / 2}`) + 8}:30`}
-                  </option>
-                ))}
-            </Select>
+            <Input
+              readOnly
+              value={lt.start_time}
+              onClick={() =>
+                setOpenTimeDialog({ id, type: 'start', defaultTime: timetableViewService.parseTime(lt.start_time) })
+              }
+            />
 
-            <Select value={lt.len} onChange={(e) => onChangeLen(Number(e.target.value) as Day)}>
-              {Array((15 - lt.start) * 2)
-                .fill(0)
-                .map((item, i) => (
-                  <option key={i} value={(i + 1) / 2}>
-                    {(i + 1) / 2}
-                  </option>
-                ))}
-            </Select>
+            <Input
+              readOnly
+              value={lt.end_time}
+              onClick={() =>
+                setOpenTimeDialog({ id, type: 'end', defaultTime: timetableViewService.parseTime(lt.end_time) })
+              }
+            />
 
-            <Input value={lt.place} onChange={(e) => onChangePlace(e.target.value)} />
+            <Input style={{ width: 'auto' }} value={lt.place} onChange={(e) => onChangePlace(e.target.value)} />
+
             <CloseIcon
               data-testid="main-lecture-edit-form-delete-time"
               onClick={() => (isAddedTime ? handleDeleteAddedTime(lt.__id__) : handleDeleteLectureTime(lt._id))}
+            />
+            <HourMinutePickDialog
+              isOpen={openTimeDialog?.id === id}
+              onClose={() => setOpenTimeDialog(null)}
+              onSubmit={
+                openTimeDialog?.type === 'start'
+                  ? (hour, minute) => {
+                      // 시작 시간 바꿨는데 끝 시간 넘었으면 끝 시간도 변경
+                      if (hourMinuteService.isBefore(timetableViewService.parseTime(lt.end_time), { hour, minute }))
+                        onChangeStartEndTime(timetableViewService.formatTime(hour, minute));
+                      else onChangeStartTime(timetableViewService.formatTime(hour, minute));
+                    }
+                  : (hour, minute) => onChangeEndTime(timetableViewService.formatTime(hour, minute))
+              }
+              defaultHourMinute={openTimeDialog?.defaultTime}
+              range={{
+                start: openTimeDialog?.type === 'start' ? startBound : timetableViewService.parseTime(lt.start_time),
+                end: endBound,
+              }}
             />
           </TimeItem>
         );
@@ -103,6 +137,7 @@ const Select = styled.select`
 `;
 
 const Input = styled.input`
+  width: 60px;
   outline: none;
   height: 100%;
 `;

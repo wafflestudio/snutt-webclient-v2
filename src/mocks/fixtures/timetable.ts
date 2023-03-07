@@ -44,6 +44,7 @@ export const mockTimeTable123: FullTimetable = {
   lecture_list: [
     {
       _id: '5d1a0132db261b554d5d0078',
+      lecture_id: '5d1a0132db261b554d5d0078',
       classification: '교양',
       department: '수리과학부',
       academic_year: '1학년',
@@ -86,6 +87,7 @@ export const mockTimeTable123: FullTimetable = {
     },
     {
       _id: '5d1decbddb261b554d609dcc',
+      lecture_id: '5d1decbddb261b554d609dcc',
       classification: '전필',
       department: '컴퓨터공학부',
       academic_year: '2학년',
@@ -137,6 +139,7 @@ export const mockTimeTable123: FullTimetable = {
     },
     {
       _id: '5d214a39a165ad381464b4e0',
+      lecture_id: '5d214a39a165ad381464b4e0',
       classification: '교양',
       department: '수리과학부',
       academic_year: '1학년',
@@ -169,6 +172,7 @@ export const mockTimeTable123: FullTimetable = {
     },
     {
       _id: '5d214cfca165ad381464b5bf',
+      lecture_id: '5d214cfca165ad381464b5bf',
       classification: '교양',
       department: '생명과학부',
       academic_year: '1학년',
@@ -201,6 +205,7 @@ export const mockTimeTable123: FullTimetable = {
     },
     {
       _id: '5d43e9fb3c46177d58a540b5',
+      lecture_id: '5d43e9fb3c46177d58a540b5',
       classification: '교양',
       department: '불어불문학과(불어불문학전공)',
       academic_year: '1학년',
@@ -242,6 +247,7 @@ export const mockTimeTable123: FullTimetable = {
     },
     {
       _id: '5d6e07c63c46177d58ad11f0',
+      lecture_id: '5d6e07c63c46177d58ad11f0',
       classification: '교양',
       department: '인류학과',
       academic_year: '1학년',
@@ -283,6 +289,7 @@ export const mockTimeTable123: FullTimetable = {
     },
     {
       _id: '5d6fbcf33c46177d58adff73',
+      lecture_id: '5d6fbcf33c46177d58adff73',
       classification: '교양',
       department: '통계학과',
       academic_year: '1학년',
@@ -316,6 +323,7 @@ export const mockTimeTable123: FullTimetable = {
     },
     {
       _id: '5d70696c3c46177d58ae23d5',
+      lecture_id: '5d70696c3c46177d58ae23d5',
       classification: '교양',
       department: '중어중문학과',
       academic_year: '1학년',
@@ -373,11 +381,11 @@ export const mockTimeTable123: FullTimetable = {
         {
           _id: '5dc2ca043c46177d58b4e410',
           day: 0,
-          len: 2.5,
+          len: 2.75,
           place: '',
           start: 9.5,
           start_time: '17:30',
-          end_time: '20:00',
+          end_time: '20:15',
         },
         {
           _id: '5dc2ca043c46177d58b4e40f',
@@ -437,6 +445,7 @@ export const mockTimeTable456: FullTimetable = {
   lecture_list: [
     {
       _id: '5c59396a22ac5f0f310df4ba',
+      lecture_id: '5c59396a22ac5f0f310df4ba',
       classification: '교양',
       department: '컴퓨터공학부',
       academic_year: '1학년',
@@ -478,6 +487,7 @@ export const mockTimeTable456: FullTimetable = {
     },
     {
       _id: '5c682d8f22ac5f0f31120efe',
+      lecture_id: '5c682d8f22ac5f0f31120efe',
       classification: '교양',
       department: '수리과학부',
       academic_year: '1학년',
@@ -519,6 +529,7 @@ export const mockTimeTable456: FullTimetable = {
     },
     {
       _id: '5c94a003539b982ccabbdb5e',
+      lecture_id: '5c94a003539b982ccabbdb5e',
       classification: '교양',
       department: '국어국문학과',
       academic_year: '1학년',
@@ -560,6 +571,7 @@ export const mockTimeTable456: FullTimetable = {
     },
     {
       _id: '5c94a044539b982ccabbdb6e',
+      lecture_id: '5c94a044539b982ccabbdb6e',
       classification: '교양',
       department: '영어영문학과',
       academic_year: '1학년',
@@ -610,6 +622,7 @@ export const mockTimeTable456: FullTimetable = {
     },
     {
       _id: '5c94a04b539b982ccabbdb75',
+      lecture_id: '5c94a04b539b982ccabbdb75',
       classification: '교양',
       department: '철학과',
       academic_year: '1학년',
@@ -642,6 +655,7 @@ export const mockTimeTable456: FullTimetable = {
     },
     {
       _id: '5c94a059539b982ccabbdb79',
+      lecture_id: '5c94a059539b982ccabbdb79',
       classification: '교양',
       department: '수리과학부',
       academic_year: '1학년',
@@ -674,6 +688,7 @@ export const mockTimeTable456: FullTimetable = {
     },
     {
       _id: '5c94a0b4539b982ccabbdb83',
+      lecture_id: '5c94a0b4539b982ccabbdb83',
       classification: '교양',
       department: '통계학과',
       academic_year: '1학년',
@@ -803,6 +818,7 @@ export const mockTimeTable789: FullTimetable = {
   lecture_list: [
     {
       _id: '5cd24770db261b554d530d8a',
+      lecture_id: '5cd24770db261b554d530d8a',
       classification: '교양',
       department: '물리·천문학부(물리학전공)',
       academic_year: '1학년',
@@ -835,6 +851,7 @@ export const mockTimeTable789: FullTimetable = {
     },
     {
       _id: '5d0ca53fdb261b554d576640',
+      lecture_id: '5d0ca53fdb261b554d576640',
       classification: '교양',
       department: '생명과학부',
       academic_year: '1학년',
@@ -1122,6 +1139,7 @@ export const mockTimeTable: FullTimetable = {
   lecture_list: [
     {
       _id: '633ae5ba817bbc0010601783',
+      lecture_id: '633ae5ba817bbc0010601783',
       classification: '전선',
       department: '혁신공유학부',
       academic_year: '1학년',

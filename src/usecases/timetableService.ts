@@ -1,7 +1,6 @@
 import { Color } from '@/entities/color';
 import { Semester } from '@/entities/semester';
 import { Day } from '@/entities/time';
-import { TimeMask } from '@/entities/timeMask';
 import { FullTimetable, Timetable } from '@/entities/timetable';
 import { TimetableRepository, timetableRepository } from '@/repositories/timetableRepository';
 import { AuthService, authService } from '@/usecases/authService';
@@ -17,15 +16,14 @@ export interface TimetableService {
     token: string,
     params: { id: string; lecture_id: string },
     data: {
-      course_title: string;
-      instructor: string;
-      class_time_mask: TimeMask;
-      class_time_json: (
-        | { _id: string; day: Day; start: number; start_time: string; end_time: string; len: number; place: string }
-        | { day: Day; start: number; len: number; place: string }
+      course_title?: string;
+      instructor?: string;
+      class_time_json?: (
+        | { _id: string; day: Day; start_time: string; end_time: string; place: string }
+        | { day: Day; start_time: string; end_time: string; place: string }
       )[];
-      remark: string;
-      credit: number;
+      remark?: string;
+      credit?: number;
     } & ({ colorIndex: 0; color: Color } | { colorIndex: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 }),
   ): Promise<FullTimetable>;
   createLecture(
@@ -34,10 +32,9 @@ export interface TimetableService {
     data: {
       course_title: string;
       instructor: string;
-      class_time_mask: TimeMask;
       class_time_json: (
-        | { _id: string; day: Day; start: number; start_time: string; end_time: string; len: number; place: string }
-        | { day: Day; start: number; len: number; place: string }
+        | { _id: string; day: Day; start_time: string; end_time: string; place: string }
+        | { day: Day; start_time: string; end_time: string; place: string }
       )[];
       remark: string;
       credit: number;

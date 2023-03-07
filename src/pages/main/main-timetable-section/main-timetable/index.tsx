@@ -8,6 +8,7 @@ import { timeMaskHours } from '@/entities/timeMask';
 import { FullTimetable } from '@/entities/timetable';
 import { colorService } from '@/usecases/colorService';
 import { lectureService } from '@/usecases/lectureService';
+import { timetableViewService } from '@/usecases/timetableViewService';
 
 type Props = {
   timetable: FullTimetable;
@@ -40,7 +41,7 @@ export const MainTimeTable = ({
     <Wrapper
       className={className}
       $columnCount={days.length}
-      $rowCount={timeMaskHours.length * 2}
+      $rowCount={timeMaskHours.length * 12}
       data-testid="main-timetable"
     >
       {
@@ -55,7 +56,7 @@ export const MainTimeTable = ({
       {
         // 좌측 8 ~ 22
         timeMaskHours.map((t, i) => (
-          <Time data-testid="hour-label" $rowStart={i * 2 + 2} key={t}>
+          <Time data-testid="hour-label" $rowStart={i * 12 + 2} key={t}>
             {t}
           </Time>
         ))
@@ -64,7 +65,7 @@ export const MainTimeTable = ({
       {
         // 가운데 시간표 가로줄들
         timeMaskHours.map((_, i) => (
-          <TimeLine $rowStart={i * 2 + 2} key={_} />
+          <TimeLine $rowStart={i * 12 + 2} key={_} />
         ))
       }
 
@@ -73,16 +74,19 @@ export const MainTimeTable = ({
 
         const { bg: backgroundColor, fg: color } = lectureService.getLectureColor(lecture, colorList);
         const isHovered = lecture._id === hoveredLectureId;
+        const isCustomLecture = lectureService.isCustomLecture(lecture);
 
         return lecture.class_time_json.map((time) => {
-          const colStart = time.day;
-          const rowStart = time.start * 2 + 2;
-          const rowEnd = rowStart + time.len * 2;
+          const {
+            col: [colStart, colEnd],
+            row: [rowStart, rowEnd],
+          } = timetableViewService.getGridPos(time, isCustomLecture);
 
           return (
             <Item
               data-testid="main-timetable-lecture"
-              $colStart={colStart + 2}
+              $colStart={colStart}
+              $colEnd={colEnd}
               $rowStart={rowStart}
               $rowEnd={rowEnd}
               $hovered={isHovered}
@@ -101,14 +105,16 @@ export const MainTimeTable = ({
       })}
 
       {previewLecture?.class_time_json.map((time) => {
-        const colStart = time.day;
-        const rowStart = time.start * 2 + 2;
-        const rowEnd = rowStart + time.len * 2;
+        const {
+          col: [colStart, colEnd],
+          row: [rowStart, rowEnd],
+        } = timetableViewService.getGridPos(time);
 
         return (
           <Item
             data-testid="main-timetable-preview-lecture"
-            $colStart={colStart + 2}
+            $colStart={colStart}
+            $colEnd={colEnd}
             $rowStart={rowStart}
             $rowEnd={rowEnd}
             $isPreview
@@ -131,7 +137,7 @@ const useColorList = () => useQuery(['colors'], () => colorService.getColorList(
 const Wrapper = styled.div<{ $columnCount: number; $rowCount: number }>`
   display: grid;
   grid-template-columns: 45px repeat(${({ $columnCount }) => $columnCount}, 1fr);
-  grid-template-rows: 40px repeat(${({ $rowCount }) => $rowCount}, 20px) 1fr;
+  grid-template-rows: 40px repeat(${({ $rowCount }) => $rowCount}, 3px) 1fr;
 
   height: 100%;
 `;
@@ -150,7 +156,7 @@ const DayLabel = styled.div<{ $colStart: number }>`
 
 const Time = styled.div<{ $rowStart: number }>`
   grid-column: 1 / 2;
-  grid-row: ${({ $rowStart }) => `${$rowStart} / ${$rowStart + 1}`};
+  grid-row: ${({ $rowStart }) => `${$rowStart} / ${$rowStart + 6}`};
   text-align: right;
   font-size: 14px;
   opacity: 0.4;
@@ -159,7 +165,7 @@ const Time = styled.div<{ $rowStart: number }>`
 
 const TimeLine = styled.div<{ $rowStart: number }>`
   grid-column: 2 / -1;
-  grid-row: ${({ $rowStart }) => `${$rowStart + 1} / ${$rowStart + 2}`};
+  grid-row: ${({ $rowStart }) => `${$rowStart + 6} / ${$rowStart + 12}`};
   border-top: 1px solid rgb(248, 249, 250);
   border-bottom: 1px solid rgb(232, 235, 240);
 `;
@@ -188,12 +194,13 @@ const AddLectureButton = styled(Button).attrs({ variant: 'outlined', size: 'smal
 
 const Item = styled.div<{
   $colStart: number;
+  $colEnd: number;
   $rowStart: number;
   $rowEnd: number;
   $hovered?: boolean;
   $isPreview?: boolean;
 }>`
-  grid-column: ${({ $colStart }) => `${$colStart} / ${$colStart + 1}`};
+  grid-column: ${({ $colStart, $colEnd }) => `${$colStart} / ${$colEnd}`};
   grid-row: ${({ $rowStart, $rowEnd }) => `${$rowStart} / ${$rowEnd}`};
   font-size: 10px;
   display: flex;

@@ -9,7 +9,6 @@ import { useTokenContext } from '@/contexts/tokenContext';
 import { Color } from '@/entities/color';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { lectureService } from '@/usecases/lectureService';
-import { timeMaskService } from '@/usecases/timeMaskService';
 import { timetableService } from '@/usecases/timetableService';
 import { queryKey } from '@/utils/query-key-factory';
 
@@ -40,8 +39,7 @@ export const MainLectureCreateDialog = ({ open, onClose, timetableId }: Props) =
       {
         class_time_json:
           draft.class_time_json?.map((t) => ('_id' in t ? t : lectureService.emptyClassTimeToRequest(t))) ?? [],
-        class_time_mask: timeMaskService.getLectureFullTimeBitMask(draft.class_time_json ?? []),
-        course_title: draft.course_title,
+        course_title: draft.course_title ?? '',
         credit: draft.credit ?? 0,
         instructor: draft.instructor ?? '',
         remark: draft.remark ?? '',
@@ -91,7 +89,7 @@ const useCreateLecture = (id?: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    (body: Parameters<typeof timetableService.updateLecture>[2]) => {
+    (body: Parameters<typeof timetableService['createLecture']>[2]) => {
       if (!token) throw new Error('no token');
       if (!id) throw new Error('no id');
       return timetableService.createLecture(token, { id }, body);

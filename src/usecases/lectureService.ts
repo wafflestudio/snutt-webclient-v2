@@ -4,15 +4,16 @@ import { CourseBook } from '@/entities/semester';
 import { DAY_LABEL_MAP } from '@/entities/time';
 import { createRandomId } from '@/utils/random-id';
 
-export interface SemesterService {
+export interface LectureService {
   getLectureDetailUrl(lecture: BaseLecture, courseBook: Omit<CourseBook, 'updated_at'>): string;
   getLectureTimeTexts(lecture: BaseLecture): string[];
   getLectureColor(lecture: Pick<Lecture, 'color' | 'colorIndex'>, colorList: Color[]): Color;
   getEmptyClassTime(): AddedLectureTime;
   emptyClassTimeToRequest(time: AddedLectureTime): Omit<AddedLectureTime, '__id__'>;
+  isCustomLecture(lecture: BaseLecture): boolean;
 }
 
-const getLectureService = (): SemesterService => {
+const getLectureService = (): LectureService => {
   return {
     getLectureDetailUrl: ({ course_number, lecture_number }, { year, semester }) => {
       const { openShtmFg, openDetaShtmFg } = {
@@ -36,8 +37,14 @@ const getLectureService = (): SemesterService => {
 
       return { bg, fg };
     },
-    getEmptyClassTime: () => ({ day: 0, len: 0.5, place: '', start: 0, __id__: createRandomId() }),
-    emptyClassTimeToRequest: (time) => ({ day: time.day, len: time.len, place: time.place, start: time.start }),
+    getEmptyClassTime: () => ({ day: 0, start_time: '08:00', end_time: '08:30', place: '', __id__: createRandomId() }),
+    emptyClassTimeToRequest: (time) => ({
+      day: time.day,
+      start_time: time.start_time,
+      end_time: time.end_time,
+      place: time.place,
+    }),
+    isCustomLecture: (lecture) => lecture.lecture_id == undefined,
   };
 };
 
