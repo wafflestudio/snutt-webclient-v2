@@ -109,7 +109,7 @@ export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMin
       </StyledContent>
 
       <Dialog.Actions>
-        <Button size="small" color="gray" onClick={handleClose}>
+        <Button size="small" color="gray" onClick={handleClose} data-testid="time-pick-dialog-cancel">
           취소
         </Button>
         <Button size="small" disabled={!isValid} onClick={handleSubmit} data-testid="time-pick-dialog-submit">
