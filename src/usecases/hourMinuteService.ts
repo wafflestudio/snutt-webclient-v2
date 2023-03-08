@@ -1,4 +1,4 @@
-import { AmPm, Hour12, Hour24, HourMinute, HourMinute12, HourMinute24 } from '@/entities/time';
+import { AmPm, Hour12, Hour24, HourMinute, HourMinute12, HourMinute24, Minute } from '@/entities/time';
 
 export interface HourMinuteService {
   isAfter: (hm1: HourMinute, hm2: HourMinute) => boolean;
@@ -10,6 +10,8 @@ export interface HourMinuteService {
   toHour24: (hour: Hour12, amPm: AmPm) => Hour24;
   toHourMinute24: (hm: HourMinute) => HourMinute24;
   toHourMinute12: (hm: HourMinute) => HourMinute12;
+
+  addMinute: (hm: HourMinute24, minute: Minute) => HourMinute24;
 }
 
 const getHourMinuteService = (): HourMinuteService => {
@@ -36,6 +38,14 @@ const getHourMinuteService = (): HourMinuteService => {
             minute: hm.minute,
             amPm: hm.hour >= 12 ? AmPm.PM : AmPm.AM,
           },
+    addMinute: (hm, minute) => {
+      const addedHour = hm.hour + Math.floor((hm.minute + minute) / 60);
+      const addedMinute = (hm.minute + minute) % 60;
+
+      if (addedHour > 23) throw new Error('hourminute24 out of bound');
+
+      return { hour: addedHour as Hour24, minute: addedMinute as Minute };
+    },
   };
 };
 

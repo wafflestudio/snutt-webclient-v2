@@ -19,7 +19,7 @@ export interface TimetableViewService {
   ) => { col: [number, number]; row: [number, number] };
 
   parseTime: (time: string) => HourMinute24; // 11:55 => { hour: 11, minute: 55 }
-  formatTime: (hour: number, minute: number) => string; // { hour: 11, minute: 55 } => 11:55
+  formatTime: (hourMinute: HourMinute24) => string; // { hour: 11, minute: 55 } => 11:55
 }
 
 export const getTimetableViewService = ({
@@ -29,7 +29,8 @@ export const getTimetableViewService = ({
 }): TimetableViewService => {
   const getDisplayMode = () => (repositories[0].get('timetable_display_mode', true) === 'full' ? 'full' : 'real');
   const parseTime = (time: string) => ({ hour: +time.split(':')[0] as Hour24, minute: +time.split(':')[1] as Minute });
-  const formatTime = (hour: number, minute: number) => `${`${hour}`.padStart(2, '0')}:${`${minute}`.padStart(2, '0')}`;
+  const formatTime = ({ hour, minute }: HourMinute24) =>
+    `${`${hour}`.padStart(2, '0')}:${`${minute}`.padStart(2, '0')}`;
 
   const getHourRange = (times: LectureTime[]): [Hour24, Hour24] => {
     const start = Math.min(...times.map((t) => parseTime(t.start_time).hour), 8) as Hour24;

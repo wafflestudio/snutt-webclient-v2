@@ -16,9 +16,6 @@ type Props = {
   onChangeLectureTime: (lectureTime: (ArrayElement<Lecture['class_time_json']> | AddedLectureTime)[]) => void;
 };
 
-const startBound = { hour: 8, minute: 0 } as const;
-const endBound = { hour: 22, minute: 55 } as const;
-
 export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Props) => {
   const [openTimeDialog, setOpenTimeDialog] = useState<{
     id: string;
@@ -48,10 +45,8 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
         const onChangeEndTime = (end_time: string) =>
           onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, end_time } : _lt)));
 
-        const onChangeStartEndTime = (time: string) =>
-          onChangeLectureTime(
-            lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, start_time: time, end_time: time } : _lt)),
-          );
+        const onChangeStartEndTime = (start_time: string, end_time: string) =>
+          onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, start_time, end_time } : _lt)));
 
         const onChangePlace = (place: string) =>
           onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, place } : _lt)));
@@ -94,18 +89,24 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
               onSubmit={
                 openTimeDialog?.type === 'start'
                   ? (hour, minute) => {
-                      // 시작 시간 바꿨는데 끝 시간 넘었으면 끝 시간도 변경
-                      if (hourMinuteService.isBefore(timetableViewService.parseTime(lt.end_time), { hour, minute }))
-                        onChangeStartEndTime(timetableViewService.formatTime(hour, minute));
-                      else onChangeStartTime(timetableViewService.formatTime(hour, minute));
+                      // 시작 시간 바꿨는데 끝 시간 보다 같거나 뒤면 끝시간을 시작시간 + 5분 으로
+                      if (!hourMinuteService.isAfter(timetableViewService.parseTime(lt.end_time), { hour, minute })) {
+                        const start = timetableViewService.formatTime({ hour, minute });
+                        const end = timetableViewService.formatTime(hourMinuteService.addMinute({ hour, minute }, 5));
+                        onChangeStartEndTime(start, end);
+                      } else onChangeStartTime(timetableViewService.formatTime({ hour, minute }));
                     }
-                  : (hour, minute) => onChangeEndTime(timetableViewService.formatTime(hour, minute))
+                  : (hour, minute) => onChangeEndTime(timetableViewService.formatTime({ hour, minute }))
               }
               defaultHourMinute={openTimeDialog?.defaultTime}
-              range={{
-                start: openTimeDialog?.type === 'start' ? startBound : timetableViewService.parseTime(lt.start_time),
-                end: endBound,
-              }}
+              range={
+                openTimeDialog?.type === 'start'
+                  ? { start: { hour: 0, minute: 0 }, end: { hour: 23, minute: 50 } }
+                  : {
+                      start: hourMinuteService.addMinute(timetableViewService.parseTime(lt.start_time), 5),
+                      end: { hour: 23, minute: 55 },
+                    }
+              }
             />
           </TimeItem>
         );

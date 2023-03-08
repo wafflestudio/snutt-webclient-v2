@@ -29,11 +29,11 @@ test('강의 시간 수정 선택 기능이 엄청 잘 동작한다 (컴프)', a
   await expect(hBox).toHaveValue('08');
   await expect(mBox).toHaveValue('20');
   await expect(hClock.getByText('5', { exact: true })).toBeDisabled();
-  await expect(hClock.getByText('11', { exact: true })).toBeDisabled();
+  await expect(hClock.getByText('12', { exact: true })).toBeDisabled();
   await expect(hClock.getByText('8', { exact: true })).toHaveAttribute('aria-selected', 'true');
   await hClock.getByText('6', { exact: true }).click();
   await expect(hBox).toHaveValue('06');
-  await expect(mClock.getByText('30', { exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(mClock.getByText('35', { exact: true })).toHaveAttribute('aria-selected', 'true');
   await mClock.getByText('45', { exact: true }).click();
   await page.getByTestId(testIds['시간 취소']).click();
   await expect(times[1].end).toHaveValue('20:20');
@@ -50,33 +50,33 @@ test('강의 시간 수정 선택 기능이 엄청 잘 동작한다 (컴프)', a
   await hClock.getByText('10', { exact: true }).click();
   await page.getByTestId(testIds['시간 저장']).click();
   await expect(times[1].start).toHaveValue('22:00');
-  await expect(times[1].end).toHaveValue('22:00');
+  await expect(times[1].end).toHaveValue('22:05');
 
   await times[0].start.click();
   await expect(am).toHaveAttribute('aria-selected', 'true');
   await pm.click();
   await expect(pm).toHaveAttribute('aria-selected', 'true');
-  await expect(hBox).toHaveValue('10');
-  await expect(mBox).toHaveValue('55');
+  await expect(hBox).toHaveValue('11');
+  await expect(mBox).toHaveValue('00');
   await hClock.getByText('3', { exact: true }).click();
   await am.click();
-  await expect(hBox).toHaveValue('08');
+  await expect(hBox).toHaveValue('03');
   await expect(mBox).toHaveValue('00');
   await mClock.getByText('25', { exact: true }).click();
   await page.getByTestId(testIds['시간 저장']).click();
-  await expect(times[0].start).toHaveValue('08:25');
+  await expect(times[0].start).toHaveValue('03:25');
 
   await times[0].end.click();
-  await hClock.getByText('8', { exact: true }).click();
-  await expect(hBox).toHaveValue('08');
+  await hClock.getByText('3', { exact: true }).click();
+  await expect(hBox).toHaveValue('03');
   await expect(mBox).toHaveValue('15');
   await am.click();
-  await expect(mBox).toHaveValue('25');
-  await expect(mClock.getByText('20', { exact: true })).toBeDisabled();
+  await expect(mBox).toHaveValue('30');
+  await expect(mClock.getByText('25', { exact: true })).toBeDisabled();
   await hBox.click();
   await hClock.getByText('11', { exact: true }).click();
   await page.getByTestId(testIds['시간 저장']).click();
-  await expect(times[0].end).toHaveValue('11:25');
+  await expect(times[0].end).toHaveValue('11:30');
 });
 
 const testIds = {
