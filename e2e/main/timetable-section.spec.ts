@@ -87,6 +87,23 @@ test('로그인되었을 경우, 시간표 내용이 보인다 (월~일 시간�
   await expect(lecture.filter({ hasText: '물리학실험' })).toHaveCSS('grid-row', '62 / 86');
 });
 
+test('로그인되었을 경우, 시간표 내용이 보인다 (시작 끝 난리난 시간표)', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page);
+  const tabs = page.getByTestId('mt-tab');
+  await tabs.filter({ hasText: '나무의 시간표' }).click();
+
+  const table = page.getByTestId('main-timetable');
+  const hourLabel = table.getByTestId('hour-label');
+  const lecture = table.getByTestId('main-timetable-lecture');
+
+  await expect(hourLabel).toHaveCount(24);
+  await expect(lecture.filter({ hasText: '베이스세미나' })).toHaveCSS('grid-row', '5 / 26');
+  await expect(lecture.filter({ hasText: '가디언세미나' })).toHaveCSS('grid-row', '224 / 279');
+  await expect(lecture.filter({ hasText: '베이스 과외' })).toHaveCSS('grid-row', '200 / 212');
+  await expect(lecture.filter({ hasText: '논리와 비판적 사고' })).toHaveCSS('grid-row', '170 / 204');
+});
+
 test('로그인되지 않았을 경우, 시간표 목록 탭이 정상 동작한다 (시간표 없는 학기)', async ({ page }) => {
   await page.goto('/?year=3001&semester=4');
   await givenUser(page, { login: false });

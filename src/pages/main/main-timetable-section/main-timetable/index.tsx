@@ -55,7 +55,7 @@ export const MainTimeTable = ({
       }
 
       {
-        // 좌측 8 ~ 22
+        // 좌측 시각 레이블 (ex: 8 ~ 22)
         hours.map((t, i) => (
           <Time data-testid="hour-label" $rowStart={i * 12 + 2} key={t}>
             {t}
