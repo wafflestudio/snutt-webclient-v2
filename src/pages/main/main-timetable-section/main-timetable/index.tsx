@@ -4,7 +4,6 @@ import styled, { css, keyframes } from 'styled-components';
 import { Button } from '@/components/button';
 import { BaseLecture } from '@/entities/lecture';
 import { DAY_LABEL_MAP } from '@/entities/time';
-import { timeMaskHours } from '@/entities/timeMask';
 import { FullTimetable } from '@/entities/timetable';
 import { colorService } from '@/usecases/colorService';
 import { lectureService } from '@/usecases/lectureService';
@@ -36,13 +35,14 @@ export const MainTimeTable = ({
     .flatMap((l) => l.class_time_json)
     .concat(...(previewLecture?.class_time_json ?? []));
   const days = rangeToArray(...timetableViewService.getDayRange(allClassTimes));
+  const hours = rangeToArray(...timetableViewService.getHourRange(allClassTimes));
   const totalCredit = timetable.lecture_list.reduce((acc, cur) => acc + cur.credit, 0);
 
   return (
     <Wrapper
       className={className}
       $columnCount={days.length}
-      $rowCount={timeMaskHours.length * 12}
+      $rowCount={hours.length * 12}
       data-testid="main-timetable"
     >
       {
@@ -56,7 +56,7 @@ export const MainTimeTable = ({
 
       {
         // 좌측 8 ~ 22
-        timeMaskHours.map((t, i) => (
+        hours.map((t, i) => (
           <Time data-testid="hour-label" $rowStart={i * 12 + 2} key={t}>
             {t}
           </Time>
@@ -65,7 +65,7 @@ export const MainTimeTable = ({
 
       {
         // 가운데 시간표 가로줄들
-        timeMaskHours.map((_, i) => (
+        hours.map((_, i) => (
           <TimeLine $rowStart={i * 12 + 2} key={_} />
         ))
       }
@@ -81,7 +81,7 @@ export const MainTimeTable = ({
           const {
             col: [colStart, colEnd],
             row: [rowStart, rowEnd],
-          } = timetableViewService.getGridPos(time, isCustomLecture);
+          } = timetableViewService.getGridPos(allClassTimes, time, isCustomLecture);
 
           return (
             <Item
@@ -109,7 +109,7 @@ export const MainTimeTable = ({
         const {
           col: [colStart, colEnd],
           row: [rowStart, rowEnd],
-        } = timetableViewService.getGridPos(time);
+        } = timetableViewService.getGridPos(allClassTimes, time);
 
         return (
           <Item
