@@ -3,12 +3,13 @@ import styled, { css, keyframes } from 'styled-components';
 
 import { Button } from '@/components/button';
 import { BaseLecture } from '@/entities/lecture';
-import { DAY_LABEL_MAP, dayList } from '@/entities/time';
+import { DAY_LABEL_MAP } from '@/entities/time';
 import { timeMaskHours } from '@/entities/timeMask';
 import { FullTimetable } from '@/entities/timetable';
 import { colorService } from '@/usecases/colorService';
 import { lectureService } from '@/usecases/lectureService';
 import { timetableViewService } from '@/usecases/timetableViewService';
+import { rangeToArray } from '@/utils/rangeToArray';
 
 type Props = {
   timetable: FullTimetable;
@@ -34,7 +35,7 @@ export const MainTimeTable = ({
   const allClassTimes = timetable.lecture_list
     .flatMap((l) => l.class_time_json)
     .concat(...(previewLecture?.class_time_json ?? []));
-  const days = dayList.slice(0, Math.max(4, Math.max(...allClassTimes.map((item) => item.day))) + 1);
+  const days = rangeToArray(...timetableViewService.getDayRange(allClassTimes));
   const totalCredit = timetable.lecture_list.reduce((acc, cur) => acc + cur.credit, 0);
 
   return (

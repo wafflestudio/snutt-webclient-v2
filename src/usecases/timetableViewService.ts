@@ -1,17 +1,17 @@
 import { BaseLecture } from '@/entities/lecture';
-import { Hour24, HourMinute24, Minute } from '@/entities/time';
+import { Day, Hour24, HourMinute24, Minute } from '@/entities/time';
 import { TimetableDisplayMode } from '@/entities/timetableView';
 import { StorageRepository, storageRepository } from '@/repositories/storageRepository';
 import { ArrayElement } from '@/utils/array-element';
+
+type LectureTime = ArrayElement<BaseLecture['class_time_json']>;
 
 export interface TimetableViewService {
   getDisplayMode: () => TimetableDisplayMode;
   setDisplayMode: (mode: TimetableDisplayMode) => void;
 
-  getGridPos: (
-    time: ArrayElement<BaseLecture['class_time_json']>,
-    isCustomLecture?: boolean,
-  ) => { col: [number, number]; row: [number, number] };
+  getDayRange: (times: LectureTime[]) => [Day, Day]; // start ~ end
+  getGridPos: (time: LectureTime, isCustomLecture?: boolean) => { col: [number, number]; row: [number, number] };
 
   parseTime: (time: string) => HourMinute24; // 11:55 => { hour: 11, minute: 55 }
   formatTime: (hour: number, minute: number) => string; // { hour: 11, minute: 55 } => 11:55
@@ -29,6 +29,7 @@ export const getTimetableViewService = ({
   return {
     getDisplayMode,
     setDisplayMode: (mode) => repositories[0].set('timetable_display_mode', mode, true),
+    getDayRange: (times) => [0, Math.max(4, Math.max(...times.map((item) => item.day))) as Day],
     getGridPos: (time, isCustomLecture = false) => {
       const displayMode = getDisplayMode();
 
