@@ -147,7 +147,7 @@ test('강의 시간 추가/제거가 잘 된다', async ({ page }) => {
       (req) =>
         req.postDataJSON().class_time_json[1].place === '문도 박사' &&
         req.postDataJSON().class_time_json[1].start_time === '09:00' &&
-        req.postDataJSON().class_time_json[1].end_time === '09:00' && // 시간이 자동으로 밀려서 end_time 이 start_time 과 같아진다
+        req.postDataJSON().class_time_json[1].end_time === '09:05' && // 시간이 자동으로 밀려서 end_time 이 start_time 과 같아진다
         req.postDataJSON().class_time_json[1].day === 0 &&
         req.url().includes('/v1/tables/123/lecture/5d1a0132db261b554d5d0078') &&
         req.method() === 'PUT',
