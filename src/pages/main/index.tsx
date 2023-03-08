@@ -128,6 +128,7 @@ const useSearchResult = () => {
 const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
+  align-items: stretch;
 `;
 
 const sectionStyle = css`
@@ -142,7 +143,7 @@ const sectionStyle = css`
 
 const LectureSection = styled(MainLectureSection)`
   ${sectionStyle};
-  height: 680px;
+
   @media (max-width: ${BREAKPOINT}px) {
     height: 400px;
   }

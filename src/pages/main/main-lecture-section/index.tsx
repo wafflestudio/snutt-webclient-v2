@@ -79,9 +79,14 @@ export const MainLectureSection = ({
 
 const Wrapper = styled.section`
   padding: 20px 15px 0;
+  position: relative;
 `;
 
 const Content = styled.div`
   background-color: #ffffff;
-  height: calc(100% - 33px);
+  top: 53px;
+  left: 15px;
+  right: 15px;
+  bottom: 0;
+  position: absolute;
 `;
