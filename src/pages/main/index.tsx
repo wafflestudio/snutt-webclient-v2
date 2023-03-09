@@ -152,6 +152,7 @@ const LectureSection = styled(MainLectureSection)`
 
 const TimetableSection = styled(MainTimetableSection)`
   ${sectionStyle};
+  min-height: 680px;
   @media (max-width: ${BREAKPOINT}px) {
     margin-bottom: 30px;
   }
