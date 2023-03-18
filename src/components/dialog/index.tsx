@@ -63,7 +63,6 @@ export const Dialog = ({
 };
 
 const Title = styled.div`
-  font-family: AppleSDGothicNeo;
   padding: 16px 24px;
   font-size: 1.25rem;
   margin: 0;
@@ -82,9 +81,7 @@ const Content = styled.div`
   padding: 0 24px 20px;
 `;
 
-const ContentText = styled.div`
-  font-family: AppleSDGothicNeo;
-`;
+const ContentText = styled.div``;
 
 const Dimmer = styled(Backdrop)`
   z-index: 9999;
