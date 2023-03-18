@@ -11,7 +11,6 @@ export interface BaseLecture {
   class_time?: string;
   real_class_time: string;
   class_time_json: {
-    _id: string;
     day: Day;
     place: string;
     start_time: string;

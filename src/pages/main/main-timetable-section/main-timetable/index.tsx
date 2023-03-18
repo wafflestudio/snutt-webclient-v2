@@ -77,7 +77,7 @@ export const MainTimeTable = ({
         const isHovered = lecture._id === hoveredLectureId;
         const isCustomLecture = lectureService.isCustomLecture(lecture);
 
-        return lecture.class_time_json.map((time) => {
+        return lecture.class_time_json.map((time, i) => {
           const {
             col: [colStart, colEnd],
             row: [rowStart, rowEnd],
@@ -91,7 +91,7 @@ export const MainTimeTable = ({
               $rowStart={rowStart}
               $rowEnd={rowEnd}
               $hovered={isHovered}
-              key={time._id}
+              key={lecture._id + i}
               style={{ backgroundColor, color }}
               onMouseEnter={() => setHoveredLectureId(lecture._id)}
               onMouseLeave={() => setHoveredLectureId(null)}
@@ -105,7 +105,7 @@ export const MainTimeTable = ({
         });
       })}
 
-      {previewLecture?.class_time_json.map((time) => {
+      {previewLecture?.class_time_json.map((time, i) => {
         const {
           col: [colStart, colEnd],
           row: [rowStart, rowEnd],
@@ -119,7 +119,7 @@ export const MainTimeTable = ({
             $rowStart={rowStart}
             $rowEnd={rowEnd}
             $isPreview
-            key={time._id}
+            key={previewLecture._id + i}
           >
             {previewLecture.course_title}
           </Item>

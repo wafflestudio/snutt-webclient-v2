@@ -54,14 +54,12 @@ export const mockTimeTable123: FullTimetable = {
       real_class_time: '월(11:00~11:50)/수(11:00~11:50)',
       class_time_json: [
         {
-          _id: '5d19f6370342fd1f4074843a',
           day: 0,
           place: '025-101',
           start_time: '11:00',
           end_time: '11:50',
         },
         {
-          _id: '5d19f6370342fd1f40748439',
           day: 2,
           place: '025-101',
           start_time: '11:00',
@@ -93,21 +91,18 @@ export const mockTimeTable123: FullTimetable = {
       real_class_time: '화(11:00~12:15)/수(18:30~20:20)/목(11:00~12:15)',
       class_time_json: [
         {
-          _id: '5d1dea9d681fc03728c46e30',
           day: 1,
           place: '302-208',
           start_time: '11:00',
           end_time: '12:15',
         },
         {
-          _id: '5d1dea9d681fc03728c46e2f',
           day: 2,
           place: '',
           start_time: '18:30',
           end_time: '20:20',
         },
         {
-          _id: '5d1dea9d681fc03728c46e2e',
           day: 3,
           place: '302-208',
           start_time: '11:00',
@@ -139,7 +134,6 @@ export const mockTimeTable123: FullTimetable = {
       real_class_time: '수(15:30~17:20)',
       class_time_json: [
         {
-          _id: '5d1f3c3ca18d4012f64773a8',
           day: 2,
           place: '024-112',
           start_time: '15:30',
@@ -170,7 +164,6 @@ export const mockTimeTable123: FullTimetable = {
       real_class_time: '월(15:00~16:50)',
       class_time_json: [
         {
-          _id: '5d1f3c3ca18d4012f64775b9',
           day: 0,
           place: '026-403',
           start_time: '15:00',
@@ -201,14 +194,12 @@ export const mockTimeTable123: FullTimetable = {
       real_class_time: '화(12:30~13:45)/목(12:30~13:45)',
       class_time_json: [
         {
-          _id: '5d6e55fcad5ab46079bafccb',
           day: 1,
           place: '014-203',
           start_time: '12:30',
           end_time: '13:45',
         },
         {
-          _id: '5d6e55fcad5ab46079bafcca',
           day: 3,
           place: '014-203',
           start_time: '12:30',
@@ -239,14 +230,12 @@ export const mockTimeTable123: FullTimetable = {
       real_class_time: '화(14:00~15:15)/목(14:00~15:15)',
       class_time_json: [
         {
-          _id: '5d2fd9ef9ee6ed1f1654c1ab',
           day: 1,
           place: '083-506',
           start_time: '14:00',
           end_time: '15:15',
         },
         {
-          _id: '5d2fd9ef9ee6ed1f1654c1aa',
           day: 3,
           place: '083-506',
           start_time: '14:00',
@@ -277,7 +266,6 @@ export const mockTimeTable123: FullTimetable = {
       real_class_time: '월(13:00~14:50)',
       class_time_json: [
         {
-          _id: '5d2fd9ef9ee6ed1f1654bd78',
           day: 0,
           place: '026-102',
           start_time: '13:00',
@@ -309,21 +297,18 @@ export const mockTimeTable123: FullTimetable = {
       real_class_time: '화(15:30~16:45)/화(17:00~17:50)/목(15:30~16:45)',
       class_time_json: [
         {
-          _id: '5d821c6f03c812275101bc7c',
           day: 1,
           place: '003-104',
           start_time: '15:30',
           end_time: '16:45',
         },
         {
-          _id: '5d821c6f03c812275101bc7b',
           day: 1,
           place: '003-105/003-102',
           start_time: '17:00',
           end_time: '17:50',
         },
         {
-          _id: '5d821c6f03c812275101bc7a',
           day: 3,
           place: '003-104',
           start_time: '15:30',
@@ -349,14 +334,12 @@ export const mockTimeTable123: FullTimetable = {
       real_class_time: '월(17:30~20:00)/목(17:30~20:00)',
       class_time_json: [
         {
-          _id: '5dc2ca043c46177d58b4e410',
           day: 0,
           place: '',
           start_time: '17:30',
           end_time: '20:15',
         },
         {
-          _id: '5dc2ca043c46177d58b4e40f',
           day: 3,
           place: '',
           start_time: '17:30',
@@ -379,7 +362,6 @@ export const mockTimeTable123: FullTimetable = {
       real_class_time: '목(21:30~22:00)',
       class_time_json: [
         {
-          _id: '5da442da3c46177d58b123fa',
           day: 3,
           place: '',
           start_time: '21:30',
@@ -419,14 +401,12 @@ export const mockTimeTable456: FullTimetable = {
       real_class_time: '월(14:30~16:20)/수(14:30~16:20)',
       class_time_json: [
         {
-          _id: '5c5434e5fe0abe35a3473748',
           day: 0,
           place: '301-203',
           start_time: '14:30',
           end_time: '16:20',
         },
         {
-          _id: '5c5434e5fe0abe35a3473747',
           day: 2,
           place: '301-203',
           start_time: '14:30',
@@ -457,14 +437,12 @@ export const mockTimeTable456: FullTimetable = {
       real_class_time: '월(13:00~13:50)/수(13:00~13:50)',
       class_time_json: [
         {
-          _id: '5c676ec0fa19e84583db6ec5',
           day: 0,
           place: '025-109',
           start_time: '13:00',
           end_time: '13:50',
         },
         {
-          _id: '5c676ec0fa19e84583db6ec4',
           day: 2,
           place: '025-109',
           start_time: '13:00',
@@ -495,14 +473,12 @@ export const mockTimeTable456: FullTimetable = {
       real_class_time: '화(14:00~15:15)/목(14:00~15:15)',
       class_time_json: [
         {
-          _id: '5c9441c84a58e371b1b82313',
           day: 1,
           place: '001-210',
           start_time: '14:00',
           end_time: '15:15',
         },
         {
-          _id: '5c9441c84a58e371b1b82312',
           day: 3,
           place: '001-210',
           start_time: '14:00',
@@ -533,21 +509,18 @@ export const mockTimeTable456: FullTimetable = {
       real_class_time: '월(11:00~12:15)/수(11:00~12:15)/금(11:00~11:50)',
       class_time_json: [
         {
-          _id: '5c9441c84a58e371b1b824fa',
           day: 0,
           place: '002-104-1',
           start_time: '11:00',
           end_time: '12:15',
         },
         {
-          _id: '5c9441c84a58e371b1b824f9',
           day: 2,
           place: '002-104-1',
           start_time: '11:00',
           end_time: '12:15',
         },
         {
-          _id: '5c9441c84a58e371b1b824f8',
           day: 4,
           place: '002-104-1',
           start_time: '11:00',
@@ -578,7 +551,6 @@ export const mockTimeTable456: FullTimetable = {
       real_class_time: '금(14:00~16:50)',
       class_time_json: [
         {
-          _id: '5c9441c84a58e371b1b823c4',
           day: 4,
           place: '006-105',
           start_time: '14:00',
@@ -609,7 +581,6 @@ export const mockTimeTable456: FullTimetable = {
       real_class_time: '목(15:30~17:20)',
       class_time_json: [
         {
-          _id: '5c9441c94a58e371b1b8283c',
           day: 3,
           place: '043-1-302',
           start_time: '15:30',
@@ -640,14 +611,12 @@ export const mockTimeTable456: FullTimetable = {
       real_class_time: '화(11:00~12:15)/목(11:00~12:15)',
       class_time_json: [
         {
-          _id: '5c9441c94a58e371b1b82914',
           day: 1,
           place: '028-101',
           start_time: '11:00',
           end_time: '12:15',
         },
         {
-          _id: '5c9441c94a58e371b1b82913',
           day: 3,
           place: '028-101',
           start_time: '11:00',
@@ -674,7 +643,6 @@ export const mockTimeTable456: FullTimetable = {
       real_class_time: '월(16:30~17:30)',
       class_time_json: [
         {
-          _id: '5ce62274db261b554d559fae',
           day: 0,
           place: '두레문예관',
           start_time: '16:30',
@@ -697,7 +665,6 @@ export const mockTimeTable456: FullTimetable = {
       real_class_time: '월(18:00~19:00)',
       class_time_json: [
         {
-          _id: '5ce622abdb261b554d559fb5',
           day: 0,
           place: '36동합주실',
           start_time: '00:15',
@@ -720,7 +687,6 @@ export const mockTimeTable456: FullTimetable = {
       real_class_time: '목(18:30~20:00)',
       class_time_json: [
         {
-          _id: '5ce622d1db261b554d559fbd',
           day: 3,
           place: '301동203호',
           start_time: '18:30',
@@ -760,7 +726,6 @@ export const mockTimeTable789: FullTimetable = {
       real_class_time: '수(13:00~14:50)',
       class_time_json: [
         {
-          _id: '5d136a2edb261b554d57ea33',
           day: 2,
           place: '',
           start_time: '13:00',
@@ -791,21 +756,18 @@ export const mockTimeTable789: FullTimetable = {
       real_class_time: '월(15:00~17:50)/수(15:00~17:50)/금(15:00~17:50)',
       class_time_json: [
         {
-          _id: '5d0ca6dcdb261b554d576662',
           day: 0,
           place: '024-101',
           start_time: '15:00',
           end_time: '17:50',
         },
         {
-          _id: '5d0ca6dcdb261b554d576661',
           day: 2,
           place: '024-101',
           start_time: '15:00',
           end_time: '17:50',
         },
         {
-          _id: '5d0ca6dcdb261b554d576660',
           day: 4,
           place: '024-101',
           start_time: '15:00',
@@ -831,14 +793,12 @@ export const mockTimeTable789: FullTimetable = {
       real_class_time: '화(18:00~21:00)/금(18:00~21:00)',
       class_time_json: [
         {
-          _id: '5d0ca606db261b554d576650',
           day: 1,
           place: '',
           start_time: '18:00',
           end_time: '21:00',
         },
         {
-          _id: '5d0ca606db261b554d57664f',
           day: 4,
           place: '',
           start_time: '18:00',
@@ -861,7 +821,6 @@ export const mockTimeTable789: FullTimetable = {
       real_class_time: '수(19:00~21:00)',
       class_time_json: [
         {
-          _id: '5d141e9fdb261b554d57f245',
           day: 2,
           place: '',
           start_time: '19:00',
@@ -885,49 +844,42 @@ export const mockTimeTable789: FullTimetable = {
         '월(8:30~9:30)/화(8:30~9:30)/수(8:30~9:30)/목(8:30~9:30)/금(8:30~9:30)/토(8:30~9:30)/일(8:30~9:30)',
       class_time_json: [
         {
-          _id: '5d0ca77adb261b554d576673',
           day: 0,
           place: '',
           start_time: '8:30',
           end_time: '9:30',
         },
         {
-          _id: '5d0ca77adb261b554d576672',
           day: 1,
           place: '',
           start_time: '8:30',
           end_time: '9:30',
         },
         {
-          _id: '5d0ca77adb261b554d576671',
           day: 2,
           place: '',
           start_time: '8:30',
           end_time: '9:30',
         },
         {
-          _id: '5d0ca77adb261b554d576670',
           day: 3,
           place: '',
           start_time: '8:30',
           end_time: '9:30',
         },
         {
-          _id: '5d0ca77adb261b554d57666f',
           day: 4,
           place: '',
           start_time: '8:30',
           end_time: '9:30',
         },
         {
-          _id: '5d0ca77adb261b554d57666e',
           day: 5,
           place: '',
           start_time: '8:30',
           end_time: '9:30',
         },
         {
-          _id: '5d0ca77adb261b554d57666d',
           day: 6,
           place: '',
           start_time: '8:30',
@@ -950,7 +902,6 @@ export const mockTimeTable789: FullTimetable = {
       real_class_time: '목(15:00~17:00)',
       class_time_json: [
         {
-          _id: '5d2ef74f76b85419827190f5',
           day: 3,
           place: '',
           start_time: '15:00',
@@ -973,7 +924,6 @@ export const mockTimeTable789: FullTimetable = {
       real_class_time: '목(10:00~12:00)',
       class_time_json: [
         {
-          _id: '5d2ef76576b8541982719111',
           day: 3,
           place: '',
           start_time: '10:00',
@@ -996,7 +946,6 @@ export const mockTimeTable789: FullTimetable = {
       real_class_time: '금(12:00~14:00)',
       class_time_json: [
         {
-          _id: '5d14bdd0db261b554d5814f8',
           day: 4,
           place: '',
           start_time: '12:00',
@@ -1047,21 +996,18 @@ export const mockTimeTable: FullTimetable = {
       real_class_time: '월(12:00~14:50)/수(12:00~14:50)/금(12:00~14:50)',
       class_time_json: [
         {
-          _id: '627e4849082b910095f76ece',
           day: 0,
           place: '301-207',
           start_time: '12:00',
           end_time: '14:50',
         },
         {
-          _id: '627e4849082b910095f76ecd',
           day: 2,
           place: '301-207',
           start_time: '12:00',
           end_time: '14:50',
         },
         {
-          _id: '627e4849082b910095f76ecc',
           day: 4,
           place: '301-207',
           start_time: '12:00',
