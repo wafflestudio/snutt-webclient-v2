@@ -1,5 +1,4 @@
-import { dayList } from '@/entities/time';
-import { CellStatus, DragMode, Position, TimeMask, timeMaskHours } from '@/entities/timeMask';
+import { CellStatus, DragMode, Position, TimeMask } from '@/entities/timeMask';
 import { FullTimetable } from '@/entities/timetable';
 
 export interface TimeMaskService {
@@ -35,19 +34,13 @@ const getTimeMaskService = (): TimeMaskService => {
       const transposed = cellStatus[0].map((_, j) => cellStatus.map((row) => row[j])); // 행-열 반전
       return transposed.map((row) => row.map(Number).reduce((acc, cur) => acc * 2 + cur, 0)) as TimeMask;
     },
-    getTimetableEmptyTimeBitMask: (timetable) => {
-      const cellStatus = Array(timeMaskHours.length * 2)
-        .fill(0)
-        .map(() => Array(dayList.length).fill(true));
-
-      timetable?.lecture_list
-        .flatMap((l) => l.class_time_json)
-        .forEach((t) => {
-          for (let i = 0; i < t.len * 2; i++) cellStatus[i + t.start * 2][t.day] = false;
-        });
-
-      return timeMaskService.getBitMask(cellStatus);
-    },
+    getTimetableEmptyTimeBitMask: (timetable) =>
+      (timetable?.lecture_list ?? [])
+        .reduce<TimeMask>(
+          (acc, cur) => acc.map((mask, day) => mask | cur.class_time_mask[day]) as TimeMask,
+          [0, 0, 0, 0, 0, 0, 0],
+        )
+        .map((mask) => mask ^ 0x3fffffff) as TimeMask,
   };
 };
 

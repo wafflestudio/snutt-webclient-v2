@@ -13,11 +13,11 @@ export interface BaseLecture {
   class_time_json: {
     _id: string;
     day: Day;
-    start: number;
-    len: number;
     place: string;
     start_time: string;
     end_time: string;
+    start?: never; // deprecated
+    len?: never; //deprecated
   }[];
   class_time_mask: number[];
   instructor: string;

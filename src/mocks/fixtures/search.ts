@@ -14,8 +14,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eec59',
         day: 1,
-        start: 7.5,
-        len: 1.5,
         place: '302-105',
         start_time: '15:30',
         end_time: '16:45',
@@ -23,8 +21,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eec58',
         day: 3,
-        start: 7.5,
-        len: 1.5,
         place: '302-105',
         start_time: '15:30',
         end_time: '16:45',
@@ -54,8 +50,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee9b8',
         day: 0,
-        start: 7.5,
-        len: 1.5,
         place: '302-208',
         start_time: '15:30',
         end_time: '16:45',
@@ -63,8 +57,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee9b7',
         day: 2,
-        start: 7.5,
-        len: 1.5,
         place: '302-208',
         start_time: '15:30',
         end_time: '16:45',
@@ -93,8 +85,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee0e3',
         day: 6,
-        start: 6,
-        len: 4,
         place: '16-M209',
         start_time: '14:00',
         end_time: '17:50',
@@ -125,8 +115,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eec43',
         day: 0,
-        start: 6,
-        len: 1.5,
         place: '301-202',
         start_time: '14:00',
         end_time: '15:15',
@@ -134,8 +122,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eec42',
         day: 2,
-        start: 6,
-        len: 1.5,
         place: '301-202',
         start_time: '14:00',
         end_time: '15:15',
@@ -162,7 +148,13 @@ export const mockSearchResult: SearchResultLecture[] = [
     class_time: '수(1-3)',
     real_class_time: '수(9:00~11:50)',
     class_time_json: [
-      { _id: '6329ab4dcb360c002b6ed94b', day: 2, start: 1, len: 3, place: '', start_time: '9:00', end_time: '11:50' },
+      {
+        _id: '6329ab4dcb360c002b6ed94b',
+        day: 2,
+        place: '',
+        start_time: '9:00',
+        end_time: '11:50',
+      },
     ],
     class_time_mask: [0, 0, 264241152, 0, 0, 0, 0],
     instructor: '교수님 이름이 길어지면 어떻게 되는지 확인해 보려 합니다',
@@ -187,8 +179,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed93f',
         day: 1,
-        start: 3,
-        len: 1.5,
         place: '302-107',
         start_time: '11:00',
         end_time: '12:15',
@@ -196,8 +186,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed93e',
         day: 3,
-        start: 3,
-        len: 1.5,
         place: '302-107',
         start_time: '11:00',
         end_time: '12:15',
@@ -226,8 +214,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee0d3',
         day: 2,
-        start: 5,
-        len: 1,
         place: '302-105',
         start_time: '13:00',
         end_time: '13:50',
@@ -257,8 +243,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eebb6',
         day: 1,
-        start: 6,
-        len: 1.5,
         place: '302-408',
         start_time: '14:00',
         end_time: '15:15',
@@ -266,8 +250,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eebb5',
         day: 3,
-        start: 6,
-        len: 1.5,
         place: '302-408',
         start_time: '14:00',
         end_time: '15:15',
@@ -296,8 +278,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eeca6',
         day: 1,
-        start: 1.5,
-        len: 1.5,
         place: '301-118',
         start_time: '9:30',
         end_time: '10:45',
@@ -305,8 +285,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eeca5',
         day: 2,
-        start: 11,
-        len: 2,
         place: '301-118',
         start_time: '19:00',
         end_time: '20:50',
@@ -314,8 +292,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eeca4',
         day: 3,
-        start: 1.5,
-        len: 1.5,
         place: '301-118',
         start_time: '9:30',
         end_time: '10:45',
@@ -345,8 +321,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed949',
         day: 0,
-        start: 5,
-        len: 3,
         place: '5-110',
         start_time: '13:00',
         end_time: '15:50',
@@ -375,8 +349,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efbfa',
         day: 1,
-        start: 4.5,
-        len: 2,
         place: '302-509',
         start_time: '12:30',
         end_time: '14:20',
@@ -384,8 +356,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efbf9',
         day: 3,
-        start: 4.5,
-        len: 2,
         place: '302-211',
         start_time: '12:30',
         end_time: '14:20',
@@ -414,8 +384,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efbfd',
         day: 1,
-        start: 8,
-        len: 2,
         place: '44-1-207',
         start_time: '16:00',
         end_time: '17:50',
@@ -423,8 +391,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efbfc',
         day: 3,
-        start: 8,
-        len: 2,
         place: '44-1-207',
         start_time: '16:00',
         end_time: '17:50',
@@ -453,8 +419,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc00',
         day: 0,
-        start: 2,
-        len: 2,
         place: '44-1-207',
         start_time: '10:00',
         end_time: '11:50',
@@ -462,8 +426,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efbff',
         day: 2,
-        start: 2,
-        len: 2,
         place: '44-1-207',
         start_time: '10:00',
         end_time: '11:50',
@@ -492,8 +454,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc03',
         day: 1,
-        start: 6,
-        len: 2,
         place: '10-1-101',
         start_time: '14:00',
         end_time: '15:50',
@@ -501,8 +461,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc02',
         day: 3,
-        start: 10.5,
-        len: 2,
         place: '10-1-107',
         start_time: '18:30',
         end_time: '20:20',
@@ -531,8 +489,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc06',
         day: 1,
-        start: 7,
-        len: 2,
         place: '44-1-206',
         start_time: '15:00',
         end_time: '16:50',
@@ -540,8 +496,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc05',
         day: 3,
-        start: 7,
-        len: 2,
         place: '44-1-206',
         start_time: '15:00',
         end_time: '16:50',
@@ -570,8 +524,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed944',
         day: 1,
-        start: 3,
-        len: 1.5,
         place: '301-104',
         start_time: '11:00',
         end_time: '12:15',
@@ -579,8 +531,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed943',
         day: 3,
-        start: 3,
-        len: 1.5,
         place: '301-104',
         start_time: '11:00',
         end_time: '12:15',
@@ -609,8 +559,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee0dc',
         day: 1,
-        start: 5,
-        len: 1,
         place: '302-309-2',
         start_time: '13:00',
         end_time: '13:50',
@@ -618,8 +566,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee0db',
         day: 4,
-        start: 10,
-        len: 4,
         place: '302-309-2',
         start_time: '18:00',
         end_time: '21:50',
@@ -649,8 +595,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee0e7',
         day: 4,
-        start: 1,
-        len: 4,
         place: '200-1007',
         start_time: '9:00',
         end_time: '12:50',
@@ -679,8 +623,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee0e5',
         day: 1,
-        start: 6,
-        len: 3,
         place: '64-303',
         start_time: '14:00',
         end_time: '16:50',
@@ -709,8 +651,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc0c',
         day: 0,
-        start: 8,
-        len: 2,
         place: '26-102',
         start_time: '16:00',
         end_time: '17:50',
@@ -718,8 +658,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc0b',
         day: 2,
-        start: 8,
-        len: 2,
         place: '26-102',
         start_time: '16:00',
         end_time: '17:50',
@@ -749,8 +687,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc1b',
         day: 0,
-        start: 6,
-        len: 2,
         place: '26-101',
         start_time: '14:00',
         end_time: '15:50',
@@ -758,8 +694,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc1a',
         day: 2,
-        start: 6,
-        len: 2,
         place: '26-101',
         start_time: '14:00',
         end_time: '15:50',
@@ -789,8 +723,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc1e',
         day: 0,
-        start: 6,
-        len: 2,
         place: '26-102',
         start_time: '14:00',
         end_time: '15:50',
@@ -798,8 +730,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc1d',
         day: 2,
-        start: 6,
-        len: 2,
         place: '26-102',
         start_time: '14:00',
         end_time: '15:50',
@@ -829,8 +759,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc24',
         day: 0,
-        start: 4,
-        len: 2,
         place: '26-101',
         start_time: '12:00',
         end_time: '13:50',
@@ -838,8 +766,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc23',
         day: 2,
-        start: 4,
-        len: 2,
         place: '26-101',
         start_time: '12:00',
         end_time: '13:50',
@@ -869,8 +795,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc27',
         day: 1,
-        start: 6,
-        len: 2,
         place: '26-101',
         start_time: '14:00',
         end_time: '15:50',
@@ -878,8 +802,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc26',
         day: 3,
-        start: 6,
-        len: 2,
         place: '26-101',
         start_time: '14:00',
         end_time: '15:50',
@@ -909,8 +831,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc2a',
         day: 1,
-        start: 6,
-        len: 2,
         place: '26-102',
         start_time: '14:00',
         end_time: '15:50',
@@ -918,8 +838,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc29',
         day: 3,
-        start: 6,
-        len: 2,
         place: '26-102',
         start_time: '14:00',
         end_time: '15:50',
@@ -949,8 +867,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc2d',
         day: 0,
-        start: 4,
-        len: 2,
         place: '26-102',
         start_time: '12:00',
         end_time: '13:50',
@@ -958,8 +874,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc2c',
         day: 2,
-        start: 4,
-        len: 2,
         place: '26-102',
         start_time: '12:00',
         end_time: '13:50',
@@ -989,8 +903,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc30',
         day: 0,
-        start: 2,
-        len: 2,
         place: '26-101',
         start_time: '10:00',
         end_time: '11:50',
@@ -998,8 +910,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc2f',
         day: 2,
-        start: 2,
-        len: 2,
         place: '26-101',
         start_time: '10:00',
         end_time: '11:50',
@@ -1029,8 +939,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc33',
         day: 1,
-        start: 8,
-        len: 2,
         place: '26-102',
         start_time: '16:00',
         end_time: '17:50',
@@ -1038,8 +946,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc32',
         day: 3,
-        start: 8,
-        len: 2,
         place: '26-102',
         start_time: '16:00',
         end_time: '17:50',
@@ -1069,8 +975,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc36',
         day: 0,
-        start: 8,
-        len: 2,
         place: '26-101',
         start_time: '16:00',
         end_time: '17:50',
@@ -1078,8 +982,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc35',
         day: 2,
-        start: 8,
-        len: 2,
         place: '26-101',
         start_time: '16:00',
         end_time: '17:50',
@@ -1109,8 +1011,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc09',
         day: 1,
-        start: 3,
-        len: 2,
         place: '26-102',
         start_time: '11:00',
         end_time: '12:50',
@@ -1118,8 +1018,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc08',
         day: 3,
-        start: 3,
-        len: 2,
         place: '26-102',
         start_time: '11:00',
         end_time: '12:50',
@@ -1148,8 +1046,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc0f',
         day: 1,
-        start: 2,
-        len: 2,
         place: '26-101',
         start_time: '10:00',
         end_time: '11:50',
@@ -1157,8 +1053,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc0e',
         day: 3,
-        start: 2,
-        len: 2,
         place: '26-101',
         start_time: '10:00',
         end_time: '11:50',
@@ -1188,8 +1082,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc12',
         day: 1,
-        start: 4,
-        len: 2,
         place: '26-101',
         start_time: '12:00',
         end_time: '13:50',
@@ -1197,8 +1089,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc11',
         day: 3,
-        start: 4,
-        len: 2,
         place: '26-101',
         start_time: '12:00',
         end_time: '13:50',
@@ -1228,8 +1118,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc15',
         day: 0,
-        start: 2,
-        len: 2,
         place: '26-102',
         start_time: '10:00',
         end_time: '11:50',
@@ -1237,8 +1125,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc14',
         day: 2,
-        start: 2,
-        len: 2,
         place: '26-102',
         start_time: '10:00',
         end_time: '11:50',
@@ -1268,8 +1154,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc18',
         day: 1,
-        start: 1,
-        len: 2,
         place: '26-102',
         start_time: '9:00',
         end_time: '10:50',
@@ -1277,8 +1161,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc17',
         day: 3,
-        start: 1,
-        len: 2,
         place: '26-102',
         start_time: '9:00',
         end_time: '10:50',
@@ -1307,8 +1189,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed93c',
         day: 0,
-        start: 9,
-        len: 1.5,
         place: '302-309-3',
         start_time: '17:00',
         end_time: '18:15',
@@ -1316,8 +1196,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed93b',
         day: 2,
-        start: 9,
-        len: 1.5,
         place: '302-309-3',
         start_time: '17:00',
         end_time: '18:15',
@@ -1346,8 +1224,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '632afccbfd2c4f00492c4650',
         day: 1,
-        start: 4.5,
-        len: 1.5,
         place: '301-203',
         start_time: '12:30',
         end_time: '13:45',
@@ -1355,8 +1231,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '632afccbfd2c4f00492c464f',
         day: 3,
-        start: 4.5,
-        len: 1.5,
         place: '301-203',
         start_time: '12:30',
         end_time: '13:45',
@@ -1385,8 +1259,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed947',
         day: 1,
-        start: 1.5,
-        len: 1.5,
         place: '302-309-1',
         start_time: '9:30',
         end_time: '10:45',
@@ -1394,8 +1266,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed946',
         day: 3,
-        start: 1.5,
-        len: 1.5,
         place: '302-309-1',
         start_time: '9:30',
         end_time: '10:45',
@@ -1424,8 +1294,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed941',
         day: 2,
-        start: 7.5,
-        len: 3,
         place: '301-102',
         start_time: '15:30',
         end_time: '18:20',
@@ -1454,8 +1322,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eebb0',
         day: 1,
-        start: 9,
-        len: 1.5,
         place: '301-201',
         start_time: '17:00',
         end_time: '18:15',
@@ -1463,8 +1329,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eebaf',
         day: 3,
-        start: 9,
-        len: 1.5,
         place: '301-201',
         start_time: '17:00',
         end_time: '18:15',
@@ -1493,8 +1357,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee0d9',
         day: 0,
-        start: 9,
-        len: 1.5,
         place: '301-203',
         start_time: '17:00',
         end_time: '18:15',
@@ -1502,8 +1364,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee0d8',
         day: 2,
-        start: 9,
-        len: 1.5,
         place: '301-203',
         start_time: '17:00',
         end_time: '18:15',
@@ -1532,8 +1392,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee0e1',
         day: 1,
-        start: 9,
-        len: 1.5,
         place: '301-203',
         start_time: '17:00',
         end_time: '18:15',
@@ -1541,8 +1399,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee0e0',
         day: 3,
-        start: 9,
-        len: 1.5,
         place: '301-203',
         start_time: '17:00',
         end_time: '18:15',
@@ -1571,8 +1427,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee0d6',
         day: 1,
-        start: 3,
-        len: 1.5,
         place: '302-309-2',
         start_time: '11:00',
         end_time: '12:15',
@@ -1580,8 +1434,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee0d5',
         day: 3,
-        start: 3,
-        len: 1.5,
         place: '302-309-2',
         start_time: '11:00',
         end_time: '12:15',
@@ -1610,8 +1462,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eec0f',
         day: 2,
-        start: 7.5,
-        len: 3,
         place: '302-209',
         start_time: '15:30',
         end_time: '18:20',
@@ -1640,8 +1490,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed939',
         day: 1,
-        start: 4.5,
-        len: 1.5,
         place: '301-103',
         start_time: '12:30',
         end_time: '13:45',
@@ -1649,8 +1497,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed938',
         day: 3,
-        start: 4.5,
-        len: 1.5,
         place: '301-103',
         start_time: '12:30',
         end_time: '13:45',
@@ -1679,8 +1525,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed936',
         day: 0,
-        start: 10.5,
-        len: 1.5,
         place: '302-209',
         start_time: '18:30',
         end_time: '19:45',
@@ -1688,8 +1532,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed935',
         day: 2,
-        start: 10.5,
-        len: 1.5,
         place: '302-209',
         start_time: '18:30',
         end_time: '19:45',
@@ -1718,8 +1560,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee348',
         day: 0,
-        start: 7.5,
-        len: 1.5,
         place: '15-301',
         start_time: '15:30',
         end_time: '16:45',
@@ -1727,8 +1567,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee347',
         day: 2,
-        start: 7.5,
-        len: 1.5,
         place: '15-301',
         start_time: '15:30',
         end_time: '16:45',
@@ -1758,8 +1596,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee4c5',
         day: 1,
-        start: 3,
-        len: 1.5,
         place: '301-203',
         start_time: '11:00',
         end_time: '12:15',
@@ -1767,8 +1603,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee4c4',
         day: 3,
-        start: 3,
-        len: 1.5,
         place: '301-203',
         start_time: '11:00',
         end_time: '12:15',
@@ -1797,8 +1631,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee822',
         day: 1,
-        start: 7.5,
-        len: 1.5,
         place: '302-311-1',
         start_time: '15:30',
         end_time: '16:45',
@@ -1806,8 +1638,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee821',
         day: 3,
-        start: 7.5,
-        len: 1.5,
         place: '302-311-1',
         start_time: '15:30',
         end_time: '16:45',
@@ -1837,8 +1667,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee8d3',
         day: 1,
-        start: 6,
-        len: 1.5,
         place: '302-105',
         start_time: '14:00',
         end_time: '15:15',
@@ -1846,8 +1674,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee8d2',
         day: 3,
-        start: 6,
-        len: 1.5,
         place: '302-105',
         start_time: '14:00',
         end_time: '15:15',
@@ -1855,8 +1681,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee8d1',
         day: 3,
-        start: 11,
-        len: 2,
         place: '302-310-2',
         start_time: '19:00',
         end_time: '20:50',
@@ -1886,8 +1710,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eeb06',
         day: 1,
-        start: 9,
-        len: 1.5,
         place: '302-311-1',
         start_time: '17:00',
         end_time: '18:15',
@@ -1895,8 +1717,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eeb05',
         day: 3,
-        start: 9,
-        len: 1.5,
         place: '302-311-1',
         start_time: '17:00',
         end_time: '18:15',
@@ -1926,8 +1746,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eecd4',
         day: 0,
-        start: 6,
-        len: 1.5,
         place: '302-105',
         start_time: '14:00',
         end_time: '15:15',
@@ -1935,8 +1753,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eecd3',
         day: 2,
-        start: 6,
-        len: 1.5,
         place: '302-105',
         start_time: '14:00',
         end_time: '15:15',
@@ -1966,8 +1782,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6edd0b',
         day: 1,
-        start: 6,
-        len: 1.5,
         place: '302-107',
         start_time: '14:00',
         end_time: '15:15',
@@ -1975,8 +1789,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6edd0a',
         day: 3,
-        start: 6,
-        len: 1.5,
         place: '302-107',
         start_time: '14:00',
         end_time: '15:15',
@@ -2005,8 +1817,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed68a',
         day: 1,
-        start: 6,
-        len: 1.5,
         place: '301-118',
         start_time: '14:00',
         end_time: '15:15',
@@ -2014,8 +1824,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed689',
         day: 3,
-        start: 6,
-        len: 1.5,
         place: '301-118',
         start_time: '14:00',
         end_time: '15:15',
@@ -2045,8 +1853,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede05',
         day: 0,
-        start: 6,
-        len: 1.5,
         place: '302-208',
         start_time: '14:00',
         end_time: '15:15',
@@ -2054,8 +1860,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede04',
         day: 2,
-        start: 6,
-        len: 1.5,
         place: '302-208',
         start_time: '14:00',
         end_time: '15:15',
@@ -2084,8 +1888,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eeba3',
         day: 0,
-        start: 3,
-        len: 1.5,
         place: '302-105',
         start_time: '11:00',
         end_time: '12:15',
@@ -2093,8 +1895,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eeba2',
         day: 2,
-        start: 3,
-        len: 1.5,
         place: '302-105',
         start_time: '11:00',
         end_time: '12:15',
@@ -2124,8 +1924,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede08',
         day: 1,
-        start: 3,
-        len: 1.5,
         place: '302-105',
         start_time: '11:00',
         end_time: '12:15',
@@ -2133,8 +1931,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede07',
         day: 3,
-        start: 3,
-        len: 1.5,
         place: '302-105',
         start_time: '11:00',
         end_time: '12:15',
@@ -2163,8 +1959,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede33',
         day: 1,
-        start: 6,
-        len: 1.5,
         place: '302-208',
         start_time: '14:00',
         end_time: '15:15',
@@ -2172,8 +1966,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede32',
         day: 3,
-        start: 6,
-        len: 1.5,
         place: '302-208',
         start_time: '14:00',
         end_time: '15:15',
@@ -2202,8 +1994,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee541',
         day: 1,
-        start: 3,
-        len: 1.5,
         place: '301-101',
         start_time: '11:00',
         end_time: '12:15',
@@ -2211,8 +2001,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee540',
         day: 3,
-        start: 3,
-        len: 1.5,
         place: '301-101',
         start_time: '11:00',
         end_time: '12:15',
@@ -2241,8 +2029,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eecb0',
         day: 0,
-        start: 7.5,
-        len: 1.5,
         place: '301-203',
         start_time: '15:30',
         end_time: '16:45',
@@ -2250,8 +2036,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eecaf',
         day: 2,
-        start: 7.5,
-        len: 1.5,
         place: '301-203',
         start_time: '15:30',
         end_time: '16:45',
@@ -2280,8 +2064,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed514',
         day: 1,
-        start: 6,
-        len: 1.5,
         place: '7-202',
         start_time: '14:00',
         end_time: '15:15',
@@ -2289,8 +2071,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed513',
         day: 3,
-        start: 6,
-        len: 1.5,
         place: '7-202',
         start_time: '14:00',
         end_time: '15:15',
@@ -2319,8 +2099,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee9ac',
         day: 1,
-        start: 4.5,
-        len: 1.5,
         place: '7-202',
         start_time: '12:30',
         end_time: '13:45',
@@ -2328,8 +2106,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee9ab',
         day: 3,
-        start: 4.5,
-        len: 1.5,
         place: '7-202',
         start_time: '12:30',
         end_time: '13:45',
@@ -2358,8 +2134,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed59f',
         day: 1,
-        start: 7.5,
-        len: 1.5,
         place: '301-203',
         start_time: '15:30',
         end_time: '16:45',
@@ -2367,8 +2141,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed59e',
         day: 3,
-        start: 7.5,
-        len: 1.5,
         place: '301-203',
         start_time: '15:30',
         end_time: '16:45',
@@ -2397,8 +2169,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc39',
         day: 1,
-        start: 6,
-        len: 2,
         place: '43-1-301',
         start_time: '14:00',
         end_time: '15:50',
@@ -2406,8 +2176,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc38',
         day: 3,
-        start: 6,
-        len: 2,
         place: '43-1-301',
         start_time: '14:00',
         end_time: '15:50',
@@ -2436,8 +2204,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eec90',
         day: 1,
-        start: 6,
-        len: 1.5,
         place: '301-203',
         start_time: '14:00',
         end_time: '15:15',
@@ -2445,8 +2211,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eec8f',
         day: 3,
-        start: 6,
-        len: 1.5,
         place: '301-203',
         start_time: '14:00',
         end_time: '15:15',
@@ -2475,8 +2239,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed7c5',
         day: 1,
-        start: 3,
-        len: 1.5,
         place: '301-118',
         start_time: '11:00',
         end_time: '12:15',
@@ -2484,8 +2246,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed7c4',
         day: 3,
-        start: 3,
-        len: 1.5,
         place: '301-118',
         start_time: '11:00',
         end_time: '12:15',
@@ -2515,8 +2275,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed9cb',
         day: 1,
-        start: 7.5,
-        len: 1.5,
         place: '302-309-1',
         start_time: '15:30',
         end_time: '16:45',
@@ -2524,8 +2282,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed9ca',
         day: 3,
-        start: 7.5,
-        len: 1.5,
         place: '302-309-1',
         start_time: '15:30',
         end_time: '16:45',
@@ -3114,8 +2870,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee163',
         day: 0,
-        start: 8,
-        len: 2,
         place: '301-118',
         start_time: '16:00',
         end_time: '17:50',
@@ -3123,8 +2877,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee162',
         day: 2,
-        start: 10.5,
-        len: 2,
         place: '302-105',
         start_time: '18:30',
         end_time: '20:20',
@@ -3154,8 +2906,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee609',
         day: 4,
-        start: 11,
-        len: 2,
         place: '302-308',
         start_time: '19:00',
         end_time: '20:50',
@@ -3185,8 +2935,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee05b',
         day: 4,
-        start: 5,
-        len: 6,
         place: '302-208',
         start_time: '13:00',
         end_time: '18:50',
@@ -3216,8 +2964,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee4d0',
         day: 0,
-        start: 3,
-        len: 1.5,
         place: '301-203',
         start_time: '11:00',
         end_time: '12:15',
@@ -3225,8 +2971,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee4cf',
         day: 2,
-        start: 3,
-        len: 1.5,
         place: '301-203',
         start_time: '11:00',
         end_time: '12:15',
@@ -3255,8 +2999,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eec0d',
         day: 0,
-        start: 1.5,
-        len: 1.5,
         place: '301-203',
         start_time: '9:30',
         end_time: '10:45',
@@ -3264,8 +3006,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eec0c',
         day: 2,
-        start: 1.5,
-        len: 1.5,
         place: '301-203',
         start_time: '9:30',
         end_time: '10:45',
@@ -3294,8 +3034,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed43f',
         day: 0,
-        start: 9,
-        len: 1.5,
         place: '302-208',
         start_time: '17:00',
         end_time: '18:15',
@@ -3303,8 +3041,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed43e',
         day: 0,
-        start: 10.5,
-        len: 2,
         place: '44-1-207',
         start_time: '18:30',
         end_time: '20:20',
@@ -3312,8 +3048,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed43d',
         day: 2,
-        start: 9,
-        len: 1.5,
         place: '302-208',
         start_time: '17:00',
         end_time: '18:15',
@@ -3343,8 +3077,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eeafa',
         day: 1,
-        start: 7.5,
-        len: 1.5,
         place: '302-106',
         start_time: '15:30',
         end_time: '16:45',
@@ -3352,8 +3084,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eeaf9',
         day: 3,
-        start: 7.5,
-        len: 1.5,
         place: '302-106',
         start_time: '15:30',
         end_time: '16:45',
@@ -3382,8 +3112,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eea69',
         day: 1,
-        start: 9,
-        len: 1.5,
         place: '302-106',
         start_time: '17:00',
         end_time: '18:15',
@@ -3391,8 +3119,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eea68',
         day: 3,
-        start: 9,
-        len: 1.5,
         place: '302-106',
         start_time: '17:00',
         end_time: '18:15',
@@ -3421,8 +3147,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eea52',
         day: 1,
-        start: 11,
-        len: 2,
         place: '302-309-1',
         start_time: '19:00',
         end_time: '20:50',
@@ -3430,8 +3154,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eea51',
         day: 3,
-        start: 5,
-        len: 1,
         place: '302-309-1',
         start_time: '13:00',
         end_time: '13:50',
@@ -3439,8 +3161,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eea50',
         day: 3,
-        start: 11,
-        len: 2,
         place: '302-309-1',
         start_time: '19:00',
         end_time: '20:50',
@@ -3470,8 +3190,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6edb10',
         day: 0,
-        start: 6,
-        len: 1.5,
         place: '302-311-1',
         start_time: '14:00',
         end_time: '15:15',
@@ -3479,8 +3197,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6edb0f',
         day: 2,
-        start: 6,
-        len: 1.5,
         place: '302-311-1',
         start_time: '14:00',
         end_time: '15:15',
@@ -3509,8 +3225,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed6a8',
         day: 0,
-        start: 11,
-        len: 3,
         place: '302-408',
         start_time: '19:00',
         end_time: '21:50',
@@ -3518,8 +3232,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed6a7',
         day: 2,
-        start: 11,
-        len: 3,
         place: '302-408',
         start_time: '19:00',
         end_time: '21:50',
@@ -3548,8 +3260,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede4e',
         day: 0,
-        start: 3,
-        len: 1.5,
         place: '302-107',
         start_time: '11:00',
         end_time: '12:15',
@@ -3557,8 +3267,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede4d',
         day: 2,
-        start: 3,
-        len: 1.5,
         place: '302-107',
         start_time: '11:00',
         end_time: '12:15',
@@ -3588,8 +3296,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed69f',
         day: 2,
-        start: 2,
-        len: 3,
         place: '18-212',
         start_time: '10:00',
         end_time: '12:50',
@@ -3618,8 +3324,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efea7',
         day: 1,
-        start: 3,
-        len: 1.5,
         place: '43-1-402',
         start_time: '11:00',
         end_time: '12:15',
@@ -3627,8 +3331,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efea6',
         day: 3,
-        start: 3,
-        len: 1.5,
         place: '43-1-402',
         start_time: '11:00',
         end_time: '12:15',
@@ -3657,8 +3359,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee2b2',
         day: 1,
-        start: 6,
-        len: 1.5,
         place: '302-106',
         start_time: '14:00',
         end_time: '15:15',
@@ -3666,8 +3366,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee2b1',
         day: 3,
-        start: 6,
-        len: 1.5,
         place: '302-106',
         start_time: '14:00',
         end_time: '15:15',
@@ -3696,8 +3394,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc21',
         day: 1,
-        start: 5,
-        len: 2,
         place: '27-224',
         start_time: '13:00',
         end_time: '14:50',
@@ -3705,8 +3401,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4fcb360c002b6efc20',
         day: 3,
-        start: 5,
-        len: 2,
         place: '27-224',
         start_time: '13:00',
         end_time: '14:50',
@@ -3735,8 +3429,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed6a5',
         day: 3,
-        start: 5,
-        len: 1,
         place: '301-118',
         start_time: '13:00',
         end_time: '13:50',
@@ -3766,8 +3458,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee4c2',
         day: 1,
-        start: 7.5,
-        len: 1.5,
         place: '301-101',
         start_time: '15:30',
         end_time: '16:45',
@@ -3775,8 +3465,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee4c1',
         day: 3,
-        start: 7.5,
-        len: 1.5,
         place: '301-101',
         start_time: '15:30',
         end_time: '16:45',
@@ -3805,8 +3493,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed36e',
         day: 1,
-        start: 3,
-        len: 1.5,
         place: '302-311-1',
         start_time: '11:00',
         end_time: '12:15',
@@ -3814,8 +3500,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed36d',
         day: 2,
-        start: 11,
-        len: 2,
         place: '302-311-1',
         start_time: '19:00',
         end_time: '20:50',
@@ -3823,8 +3507,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed36c',
         day: 3,
-        start: 3,
-        len: 1.5,
         place: '302-311-1',
         start_time: '11:00',
         end_time: '12:15',
@@ -3854,8 +3536,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eebc8',
         day: 1,
-        start: 6,
-        len: 1.5,
         place: '',
         start_time: '14:00',
         end_time: '15:15',
@@ -3863,8 +3543,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eebc7',
         day: 3,
-        start: 6,
-        len: 1.5,
         place: '',
         start_time: '14:00',
         end_time: '15:15',
@@ -3893,8 +3571,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ccb360c002b6ec83d',
         day: 0,
-        start: 6,
-        len: 1.5,
         place: '',
         start_time: '14:00',
         end_time: '15:15',
@@ -3902,8 +3578,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ccb360c002b6ec83c',
         day: 2,
-        start: 6,
-        len: 1.5,
         place: '',
         start_time: '14:00',
         end_time: '15:15',
@@ -3932,8 +3606,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee4bf',
         day: 0,
-        start: 7.5,
-        len: 1.5,
         place: '302-308',
         start_time: '15:30',
         end_time: '16:45',
@@ -3941,8 +3613,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee4be',
         day: 2,
-        start: 7.5,
-        len: 1.5,
         place: '302-308',
         start_time: '15:30',
         end_time: '16:45',
@@ -3971,8 +3641,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede10',
         day: 0,
-        start: 9,
-        len: 1.5,
         place: '301-101',
         start_time: '17:00',
         end_time: '18:15',
@@ -3980,8 +3648,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede0f',
         day: 2,
-        start: 9,
-        len: 1.5,
         place: '301-101',
         start_time: '17:00',
         end_time: '18:15',
@@ -4010,8 +3676,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eea8e',
         day: 1,
-        start: 3,
-        len: 1.5,
         place: '302-309-1',
         start_time: '11:00',
         end_time: '12:15',
@@ -4019,8 +3683,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6eea8d',
         day: 3,
-        start: 3,
-        len: 1.5,
         place: '302-309-1',
         start_time: '11:00',
         end_time: '12:15',
@@ -4049,8 +3711,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ccb360c002b6ec835',
         day: 1,
-        start: 7.5,
-        len: 1.5,
         place: '43-1-306',
         start_time: '15:30',
         end_time: '16:45',
@@ -4058,8 +3718,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ccb360c002b6ec834',
         day: 3,
-        start: 7.5,
-        len: 1.5,
         place: '43-1-306',
         start_time: '15:30',
         end_time: '16:45',
@@ -4088,8 +3746,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee8c4',
         day: 0,
-        start: 9,
-        len: 1.5,
         place: '302-309-1',
         start_time: '17:00',
         end_time: '18:15',
@@ -4097,8 +3753,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee8c3',
         day: 2,
-        start: 9,
-        len: 1.5,
         place: '302-309-1',
         start_time: '17:00',
         end_time: '18:15',
@@ -4127,8 +3781,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee2cd',
         day: 4,
-        start: 11,
-        len: 3,
         place: '17-108',
         start_time: '19:00',
         end_time: '21:50',
@@ -4157,8 +3809,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede13',
         day: 1,
-        start: 1.5,
-        len: 1.5,
         place: '301-101',
         start_time: '9:30',
         end_time: '10:45',
@@ -4166,8 +3816,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede12',
         day: 3,
-        start: 1.5,
-        len: 1.5,
         place: '301-101',
         start_time: '9:30',
         end_time: '10:45',
@@ -4196,8 +3844,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed442',
         day: 1,
-        start: 7.5,
-        len: 1.5,
         place: '302-519',
         start_time: '15:30',
         end_time: '16:45',
@@ -4205,8 +3851,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ed441',
         day: 3,
-        start: 7.5,
-        len: 1.5,
         place: '302-519',
         start_time: '15:30',
         end_time: '16:45',
@@ -4235,8 +3879,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6edd62',
         day: 0,
-        start: 2,
-        len: 3,
         place: '2-320',
         start_time: '10:00',
         end_time: '12:50',
@@ -4265,8 +3907,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ecb360c002b6ee548',
         day: 2,
-        start: 11,
-        len: 1,
         place: '302-107',
         start_time: '19:00',
         end_time: '19:50',
@@ -4295,8 +3935,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede0d',
         day: 0,
-        start: 6,
-        len: 1.5,
         place: '302-309-3',
         start_time: '14:00',
         end_time: '15:15',
@@ -4304,8 +3942,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4dcb360c002b6ede0c',
         day: 2,
-        start: 6,
-        len: 1.5,
         place: '302-309-3',
         start_time: '14:00',
         end_time: '15:15',
@@ -4334,8 +3970,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ccb360c002b6ec81c',
         day: 0,
-        start: 1.5,
-        len: 1.5,
         place: '301-101',
         start_time: '9:30',
         end_time: '10:45',
@@ -4343,8 +3977,6 @@ export const mockSearchResult: SearchResultLecture[] = [
       {
         _id: '6329ab4ccb360c002b6ec81b',
         day: 2,
-        start: 1.5,
-        len: 1.5,
         place: '301-101',
         start_time: '9:30',
         end_time: '10:45',
