@@ -2,10 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import { Color } from '@/entities/color';
-import { AddedLectureTime, Lecture } from '@/entities/lecture';
+import { WithInternalId } from '@/entities/id';
+import { ClassTime, Lecture } from '@/entities/lecture';
 import { colorService } from '@/usecases/colorService';
 import { lectureService } from '@/usecases/lectureService';
-import { ArrayElement } from '@/utils/array-element';
 
 import { MainLectureEditFormColor } from './main-lecture-edit-form-color';
 import { MainLectureEditFormTime } from './main-lecture-edit-form-time';
@@ -17,13 +17,13 @@ export type LectureEditForm = {
   remark: Lecture['remark'];
   color: Color;
   colorIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9; // 0이면 커스텀 색
-  class_time_json: (ArrayElement<Lecture['class_time_json']> | AddedLectureTime)[];
+  class_time_json: WithInternalId<ClassTime>[];
 };
 
 type Props = {
   draft: Partial<LectureEditForm>;
   setDraft: (draft: Partial<LectureEditForm>) => void;
-  defaultState?: Partial<Lecture>;
+  defaultState?: Partial<Omit<LectureEditForm, 'color'> & { color: Color | Record<string, never> }>;
 };
 
 export const MainLectureEditForm = ({ draft, defaultState = {}, setDraft }: Props) => {

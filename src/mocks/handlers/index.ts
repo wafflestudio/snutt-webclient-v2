@@ -143,10 +143,10 @@ export const handlers = [
     withValidateAccess(async (req, res, ctx) => {
       // TODO: 시간표 validation ?
       const { class_time_json } = await req.json();
-      if (!class_time_json || !Array.isArray(class_time_json)) return res(ctx.status(400));
+      if (class_time_json && !Array.isArray(class_time_json)) return res(ctx.status(400));
 
-      const classTimeJson = class_time_json as { start_time: string; end_time: string; day: number }[];
-      if (classTimeJson.some((c1, i1) => classTimeJson.some((c2, i2) => i1 !== i2 && isOverlap(c1, c2))))
+      const classTimeJson = class_time_json as { start_time: string; end_time: string; day: number }[] | undefined;
+      if (classTimeJson?.some((c1, i1) => classTimeJson.some((c2, i2) => i1 !== i2 && isOverlap(c1, c2))))
         return res(
           ctx.status(403),
           ctx.json({ errcode: 12300, message: 'Lecture time overlapped', ext: { confirm_message: '' } }),
