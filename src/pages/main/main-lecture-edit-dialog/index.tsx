@@ -38,15 +38,11 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
         ? { colorIndex: 0 as const, color: draft.color as Color }
         : draft.colorIndex
         ? { colorIndex: draft.colorIndex }
-        : lecture.colorIndex === 0
-        ? { colorIndex: 0 as const, color: lecture.color as Color }
-        : { colorIndex: lecture.colorIndex };
+        : {};
 
     mutate(
       {
-        class_time_json: draft.class_time_json
-          ? draft.class_time_json.map((t) => ('_id' in t ? t : lectureService.emptyClassTimeToRequest(t)))
-          : lecture.class_time_json,
+        class_time_json: draft.class_time_json?.map((t) => lectureService.removeInternalId(t)),
         course_title: draft.course_title,
         credit: draft.credit,
         instructor: draft.instructor,
@@ -76,7 +72,16 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
       <Dialog.Title>강의 편집</Dialog.Title>
       {lecture && (
         <EditDialogContent data-testid="main-lecture-edit-dialog-content">
-          <MainLectureEditForm defaultState={lecture} draft={draft} setDraft={setDraft} />
+          <MainLectureEditForm
+            defaultState={{
+              ...lecture,
+              // TODO: find a better way
+              // 받아올 때 lecture 를 받아놔야 하나..
+              class_time_json: lecture.class_time_json.map((ctj) => lectureService.appendInternalId(ctj)),
+            }}
+            draft={draft}
+            setDraft={setDraft}
+          />
         </EditDialogContent>
       )}
       <Actions>
