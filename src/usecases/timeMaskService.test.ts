@@ -1,4 +1,4 @@
-import { expect, test } from '@jest/globals';
+import { describe, expect, it, test } from '@jest/globals';
 
 import { FullTimetable } from '@/entities/timetable';
 import { timeMaskService } from '@/usecases/timeMaskService';
@@ -64,14 +64,35 @@ test('getBitMask', () => {
   ).toStrictEqual([4, 11, 32]);
 });
 
-test('getTimetableEmptyTimeBitMask', () => {
-  expect(timeMaskService.getTimetableEmptyTimeBitMask({ lecture_list: [] } as unknown as FullTimetable)).toStrictEqual([
-    1073741823, 1073741823, 1073741823, 1073741823, 1073741823, 1073741823, 1073741823,
-  ]);
+describe('getTimetableEmptyTimeBitMask', () => {
+  it('empty case', () => {
+    expect(
+      timeMaskService.getTimetableEmptyTimeBitMask({ lecture_list: [] } as unknown as FullTimetable),
+    ).toStrictEqual([1073741823, 1073741823, 1073741823, 1073741823, 1073741823, 1073741823, 1073741823]);
+  });
 
-  expect(
-    timeMaskService.getTimetableEmptyTimeBitMask({
-      lecture_list: [{ class_time_json: { day: 1, start: 0, len: 0.5 } }],
-    } as unknown as FullTimetable),
-  ).toStrictEqual([1073741823, 536870911, 1073741823, 1073741823, 1073741823, 1073741823, 1073741823]);
+  it('simple case', () => {
+    expect(
+      timeMaskService.getTimetableEmptyTimeBitMask({
+        lecture_list: [{ class_time_mask: [0, 536870912, 0, 0, 0, 0, 0] }],
+      } as unknown as FullTimetable),
+    ).toStrictEqual([1073741823, 536870911, 1073741823, 1073741823, 1073741823, 1073741823, 1073741823]);
+  });
+
+  it('complex case', () => {
+    expect(
+      timeMaskService.getTimetableEmptyTimeBitMask({
+        lecture_list: [
+          { class_time_mask: [4064, 0, 3584, 0, 0, 0, 0] },
+          { class_time_mask: [28672, 0, 28672, 0, 0, 0, 0] },
+          { class_time_mask: [0, 0, 786432, 0, 0, 0, 0] },
+          { class_time_mask: [0, 229376, 0, 229376, 0, 0, 0] },
+          { class_time_mask: [0, 3584, 0, 3584, 0, 0, 0] },
+          { class_time_mask: [14680064, 0, 14680064, 0, 0, 0, 0] },
+          { class_time_mask: [0, 28672, 0, 28672, 0, 0, 0] },
+          { class_time_mask: [0, 192, 0, 192, 0, 0, 12582912] },
+        ],
+      } as FullTimetable),
+    ).toStrictEqual([1059029023, 1073479999, 1058243071, 1073479999, 1073741823, 1073741823, 1061158911]);
+  });
 });
