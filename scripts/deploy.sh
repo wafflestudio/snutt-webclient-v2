@@ -24,4 +24,9 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
   git tag -a $newTagName -m $newTagName
   git push origin $newTagName
+else
+  echo
+  echo "\033[31mCanceled.\033[0m"
+  echo
+  exit 1
 fi
