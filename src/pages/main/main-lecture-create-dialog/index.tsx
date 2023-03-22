@@ -37,8 +37,7 @@ export const MainLectureCreateDialog = ({ open, onClose, timetableId }: Props) =
 
     mutate(
       {
-        class_time_json:
-          draft.class_time_json?.map((t) => ('_id' in t ? t : lectureService.emptyClassTimeToRequest(t))) ?? [],
+        class_time_json: draft.class_time_json?.map((t) => lectureService.removeInternalId(t)) ?? [],
         course_title: draft.course_title ?? '',
         credit: draft.credit ?? 0,
         instructor: draft.instructor ?? '',

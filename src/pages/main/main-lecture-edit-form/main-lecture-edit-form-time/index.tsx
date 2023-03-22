@@ -4,16 +4,16 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { HourMinutePickDialog } from '@/components/hour-minute-pick-dialog';
 import { IcClose } from '@/components/icons/ic-close';
-import { AddedLectureTime, Lecture } from '@/entities/lecture';
+import { WithInternalId } from '@/entities/id';
+import { ClassTime } from '@/entities/lecture';
 import { Day, DAY_LABEL_MAP, HourMinute24 } from '@/entities/time';
 import { hourMinuteService } from '@/usecases/hourMinuteService';
 import { lectureService } from '@/usecases/lectureService';
 import { timetableViewService } from '@/usecases/timetableViewService';
-import { ArrayElement } from '@/utils/array-element';
 
 type Props = {
-  lectureTime: (ArrayElement<Lecture['class_time_json']> | AddedLectureTime)[];
-  onChangeLectureTime: (lectureTime: (ArrayElement<Lecture['class_time_json']> | AddedLectureTime)[]) => void;
+  lectureTime: WithInternalId<ClassTime>[];
+  onChangeLectureTime: (lectureTime: WithInternalId<ClassTime>[]) => void;
 };
 
 export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Props) => {
@@ -24,17 +24,13 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
   } | null>(null);
   const handleAddTime = () => onChangeLectureTime([...lectureTime, lectureService.getEmptyClassTime()]);
 
-  const handleDeleteLectureTime = (_id: string) =>
-    onChangeLectureTime(lectureTime.filter((t) => '__id__' in t || t._id !== _id));
-
-  const handleDeleteAddedTime = (__id__: string) =>
-    onChangeLectureTime(lectureTime.filter((t) => '_id' in t || t.__id__ !== __id__));
+  const handleDeleteLectureTime = (__id__: string) =>
+    onChangeLectureTime(lectureTime.filter((t) => t.__id__ !== __id__));
 
   return (
     <Wrapper>
       {lectureTime.map((lt, i) => {
-        const isAddedTime = '__id__' in lt;
-        const id = isAddedTime ? lt.__id__ : lt._id;
+        const id = lt.__id__;
 
         const onChangeDay = (day: Day) =>
           onChangeLectureTime(lectureTime.map((_lt, _i) => (_i === i ? { ..._lt, day } : _lt)));
@@ -81,7 +77,7 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
 
             <CloseIcon
               data-testid="main-lecture-edit-form-delete-time"
-              onClick={() => (isAddedTime ? handleDeleteAddedTime(lt.__id__) : handleDeleteLectureTime(lt._id))}
+              onClick={() => handleDeleteLectureTime(lt.__id__)}
             />
             <HourMinutePickDialog
               isOpen={openTimeDialog?.id === id}

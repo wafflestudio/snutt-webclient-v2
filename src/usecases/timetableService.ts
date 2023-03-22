@@ -24,7 +24,7 @@ export interface TimetableService {
       )[];
       remark?: string;
       credit?: number;
-    } & ({ colorIndex: 0; color: Color } | { colorIndex: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 }),
+    } & ({ colorIndex: 0; color: Color } | { colorIndex?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 }),
   ): Promise<FullTimetable>;
   createLecture(
     token: string,
