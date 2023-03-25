@@ -1,7 +1,5 @@
-import { Color } from '@/entities/color';
 import { Semester } from '@/entities/semester';
-import { Day } from '@/entities/time';
-import { FullTimetable, Timetable } from '@/entities/timetable';
+import { CreateLectureRequest, FullTimetable, Timetable, UpdateLectureRequest } from '@/entities/timetable';
 
 export interface TimetableRepository {
   getTimetables(args: { baseUrl: string; apikey: string; token: string }): Promise<Timetable[]>;
@@ -20,30 +18,12 @@ export interface TimetableRepository {
   updateLecture(
     args: { baseUrl: string; apikey: string; token: string },
     params: { id: string; lecture_id: string },
-    data: {
-      course_title?: string;
-      instructor?: string;
-      class_time_json?: (
-        | { _id: string; day: Day; start_time: string; end_time: string; place: string }
-        | { day: Day; start_time: string; end_time: string; place: string }
-      )[];
-      remark?: string;
-      credit?: number;
-    } & ({ colorIndex: 0; color: Color } | { colorIndex?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 }),
+    data: UpdateLectureRequest,
   ): Promise<FullTimetable>;
   createLecture(
     args: { baseUrl: string; apikey: string; token: string },
     params: { id: string },
-    data: {
-      course_title: string;
-      instructor: string;
-      class_time_json: (
-        | { _id: string; day: Day; start_time: string; end_time: string; place: string }
-        | { day: Day; start_time: string; end_time: string; place: string }
-      )[];
-      remark: string;
-      credit: number;
-    } & ({ colorIndex: 0; color: Color } | { colorIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 }),
+    data: CreateLectureRequest,
   ): Promise<FullTimetable>;
   deleteLecture(
     args: { baseUrl: string; apikey: string; token: string },
