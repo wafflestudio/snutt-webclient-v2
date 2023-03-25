@@ -1,8 +1,8 @@
-import { SignInResponse } from '@/entities/auth';
-import { AuthRepository, authRepository } from '@/repositories/authRepository';
-import { StorageRepository, storageRepository } from '@/repositories/storageRepository';
-import { UserRepository, userRepository } from '@/repositories/userRepository';
-import { EnvService, envService } from '@/usecases/envService';
+import { type SignInResponse } from '@/entities/auth';
+import { type AuthRepository } from '@/repositories/authRepository';
+import { type StorageRepository } from '@/repositories/storageRepository';
+import { type UserRepository } from '@/repositories/userRepository';
+import { type EnvService } from '@/usecases/envService';
 
 export interface AuthService {
   getApiKey(): string;
@@ -23,7 +23,7 @@ export interface AuthService {
   resetPassword(body: { user_id: string; password: string }): Promise<{ message: 'ok' }>;
 }
 
-const getAuthService = (args: {
+export const getAuthService = (args: {
   repositories: [StorageRepository, AuthRepository, UserRepository];
   services: [EnvService];
 }): AuthService => {
@@ -49,21 +49,14 @@ const getAuthService = (args: {
     changePassword: async (token, body) => userRepo.changePassword({ baseUrl, apiKey, token }, body),
     signIn: (params) =>
       params.type === 'LOCAL'
-        ? authRepo.signInWithIdPassword({ ...params, baseUrl, apikey: apiKey })
-        : authRepo.signInWithFacebook({ ...params, baseUrl, apikey: apiKey }),
-    signUp: (params) =>
-      authRepo.signUpWithIdPassword({ baseUrl, apiKey }, { id: params.id, password: params.password }),
+        ? authRepo.signInWithIdPassword({ id: params.id, password: params.password })
+        : authRepo.signInWithFacebook({ fb_id: params.fb_id, fb_token: params.fb_token }),
+    signUp: (params) => authRepo.signUpWithIdPassword(params),
     closeAccount: (token) => userRepo.deleteUser({ baseUrl, token, apikey: apiKey }),
-    findIdByEmail: (body) => authRepo.findId({ baseUrl, apiKey }, body),
-    passwordResetCheckEmail: (body) => authRepo.passwordResetCheckEmail({ baseUrl, apiKey }, body),
-    sendPasswordResetVerificationEmail: (body) =>
-      authRepo.sendPasswordResetVerificationEmail({ baseUrl, apiKey }, body),
-    verifyPasswordResetCode: (body) => authRepo.verifyPasswordResetCode({ baseUrl, apiKey }, body),
-    resetPassword: (body) => authRepo.resetPassword({ baseUrl, apiKey }, body),
+    findIdByEmail: (body) => authRepo.findId(body),
+    passwordResetCheckEmail: (body) => authRepo.passwordResetCheckEmail(body),
+    sendPasswordResetVerificationEmail: (body) => authRepo.sendPasswordResetVerificationEmail(body),
+    verifyPasswordResetCode: (body) => authRepo.verifyPasswordResetCode(body),
+    resetPassword: (body) => authRepo.resetPassword(body),
   };
 };
-
-export const authService = getAuthService({
-  repositories: [storageRepository, authRepository, userRepository],
-  services: [envService],
-});

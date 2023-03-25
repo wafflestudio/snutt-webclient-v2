@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
-import { authService } from '@/usecases/authService';
+import { authService } from '@/usecases';
 import { errorService } from '@/usecases/errorService';
 import { get } from '@/utils/object/get';
 

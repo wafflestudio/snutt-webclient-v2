@@ -1,7 +1,9 @@
 import { Notification } from '@/entities/notification';
 import { NotificationRepository, notificationRepository } from '@/repositories/notificationRepository';
-import { AuthService, authService } from '@/usecases/authService';
+import { AuthService } from '@/usecases/authService';
 import { EnvService, envService } from '@/usecases/envService';
+
+import { authService } from '.';
 
 export interface NotificationService {
   getCount(token: string): Promise<{ count: number }>;

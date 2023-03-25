@@ -6,7 +6,7 @@ import { Button } from '@/components/button';
 import { ErrorDialog } from '@/components/error-dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
-import { authService } from '@/usecases/authService';
+import { authService } from '@/usecases';
 import { errorService } from '@/usecases/errorService';
 import { get } from '@/utils/object/get';
 

@@ -1,7 +1,9 @@
 import { CourseBook } from '@/entities/semester';
 import { SemesterRepository, semesterRepository } from '@/repositories/semesterRepository';
-import { AuthService, authService } from '@/usecases/authService';
+import { AuthService } from '@/usecases/authService';
 import { EnvService, envService } from '@/usecases/envService';
+
+import { authService } from '.';
 
 type CourseBookLabel = `${number}-${1 | 'S' | 2 | 'W'}`;
 type CourseBookValue = `${number}-${1 | 2 | 3 | 4}`;
