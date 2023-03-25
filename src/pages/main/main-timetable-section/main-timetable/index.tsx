@@ -5,7 +5,7 @@ import { Button } from '@/components/button';
 import { BaseLecture } from '@/entities/lecture';
 import { DAY_LABEL_MAP } from '@/entities/time';
 import { FullTimetable } from '@/entities/timetable';
-import { colorService } from '@/usecases/colorService';
+import { colorService } from '@/usecases';
 import { lectureService } from '@/usecases/lectureService';
 import { timetableViewService } from '@/usecases/timetableViewService';
 import { rangeToArray } from '@/utils/rangeToArray';
