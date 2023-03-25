@@ -1,8 +1,10 @@
 import { SearchFilter, SearchResultLecture } from '@/entities/search';
 import { CourseBook } from '@/entities/semester';
 import { SearchRepository, searchRepository } from '@/repositories/searchRepository';
-import { AuthService, authService } from '@/usecases/authService';
+import { AuthService } from '@/usecases/authService';
 import { EnvService, envService } from '@/usecases/envService';
+
+import { authService } from '.';
 
 export interface SearchService {
   getTags(params: Omit<CourseBook, 'updated_at'>): Promise<{

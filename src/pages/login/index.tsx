@@ -8,7 +8,7 @@ import { Button } from '@/components/button';
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { CoreServerError } from '@/entities/error';
-import { authService } from '@/usecases/authService';
+import { authService } from '@/usecases';
 import { envService } from '@/usecases/envService';
 import { errorService } from '@/usecases/errorService';
 

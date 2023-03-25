@@ -1,8 +1,10 @@
 import { Semester } from '@/entities/semester';
 import { CreateLectureRequest, FullTimetable, Timetable, UpdateLectureRequest } from '@/entities/timetable';
 import { TimetableRepository, timetableRepository } from '@/repositories/timetableRepository';
-import { AuthService, authService } from '@/usecases/authService';
+import { AuthService } from '@/usecases/authService';
 import { EnvService, envService } from '@/usecases/envService';
+
+import { authService } from '.';
 
 export interface TimetableService {
   getTimetables(token: string): Promise<Timetable[]>;

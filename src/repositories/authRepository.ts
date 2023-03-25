@@ -1,135 +1,34 @@
+import { ApiClient } from '@/clients/api';
 import { SignInResponse } from '@/entities/auth';
 
 export interface AuthRepository {
-  signInWithIdPassword(args: {
-    baseUrl: string;
-    apikey: string;
+  signInWithIdPassword(args: { id: string; password: string }): Promise<SignInResponse>;
+  signInWithFacebook(args: { fb_id: string; fb_token: string }): Promise<SignInResponse>;
+  signUpWithIdPassword(body: {
     id: string;
     password: string;
-  }): Promise<SignInResponse>;
-  signInWithFacebook(args: {
-    baseUrl: string;
-    apikey: string;
-    fb_id: string;
-    fb_token: string;
-  }): Promise<SignInResponse>;
-  signUpWithIdPassword(
-    args: { baseUrl: string; apiKey: string },
-    body: { id: string; password: string },
-  ): Promise<{ message: 'ok'; token: string; user_id: string }>;
-  findId(args: { baseUrl: string; apiKey: string }, body: { email: string }): Promise<{ message: 'ok' }>;
-  passwordResetCheckEmail(
-    args: { baseUrl: string; apiKey: string },
-    body: { user_id: string },
-  ): Promise<{ email: string }>;
-  sendPasswordResetVerificationEmail(
-    args: { baseUrl: string; apiKey: string },
-    body: { user_email: string },
-  ): Promise<{ message: 'ok' }>;
-  verifyPasswordResetCode(
-    args: { baseUrl: string; apiKey: string },
-    body: { user_id: string; code: string },
-  ): Promise<{ message: 'ok' }>;
-  resetPassword(
-    args: { baseUrl: string; apiKey: string },
-    body: { user_id: string; password: string },
-  ): Promise<{ message: 'ok' }>;
+  }): Promise<{ message: 'ok'; token: string; user_id: string }>;
+  findId(body: { email: string }): Promise<{ message: 'ok' }>;
+  passwordResetCheckEmail(body: { user_id: string }): Promise<{ email: string }>;
+  sendPasswordResetVerificationEmail(body: { user_email: string }): Promise<{ message: 'ok' }>;
+  verifyPasswordResetCode(body: { user_id: string; code: string }): Promise<{ message: 'ok' }>;
+  resetPassword(body: { user_id: string; password: string }): Promise<{ message: 'ok' }>;
 }
 
-const getAuthRepository = (): AuthRepository => {
+type Deps = { clients: [ApiClient] };
+export const getAuthRepository = ({ clients: [apiClient] }: Deps): AuthRepository => {
   return {
-    signInWithIdPassword: async ({ baseUrl, apikey, id, password }) => {
-      const response = await fetch(`${baseUrl}/v1/auth/login_local`, {
-        headers: { 'content-type': 'application/json', 'x-access-apikey': apikey },
-        method: 'POST',
-        body: JSON.stringify({ id, password }),
-      });
-
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as SignInResponse;
-    },
-    signInWithFacebook: async ({ baseUrl, apikey, fb_id, fb_token }) => {
-      const response = await fetch(`${baseUrl}/auth/login_fb`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-access-apikey': apikey,
-        },
-        method: 'POST',
-        body: JSON.stringify({ fb_id, fb_token }),
-      });
-
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as SignInResponse;
-    },
-    signUpWithIdPassword: async ({ baseUrl, apiKey }, body) => {
-      const response = await fetch(`${baseUrl}/v1/auth/register_local`, {
-        headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
-        method: 'POST',
-        body: JSON.stringify(body),
-      });
-
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as { message: 'ok'; token: string; user_id: string };
-    },
-    findId: async ({ baseUrl, apiKey }, body) => {
-      const response = await fetch(`${baseUrl}/v1/auth/id/find`, {
-        headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
-        method: 'POST',
-        body: JSON.stringify(body),
-      });
-
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as { message: 'ok' };
-    },
-    passwordResetCheckEmail: async ({ baseUrl, apiKey }, body) => {
-      const response = await fetch(`${baseUrl}/v1/auth/password/reset/email/check`, {
-        headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
-        method: 'POST',
-        body: JSON.stringify(body),
-      });
-
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as { email: string };
-    },
-    sendPasswordResetVerificationEmail: async ({ baseUrl, apiKey }, body) => {
-      const response = await fetch(`${baseUrl}/v1/auth/password/reset/email/send`, {
-        headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
-        method: 'POST',
-        body: JSON.stringify(body),
-      });
-
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as { message: 'ok' };
-    },
-    verifyPasswordResetCode: async ({ baseUrl, apiKey }, body) => {
-      const response = await fetch(`${baseUrl}/v1/auth/password/reset/verification/code`, {
-        headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
-        method: 'POST',
-        body: JSON.stringify(body),
-      });
-
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as { message: 'ok' };
-    },
-    resetPassword: async ({ baseUrl, apiKey }, body) => {
-      const response = await fetch(`${baseUrl}/v1/auth/password/reset`, {
-        headers: { 'Content-Type': 'application/json', 'x-access-apikey': apiKey },
-        method: 'POST',
-        body: JSON.stringify(body),
-      });
-
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as { message: 'ok' };
-    },
+    signInWithIdPassword: async (body) => (await apiClient.post<SignInResponse>(`/v1/auth/login_local`, body)).data,
+    signInWithFacebook: async (body) => (await apiClient.post<SignInResponse>(`/auth/login_fb`, body)).data,
+    signUpWithIdPassword: async (body) =>
+      (await apiClient.post<{ message: 'ok'; token: string; user_id: string }>(`/v1/auth/register_local`, body)).data,
+    findId: async (body) => (await apiClient.post<{ message: 'ok' }>(`/v1/auth/id/find`, body)).data,
+    passwordResetCheckEmail: async (body) =>
+      (await apiClient.post<{ email: string }>(`/v1/auth/password/reset/email/check`, body)).data,
+    sendPasswordResetVerificationEmail: async (body) =>
+      (await apiClient.post<{ message: 'ok' }>(`/v1/auth/password/reset/email/send`, body)).data,
+    verifyPasswordResetCode: async (body) =>
+      (await apiClient.post<{ message: 'ok' }>(`/v1/auth/password/reset/verification/code`, body)).data,
+    resetPassword: async (body) => (await apiClient.post<{ message: 'ok' }>(`/v1/auth/password/reset`, body)).data,
   };
 };
-
-export const authRepository = getAuthRepository();

@@ -1,10 +1,11 @@
-import { expect, jest, test } from '@jest/globals';
+import { expect, test } from '@jest/globals';
 
-import { authService } from '@/usecases/authService';
+import { getAuthService } from '@/usecases/authService';
 
-jest.mock('@/usecases/envService', () => ({
-  envService: { getBaseUrl: () => '', getApiKey: () => '' },
-}));
+const authService = getAuthService({
+  repositories: [],
+  services: [{ getBaseUrl: () => '', getApiKey: () => '' }],
+} as unknown as Parameters<typeof getAuthService>[0]);
 
 test('isValidPassword', () => {
   expect(authService.isValidPassword('')).toStrictEqual(false);

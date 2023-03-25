@@ -1,7 +1,9 @@
 import { User } from '@/entities/user';
 import { UserRepository, userRepository } from '@/repositories/userRepository';
-import { AuthService, authService } from '@/usecases/authService';
+import { AuthService } from '@/usecases/authService';
 import { EnvService, envService } from '@/usecases/envService';
+
+import { authService } from '.';
 
 export interface UserService {
   getUserInfo(token: string): Promise<User>;

@@ -1,7 +1,9 @@
 import { Color } from '@/entities/color';
 import { ColorRepository, colorRepository } from '@/repositories/colorRepository';
-import { AuthService, authService } from '@/usecases/authService';
+import { AuthService } from '@/usecases/authService';
 import { EnvService, envService } from '@/usecases/envService';
+
+import { authService } from '.';
 
 export interface ColorService {
   getColorList(): Promise<Color[]>;
