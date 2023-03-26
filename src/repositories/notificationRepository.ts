@@ -1,29 +1,21 @@
+import type { ApiClient } from '@/clients/api';
 import type { Notification } from '@/entities/notification';
 
 export interface NotificationRepository {
-  getCount(args: { baseUrl: string; apikey: string; token: string }): Promise<{ count: number }>;
-  getList(args: { baseUrl: string; apikey: string; token: string }): Promise<Notification[]>;
+  getCount(args: { token: string }): Promise<{ count: number }>;
+  getList(args: { token: string }): Promise<Notification[]>;
 }
 
-const getNotificationRepository = (): NotificationRepository => {
+type Deps = { clients: [ApiClient] };
+export const getNotificationRepository = ({ clients: [apiClient] }: Deps): NotificationRepository => {
   return {
-    getCount: async ({ baseUrl, apikey, token }) => {
-      const response = await fetch(`${baseUrl}/v1/notification/count`, {
-        headers: { 'x-access-apikey': apikey, 'x-access-token': token },
-      });
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as { count: number };
-    },
-    getList: async ({ baseUrl, apikey, token }) => {
-      const response = await fetch(`${baseUrl}/v1/notification`, {
-        headers: { 'x-access-apikey': apikey, 'x-access-token': token },
-      });
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as Notification[];
-    },
+    getCount: async ({ token }) =>
+      (
+        await apiClient.get<{ count: number }>(`/v1/notification/count`, {
+          headers: { 'x-access-token': token },
+        })
+      ).data,
+    getList: async ({ token }) =>
+      (await apiClient.get<Notification[]>(`/v1/notification`, { headers: { 'x-access-token': token } })).data,
   };
 };
-
-export const notificationRepository = getNotificationRepository();

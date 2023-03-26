@@ -7,6 +7,7 @@ import { getColorRepository } from '@/repositories/colorRepository';
 import { getEnvRepository } from '@/repositories/envRepository';
 import { getErrorRepository } from '@/repositories/errorRepository';
 import { getFeedbackRepository } from '@/repositories/feedbackRepository';
+import { getNotificationRepository } from '@/repositories/notificationRepository';
 import { storageRepository } from '@/repositories/storageRepository';
 import { userRepository } from '@/repositories/userRepository';
 import { getAuthService } from '@/usecases/authService';
@@ -14,6 +15,7 @@ import { getColorService } from '@/usecases/colorService';
 import { getEnvService } from '@/usecases/envService';
 import { getErrorService } from '@/usecases/errorService';
 import { getFeedbackService } from '@/usecases/feedbackService';
+import { getNotificationService } from '@/usecases/notificationService';
 
 const envRepository = getEnvRepository({ external: [viteEnvironmentVariables] });
 export const envService = getEnvService({ repositories: [envRepository] });
@@ -37,3 +39,6 @@ export const errorService = getErrorService({ repositories: [errorRepository] })
 
 const feedbackRepository = getFeedbackRepository({ clients: [snuttApiClient] });
 export const feedbackService = getFeedbackService({ repositories: [feedbackRepository] });
+
+const notificationRepository = getNotificationRepository({ clients: [snuttApiClient] });
+export const notificationService = getNotificationService({ repositories: [notificationRepository] });

@@ -9,7 +9,7 @@ import { IcTrash } from '@/components/icons/ic-trash';
 import { usePopoverContext } from '@/components/popover';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { NotificationType } from '@/entities/notification';
-import { notificationService } from '@/usecases/notificationService';
+import { notificationService } from '@/services';
 import { queryKey } from '@/utils/query-key-factory';
 
 export const LayoutNotificationPopoverContent = () => {
