@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
-import { feedbackService } from '@/usecases/feedbackService';
+import { feedbackService } from '@/services';
 
 type Props = { isOpen: boolean; onClose: () => void };
 

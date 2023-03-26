@@ -1,21 +1,11 @@
-import { type FeedbackRepository, feedbackRepository } from '@/repositories/feedbackRepository';
-import { envService } from '@/services';
-import type { EnvService } from '@/usecases/envService';
+import type { FeedbackRepository } from '@/repositories/feedbackRepository';
 
 export interface FeedbackService {
   post(body: { email: string; message: string }): Promise<{ message: 'ok' }>;
 }
 
-const getFeedbackService = (args: { services: [EnvService]; repositories: [FeedbackRepository] }): FeedbackService => {
-  const baseUrl = args.services[0].getBaseUrl();
-  const apikey = args.services[0].getApiKey();
-
+export const getFeedbackService = (args: { repositories: [FeedbackRepository] }): FeedbackService => {
   return {
-    post: (body) => args.repositories[0].post({ baseUrl, apikey }, body),
+    post: (body) => args.repositories[0].post(body),
   };
 };
-
-export const feedbackService = getFeedbackService({
-  services: [envService],
-  repositories: [feedbackRepository],
-});
