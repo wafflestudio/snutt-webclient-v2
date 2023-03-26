@@ -10,7 +10,7 @@
     "react/display-name": "off",
     "simple-import-sort/imports": "error",
     "react/jsx-no-useless-fragment": ["error", { "allowExpressions": true }],
-    "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/consistent-type-imports": ["error", { "fixStyle": "inline-type-imports" }],
     "no-duplicate-imports": "error",
     "no-restricted-imports": [
       "error",

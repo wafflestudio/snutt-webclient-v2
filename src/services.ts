@@ -68,6 +68,4 @@ export const timetableViewService = getTimetableViewService({ repositories: [sto
 
 export const hourMinuteService = getHourMinuteService();
 
-export const hourMinutePickerService = getHourMinutePickerService({
-  services: [hourMinuteService],
-});
+export const hourMinutePickerService = getHourMinutePickerService({ services: [hourMinuteService] });

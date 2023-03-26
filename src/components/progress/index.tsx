@@ -1,5 +1,4 @@
-import type { HTMLAttributes } from 'react';
-import { forwardRef } from 'react';
+import { forwardRef, type HTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
