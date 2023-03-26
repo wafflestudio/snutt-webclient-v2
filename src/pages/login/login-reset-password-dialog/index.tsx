@@ -5,8 +5,7 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { Progress } from '@/components/progress';
-import { authService } from '@/services';
-import { errorService } from '@/usecases/errorService';
+import { authService, errorService } from '@/services';
 import { get } from '@/utils/object/get';
 
 type Props = { open: boolean; onClose: () => void };
