@@ -1,10 +1,6 @@
 import type { Semester } from '@/entities/semester';
 import type { CreateLectureRequest, FullTimetable, Timetable, UpdateLectureRequest } from '@/entities/timetable';
 import type { TimetableRepository } from '@/repositories/timetableRepository';
-import { timetableRepository } from '@/repositories/timetableRepository';
-import { authService, envService } from '@/services';
-import type { AuthService } from '@/usecases/authService';
-import type { EnvService } from '@/usecases/envService';
 
 export interface TimetableService {
   getTimetables(token: string): Promise<Timetable[]>;
@@ -22,31 +18,18 @@ export interface TimetableService {
   addLecture(token: string, params: { id: string; lecture_id: string }): Promise<FullTimetable>;
 }
 
-const getTimetableService = ({
-  services,
-  repositories: [timetableRepo],
-}: {
-  services: [AuthService, EnvService];
-  repositories: [TimetableRepository];
-}): TimetableService => {
-  const baseUrl = services[1].getBaseUrl();
-  const apikey = services[0].getApiKey();
-
+type Deps = { repositories: [TimetableRepository] };
+export const getTimetableService = ({ repositories: [timetableRepository] }: Deps): TimetableService => {
   return {
-    getTimetables: (token) => timetableRepo.getTimetables({ baseUrl, apikey, token }),
-    getFullTimetable: (token, id) => timetableRepo.getFullTimetable({ baseUrl, apikey, token }, { id }),
-    deleteTimetable: (token, id) => timetableRepo.deleteTimetable({ baseUrl, apikey, token }, { id }),
-    renameTimetable: (token, id, title) => timetableRepo.updateTimetable({ baseUrl, apikey, token }, { id }, { title }),
+    getTimetables: (token) => timetableRepository.getTimetables({ token }),
+    getFullTimetable: (token, id) => timetableRepository.getFullTimetable({ token }, { id }),
+    deleteTimetable: (token, id) => timetableRepository.deleteTimetable({ token }, { id }),
+    renameTimetable: (token, id, title) => timetableRepository.updateTimetable({ token }, { id }, { title }),
     createTimetable: async (token, { title, year, semester }) =>
-      timetableRepo.createTimetable({ baseUrl, apikey, token }, { title, year, semester }),
-    updateLecture: async (token, params, body) => timetableRepo.updateLecture({ baseUrl, apikey, token }, params, body),
-    createLecture: async (token, params, body) => timetableRepo.createLecture({ baseUrl, apikey, token }, params, body),
-    deleteLecture: async (token, params) => timetableRepo.deleteLecture({ baseUrl, apikey, token }, params),
-    addLecture: async (token, params) => timetableRepo.addLecture({ baseUrl, apikey, token }, params),
+      timetableRepository.createTimetable({ token }, { title, year, semester }),
+    updateLecture: async (token, params, body) => timetableRepository.updateLecture({ token }, params, body),
+    createLecture: async (token, params, body) => timetableRepository.createLecture({ token }, params, body),
+    deleteLecture: async (token, params) => timetableRepository.deleteLecture({ token }, params),
+    addLecture: async (token, params) => timetableRepository.addLecture({ token }, params),
   };
 };
-
-export const timetableService = getTimetableService({
-  services: [authService, envService],
-  repositories: [timetableRepository],
-});

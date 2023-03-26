@@ -6,7 +6,7 @@ import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { useYearSemester } from '@/hooks/useYearSemester';
-import { timetableService } from '@/usecases/timetableService';
+import { timetableService } from '@/services';
 import { get } from '@/utils/object/get';
 import { queryKey } from '@/utils/query-key-factory';
 

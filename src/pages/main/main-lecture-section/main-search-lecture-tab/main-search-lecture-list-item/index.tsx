@@ -5,7 +5,7 @@ import { ErrorDialog } from '@/components/error-dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { BaseLecture } from '@/entities/lecture';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
-import { timetableService } from '@/usecases/timetableService';
+import { timetableService } from '@/services';
 import { get } from '@/utils/object/get';
 import { queryKey } from '@/utils/query-key-factory';
 

@@ -6,11 +6,10 @@ import { HourMinutePickDialog } from '@/components/hour-minute-pick-dialog';
 import { IcClose } from '@/components/icons/ic-close';
 import type { WithInternalId } from '@/entities/id';
 import type { ClassTime } from '@/entities/lecture';
-import type { Day, HourMinute24 } from '@/entities/time';
-import { DAY_LABEL_MAP } from '@/entities/time';
+import { type Day, DAY_LABEL_MAP, type HourMinute24 } from '@/entities/time';
+import { timetableViewService } from '@/services';
 import { hourMinuteService } from '@/usecases/hourMinuteService';
 import { lectureService } from '@/usecases/lectureService';
-import { timetableViewService } from '@/usecases/timetableViewService';
 
 type Props = {
   lectureTime: WithInternalId<ClassTime>[];

@@ -5,7 +5,7 @@ import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { BaseLecture } from '@/entities/lecture';
-import { timetableService } from '@/usecases/timetableService';
+import { timetableService } from '@/services';
 import { queryKey } from '@/utils/query-key-factory';
 
 type Props = {

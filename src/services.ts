@@ -11,6 +11,7 @@ import { getNotificationRepository } from '@/repositories/notificationRepository
 import { getSearchRepository } from '@/repositories/searchRepository';
 import { getSemesterRepository } from '@/repositories/semesterRepository';
 import { getStorageRepository } from '@/repositories/storageRepository';
+import { getTimetableRepository } from '@/repositories/timetableRepository';
 import { userRepository } from '@/repositories/userRepository';
 import { getAuthService } from '@/usecases/authService';
 import { getColorService } from '@/usecases/colorService';
@@ -20,6 +21,8 @@ import { getFeedbackService } from '@/usecases/feedbackService';
 import { getNotificationService } from '@/usecases/notificationService';
 import { getSearchService } from '@/usecases/searchService';
 import { getSemesterService } from '@/usecases/semesterService';
+import { getTimetableService } from '@/usecases/timetableService';
+import { getTimetableViewService } from '@/usecases/timetableViewService';
 
 const envRepository = getEnvRepository({ external: [viteEnvironmentVariables] });
 export const envService = getEnvService({ repositories: [envRepository] });
@@ -54,3 +57,11 @@ export const searchService = getSearchService({ repositories: [searchRepository]
 
 const semesterRepository = getSemesterRepository({ clients: [snuttApiClient] });
 export const semesterService = getSemesterService({ repositories: [semesterRepository] });
+
+const timetableRepository = getTimetableRepository({ clients: [snuttApiClient] });
+export const timetableService = getTimetableService({
+  services: [authService, envService],
+  repositories: [timetableRepository],
+});
+
+export const timetableViewService = getTimetableViewService({ repositories: [storageRepository] });

@@ -6,9 +6,8 @@ import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { SearchFilter } from '@/entities/search';
 import { useYearSemester } from '@/hooks/useYearSemester';
-import { searchService } from '@/services';
+import { searchService, timetableService } from '@/services';
 import { BREAKPOINT } from '@/styles/constants';
-import { timetableService } from '@/usecases/timetableService';
 import { queryKey } from '@/utils/query-key-factory';
 
 import { MainLectureCreateDialog } from './main-lecture-create-dialog';
