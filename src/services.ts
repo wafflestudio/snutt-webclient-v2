@@ -18,6 +18,8 @@ import { getColorService } from '@/usecases/colorService';
 import { getEnvService } from '@/usecases/envService';
 import { getErrorService } from '@/usecases/errorService';
 import { getFeedbackService } from '@/usecases/feedbackService';
+import { getHourMinutePickerService } from '@/usecases/hourMinutePickerService';
+import { getHourMinuteService } from '@/usecases/hourMinuteService';
 import { getNotificationService } from '@/usecases/notificationService';
 import { getSearchService } from '@/usecases/searchService';
 import { getSemesterService } from '@/usecases/semesterService';
@@ -63,3 +65,9 @@ const timetableRepository = getTimetableRepository({ clients: [snuttApiClient] }
 export const timetableService = getTimetableService({ repositories: [timetableRepository] });
 
 export const timetableViewService = getTimetableViewService({ repositories: [storageRepository] });
+
+export const hourMinuteService = getHourMinuteService();
+
+export const hourMinutePickerService = getHourMinutePickerService({
+  services: [hourMinuteService],
+});

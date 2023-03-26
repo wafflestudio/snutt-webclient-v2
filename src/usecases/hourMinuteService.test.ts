@@ -1,7 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 
 import { AmPm } from '@/entities/time';
-import { hourMinuteService } from '@/usecases/hourMinuteService';
+import { getHourMinuteService } from '@/usecases/hourMinuteService';
+
+const hourMinuteService = getHourMinuteService();
 
 describe('hourMinuteService', () => {
   describe('isAfter', () => {

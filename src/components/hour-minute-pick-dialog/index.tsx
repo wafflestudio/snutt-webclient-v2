@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
 import type { Hour12, Hour24, HourMinute12, HourMinute24, Minute } from '@/entities/time';
-import { hourMinutePickerService } from '@/usecases/hourMinutePickerService';
+import { hourMinutePickerService } from '@/services';
 
 import { Clock } from '../clock';
 import { Dialog } from '../dialog';

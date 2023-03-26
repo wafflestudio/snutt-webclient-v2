@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { useTokenContext } from '@/contexts/tokenContext';
-import { userService } from '@/usecases/userService';
+import { userService } from '@/services';
 import { queryKey } from '@/utils/query-key-factory';
 
 export const LayoutProfile = () => {

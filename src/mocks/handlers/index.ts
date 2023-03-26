@@ -23,7 +23,7 @@ import {
 } from '@/mocks/fixtures/timetable';
 import { mockUsers } from '@/mocks/fixtures/user';
 import type { SearchRepository } from '@/repositories/searchRepository';
-import type { timetableRepository } from '@/repositories/timetableRepository';
+import type { TimetableRepository } from '@/repositories/timetableRepository';
 import type { UserRepository } from '@/repositories/userRepository';
 
 import { withValidateAccess } from '../utils/access';
@@ -135,8 +135,8 @@ export const handlers = [
   ),
 
   rest.put<
-    Parameters<typeof timetableRepository['updateLecture']>[2],
-    Parameters<typeof timetableRepository['updateLecture']>[1],
+    Parameters<TimetableRepository['updateLecture']>[2],
+    Parameters<TimetableRepository['updateLecture']>[1],
     FullTimetable | CoreServerError
   >(
     `*/v1/tables/:id/lecture/:lecture_id`,
@@ -157,8 +157,8 @@ export const handlers = [
   ),
 
   rest.post<
-    Parameters<typeof timetableRepository['updateLecture']>[2],
-    Parameters<typeof timetableRepository['updateLecture']>[1],
+    Parameters<TimetableRepository['updateLecture']>[2],
+    Parameters<TimetableRepository['updateLecture']>[1],
     FullTimetable | CoreServerError
   >(
     `*/v1/tables/:id/lecture`,
