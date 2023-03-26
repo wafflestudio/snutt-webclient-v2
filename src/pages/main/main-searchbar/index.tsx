@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
-import type { FormEvent } from 'react';
-import { useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import styled from 'styled-components';
 
 import { IcFilter } from '@/components/icons/ic-filter';

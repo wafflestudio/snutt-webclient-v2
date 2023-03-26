@@ -1,5 +1,4 @@
-import type { HTMLProps } from 'react';
-import { forwardRef } from 'react';
+import { forwardRef, type HTMLProps } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 interface Props extends HTMLProps<HTMLSpanElement> {}

@@ -1,8 +1,7 @@
-import type { ButtonHTMLAttributes } from 'react';
-import { forwardRef } from 'react';
+import { type ButtonHTMLAttributes, forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 
-import { Loader } from '../loader';
+import { Loader } from '@/components/loader';
 
 type Variant = 'contained' | 'outlined' | 'text';
 type Size = 'big' | 'small';

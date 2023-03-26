@@ -5,8 +5,7 @@ import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { DAY_LABEL_MAP, dayList } from '@/entities/time';
-import type { CellStatus, Position } from '@/entities/timeMask';
-import { timeMaskHours } from '@/entities/timeMask';
+import { type CellStatus, type Position, timeMaskHours } from '@/entities/timeMask';
 import { timeMaskService } from '@/usecases/timeMaskService';
 
 import { MainSearchbarFilterTimeSelectCell } from './main-searchbar-filter-time-select-cell';
