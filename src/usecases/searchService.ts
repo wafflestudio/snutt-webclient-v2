@@ -1,9 +1,6 @@
 import { type SearchFilter, type SearchResultLecture } from '@/entities/search';
 import { type CourseBook } from '@/entities/semester';
-import { type SearchRepository, searchRepository } from '@/repositories/searchRepository';
-import { authService, envService } from '@/services';
-import { type AuthService } from '@/usecases/authService';
-import { type EnvService } from '@/usecases/envService';
+import { type SearchRepository } from '@/repositories/searchRepository';
 
 export interface SearchService {
   getTags(params: Omit<CourseBook, 'updated_at'>): Promise<{
@@ -18,20 +15,10 @@ export interface SearchService {
   search(params: Partial<SearchFilter>): Promise<SearchResultLecture[]>;
 }
 
-const getSearchService = (deps: {
-  services: [AuthService, EnvService];
-  repositories: [SearchRepository];
-}): SearchService => {
-  const apikey = deps.services[0].getApiKey();
-  const baseUrl = deps.services[1].getBaseUrl();
-
+type Deps = { repositories: [SearchRepository] };
+export const getSearchService = ({ repositories: [searchRepository] }: Deps): SearchService => {
   return {
-    getTags: (yearSemester) => deps.repositories[0].getTags({ apikey, baseUrl }, yearSemester),
-    search: (params) => deps.repositories[0].search({ apikey, baseUrl }, params),
+    getTags: (yearSemester) => searchRepository.getTags(yearSemester),
+    search: (params) => searchRepository.search(params),
   };
 };
-
-export const searchService = getSearchService({
-  services: [authService, envService],
-  repositories: [searchRepository],
-});

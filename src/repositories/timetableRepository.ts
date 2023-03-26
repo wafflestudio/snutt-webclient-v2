@@ -1,151 +1,65 @@
+import type { ApiClient } from '@/clients/api';
 import type { Semester } from '@/entities/semester';
 import type { CreateLectureRequest, FullTimetable, Timetable, UpdateLectureRequest } from '@/entities/timetable';
 
 export interface TimetableRepository {
-  getTimetables(args: { baseUrl: string; apikey: string; token: string }): Promise<Timetable[]>;
-  getFullTimetable(
-    args: { baseUrl: string; apikey: string; token: string },
-    params: { id: string },
-  ): Promise<FullTimetable>;
+  getTimetables(args: { token: string }): Promise<Timetable[]>;
+  getFullTimetable(args: { token: string }, params: { id: string }): Promise<FullTimetable>;
   createTimetable(
-    args: { baseUrl: string; apikey: string; token: string },
+    args: { token: string },
     params: { title: string; year: number; semester: Semester },
   ): Promise<Timetable[]>;
-  deleteTimetable(
-    args: { baseUrl: string; apikey: string; token: string },
-    params: { id: string },
-  ): Promise<Timetable[]>;
+  deleteTimetable(args: { token: string }, params: { id: string }): Promise<Timetable[]>;
   updateLecture(
-    args: { baseUrl: string; apikey: string; token: string },
+    args: { token: string },
     params: { id: string; lecture_id: string },
     data: UpdateLectureRequest,
   ): Promise<FullTimetable>;
-  createLecture(
-    args: { baseUrl: string; apikey: string; token: string },
-    params: { id: string },
-    data: CreateLectureRequest,
-  ): Promise<FullTimetable>;
-  deleteLecture(
-    args: { baseUrl: string; apikey: string; token: string },
-    params: { id: string; lecture_id: string },
-  ): Promise<FullTimetable>;
-  addLecture(
-    args: { baseUrl: string; apikey: string; token: string },
-    params: { id: string; lecture_id: string },
-  ): Promise<FullTimetable>;
-  updateTimetable(
-    args: { baseUrl: string; apikey: string; token: string },
-    params: { id: string },
-    data: { title: string },
-  ): Promise<Timetable[]>;
+  createLecture(args: { token: string }, params: { id: string }, data: CreateLectureRequest): Promise<FullTimetable>;
+  deleteLecture(args: { token: string }, params: { id: string; lecture_id: string }): Promise<FullTimetable>;
+  addLecture(args: { token: string }, params: { id: string; lecture_id: string }): Promise<FullTimetable>;
+  updateTimetable(args: { token: string }, params: { id: string }, data: { title: string }): Promise<Timetable[]>;
 }
 
-const getTimetableRepository = (): TimetableRepository => {
+type Deps = { clients: [ApiClient] };
+export const getTimetableRepository = ({ clients: [apiClient] }: Deps): TimetableRepository => {
   return {
-    getTimetables: async ({ baseUrl, apikey, token }) => {
-      const response = await fetch(`${baseUrl}/v1/tables`, {
-        headers: { 'x-access-apikey': apikey, 'x-access-token': token },
-      });
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as Timetable[];
-    },
-    getFullTimetable: async ({ baseUrl, apikey, token }, { id }) => {
-      const response = await fetch(`${baseUrl}/v1/tables/${id}`, {
-        headers: { 'x-access-apikey': apikey, 'x-access-token': token, accept: 'application/json' },
-      });
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as FullTimetable;
-    },
-    deleteTimetable: async ({ baseUrl, apikey, token }, { id }) => {
-      const response = await fetch(`${baseUrl}/v1/tables/${id}`, {
-        headers: { 'x-access-apikey': apikey, 'x-access-token': token },
-        method: 'DELETE',
-      });
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as Timetable[];
-    },
-    createTimetable: async ({ baseUrl, apikey, token }, { title, year, semester }) => {
-      const response = await fetch(`${baseUrl}/v1/tables`, {
-        headers: {
-          'x-access-apikey': apikey,
-          'x-access-token': token,
-          'content-type': 'application/json;charset=UTF-8',
-        },
-        method: 'POST',
-        body: JSON.stringify({ title, year, semester }),
-      });
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as Timetable[];
-    },
-    updateLecture: async ({ baseUrl, apikey, token }, { id, lecture_id }, body) => {
-      const response = await fetch(`${baseUrl}/v1/tables/${id}/lecture/${lecture_id}`, {
-        headers: {
-          'x-access-apikey': apikey,
-          'x-access-token': token,
-          'content-type': 'application/json;charset=UTF-8',
-        },
-        method: 'PUT',
-        body: JSON.stringify(body),
-      });
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as FullTimetable;
-    },
-    createLecture: async ({ baseUrl, apikey, token }, { id }, body) => {
-      const response = await fetch(`${baseUrl}/v1/tables/${id}/lecture`, {
-        headers: {
-          'x-access-apikey': apikey,
-          'x-access-token': token,
-          'content-type': 'application/json;charset=UTF-8',
-        },
-        method: 'POST',
-        body: JSON.stringify(body),
-      });
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as FullTimetable;
-    },
-    deleteLecture: async ({ baseUrl, apikey, token }, { id, lecture_id }) => {
-      const response = await fetch(`${baseUrl}/v1/tables/${id}/lecture/${lecture_id}`, {
-        headers: { 'x-access-apikey': apikey, 'x-access-token': token },
-        method: 'DELETE',
-      });
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as FullTimetable;
-    },
-    addLecture: async ({ baseUrl, apikey, token }, { id, lecture_id }) => {
-      const response = await fetch(`${baseUrl}/v1/tables/${id}/lecture/${lecture_id}`, {
-        headers: {
-          'x-access-apikey': apikey,
-          'x-access-token': token,
-          'content-type': 'application/json;charset=UTF-8',
-        },
-        method: 'POST',
-      });
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as FullTimetable;
-    },
-    updateTimetable: async ({ baseUrl, apikey, token }, { id }, body) => {
-      const response = await fetch(`${baseUrl}/v1/tables/${id}`, {
-        headers: {
-          'x-access-apikey': apikey,
-          'x-access-token': token,
-          'content-type': 'application/json;charset=UTF-8',
-        },
-        method: 'PUT',
-        body: JSON.stringify(body),
-      });
-      const data = await response.json().catch(() => null);
-      if (!response.ok) throw data;
-      return data as Timetable[];
-    },
+    getTimetables: async ({ token }) =>
+      (await apiClient.get<Timetable[]>('/v1/tables', { headers: { 'x-access-token': token } })).data,
+    getFullTimetable: async ({ token }, { id }) =>
+      (await apiClient.get<FullTimetable>(`/v1/tables/${id}`, { headers: { 'x-access-token': token } })).data,
+    deleteTimetable: async ({ token }, { id }) =>
+      (await apiClient.delete<Timetable[]>(`/v1/tables/${id}`, { headers: { 'x-access-token': token } })).data,
+    createTimetable: async ({ token }, { title, year, semester }) =>
+      (
+        await apiClient.post<Timetable[]>(
+          '/v1/tables',
+          { title, year, semester },
+          { headers: { 'x-access-token': token } },
+        )
+      ).data,
+    updateLecture: async ({ token }, { id, lecture_id }, body) =>
+      (
+        await apiClient.put<FullTimetable>(`/v1/tables/${id}/lecture/${lecture_id}`, body, {
+          headers: { 'x-access-token': token },
+        })
+      ).data,
+    createLecture: async ({ token }, { id }, body) =>
+      (await apiClient.post<FullTimetable>(`/v1/tables/${id}/lecture`, body, { headers: { 'x-access-token': token } }))
+        .data,
+    deleteLecture: async ({ token }, { id, lecture_id }) =>
+      (
+        await apiClient.delete<FullTimetable>(`/v1/tables/${id}/lecture/${lecture_id}`, {
+          headers: { 'x-access-token': token },
+        })
+      ).data,
+    addLecture: async ({ token }, { id, lecture_id }) =>
+      (
+        await apiClient.post<FullTimetable>(`/v1/tables/${id}/lecture/${lecture_id}`, null, {
+          headers: { 'x-access-token': token },
+        })
+      ).data,
+    updateTimetable: async ({ token }, { id }, body) =>
+      (await apiClient.put<Timetable[]>(`/v1/tables/${id}`, body, { headers: { 'x-access-token': token } })).data,
   };
 };
-
-export const timetableRepository = getTimetableRepository();

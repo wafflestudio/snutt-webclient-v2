@@ -1,8 +1,6 @@
-import type { Hour12, HourMinute12, HourMinute24, Minute } from '@/entities/time';
-import { AmPm } from '@/entities/time';
+import { AmPm, type Hour12, type HourMinute12, type HourMinute24, type Minute } from '@/entities/time';
 
-import type { HourMinuteService } from './hourMinuteService';
-import { hourMinuteService } from './hourMinuteService';
+import { type HourMinuteService } from './hourMinuteService';
 
 type State = Partial<HourMinute12>;
 
@@ -47,7 +45,7 @@ export interface HourMinutePickerService {
 }
 
 type Deps = { services: [HourMinuteService] };
-const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService => {
+export const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService => {
   const getAmPmWithDefault = (amPm: AmPm | undefined, defaultHourMinute: HourMinute24 | undefined): AmPm | undefined =>
     amPm ?? (defaultHourMinute ? (defaultHourMinute.hour >= 12 ? AmPm.PM : AmPm.AM) : undefined);
 
@@ -168,7 +166,3 @@ const getHourMinutePickerService = ({ services }: Deps): HourMinutePickerService
     getMinuteWithDefault,
   };
 };
-
-export const hourMinutePickerService = getHourMinutePickerService({
-  services: [hourMinuteService],
-});

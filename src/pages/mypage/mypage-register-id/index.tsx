@@ -6,8 +6,7 @@ import { Button } from '@/components/button';
 import { ErrorDialog } from '@/components/error-dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
-import { authService, errorService } from '@/services';
-import { userService } from '@/usecases/userService';
+import { authService, errorService, userService } from '@/services';
 import { get } from '@/utils/object/get';
 import { queryKey } from '@/utils/query-key-factory';
 

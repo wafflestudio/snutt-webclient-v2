@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { useYearSemester } from '@/hooks/useYearSemester';
-import { searchService } from '@/usecases/searchService';
+import { searchService } from '@/services';
 import type { ArrayElement } from '@/utils/array-element';
 
 import type { SearchForm } from '..';

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { useCourseBooks } from '@/hooks/useCourseBooks';
 import { useYearSemester } from '@/hooks/useYearSemester';
-import { semesterService } from '@/usecases/semesterService';
+import { semesterService } from '@/services';
 
 type Props = { resetSearchResult: () => void };
 

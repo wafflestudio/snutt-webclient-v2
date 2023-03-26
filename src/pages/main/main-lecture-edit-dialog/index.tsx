@@ -9,12 +9,11 @@ import { useTokenContext } from '@/contexts/tokenContext';
 import type { Color } from '@/entities/color';
 import type { Lecture } from '@/entities/lecture';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
+import { timetableService } from '@/services';
 import { lectureService } from '@/usecases/lectureService';
-import { timetableService } from '@/usecases/timetableService';
 import { queryKey } from '@/utils/query-key-factory';
 
-import type { LectureEditForm } from '../main-lecture-edit-form';
-import { MainLectureEditForm } from '../main-lecture-edit-form';
+import { type LectureEditForm, MainLectureEditForm } from '../main-lecture-edit-form';
 import { MainLectureDeleteDialog } from './main-lecture-delete-dialog';
 
 type Props = {

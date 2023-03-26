@@ -1,28 +1,15 @@
-import { type Notification } from '@/entities/notification';
-import { type NotificationRepository, notificationRepository } from '@/repositories/notificationRepository';
-import { authService, envService } from '@/services';
-import { type AuthService } from '@/usecases/authService';
-import { type EnvService } from '@/usecases/envService';
+import type { Notification } from '@/entities/notification';
+import type { NotificationRepository } from '@/repositories/notificationRepository';
 
 export interface NotificationService {
   getCount(token: string): Promise<{ count: number }>;
   getList(token: string): Promise<Notification[]>;
 }
 
-const getNotificationService = (args: {
-  services: [AuthService, EnvService];
-  repositories: [NotificationRepository];
-}): NotificationService => {
-  const baseUrl = args.services[1].getBaseUrl();
-  const apikey = args.services[0].getApiKey();
-
+type Deps = { repositories: [NotificationRepository] };
+export const getNotificationService = ({ repositories: [notificationRepository] }: Deps): NotificationService => {
   return {
-    getCount: (token: string) => args.repositories[0].getCount({ baseUrl, apikey, token }),
-    getList: (token: string) => args.repositories[0].getList({ baseUrl, apikey, token }),
+    getCount: (token: string) => notificationRepository.getCount({ token }),
+    getList: (token: string) => notificationRepository.getList({ token }),
   };
 };
-
-export const notificationService = getNotificationService({
-  services: [authService, envService],
-  repositories: [notificationRepository],
-});

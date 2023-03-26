@@ -5,9 +5,8 @@ import { Button } from '@/components/button';
 import type { BaseLecture } from '@/entities/lecture';
 import { DAY_LABEL_MAP } from '@/entities/time';
 import type { FullTimetable } from '@/entities/timetable';
-import { colorService } from '@/services';
+import { colorService, timetableViewService } from '@/services';
 import { lectureService } from '@/usecases/lectureService';
-import { timetableViewService } from '@/usecases/timetableViewService';
 import { rangeToArray } from '@/utils/rangeToArray';
 
 type Props = {

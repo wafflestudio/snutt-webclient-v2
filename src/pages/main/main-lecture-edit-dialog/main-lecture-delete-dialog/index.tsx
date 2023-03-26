@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
-import { timetableService } from '@/usecases/timetableService';
+import { timetableService } from '@/services';
 import { queryKey } from '@/utils/query-key-factory';
 
 type Props = {

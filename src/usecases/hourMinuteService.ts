@@ -1,5 +1,12 @@
-import type { Hour12, Hour24, HourMinute, HourMinute12, HourMinute24, Minute } from '@/entities/time';
-import { AmPm } from '@/entities/time';
+import {
+  AmPm,
+  type Hour12,
+  type Hour24,
+  type HourMinute,
+  type HourMinute12,
+  type HourMinute24,
+  type Minute,
+} from '@/entities/time';
 
 export interface HourMinuteService {
   isAfter: (hm1: HourMinute, hm2: HourMinute) => boolean;
@@ -15,7 +22,7 @@ export interface HourMinuteService {
   addMinute: (hm: HourMinute24, minute: Minute) => HourMinute24;
 }
 
-const getHourMinuteService = (): HourMinuteService => {
+export const getHourMinuteService = (): HourMinuteService => {
   return {
     isAfter: (hm1, hm2) => toValue(hm1) > toValue(hm2),
     isBefore: (hm1, hm2) => toValue(hm1) < toValue(hm2),
@@ -49,8 +56,6 @@ const getHourMinuteService = (): HourMinuteService => {
     },
   };
 };
-
-export const hourMinuteService = getHourMinuteService();
 
 const toValue = (hm: HourMinute12 | HourMinute24) =>
   ('amPm' in hm && hm.amPm === AmPm.PM ? hm.hour + 12 : hm.hour) * 60 + hm.minute;

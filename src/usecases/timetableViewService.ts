@@ -2,7 +2,6 @@ import type { BaseLecture } from '@/entities/lecture';
 import type { Day, Hour24, HourMinute24, Minute } from '@/entities/time';
 import type { TimetableDisplayMode } from '@/entities/timetableView';
 import type { StorageRepository } from '@/repositories/storageRepository';
-import { storageRepository } from '@/repositories/storageRepository';
 import type { ArrayElement } from '@/utils/array-element';
 
 type LectureTime = ArrayElement<BaseLecture['class_time_json']>;
@@ -70,7 +69,3 @@ export const getTimetableViewService = ({
     formatTime,
   };
 };
-
-export const timetableViewService = getTimetableViewService({
-  repositories: [storageRepository],
-});

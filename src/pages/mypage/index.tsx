@@ -9,9 +9,7 @@ import { Button } from '@/components/button';
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { CoreServerError } from '@/entities/error';
-import { envService, errorService } from '@/services';
-import { timetableViewService } from '@/usecases/timetableViewService';
-import { userService } from '@/usecases/userService';
+import { envService, errorService, timetableViewService, userService } from '@/services';
 import { queryKey } from '@/utils/query-key-factory';
 
 import { MypageChangePassword } from './mypage-change-password';
