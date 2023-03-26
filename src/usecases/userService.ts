@@ -1,8 +1,5 @@
 import { type User } from '@/entities/user';
-import { type UserRepository, userRepository } from '@/repositories/userRepository';
-import { authService, envService } from '@/services';
-import { type AuthService } from '@/usecases/authService';
-import { type EnvService } from '@/usecases/envService';
+import { type UserRepository } from '@/repositories/userRepository';
 
 export interface UserService {
   getUserInfo(token: string): Promise<User>;
@@ -12,18 +9,14 @@ export interface UserService {
   isFbOnlyUser(user: User): boolean;
 }
 
-const getUserService = (args: { services: [AuthService, EnvService]; repositories: [UserRepository] }): UserService => {
-  const apikey = args.services[0].getApiKey();
-  const baseUrl = args.services[1].getBaseUrl();
-
+type Deps = { repositories: [UserRepository] };
+export const getUserService = ({ repositories: [userRepository] }: Deps): UserService => {
   return {
-    getUserInfo: (token: string) => args.repositories[0].getUserInfo({ baseUrl, apikey, token }),
-    addIdPassword: (token, body) => args.repositories[0].addIdPassword({ baseUrl, apiKey: apikey, token }, body),
+    getUserInfo: (token: string) => userRepository.getUserInfo({ token }),
+    addIdPassword: (token, body) => userRepository.addIdPassword({ token }, body),
     attachFacebookAccount: (token: string, body: { fb_id: string; fb_token: string }) =>
-      args.repositories[0].attachFacebookAccount({ baseUrl, apikey, token }, body),
-    detachFacebookAccount: (token: string) => args.repositories[0].detachFacebookAccount({ baseUrl, apikey, token }),
+      userRepository.attachFacebookAccount({ token }, body),
+    detachFacebookAccount: (token: string) => userRepository.detachFacebookAccount({ token }),
     isFbOnlyUser: (user) => !!user.fb_name && !user.local_id,
   };
 };
-
-export const userService = getUserService({ services: [authService, envService], repositories: [userRepository] });

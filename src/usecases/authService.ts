@@ -2,10 +2,8 @@ import { type SignInResponse } from '@/entities/auth';
 import { type AuthRepository } from '@/repositories/authRepository';
 import { type StorageRepository } from '@/repositories/storageRepository';
 import { type UserRepository } from '@/repositories/userRepository';
-import { type EnvService } from '@/usecases/envService';
 
 export interface AuthService {
-  getApiKey(): string;
   getToken(): string | null;
   saveToken(token: string, persist: boolean): void;
   clearToken(): void;
@@ -23,40 +21,33 @@ export interface AuthService {
   resetPassword(body: { user_id: string; password: string }): Promise<{ message: 'ok' }>;
 }
 
-export const getAuthService = (args: {
-  repositories: [StorageRepository, AuthRepository, UserRepository];
-  services: [EnvService];
-}): AuthService => {
-  const [storageRepo, authRepo, userRepo] = args.repositories;
-  const [envService] = args.services;
-
-  const baseUrl = envService.getBaseUrl();
-  const apiKey = envService.getApiKey();
-
+type Deps = { repositories: [StorageRepository, AuthRepository, UserRepository] };
+export const getAuthService = ({
+  repositories: [storageRepository, authRepository, userRepository],
+}: Deps): AuthService => {
   return {
-    getApiKey: () => args.services[0].getApiKey(),
-    getToken: () => storageRepo.get('snutt_token', false) ?? storageRepo.get('snutt_token', true),
-    saveToken: (token, persist) => storageRepo.set('snutt_token', token, persist),
+    getToken: () => storageRepository.get('snutt_token', false) ?? storageRepository.get('snutt_token', true),
+    saveToken: (token, persist) => storageRepository.set('snutt_token', token, persist),
     clearToken: () => {
-      storageRepo.remove('snutt_token', false);
-      storageRepo.remove('snutt_token', true);
+      storageRepository.remove('snutt_token', false);
+      storageRepository.remove('snutt_token', true);
     },
     isValidPassword: (password) =>
       password.split('').some((item) => /[0-9]+/.test(item)) &&
       password.split('').some((item) => /[a-zA-Z]+/.test(item)) &&
       password.length >= 6 &&
       password.length <= 20,
-    changePassword: async (token, body) => userRepo.changePassword({ baseUrl, apiKey, token }, body),
+    changePassword: async (token, body) => userRepository.changePassword({ token }, body),
     signIn: (params) =>
       params.type === 'LOCAL'
-        ? authRepo.signInWithIdPassword({ id: params.id, password: params.password })
-        : authRepo.signInWithFacebook({ fb_id: params.fb_id, fb_token: params.fb_token }),
-    signUp: (params) => authRepo.signUpWithIdPassword(params),
-    closeAccount: (token) => userRepo.deleteUser({ baseUrl, token, apikey: apiKey }),
-    findIdByEmail: (body) => authRepo.findId(body),
-    passwordResetCheckEmail: (body) => authRepo.passwordResetCheckEmail(body),
-    sendPasswordResetVerificationEmail: (body) => authRepo.sendPasswordResetVerificationEmail(body),
-    verifyPasswordResetCode: (body) => authRepo.verifyPasswordResetCode(body),
-    resetPassword: (body) => authRepo.resetPassword(body),
+        ? authRepository.signInWithIdPassword({ id: params.id, password: params.password })
+        : authRepository.signInWithFacebook({ fb_id: params.fb_id, fb_token: params.fb_token }),
+    signUp: (params) => authRepository.signUpWithIdPassword(params),
+    closeAccount: (token) => userRepository.deleteUser({ token }),
+    findIdByEmail: (body) => authRepository.findId(body),
+    passwordResetCheckEmail: (body) => authRepository.passwordResetCheckEmail(body),
+    sendPasswordResetVerificationEmail: (body) => authRepository.sendPasswordResetVerificationEmail(body),
+    verifyPasswordResetCode: (body) => authRepository.verifyPasswordResetCode(body),
+    resetPassword: (body) => authRepository.resetPassword(body),
   };
 };
