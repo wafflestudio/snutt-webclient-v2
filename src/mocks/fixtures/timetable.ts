@@ -1,4 +1,4 @@
-import { FullTimetable, Timetable } from '@/entities/timetable';
+import type { FullTimetable, Timetable } from '@/entities/timetable';
 
 export const mockTimeTables: Timetable[] = [
   {

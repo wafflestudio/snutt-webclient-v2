@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
 import { rest } from 'msw';
 
-import { SignInResponse } from '@/entities/auth';
-import { Color } from '@/entities/color';
-import { CoreServerError } from '@/entities/error';
-import { Notification } from '@/entities/notification';
-import { SearchFilter, SearchResultLecture } from '@/entities/search';
-import { CourseBook, Semester } from '@/entities/semester';
-import { FullTimetable, Timetable } from '@/entities/timetable';
+import type { SignInResponse } from '@/entities/auth';
+import type { Color } from '@/entities/color';
+import type { CoreServerError } from '@/entities/error';
+import type { Notification } from '@/entities/notification';
+import type { SearchFilter, SearchResultLecture } from '@/entities/search';
+import type { CourseBook, Semester } from '@/entities/semester';
+import type { FullTimetable, Timetable } from '@/entities/timetable';
 import { mockVividIos } from '@/mocks/fixtures/color';
 import { mockCourseBooks } from '@/mocks/fixtures/courseBook';
 import { mockNotification } from '@/mocks/fixtures/notification';
@@ -22,9 +22,9 @@ import {
   mockTimeTables,
 } from '@/mocks/fixtures/timetable';
 import { mockUsers } from '@/mocks/fixtures/user';
-import { SearchRepository } from '@/repositories/searchRepository';
-import { timetableRepository } from '@/repositories/timetableRepository';
-import { UserRepository } from '@/repositories/userRepository';
+import type { SearchRepository } from '@/repositories/searchRepository';
+import type { timetableRepository } from '@/repositories/timetableRepository';
+import type { UserRepository } from '@/repositories/userRepository';
 
 import { withValidateAccess } from '../utils/access';
 

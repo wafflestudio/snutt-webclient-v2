@@ -1,7 +1,5 @@
-// 이 파일은 전체 프로젝트에서 유일하게 @/constants/environment 에 접근할 수 있습니다.
-// eslint-disable-next-line no-restricted-imports
-import { EnvironmentVariables, viteEnvironmentVariables } from '@/constants/environment';
-import { AppEnv, NodeEnv } from '@/entities/env';
+import type { EnvironmentVariables } from '@/constants/environment';
+import type { AppEnv, NodeEnv } from '@/entities/env';
 
 export interface EnvRepository {
   getAppEnv(): AppEnv;
@@ -15,7 +13,7 @@ export interface EnvRepository {
 }
 
 type Dependencies = { external: [EnvironmentVariables] };
-const getEnvRepository = ({ external: [envVariables] }: Dependencies): EnvRepository => {
+export const getEnvRepository = ({ external: [envVariables] }: Dependencies): EnvRepository => {
   const { API_BASE_URL, API_KEY, APP_ENV, GIT_SHA, GIT_TAG, FACEBOOK_APP_ID, TRUFFLE_API_KEY, NODE_ENV } = envVariables;
   return {
     getAppEnv: () => {
@@ -52,5 +50,3 @@ const getEnvRepository = ({ external: [envVariables] }: Dependencies): EnvReposi
     },
   };
 };
-
-export const envRepository = getEnvRepository({ external: [viteEnvironmentVariables] });

@@ -1,6 +1,6 @@
-import { DefaultBodyType, PathParams, ResponseResolver, RestContext, RestRequest } from 'msw';
+import type { DefaultBodyType, PathParams, ResponseResolver, RestContext, RestRequest } from 'msw';
 
-import { CoreServerError } from '@/entities/error';
+import type { CoreServerError } from '@/entities/error';
 
 import { mockUsers } from '../fixtures/user';
 

@@ -1,4 +1,4 @@
-import { CourseBook } from '@/entities/semester';
+import type { CourseBook } from '@/entities/semester';
 
 export interface SemesterRepository {
   getCourseBooks(args: { baseUrl: string; apikey: string }): Promise<CourseBook[]>;

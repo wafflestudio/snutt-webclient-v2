@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
-import { FullTimetable } from '@/entities/timetable';
+import type { FullTimetable } from '@/entities/timetable';
 import { timetableService } from '@/usecases/timetableService';
 import { queryKey } from '@/utils/query-key-factory';
 

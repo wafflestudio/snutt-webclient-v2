@@ -1,9 +1,8 @@
-import { CourseBook } from '@/entities/semester';
-import { SemesterRepository, semesterRepository } from '@/repositories/semesterRepository';
-import { AuthService } from '@/usecases/authService';
-import { EnvService, envService } from '@/usecases/envService';
-
-import { authService } from '.';
+import { type CourseBook } from '@/entities/semester';
+import { type SemesterRepository, semesterRepository } from '@/repositories/semesterRepository';
+import { authService, envService } from '@/services';
+import { type AuthService } from '@/usecases/authService';
+import { type EnvService } from '@/usecases/envService';
 
 type CourseBookLabel = `${number}-${1 | 'S' | 2 | 'W'}`;
 type CourseBookValue = `${number}-${1 | 2 | 3 | 4}`;

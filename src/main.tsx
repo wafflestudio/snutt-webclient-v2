@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { TokenContextProvider } from '@/contexts/tokenContext';
-import { envService } from '@/usecases/envService';
+import { envService } from '@/services';
 
 import App from './App';
 

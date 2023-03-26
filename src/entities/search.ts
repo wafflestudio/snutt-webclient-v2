@@ -1,5 +1,5 @@
-import { BaseLecture } from './lecture';
-import { Semester } from './semester';
+import type { BaseLecture } from './lecture';
+import type { Semester } from './semester';
 
 type BitMask = number;
 

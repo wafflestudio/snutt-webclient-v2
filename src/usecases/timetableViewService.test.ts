@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 
-import { StorageRepository } from '@/repositories/storageRepository';
+import type { StorageRepository } from '@/repositories/storageRepository';
 import { getTimetableViewService } from '@/usecases/timetableViewService';
 
 describe('getGridPos', () => {

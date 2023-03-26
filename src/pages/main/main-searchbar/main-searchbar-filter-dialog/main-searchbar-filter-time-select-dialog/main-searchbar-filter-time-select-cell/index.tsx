@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Position } from '@/entities/timeMask';
+import type { Position } from '@/entities/timeMask';
 import { timeMaskService } from '@/usecases/timeMaskService';
 
 type Props = {

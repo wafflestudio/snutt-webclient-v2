@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 import { Tabs } from '@/components/tabs';
-import { SearchResultLecture } from '@/entities/search';
-import { FullTimetable, Timetable } from '@/entities/timetable';
+import type { SearchResultLecture } from '@/entities/search';
+import type { FullTimetable, Timetable } from '@/entities/timetable';
 
 import { MainCurrentLectureTab } from './main-current-lecture-tab';
 import { MainSearchLectureTab } from './main-search-lecture-tab';

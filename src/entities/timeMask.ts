@@ -1,4 +1,4 @@
-import { Hour24 } from './time';
+import type { Hour24 } from './time';
 
 export type Position = { i: number; j: number };
 export type CellStatus = boolean[][];

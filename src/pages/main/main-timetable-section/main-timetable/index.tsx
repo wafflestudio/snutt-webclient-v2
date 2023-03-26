@@ -2,10 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import styled, { css, keyframes } from 'styled-components';
 
 import { Button } from '@/components/button';
-import { BaseLecture } from '@/entities/lecture';
+import type { BaseLecture } from '@/entities/lecture';
 import { DAY_LABEL_MAP } from '@/entities/time';
-import { FullTimetable } from '@/entities/timetable';
-import { colorService } from '@/usecases';
+import type { FullTimetable } from '@/entities/timetable';
+import { colorService } from '@/services';
 import { lectureService } from '@/usecases/lectureService';
 import { timetableViewService } from '@/usecases/timetableViewService';
 import { rangeToArray } from '@/utils/rangeToArray';

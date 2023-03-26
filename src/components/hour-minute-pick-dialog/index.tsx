@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
-import { Hour12, Hour24, HourMinute12, HourMinute24, Minute } from '@/entities/time';
+import type { Hour12, Hour24, HourMinute12, HourMinute24, Minute } from '@/entities/time';
 import { hourMinutePickerService } from '@/usecases/hourMinutePickerService';
 
 import { Clock } from '../clock';

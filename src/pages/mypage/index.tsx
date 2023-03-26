@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from 'react-facebook-login';
+import type { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from 'react-facebook-login';
 import FBLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -8,8 +8,8 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
-import { CoreServerError } from '@/entities/error';
-import { envService } from '@/usecases/envService';
+import type { CoreServerError } from '@/entities/error';
+import { envService } from '@/services';
 import { errorService } from '@/usecases/errorService';
 import { timetableViewService } from '@/usecases/timetableViewService';
 import { userService } from '@/usecases/userService';

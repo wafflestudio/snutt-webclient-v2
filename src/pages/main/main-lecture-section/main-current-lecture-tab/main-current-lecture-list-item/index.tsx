@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { BaseLecture } from '@/entities/lecture';
+import type { BaseLecture } from '@/entities/lecture';
 
 import { MainLectureListItem } from '../../main-lecture-listitem';
 import { MainCurrentLectureDeleteDialog } from './main-current-lecture-delete-dialog';

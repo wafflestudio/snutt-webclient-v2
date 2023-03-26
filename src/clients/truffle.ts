@@ -1,6 +1,6 @@
 import { getTruffleClient } from '@wafflestudio/truffle-browser';
 
-import { envService } from '@/usecases/envService';
+import { envService } from '@/services';
 
 export const truffleClient = getTruffleClient({
   enabled: envService.getNodeEnv() === 'production' && envService.getAppEnv() !== 'test',

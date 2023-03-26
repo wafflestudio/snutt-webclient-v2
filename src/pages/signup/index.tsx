@@ -8,7 +8,7 @@ import { ErrorDialog } from '@/components/error-dialog';
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
-import { authService } from '@/usecases';
+import { authService } from '@/services';
 import { errorService } from '@/usecases/errorService';
 import { get } from '@/utils/object/get';
 

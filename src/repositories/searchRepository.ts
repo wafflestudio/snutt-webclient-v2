@@ -1,5 +1,5 @@
-import { SearchFilter, SearchResultLecture } from '@/entities/search';
-import { CourseBook } from '@/entities/semester';
+import type { SearchFilter, SearchResultLecture } from '@/entities/search';
+import type { CourseBook } from '@/entities/semester';
 
 export interface SearchRepository {
   getTags(

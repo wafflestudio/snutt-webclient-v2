@@ -1,4 +1,4 @@
-import { Key, ReactNode } from 'react';
+import type { Key, ReactNode } from 'react';
 import styled from 'styled-components';
 
 type Props<T> = {

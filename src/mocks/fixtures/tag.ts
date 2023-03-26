@@ -1,4 +1,4 @@
-import { SearchRepository } from '@/repositories/searchRepository';
+import type { SearchRepository } from '@/repositories/searchRepository';
 
 export const mockTags: Awaited<ReturnType<SearchRepository['getTags']>> = {
   classification: ['교양', '교직', '논문', '전선', '전필'],

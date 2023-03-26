@@ -1,4 +1,5 @@
-import { createContext, PropsWithChildren, useCallback, useContext, useRef, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useCallback, useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import useOnClickOutside from '@/hooks/useOnClickOutside';

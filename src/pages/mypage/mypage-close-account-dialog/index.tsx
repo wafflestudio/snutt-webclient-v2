@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
-import { authService } from '@/usecases';
+import { authService } from '@/services';
 import { get } from '@/utils/object/get';
 
 const CONFIRM_TEXT = '탈퇴';

@@ -1,9 +1,8 @@
-import { User } from '@/entities/user';
-import { UserRepository, userRepository } from '@/repositories/userRepository';
-import { AuthService } from '@/usecases/authService';
-import { EnvService, envService } from '@/usecases/envService';
-
-import { authService } from '.';
+import { type User } from '@/entities/user';
+import { type UserRepository, userRepository } from '@/repositories/userRepository';
+import { authService, envService } from '@/services';
+import { type AuthService } from '@/usecases/authService';
+import { type EnvService } from '@/usecases/envService';
 
 export interface UserService {
   getUserInfo(token: string): Promise<User>;

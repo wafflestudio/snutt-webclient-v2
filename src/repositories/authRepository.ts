@@ -1,5 +1,5 @@
-import { ApiClient } from '@/clients/api';
-import { SignInResponse } from '@/entities/auth';
+import type { ApiClient } from '@/clients/api';
+import type { SignInResponse } from '@/entities/auth';
 
 export interface AuthRepository {
   signInWithIdPassword(args: { id: string; password: string }): Promise<SignInResponse>;

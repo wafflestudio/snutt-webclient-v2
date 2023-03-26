@@ -1,11 +1,11 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 
 import { IcClock } from '@/components/icons/ic-clock';
 import { IcDots } from '@/components/icons/ic-dots';
 import { IcLabel } from '@/components/icons/ic-label';
 import { IcMap } from '@/components/icons/ic-map';
-import { BaseLecture } from '@/entities/lecture';
+import type { BaseLecture } from '@/entities/lecture';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { lectureService } from '@/usecases/lectureService';
 

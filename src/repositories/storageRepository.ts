@@ -1,4 +1,4 @@
-import { StorageKey } from '@/entities/storage';
+import type { StorageKey } from '@/entities/storage';
 
 export interface StorageRepository {
   get(key: StorageKey, persist: boolean): string | null;

@@ -1,6 +1,6 @@
 import { describe, expect, it, test } from '@jest/globals';
 
-import { FullTimetable } from '@/entities/timetable';
+import type { FullTimetable } from '@/entities/timetable';
 import { timeMaskService } from '@/usecases/timeMaskService';
 
 test('getInitialCellStatus', () => {

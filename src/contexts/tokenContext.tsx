@@ -1,6 +1,8 @@
-import { createContext, PropsWithChildren, useContext, useMemo, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 
-import { authService } from '@/usecases';
+import { authService } from '@/services';
+
 type TokenContext = {
   token: string | null;
   saveToken: (token: string, permanent: boolean) => void;

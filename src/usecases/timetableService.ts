@@ -1,10 +1,10 @@
-import { Semester } from '@/entities/semester';
-import { CreateLectureRequest, FullTimetable, Timetable, UpdateLectureRequest } from '@/entities/timetable';
-import { TimetableRepository, timetableRepository } from '@/repositories/timetableRepository';
-import { AuthService } from '@/usecases/authService';
-import { EnvService, envService } from '@/usecases/envService';
-
-import { authService } from '.';
+import type { Semester } from '@/entities/semester';
+import type { CreateLectureRequest, FullTimetable, Timetable, UpdateLectureRequest } from '@/entities/timetable';
+import type { TimetableRepository } from '@/repositories/timetableRepository';
+import { timetableRepository } from '@/repositories/timetableRepository';
+import { authService, envService } from '@/services';
+import type { AuthService } from '@/usecases/authService';
+import type { EnvService } from '@/usecases/envService';
 
 export interface TimetableService {
   getTimetables(token: string): Promise<Timetable[]>;

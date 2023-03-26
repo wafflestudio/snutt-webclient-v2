@@ -10,9 +10,14 @@
     "react/display-name": "off",
     "simple-import-sort/imports": "error",
     "react/jsx-no-useless-fragment": ["error", { "allowExpressions": true }],
+    "@typescript-eslint/consistent-type-imports": "error",
     "no-restricted-imports": [
       "error",
-      { "name": "@/constants/environment", "message": "\n\nenvironmentService 를 통해 환경변수에 접근해야 합니다.\n\n" }
+      {
+        "name": "@/constants/environment",
+        "importNames": ["viteEnvironmentVariables"],
+        "message": "\n\nenvironmentService 를 통해 환경변수에 접근해야 합니다.\n\n"
+      }
     ],
     "no-restricted-syntax": [
       "error",

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { COLOR_LABEL_MAP } from '@/constants/color';
-import { Color } from '@/entities/color';
+import type { Color } from '@/entities/color';
 
 type Props = {
   colorList: Color[];
