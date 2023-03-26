@@ -10,7 +10,7 @@ import { getFeedbackRepository } from '@/repositories/feedbackRepository';
 import { getNotificationRepository } from '@/repositories/notificationRepository';
 import { getSearchRepository } from '@/repositories/searchRepository';
 import { getSemesterRepository } from '@/repositories/semesterRepository';
-import { storageRepository } from '@/repositories/storageRepository';
+import { getStorageRepository } from '@/repositories/storageRepository';
 import { userRepository } from '@/repositories/userRepository';
 import { getAuthService } from '@/usecases/authService';
 import { getColorService } from '@/usecases/colorService';
@@ -23,6 +23,8 @@ import { getSemesterService } from '@/usecases/semesterService';
 
 const envRepository = getEnvRepository({ external: [viteEnvironmentVariables] });
 export const envService = getEnvService({ repositories: [envRepository] });
+
+const storageRepository = getStorageRepository();
 
 const snuttApiClient = getApiClient({
   baseURL: envService.getBaseUrl(),
