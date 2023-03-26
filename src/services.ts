@@ -9,6 +9,7 @@ import { getErrorRepository } from '@/repositories/errorRepository';
 import { getFeedbackRepository } from '@/repositories/feedbackRepository';
 import { getNotificationRepository } from '@/repositories/notificationRepository';
 import { getSearchRepository } from '@/repositories/searchRepository';
+import { getSemesterRepository } from '@/repositories/semesterRepository';
 import { storageRepository } from '@/repositories/storageRepository';
 import { userRepository } from '@/repositories/userRepository';
 import { getAuthService } from '@/usecases/authService';
@@ -17,8 +18,8 @@ import { getEnvService } from '@/usecases/envService';
 import { getErrorService } from '@/usecases/errorService';
 import { getFeedbackService } from '@/usecases/feedbackService';
 import { getNotificationService } from '@/usecases/notificationService';
-
-import { getSearchService } from './usecases/searchService';
+import { getSearchService } from '@/usecases/searchService';
+import { getSemesterService } from '@/usecases/semesterService';
 
 const envRepository = getEnvRepository({ external: [viteEnvironmentVariables] });
 export const envService = getEnvService({ repositories: [envRepository] });
@@ -48,3 +49,6 @@ export const notificationService = getNotificationService({ repositories: [notif
 
 const searchRepository = getSearchRepository({ clients: [snuttApiClient] });
 export const searchService = getSearchService({ repositories: [searchRepository] });
+
+const semesterRepository = getSemesterRepository({ clients: [snuttApiClient] });
+export const semesterService = getSemesterService({ repositories: [semesterRepository] });
