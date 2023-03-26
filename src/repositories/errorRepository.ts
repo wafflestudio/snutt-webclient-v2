@@ -4,7 +4,7 @@ export interface ErrorRepository {
   getErrorMessage(args: { errorCode: number; useDefaultMessage: boolean }): string;
 }
 
-const getErrorRepository = (): ErrorRepository => {
+export const getErrorRepository = (): ErrorRepository => {
   return {
     getErrorMessage: ({ errorCode, useDefaultMessage }) => {
       const matchingError = errorTable.find((e) => e.code === errorCode);
@@ -12,5 +12,3 @@ const getErrorRepository = (): ErrorRepository => {
     },
   };
 };
-
-export const errorRepository = getErrorRepository();

@@ -8,8 +8,7 @@ import { Button } from '@/components/button';
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { CoreServerError } from '@/entities/error';
-import { authService, envService } from '@/services';
-import { errorService } from '@/usecases/errorService';
+import { authService, envService, errorService } from '@/services';
 
 import { LoginFindIdDialog } from './login-find-id-dialog';
 import { LoginResetPasswordDialog } from './login-reset-password-dialog';
