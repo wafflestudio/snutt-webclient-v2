@@ -9,7 +9,7 @@ import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { CoreServerError } from '@/entities/error';
 import { authService } from '@/usecases';
-import { envService } from '@/usecases/envService';
+import { envService } from '@/usecases';
 import { errorService } from '@/usecases/errorService';
 
 import { LoginFindIdDialog } from './login-find-id-dialog';

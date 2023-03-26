@@ -1,7 +1,8 @@
 import { Notification } from '@/entities/notification';
 import { NotificationRepository, notificationRepository } from '@/repositories/notificationRepository';
+import { envService } from '@/usecases';
 import { AuthService } from '@/usecases/authService';
-import { EnvService, envService } from '@/usecases/envService';
+import { EnvService } from '@/usecases/envService';
 
 import { authService } from '.';
 

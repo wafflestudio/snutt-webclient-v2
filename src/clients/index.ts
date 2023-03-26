@@ -1,4 +1,4 @@
-import { envService } from '@/usecases/envService';
+import { envService } from '@/usecases';
 
 import { getApiClient } from './api';
 

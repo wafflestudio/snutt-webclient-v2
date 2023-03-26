@@ -1,5 +1,6 @@
 import { FeedbackRepository, feedbackRepository } from '@/repositories/feedbackRepository';
-import { EnvService, envService } from '@/usecases/envService';
+import { envService } from '@/usecases';
+import { EnvService } from '@/usecases/envService';
 
 export interface FeedbackService {
   post(body: { email: string; message: string }): Promise<{ message: 'ok' }>;

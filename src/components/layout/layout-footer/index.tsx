@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { BREAKPOINT } from '@/styles/constants';
-import { envService } from '@/usecases/envService';
+import { envService } from '@/usecases';
 
 import { LayoutFooterFeedbackDialog } from './layout-footer-feedback-dialog';
 

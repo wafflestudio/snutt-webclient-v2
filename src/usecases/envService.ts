@@ -1,5 +1,5 @@
 import { AppEnv } from '@/entities/env';
-import { EnvRepository, envRepository } from '@/repositories/envRepository';
+import { EnvRepository } from '@/repositories/envRepository';
 
 export interface EnvService {
   getAppEnv(): AppEnv;
@@ -12,7 +12,7 @@ export interface EnvService {
   getNodeEnv(): string;
 }
 
-const getEnvService = (args: { repositories: [EnvRepository] }): EnvService => {
+export const getEnvService = (args: { repositories: [EnvRepository] }): EnvService => {
   return {
     getAppEnv: () => args.repositories[0].getAppEnv(),
     getApiKey: () => args.repositories[0].getApiKey(),
@@ -36,5 +36,3 @@ const getEnvService = (args: { repositories: [EnvRepository] }): EnvService => {
     getNodeEnv: () => args.repositories[0].getNodeEnv(),
   };
 };
-
-export const envService = getEnvService({ repositories: [envRepository] });
