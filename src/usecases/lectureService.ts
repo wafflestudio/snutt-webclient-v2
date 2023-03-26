@@ -1,7 +1,7 @@
-import { Color } from '@/entities/color';
-import { WithInternalId } from '@/entities/id';
-import { BaseLecture, ClassTime, Lecture } from '@/entities/lecture';
-import { CourseBook } from '@/entities/semester';
+import type { Color } from '@/entities/color';
+import type { WithInternalId } from '@/entities/id';
+import type { BaseLecture, ClassTime, Lecture } from '@/entities/lecture';
+import type { CourseBook } from '@/entities/semester';
 import { DAY_LABEL_MAP } from '@/entities/time';
 import { createRandomId } from '@/utils/random-id';
 

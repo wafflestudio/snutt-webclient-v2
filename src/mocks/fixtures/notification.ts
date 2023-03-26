@@ -1,4 +1,4 @@
-import { Notification } from '@/entities/notification';
+import type { Notification } from '@/entities/notification';
 
 export const mockNotification: Notification[] = [
   {

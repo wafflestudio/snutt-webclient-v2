@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from 'react-facebook-login';
+import type { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from 'react-facebook-login';
 import FBLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { Link, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -7,7 +7,7 @@ import styled, { css } from 'styled-components';
 import { Button } from '@/components/button';
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
-import { CoreServerError } from '@/entities/error';
+import type { CoreServerError } from '@/entities/error';
 import { authService } from '@/usecases';
 import { envService } from '@/usecases';
 import { errorService } from '@/usecases/errorService';

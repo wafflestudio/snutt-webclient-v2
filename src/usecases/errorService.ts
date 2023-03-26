@@ -1,4 +1,5 @@
-import { ErrorRepository, errorRepository } from '@/repositories/errorRepository';
+import type { ErrorRepository } from '@/repositories/errorRepository';
+import { errorRepository } from '@/repositories/errorRepository';
 
 export interface ErrorService {
   getErrorMessage(errorCode: number, useDefaultMessage?: boolean): string;

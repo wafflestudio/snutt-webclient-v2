@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { ErrorDialog } from '@/components/error-dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
-import { BaseLecture } from '@/entities/lecture';
+import type { BaseLecture } from '@/entities/lecture';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { timetableService } from '@/usecases/timetableService';
 import { get } from '@/utils/object/get';

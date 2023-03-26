@@ -1,6 +1,6 @@
-import { Color } from './color';
-import { Lecture } from './lecture';
-import { Day } from './time';
+import type { Color } from './color';
+import type { Lecture } from './lecture';
+import type { Day } from './time';
 
 export interface Timetable {
   semester: 1 | 2 | 3 | 4;

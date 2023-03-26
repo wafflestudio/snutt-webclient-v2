@@ -1,8 +1,8 @@
-import { User } from '@/entities/user';
-import { UserRepository, userRepository } from '@/repositories/userRepository';
+import { type User } from '@/entities/user';
+import { type UserRepository, userRepository } from '@/repositories/userRepository';
 import { envService } from '@/usecases';
-import { AuthService } from '@/usecases/authService';
-import { EnvService } from '@/usecases/envService';
+import { type AuthService } from '@/usecases/authService';
+import { type EnvService } from '@/usecases/envService';
 
 import { authService } from '.';
 

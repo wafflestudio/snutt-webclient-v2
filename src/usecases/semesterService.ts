@@ -1,8 +1,8 @@
-import { CourseBook } from '@/entities/semester';
-import { SemesterRepository, semesterRepository } from '@/repositories/semesterRepository';
+import { type CourseBook } from '@/entities/semester';
+import { type SemesterRepository, semesterRepository } from '@/repositories/semesterRepository';
 import { envService } from '@/usecases';
-import { AuthService } from '@/usecases/authService';
-import { EnvService } from '@/usecases/envService';
+import { type AuthService } from '@/usecases/authService';
+import { type EnvService } from '@/usecases/envService';
 
 import { authService } from '.';
 

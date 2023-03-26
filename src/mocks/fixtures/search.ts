@@ -1,4 +1,4 @@
-import { SearchResultLecture } from '@/entities/search';
+import type { SearchResultLecture } from '@/entities/search';
 
 export const mockSearchResult: SearchResultLecture[] = [
   {

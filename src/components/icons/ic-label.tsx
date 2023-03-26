@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import type { SVGProps } from 'react';
 
 export const IcLabel = (props: SVGProps<SVGSVGElement>) => {
   return (

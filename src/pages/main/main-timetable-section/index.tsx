@@ -6,8 +6,8 @@ import { IcClose } from '@/components/icons/ic-close';
 import { IcPlus } from '@/components/icons/ic-plus';
 import { Tabs } from '@/components/tabs';
 import { useTokenContext } from '@/contexts/tokenContext';
-import { BaseLecture } from '@/entities/lecture';
-import { FullTimetable, Timetable } from '@/entities/timetable';
+import type { BaseLecture } from '@/entities/lecture';
+import type { FullTimetable, Timetable } from '@/entities/timetable';
 
 import { MainSectionEmptyWrapper } from '../main-section-empty-wrapper';
 import { MainCreateTimetableDialog } from './main-create-timetable-dialog';

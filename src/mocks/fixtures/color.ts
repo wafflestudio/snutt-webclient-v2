@@ -1,4 +1,4 @@
-import { ColorRepository } from '@/repositories/colorRepository';
+import type { ColorRepository } from '@/repositories/colorRepository';
 
 export const mockVividIos: Awaited<ReturnType<ColorRepository['getColorPalette']>> = {
   message: 'ok',

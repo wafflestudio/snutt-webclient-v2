@@ -1,4 +1,4 @@
-import { Notification } from '@/entities/notification';
+import type { Notification } from '@/entities/notification';
 
 export interface NotificationRepository {
   getCount(args: { baseUrl: string; apikey: string; token: string }): Promise<{ count: number }>;

@@ -1,5 +1,5 @@
-import { Color } from '@/entities/color';
-import { ColorRepository } from '@/repositories/colorRepository';
+import type { Color } from '@/entities/color';
+import type { ColorRepository } from '@/repositories/colorRepository';
 
 export interface ColorService {
   getColorList(): Promise<Color[]>;

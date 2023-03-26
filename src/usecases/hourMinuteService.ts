@@ -1,4 +1,5 @@
-import { AmPm, Hour12, Hour24, HourMinute, HourMinute12, HourMinute24, Minute } from '@/entities/time';
+import type { Hour12, Hour24, HourMinute, HourMinute12, HourMinute24, Minute } from '@/entities/time';
+import { AmPm } from '@/entities/time';
 
 export interface HourMinuteService {
   isAfter: (hm1: HourMinute, hm2: HourMinute) => boolean;

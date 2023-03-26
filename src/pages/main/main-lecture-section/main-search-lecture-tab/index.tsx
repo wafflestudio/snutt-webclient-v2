@@ -1,8 +1,8 @@
 import { useIsMutating } from '@tanstack/react-query';
 
 import { Loader } from '@/components/loader';
-import { SearchResultLecture } from '@/entities/search';
-import { FullTimetable } from '@/entities/timetable';
+import type { SearchResultLecture } from '@/entities/search';
+import type { FullTimetable } from '@/entities/timetable';
 
 import { MainSectionEmptyWrapper } from '../../main-section-empty-wrapper';
 import { MainLectureList } from '../main-lecture-list';

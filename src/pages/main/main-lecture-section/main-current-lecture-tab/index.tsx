@@ -1,6 +1,6 @@
 import { Loader } from '@/components/loader';
 import { useTokenContext } from '@/contexts/tokenContext';
-import { FullTimetable, Timetable } from '@/entities/timetable';
+import type { FullTimetable, Timetable } from '@/entities/timetable';
 
 import { MainSectionEmptyWrapper } from '../../main-section-empty-wrapper';
 import { MainLectureList } from '../main-lecture-list';

@@ -1,5 +1,5 @@
-import { Semester } from '@/entities/semester';
-import { CreateLectureRequest, FullTimetable, Timetable, UpdateLectureRequest } from '@/entities/timetable';
+import type { Semester } from '@/entities/semester';
+import type { CreateLectureRequest, FullTimetable, Timetable, UpdateLectureRequest } from '@/entities/timetable';
 
 export interface TimetableRepository {
   getTimetables(args: { baseUrl: string; apikey: string; token: string }): Promise<Timetable[]>;

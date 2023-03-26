@@ -1,4 +1,5 @@
-import { createContext, HTMLAttributes, useContext } from 'react';
+import type { HTMLAttributes } from 'react';
+import { createContext, useContext } from 'react';
 import styled from 'styled-components';
 
 type TabValue = string;

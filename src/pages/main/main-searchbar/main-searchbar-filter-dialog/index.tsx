@@ -6,9 +6,9 @@ import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { searchService } from '@/usecases/searchService';
-import { ArrayElement } from '@/utils/array-element';
+import type { ArrayElement } from '@/utils/array-element';
 
-import { SearchForm } from '..';
+import type { SearchForm } from '..';
 import { MainSearchbarFilterTimeSelectDialog } from './main-searchbar-filter-time-select-dialog';
 
 type Props = {

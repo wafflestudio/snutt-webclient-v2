@@ -1,6 +1,8 @@
-import { AmPm, Hour12, HourMinute12, HourMinute24, Minute } from '@/entities/time';
+import type { Hour12, HourMinute12, HourMinute24, Minute } from '@/entities/time';
+import { AmPm } from '@/entities/time';
 
-import { HourMinuteService, hourMinuteService } from './hourMinuteService';
+import type { HourMinuteService } from './hourMinuteService';
+import { hourMinuteService } from './hourMinuteService';
 
 type State = Partial<HourMinute12>;
 

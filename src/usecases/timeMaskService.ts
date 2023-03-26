@@ -1,5 +1,5 @@
-import { CellStatus, DragMode, Position, TimeMask } from '@/entities/timeMask';
-import { FullTimetable } from '@/entities/timetable';
+import type { CellStatus, DragMode, Position, TimeMask } from '@/entities/timeMask';
+import type { FullTimetable } from '@/entities/timetable';
 
 export interface TimeMaskService {
   getInitialCellStatus(row: number, col: number): CellStatus;

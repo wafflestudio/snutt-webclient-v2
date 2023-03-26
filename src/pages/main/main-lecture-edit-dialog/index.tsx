@@ -6,14 +6,15 @@ import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { ErrorDialog } from '@/components/error-dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
-import { Color } from '@/entities/color';
-import { Lecture } from '@/entities/lecture';
+import type { Color } from '@/entities/color';
+import type { Lecture } from '@/entities/lecture';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { lectureService } from '@/usecases/lectureService';
 import { timetableService } from '@/usecases/timetableService';
 import { queryKey } from '@/utils/query-key-factory';
 
-import { LectureEditForm, MainLectureEditForm } from '../main-lecture-edit-form';
+import type { LectureEditForm } from '../main-lecture-edit-form';
+import { MainLectureEditForm } from '../main-lecture-edit-form';
 import { MainLectureDeleteDialog } from './main-lecture-delete-dialog';
 
 type Props = {

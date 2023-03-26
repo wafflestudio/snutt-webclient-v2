@@ -1,4 +1,4 @@
-import { User } from '@/entities/user';
+import type { User } from '@/entities/user';
 
 export interface UserRepository {
   getUserInfo(args: { baseUrl: string; apikey: string; token: string }): Promise<User>;

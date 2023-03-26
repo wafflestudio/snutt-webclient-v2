@@ -1,5 +1,5 @@
-import { ApiClient } from '@/clients/api';
-import { Color } from '@/entities/color';
+import type { ApiClient } from '@/clients/api';
+import type { Color } from '@/entities/color';
 
 export interface ColorRepository {
   getColorPalette(): Promise<{ colors: Color[]; names: string[]; message: 'ok' }>;

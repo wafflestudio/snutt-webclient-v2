@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
-import { Color } from '@/entities/color';
-import { WithInternalId } from '@/entities/id';
-import { ClassTime, Lecture } from '@/entities/lecture';
+import type { Color } from '@/entities/color';
+import type { WithInternalId } from '@/entities/id';
+import type { ClassTime, Lecture } from '@/entities/lecture';
 import { colorService } from '@/usecases';
 import { lectureService } from '@/usecases/lectureService';
 

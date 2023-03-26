@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
-import { SearchFilter } from '@/entities/search';
+import type { SearchFilter } from '@/entities/search';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { BREAKPOINT } from '@/styles/constants';
 import { searchService } from '@/usecases/searchService';

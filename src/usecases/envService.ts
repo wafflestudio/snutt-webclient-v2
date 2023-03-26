@@ -1,5 +1,5 @@
-import { AppEnv } from '@/entities/env';
-import { EnvRepository } from '@/repositories/envRepository';
+import type { AppEnv } from '@/entities/env';
+import type { EnvRepository } from '@/repositories/envRepository';
 
 export interface EnvService {
   getAppEnv(): AppEnv;

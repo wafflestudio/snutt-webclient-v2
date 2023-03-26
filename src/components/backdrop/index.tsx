@@ -1,4 +1,4 @@
-import { HTMLProps } from 'react';
+import type { HTMLProps } from 'react';
 import styled from 'styled-components';
 
 interface Props extends HTMLProps<HTMLDivElement> {
