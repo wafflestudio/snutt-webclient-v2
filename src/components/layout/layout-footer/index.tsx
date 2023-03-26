@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
+import { envService } from '@/services';
 import { BREAKPOINT } from '@/styles/constants';
-import { envService } from '@/usecases';
 
 import { LayoutFooterFeedbackDialog } from './layout-footer-feedback-dialog';
 

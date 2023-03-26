@@ -9,7 +9,7 @@ import { Button } from '@/components/button';
 import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { CoreServerError } from '@/entities/error';
-import { envService } from '@/usecases';
+import { envService } from '@/services';
 import { errorService } from '@/usecases/errorService';
 import { timetableViewService } from '@/usecases/timetableViewService';
 import { userService } from '@/usecases/userService';

@@ -1,5 +1,5 @@
 import { type FeedbackRepository, feedbackRepository } from '@/repositories/feedbackRepository';
-import { envService } from '@/usecases';
+import { envService } from '@/services';
 import type { EnvService } from '@/usecases/envService';
 
 export interface FeedbackService {
