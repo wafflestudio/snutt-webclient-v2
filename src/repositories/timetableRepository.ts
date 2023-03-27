@@ -55,7 +55,7 @@ export const getTimetableRepository = ({ clients: [apiClient] }: Deps): Timetabl
       ).data,
     addLecture: async ({ token }, { id, lecture_id }) =>
       (
-        await apiClient.post<FullTimetable>(`/v1/tables/${id}/lecture/${lecture_id}`, null, {
+        await apiClient.post<FullTimetable>(`/v1/tables/${id}/lecture/${lecture_id}`, undefined, {
           headers: { 'x-access-token': token },
         })
       ).data,
