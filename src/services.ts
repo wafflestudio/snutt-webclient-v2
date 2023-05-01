@@ -1,4 +1,5 @@
 import { getApiClient } from '@/clients/api';
+import { getStorageClient } from '@/clients/storage';
 // 이 파일은 전체 프로젝트에서 유일하게 @/constants/environment 에 접근할 수 있습니다.
 // eslint-disable-next-line no-restricted-imports
 import { viteEnvironmentVariables } from '@/constants/environment';
@@ -30,7 +31,9 @@ import { getUserService } from '@/usecases/userService';
 const envRepository = getEnvRepository({ external: [viteEnvironmentVariables] });
 export const envService = getEnvService({ repositories: [envRepository] });
 
-const storageRepository = getStorageRepository();
+const persistStorage = getStorageClient(true);
+const temporaryStorage = getStorageClient(false);
+const storageRepository = getStorageRepository({ clients: [persistStorage, temporaryStorage] });
 
 const snuttApiClient = getApiClient({
   baseURL: envService.getBaseUrl(),

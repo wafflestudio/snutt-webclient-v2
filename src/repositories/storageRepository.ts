@@ -1,3 +1,4 @@
+import { type StorageClient } from '@/clients/storage';
 import type { StorageKey } from '@/entities/storage';
 
 export interface StorageRepository {
@@ -6,10 +7,12 @@ export interface StorageRepository {
   remove(key: StorageKey, persist: boolean): void;
 }
 
-export const getStorageRepository = (): StorageRepository => {
+type Deps = { clients: [StorageClient, StorageClient] };
+export const getStorageRepository = ({ clients }: Deps): StorageRepository => {
+  const [persistStorage, temporaryStorage] = clients;
   return {
-    get: (key, persist) => (persist ? localStorage.getItem(key) : sessionStorage.getItem(key)),
-    set: (key, value, persist) => (persist ? localStorage.setItem(key, value) : sessionStorage.setItem(key, value)),
-    remove: (key, persist) => (persist ? localStorage.removeItem(key) : sessionStorage.removeItem(key)),
+    get: (key, persist) => (persist ? persistStorage.get(key) : temporaryStorage.get(key)),
+    set: (key, value, persist) => (persist ? persistStorage.set(key, value) : temporaryStorage.set(key, value)),
+    remove: (key, persist) => (persist ? persistStorage.remove(key) : temporaryStorage.remove(key)),
   };
 };
