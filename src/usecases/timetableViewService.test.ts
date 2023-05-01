@@ -1,7 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
 
 import type { StorageRepository } from '@/repositories/storageRepository';
-import { getTimetableViewService } from '@/usecases/timetableViewService';
+
+import { getTimetableViewService } from './timetableViewService';
 
 describe('getGridPos', () => {
   type Time = Parameters<ReturnType<typeof getTimetableViewService>['getGridPos']>[1];

@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals';
 
-import { getAuthService } from '@/usecases/authService';
+import { getAuthService } from './authService';
 
 const authService = getAuthService({
   repositories: [],
