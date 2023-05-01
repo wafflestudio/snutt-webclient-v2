@@ -1,7 +1,10 @@
 import { describe, expect, it, test } from '@jest/globals';
 
 import type { FullTimetable } from '@/entities/timetable';
-import { timeMaskService } from '@/usecases/timeMaskService';
+
+import { getTimeMaskService } from './timeMaskService';
+
+const timeMaskService = getTimeMaskService();
 
 test('getInitialCellStatus', () => {
   expect(timeMaskService.getInitialCellStatus(2, 3)).toStrictEqual([

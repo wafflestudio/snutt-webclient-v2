@@ -8,7 +8,7 @@ import type { SearchFilter } from '@/entities/search';
 import type { FullTimetable } from '@/entities/timetable';
 import { useCourseBooks } from '@/hooks/useCourseBooks';
 import { useYearSemester } from '@/hooks/useYearSemester';
-import { timeMaskService } from '@/usecases/timeMaskService';
+import { timeMaskService } from '@/services';
 import type { ArrayElement } from '@/utils/array-element';
 
 import { MainSearchbarFilterDialog } from './main-searchbar-filter-dialog';

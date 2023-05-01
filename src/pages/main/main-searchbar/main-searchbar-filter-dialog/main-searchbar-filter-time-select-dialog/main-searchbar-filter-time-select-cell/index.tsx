@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import type { Position } from '@/entities/timeMask';
-import { timeMaskService } from '@/usecases/timeMaskService';
+import { timeMaskService } from '@/services';
 
 type Props = {
   dragStart: Position | null;

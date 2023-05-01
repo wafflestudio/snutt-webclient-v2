@@ -15,7 +15,7 @@ export interface LectureService {
   isCustomLecture(lecture: BaseLecture): boolean;
 }
 
-const getLectureService = (): LectureService => {
+export const getLectureService = (): LectureService => {
   return {
     getLectureDetailUrl: ({ course_number, lecture_number }, { year, semester }) => {
       const { openShtmFg, openDetaShtmFg } = {
@@ -45,5 +45,3 @@ const getLectureService = (): LectureService => {
     isCustomLecture: (lecture) => lecture.lecture_id == undefined,
   };
 };
-
-export const lectureService = getLectureService();

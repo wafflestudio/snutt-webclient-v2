@@ -7,8 +7,7 @@ import { IcClose } from '@/components/icons/ic-close';
 import type { WithInternalId } from '@/entities/id';
 import type { ClassTime } from '@/entities/lecture';
 import { type Day, DAY_LABEL_MAP, type HourMinute24 } from '@/entities/time';
-import { hourMinuteService, timetableViewService } from '@/services';
-import { lectureService } from '@/usecases/lectureService';
+import { hourMinuteService, lectureService, timetableViewService } from '@/services';
 
 type Props = {
   lectureTime: WithInternalId<ClassTime>[];

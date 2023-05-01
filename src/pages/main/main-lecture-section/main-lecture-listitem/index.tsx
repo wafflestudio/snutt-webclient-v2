@@ -7,7 +7,7 @@ import { IcLabel } from '@/components/icons/ic-label';
 import { IcMap } from '@/components/icons/ic-map';
 import type { BaseLecture } from '@/entities/lecture';
 import { useYearSemester } from '@/hooks/useYearSemester';
-import { lectureService } from '@/usecases/lectureService';
+import { lectureService } from '@/services';
 
 type Props = { lecture: BaseLecture; cta: ReactNode };
 

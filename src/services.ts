@@ -21,9 +21,11 @@ import { getErrorService } from '@/usecases/errorService';
 import { getFeedbackService } from '@/usecases/feedbackService';
 import { getHourMinutePickerService } from '@/usecases/hourMinutePickerService';
 import { getHourMinuteService } from '@/usecases/hourMinuteService';
+import { getLectureService } from '@/usecases/lectureService';
 import { getNotificationService } from '@/usecases/notificationService';
 import { getSearchService } from '@/usecases/searchService';
 import { getSemesterService } from '@/usecases/semesterService';
+import { getTimeMaskService } from '@/usecases/timeMaskService';
 import { getTimetableService } from '@/usecases/timetableService';
 import { getTimetableViewService } from '@/usecases/timetableViewService';
 import { getUserService } from '@/usecases/userService';
@@ -64,8 +66,12 @@ export const searchService = getSearchService({ repositories: [searchRepository]
 const semesterRepository = getSemesterRepository({ clients: [snuttApiClient] });
 export const semesterService = getSemesterService({ repositories: [semesterRepository] });
 
+export const lectureService = getLectureService();
+
 const timetableRepository = getTimetableRepository({ clients: [snuttApiClient] });
 export const timetableService = getTimetableService({ repositories: [timetableRepository] });
+
+export const timeMaskService = getTimeMaskService();
 
 export const timetableViewService = getTimetableViewService({ repositories: [storageRepository] });
 
