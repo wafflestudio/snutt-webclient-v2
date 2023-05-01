@@ -6,7 +6,7 @@ import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { DAY_LABEL_MAP, dayList } from '@/entities/time';
 import { type CellStatus, type Position, timeMaskHours } from '@/entities/timeMask';
-import { timeMaskService } from '@/usecases/timeMaskService';
+import { timeMaskService } from '@/services';
 
 import { MainSearchbarFilterTimeSelectCell } from './main-searchbar-filter-time-select-cell';
 

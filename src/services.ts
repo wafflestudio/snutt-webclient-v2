@@ -25,6 +25,7 @@ import { getLectureService } from '@/usecases/lectureService';
 import { getNotificationService } from '@/usecases/notificationService';
 import { getSearchService } from '@/usecases/searchService';
 import { getSemesterService } from '@/usecases/semesterService';
+import { getTimeMaskService } from '@/usecases/timeMaskService';
 import { getTimetableService } from '@/usecases/timetableService';
 import { getTimetableViewService } from '@/usecases/timetableViewService';
 import { getUserService } from '@/usecases/userService';
@@ -69,6 +70,8 @@ export const lectureService = getLectureService();
 
 const timetableRepository = getTimetableRepository({ clients: [snuttApiClient] });
 export const timetableService = getTimetableService({ repositories: [timetableRepository] });
+
+export const timeMaskService = getTimeMaskService();
 
 export const timetableViewService = getTimetableViewService({ repositories: [storageRepository] });
 

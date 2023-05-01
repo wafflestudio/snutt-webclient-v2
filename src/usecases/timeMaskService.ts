@@ -10,7 +10,7 @@ export interface TimeMaskService {
   getTimetableEmptyTimeBitMask(timetable?: FullTimetable): TimeMask;
 }
 
-const getTimeMaskService = (): TimeMaskService => {
+export const getTimeMaskService = (): TimeMaskService => {
   return {
     getInitialCellStatus: (r, c) =>
       Array(r)
@@ -19,17 +19,11 @@ const getTimeMaskService = (): TimeMaskService => {
     getUpdatedCellStatus: (prev, start, end) =>
       prev.map((row, i) =>
         row.map((col, j) =>
-          timeMaskService.checkIsInArea({ i, j }, start, end)
-            ? { add: true, remove: false }[timeMaskService.getDragMode(prev, start)]
-            : col,
+          checkIsInArea({ i, j }, start, end) ? { add: true, remove: false }[getDragMode(prev, start)] : col,
         ),
       ),
-    checkIsInArea: (target: Position, from: Position, to: Position) =>
-      target.i >= Math.min(from.i, to.i) &&
-      target.i <= Math.max(from.i, to.i) &&
-      target.j >= Math.min(from.j, to.j) &&
-      target.j <= Math.max(from.j, to.j),
-    getDragMode: (cellStatus, dragStart) => (cellStatus[dragStart.i][dragStart.j] ? 'remove' : 'add'),
+    checkIsInArea,
+    getDragMode,
     getBitMask: (cellStatus) => {
       const transposed = cellStatus[0].map((_, j) => cellStatus.map((row) => row[j])); // 행-열 반전
       return transposed.map((row) => row.map(Number).reduce((acc, cur) => acc * 2 + cur, 0)) as TimeMask;
@@ -44,4 +38,11 @@ const getTimeMaskService = (): TimeMaskService => {
   };
 };
 
-export const timeMaskService = getTimeMaskService();
+const checkIsInArea: TimeMaskService['checkIsInArea'] = (target: Position, from: Position, to: Position) =>
+  target.i >= Math.min(from.i, to.i) &&
+  target.i <= Math.max(from.i, to.i) &&
+  target.j >= Math.min(from.j, to.j) &&
+  target.j <= Math.max(from.j, to.j);
+
+const getDragMode: TimeMaskService['getDragMode'] = (cellStatus, dragStart) =>
+  cellStatus[dragStart.i][dragStart.j] ? 'remove' : 'add';
