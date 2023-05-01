@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { type Page } from '@playwright/test';
 
 type Type =
   | 'full' //     꽉찬시간표
