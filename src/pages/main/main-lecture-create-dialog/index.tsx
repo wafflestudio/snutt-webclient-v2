@@ -8,8 +8,7 @@ import { ErrorDialog } from '@/components/error-dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { Color } from '@/entities/color';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
-import { timetableService } from '@/services';
-import { lectureService } from '@/usecases/lectureService';
+import { lectureService, timetableService } from '@/services';
 import { queryKey } from '@/utils/query-key-factory';
 
 import { type LectureEditForm, MainLectureEditForm } from '../main-lecture-edit-form';

@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import type { Color } from '@/entities/color';
 import type { WithInternalId } from '@/entities/id';
 import type { ClassTime, Lecture } from '@/entities/lecture';
-import { colorService } from '@/services';
-import { lectureService } from '@/usecases/lectureService';
+import { colorService, lectureService } from '@/services';
 
 import { MainLectureEditFormColor } from './main-lecture-edit-form-color';
 import { MainLectureEditFormTime } from './main-lecture-edit-form-time';
