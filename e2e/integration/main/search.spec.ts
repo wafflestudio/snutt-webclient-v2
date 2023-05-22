@@ -1,8 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { givenUser } from '../utils/user.ts';
+import { givenUser } from '../../utils/user';
 
 test('필터 모달이 정상 동작한다', async ({ page }) => {
   await page.goto('/');

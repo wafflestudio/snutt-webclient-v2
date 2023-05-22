@@ -1,8 +1,6 @@
 import test, { expect } from '@playwright/test';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { givenUser } from '../utils/user.ts';
+import { givenUser } from '../../utils/user';
 
 const testIds = {
   '비밀번호 재설정 버튼': 'login-reset-password',

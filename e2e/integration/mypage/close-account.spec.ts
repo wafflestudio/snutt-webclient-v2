@@ -1,8 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { givenUser } from '../utils/user.ts';
+import { givenUser } from '../../utils/user';
 
 const testIds = {
   '탈퇴하기 버튼': 'mypage-close-account',

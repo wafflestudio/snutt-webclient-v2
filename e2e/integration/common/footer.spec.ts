@@ -1,8 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { givenUser } from '../utils/user.ts';
+import { givenUser } from '../../utils/user';
 
 test('snutt 팀 링크로 잘 이동한다', async ({ page, context, baseURL }) => {
   await page.goto('/');

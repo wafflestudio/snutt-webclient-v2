@@ -1,11 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { givenTimetableDisplayMode } from '../utils/timetable.ts';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { givenUser } from '../utils/user.js';
+import { givenUser } from '../../utils/user.js';
+import { mainPageTest } from './_specs.js';
 
 test('로그인되지 않았을 경우, 로그인해야 이용할 수 있다는 ui가 보여진다', async ({ page }) => {
   await page.goto('/');
@@ -75,17 +71,15 @@ test('시간표 장소가 보인다', async ({ page }) => {
   );
 });
 
-test('로그인되었을 경우, 시간표 내용이 보인다 (월~일 시간표)', async ({ page }) => {
-  await page.goto('/?year=2001&semester=2');
-  await givenUser(page);
-  await givenTimetableDisplayMode(page, { type: 'full' });
-  const table = page.getByTestId('main-timetable');
-  const lecture = page.getByTestId('main-timetable-lecture');
-  await expect(table).toContainText('일');
-  await expect(lecture.filter({ hasText: '헬스' })).toHaveCount(7);
-  await expect(lecture.filter({ hasText: '물리학실험' })).toHaveCSS('grid-column', '4 / 5');
-  await expect(lecture.filter({ hasText: '물리학실험' })).toHaveCSS('grid-row', '62 / 86');
-});
+test('로그인되었을 경우, 시간표 내용이 보인다 (월~일 시간표)', ({ browser }) =>
+  mainPageTest({ browser }, async ({ Given, When, Then }) => {
+    await When['화면을 방문한다'](['메인'], { year: 2001, semester: 2 });
+    // await Given['사용자']('로컬');
+    // await Given['시간표 모드']('꽉찬');
+    await Then['테이블에 글자가 존재한다']('일');
+    await Then['강의 개수가 올바르게 보인다']('헬스', 7);
+    await Then['강의 아이템에 css가 있다']('물리학실험', { 'grid-column': '4 / 5', 'grid-row': '62 / 86' });
+  }));
 
 test('로그인되었을 경우, 시간표 내용이 보인다 (시작 끝 난리난 시간표)', async ({ page }) => {
   await page.goto('/');

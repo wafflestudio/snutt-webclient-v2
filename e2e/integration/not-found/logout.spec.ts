@@ -1,8 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { givenUser } from '../utils/user.ts';
+import { givenUser } from '../../utils/user';
 
 test('홈으로 버튼이 잘 동작한다', async ({ page }) => {
   await page.goto('/this-utl-does-not-exist');
