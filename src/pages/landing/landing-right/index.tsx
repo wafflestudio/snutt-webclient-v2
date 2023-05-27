@@ -1,29 +1,27 @@
 import { useState } from 'react';
-import type { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from 'react-facebook-login';
+import { type ReactFacebookFailureResponse, type ReactFacebookLoginInfo } from 'react-facebook-login';
 import FBLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { Link, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 import { Button } from '@/components/button';
-import { Layout } from '@/components/layout';
 import { useTokenContext } from '@/contexts/tokenContext';
-import type { CoreServerError } from '@/entities/error';
+import { type CoreServerError } from '@/entities/error';
+import { LoginFindIdDialog } from '@/pages/landing/landing-right/find-id-dialog';
+import { LoginResetPasswordDialog } from '@/pages/landing/landing-right/reset-password-dialog';
 import { authService, envService, errorService } from '@/services';
 
-import { LoginFindIdDialog } from './login-find-id-dialog';
-import { LoginResetPasswordDialog } from './login-reset-password-dialog';
+type Props = { className?: string };
 
-export const Login = () => {
+export const LandingRight = ({ className }: Props) => {
   const navigate = useNavigate();
   const { saveToken } = useTokenContext();
-
-  const [findIdDialogOpen, setFindIdDialogOpen] = useState(false);
-  const [resetPasswordDialogOpen, setResetPasswordDialogOpen] = useState(false);
-
   const [id, setId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [keepSignIn, setKeepSignIn] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [findIdDialogOpen, setFindIdDialogOpen] = useState(false);
+  const [resetPasswordDialogOpen, setResetPasswordDialogOpen] = useState(false);
 
   const handleSignIn = async () => {
     setErrorMessage('');
@@ -56,10 +54,15 @@ export const Login = () => {
   };
 
   return (
-    <Layout>
-      <LoginWrapper>
-        <Header>시작하기</Header>
+    <Wrapper className={className}>
+      <h3>시작하기</h3>
+
+      <div style={{ width: '100%', marginTop: '60px' }}>
+        <label style={{ fontSize: '14px' }}>아이디</label>
         <Input placeholder="아이디" value={id} onChange={(e) => setId(e.target.value)} data-testid="id-input" />
+      </div>
+      <div style={{ width: '100%', marginTop: '20px' }}>
+        <label style={{ fontSize: '14px' }}>비밀번호</label>
         <Input
           placeholder="비밀번호"
           type="password"
@@ -68,60 +71,56 @@ export const Login = () => {
           onKeyDown={(e) => e.key === 'Enter' && handleSignIn()}
           data-testid="password-input"
         />
-        <CheckboxWrapper>
-          <Checkbox id="keepSignIn" checked={keepSignIn} onChange={(e) => setKeepSignIn(e.target.checked)} />
-          <Label htmlFor="keepSignIn">로그인 유지</Label>
-        </CheckboxWrapper>
-        <ErrorMessage data-testid="error-message">{errorMessage}</ErrorMessage>
-        <LocalSignInButton disabled={!(id && password)} onClick={handleSignIn} data-testid="local-signin-button">
-          로그인
-        </LocalSignInButton>
-        {/* TODO: migrate to another library */}
-        {/* eslint-disable-next-line */}
-        {/* @ts-ignore */}
-        <FBLogin
-          appId={envService.getFacebookAppId()}
-          callback={handleFacebookSignIn}
-          onFailure={({ status }: ReactFacebookFailureResponse) => setErrorMessage(status || '')}
-          render={({ onClick }) => <FBSignInButton onClick={onClick}>facebook으로 로그인</FBSignInButton>}
-        />
-        <EtcWrapper>
-          <FindWrapper>
-            <OtherButton data-testid="login-find-id" onClick={() => setFindIdDialogOpen(true)}>
-              아이디 찾기
-            </OtherButton>
-            <Divider />
-            <OtherButton data-testid="login-reset-password" onClick={() => setResetPasswordDialogOpen(true)}>
-              비밀번호 재설정
-            </OtherButton>
-          </FindWrapper>
-          <OtherLink data-testid="login-signup-link" to="/signup">
-            회원가입
-          </OtherLink>
-        </EtcWrapper>
-      </LoginWrapper>
+      </div>
+      <CheckboxWrapper>
+        <Checkbox id="keepSignIn" checked={keepSignIn} onChange={(e) => setKeepSignIn(e.target.checked)} />
+        <Label htmlFor="keepSignIn">로그인 유지</Label>
+      </CheckboxWrapper>
+      <ErrorMessage data-testid="error-message">{errorMessage}</ErrorMessage>
+      <LocalSignInButton disabled={!(id && password)} onClick={handleSignIn} data-testid="local-signin-button">
+        로그인
+      </LocalSignInButton>
+      {/* TODO: migrate to another library */}
+      {/* eslint-disable-next-line */}
+      {/* @ts-ignore */}
+      <FBLogin
+        appId={envService.getFacebookAppId()}
+        callback={handleFacebookSignIn}
+        onFailure={({ status }: ReactFacebookFailureResponse) => setErrorMessage(status || '')}
+        render={({ onClick }) => <FBSignInButton onClick={onClick}>facebook으로 로그인</FBSignInButton>}
+      />
+      <EtcWrapper>
+        <FindWrapper>
+          <OtherButton data-testid="login-find-id" onClick={() => setFindIdDialogOpen(true)}>
+            아이디 찾기
+          </OtherButton>
+          <Divider />
+          <OtherButton data-testid="login-reset-password" onClick={() => setResetPasswordDialogOpen(true)}>
+            비밀번호 재설정
+          </OtherButton>
+        </FindWrapper>
+        <OtherLink data-testid="login-signup-link" to="/signup">
+          회원가입
+        </OtherLink>
+      </EtcWrapper>
       <LoginFindIdDialog open={findIdDialogOpen} onClose={() => setFindIdDialogOpen(false)} />
       <LoginResetPasswordDialog open={resetPasswordDialogOpen} onClose={() => setResetPasswordDialogOpen(false)} />
-    </Layout>
+    </Wrapper>
   );
 };
 
-const LoginWrapper = styled.section`
-  width: 300px;
-  margin: 120px auto;
-
+const Wrapper = styled.div`
+  background-color: #fafafa;
+  border-left: 1px solid #efefef;
+  padding: 50px 20px;
   display: flex;
   flex-direction: column;
-`;
-
-const Header = styled.h2`
-  margin: 20px 0 10px;
-
-  font-size: 26px;
-  font-weight: 700;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Input = styled.input`
+  width: 100%;
   height: 40px;
   margin: 10px 0 10px;
 
@@ -144,7 +143,8 @@ const Input = styled.input`
 
 const CheckboxWrapper = styled.div`
   display: flex;
-  margin-top: 20px;
+  width: 100%;
+  margin-top: 10px;
 `;
 
 // 정확한 색상  파악 필요
@@ -197,10 +197,10 @@ const OtherButton = styled.button`
 `;
 
 const EtcWrapper = styled.div`
+  width: 100%;
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
-  padding: 0 10px;
 `;
 
 const FindWrapper = styled.div`

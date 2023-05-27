@@ -1,12 +1,18 @@
 import { expect, test } from '@playwright/test';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { givenUser } from '../utils/user.js';
+
 test('로고가 잘 보여진다', async ({ page }) => {
   await page.goto('/');
+  await givenUser(page);
   await expect(page.getByTestId('logo')).toHaveCount(1);
 });
 
 test('학기 목록 드롭다운이 정상 동작한다', async ({ page }) => {
   await page.goto('/');
+  await givenUser(page);
   const select = page.getByTestId('course-book-select');
   await expect(page).toHaveURL('/');
   await expect(select).toHaveValue('1001-1');

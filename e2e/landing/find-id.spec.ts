@@ -13,7 +13,7 @@ const testIds = {
 };
 
 test('아이디 찾기가 잘 동작한다 (취소)', async ({ page }) => {
-  await page.goto('/login');
+  await page.goto('/');
   await givenUser(page, { login: false });
 
   await page.getByTestId(testIds['아이디 찾기 버튼']).click();
@@ -24,7 +24,7 @@ test('아이디 찾기가 잘 동작한다 (취소)', async ({ page }) => {
 });
 
 test('아이디 찾기가 잘 동작한다 (실패)', async ({ page }) => {
-  await page.goto('/login');
+  await page.goto('/');
   await givenUser(page, { login: false });
 
   await page.getByTestId(testIds['아이디 찾기 버튼']).click();
@@ -36,7 +36,7 @@ test('아이디 찾기가 잘 동작한다 (실패)', async ({ page }) => {
 });
 
 test('아이디 찾기가 잘 동작한다 (성공)', async ({ page }) => {
-  await page.goto('/login');
+  await page.goto('/');
   await givenUser(page, { login: false });
 
   await page.getByTestId(testIds['아이디 찾기 버튼']).click();

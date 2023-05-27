@@ -32,7 +32,7 @@ test('임시 유저로 로그인했으면 로그인 정보가 보여진다', asy
 });
 
 test('로그인 안했으면 로그인 정보가 보여진다', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/signup');
   await givenUser(page, { login: false });
   const myInfoLink = page.getByTestId('layout-my-info');
   await expect(myInfoLink).toHaveText('로그인');
