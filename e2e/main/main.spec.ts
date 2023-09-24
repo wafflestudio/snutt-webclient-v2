@@ -10,7 +10,7 @@ test('학기 목록 드롭다운이 정상 동작한다', async ({ page }) => {
   const select = page.getByTestId('course-book-select');
   await expect(page).toHaveURL('/');
   await expect(select).toHaveValue('1001-1');
-  await select.selectOption({ label: '2001-S' });
+  await select.selectOption({ label: '2001년 여름학기' });
   await expect(page).toHaveURL('/?year=2001&semester=2');
   await expect(page.getByTestId('main-searchbar-input')).toHaveAttribute(
     'placeholder',

@@ -38,7 +38,7 @@ export const MainSearchbarYearSemesterSelect = ({ resetSearchResult }: Props) =>
 };
 
 const Select = styled.select`
-  width: 72px;
+  width: 120px;
   height: 30px;
   cursor: pointer;
   border: none;
