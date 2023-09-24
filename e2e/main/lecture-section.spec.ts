@@ -135,7 +135,7 @@ test('학기 변경 시 검색 결과가 초기화된다', async ({ page }) => {
   await page.getByTestId('main-searchbar-search').click();
   await page.getByTestId('ml-result-tab').click();
   await expect(page.getByText('강의를 검색하세요')).toHaveCount(0);
-  await page.getByTestId('course-book-select').selectOption({ label: '2001-S' });
+  await page.getByTestId('course-book-select').selectOption({ label: '2001년 여름학기' });
   await expect(page.getByText('강의를 검색하세요')).toHaveCount(1);
 });
 

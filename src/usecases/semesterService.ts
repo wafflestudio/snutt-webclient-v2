@@ -1,13 +1,12 @@
 import { type CourseBook } from '@/entities/semester';
 import { type SemesterRepository } from '@/repositories/semesterRepository';
 
-type CourseBookLabel = `${number}-${1 | 'S' | 2 | 'W'}`;
 type CourseBookValue = `${number}-${1 | 2 | 3 | 4}`;
 type BaseCourseBook = Omit<CourseBook, 'updated_at'>;
 
 export interface SemesterService {
   getCourseBooks(): Promise<CourseBook[]>;
-  courseBookToLabel(cb: BaseCourseBook): CourseBookLabel;
+  courseBookToLabel(cb: BaseCourseBook): string;
   courseBookToValue(cb: BaseCourseBook): CourseBookValue;
   valueToCourseBook(value: CourseBookValue): BaseCourseBook;
 }
@@ -16,7 +15,8 @@ type Deps = { repositories: [SemesterRepository] };
 export const getSemesterService = ({ repositories: [semesterRepository] }: Deps): SemesterService => {
   return {
     getCourseBooks: () => semesterRepository.getCourseBooks(),
-    courseBookToLabel: ({ year, semester }) => `${year}-${[, 1, 'S', 2, 'W'][semester] as 1 | 'S' | 2 | 'W'}`,
+    courseBookToLabel: ({ year, semester }) =>
+      `${year}년 ${[, 1, '여름', 2, '겨울'][semester] as 1 | 'S' | 2 | 'W'}학기`,
     courseBookToValue: ({ year, semester }) => `${year}-${semester}`,
     valueToCourseBook: (value) => ({
       year: Number(value.split('-')[0]),
