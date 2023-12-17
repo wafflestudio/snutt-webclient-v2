@@ -153,8 +153,8 @@ export const getHourMinutePickerService = ({ services }: Deps): HourMinutePicker
         hour !== undefined
           ? services[0].toHour24(hour, amPmWithDefault)
           : defaultHourMinute
-          ? services[0].toHour24((defaultHourMinute.hour % 12) as Hour12, amPmWithDefault)
-          : undefined;
+            ? services[0].toHour24((defaultHourMinute.hour % 12) as Hour12, amPmWithDefault)
+            : undefined;
       const submitMinute = minute ?? defaultHourMinute?.minute;
 
       if (submitHour === undefined || submitMinute === undefined) return null;

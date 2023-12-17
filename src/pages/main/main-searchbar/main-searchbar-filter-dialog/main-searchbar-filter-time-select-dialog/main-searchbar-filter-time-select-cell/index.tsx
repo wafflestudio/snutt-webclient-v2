@@ -59,9 +59,9 @@ const Cell = styled.td<{ $isOddRow: boolean; $selected: boolean; $dragging: 'add
   }
 
   background-color: ${({ $selected, $dragging }) =>
-    ({ null: $selected ? '#fac42d' : 'transparent', add: '#f8b20b !important', remove: '#4f48c4 !important' }[
+    ({ null: $selected ? '#fac42d' : 'transparent', add: '#f8b20b !important', remove: '#4f48c4 !important' })[
       `${$dragging}`
-    ])};
+    ]};
 
   &:hover {
     background-color: ${({ $selected }) => ($selected ? '#f8b20b' : '#faedc5')};

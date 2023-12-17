@@ -75,8 +75,8 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable, resetSearchResul
         searchForm.timeType === 'manual'
           ? searchForm.manualBitmask
           : searchForm.timeType === 'auto'
-          ? timeMaskService.getTimetableEmptyTimeBitMask(currentFullTimetable)
-          : undefined,
+            ? timeMaskService.getTimetableEmptyTimeBitMask(currentFullTimetable)
+            : undefined,
       limit: 200,
     });
   };

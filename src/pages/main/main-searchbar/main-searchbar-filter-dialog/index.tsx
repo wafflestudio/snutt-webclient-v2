@@ -53,11 +53,7 @@ export const MainSearchbarFilterDialog = ({
                   value={searchForm.department}
                   onChange={(e) => onChangeDepartment([e.target.value])}
                 />
-                <datalist id="department">
-                  {data?.department.map((d) => (
-                    <option value={d} key={d} />
-                  ))}
-                </datalist>
+                <datalist id="department">{data?.department.map((d) => <option value={d} key={d} />)}</datalist>
               </label>
             </RowContent>
           </Row>
