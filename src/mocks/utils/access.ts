@@ -12,12 +12,12 @@ export const withValidateAccess = <
   ReqBody extends DefaultBodyType,
   ResBody extends DefaultBodyType,
 >(
-  callback: (args: {
-    params: Param;
-    body: ReqBody;
-    token: string | null;
-    cookies: Record<string, string>;
-  }) => { body: ResBody } | { body: CoreServerError; status: 400 | 401 | 403 | 404 | 409 },
+  callback: (args: { params: Param; body: ReqBody; token: string | null; cookies: Record<string, string> }) =>
+    | {
+        body: Exclude<ResBody, CoreServerError>;
+        type: 'success';
+      }
+    | { body: CoreServerError; type: 'error'; status?: 400 | 401 | 403 | 404 | 409 },
   options: Partial<Options> = { token: true },
 ): ResponseResolver<HttpRequestResolverExtras<Param>, ReqBody, ResBody | CoreServerError> => {
   const isValidateToken = options.token;
