@@ -245,7 +245,7 @@ const Checkbox = <F extends 'academicYear' | 'category' | 'classification' | 'cr
     {label ?? value}
     <input
       type="checkbox"
-      checked={(searchForm[field] as typeof value[]).includes(value)}
+      checked={(searchForm[field] as (typeof value)[]).includes(value)}
       onChange={() => onChange(field, value)}
       data-testid={dataTestId}
     />

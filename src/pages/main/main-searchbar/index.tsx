@@ -88,7 +88,7 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable, resetSearchResul
     e: ArrayElement<SearchForm[F]>,
   ) => {
     setSearchForm((sf) => {
-      const org = sf[field] as typeof e[];
+      const org = sf[field] as (typeof e)[];
       return {
         ...sf,
         [field]: org.includes(e) ? org.filter((c) => c !== e) : org.concat(e),
