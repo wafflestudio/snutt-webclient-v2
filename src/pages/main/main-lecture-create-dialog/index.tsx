@@ -87,7 +87,7 @@ const useCreateLecture = (id?: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    (body: Parameters<typeof timetableService['createLecture']>[2]) => {
+    (body: Parameters<(typeof timetableService)['createLecture']>[2]) => {
       if (!token) throw new Error('no token');
       if (!id) throw new Error('no id');
       return timetableService.createLecture(token, { id }, body);
