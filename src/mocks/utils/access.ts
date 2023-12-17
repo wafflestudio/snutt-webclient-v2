@@ -1,31 +1,44 @@
-import type { DefaultBodyType, PathParams, ResponseResolver, RestContext, RestRequest } from 'msw';
+import { type DefaultBodyType, HttpResponse, type PathParams, type ResponseResolver } from 'msw';
+import { type HttpRequestResolverExtras } from 'msw/lib/core/handlers/HttpHandler';
 
-import type { CoreServerError } from '@/entities/error';
+import { type CoreServerError } from '@/entities/error';
 
 import { mockUsers } from '../fixtures/user';
 
 type Options = { token: boolean };
 
 export const withValidateAccess = <
-  ReqBody extends DefaultBodyType,
   Param extends PathParams<keyof Param>,
-  ResBody extends DefaultBodyType | CoreServerError,
+  ReqBody extends DefaultBodyType,
+  ResBody extends DefaultBodyType,
 >(
-  callback: ResponseResolver<RestRequest<ReqBody, Param>, RestContext, ResBody | CoreServerError>,
-  options: Partial<Options> = {},
-): ResponseResolver<RestRequest<ReqBody, Param>, RestContext, ResBody | CoreServerError> => {
-  const isValidateToken = options.token ?? true;
+  callback: (args: {
+    params: Param;
+    body: ReqBody;
+    token: string | null;
+    cookies: Record<string, string>;
+  }) => { body: ResBody } | { body: CoreServerError; status: 400 | 401 | 403 | 404 | 409 },
+  options: Partial<Options> = { token: true },
+): ResponseResolver<HttpRequestResolverExtras<Param>, ReqBody, ResBody | CoreServerError> => {
+  const isValidateToken = options.token;
 
-  return (req, res, ctx) => {
-    const xApiKey = req.headers.get('x-access-apikey');
-    const xToken = req.headers.get('x-access-token');
+  return async (args) => {
+    const xApiKey = args.request.headers.get('x-access-apikey');
+    const xToken = args.request.headers.get('x-access-token');
 
     if (xApiKey !== 'test')
-      return res(ctx.status(403), ctx.json({ ext: {}, message: 'invalid api key', errcode: 8192 }));
+      return HttpResponse.json({ ext: {}, message: 'invalid api key', errcode: 8192 }, { status: 403 });
 
     if (isValidateToken && mockUsers.every((u) => u.auth.token !== xToken))
-      return res(ctx.status(403), ctx.json({ ext: {}, message: 'Failed to authenticate token', errcode: 8194 }));
+      return HttpResponse.json({ ext: {}, message: 'Failed to authenticate token', errcode: 8194 }, { status: 403 });
 
-    return callback(req, res, ctx);
+    const response = callback({
+      params: args.params,
+      body: await args.request.json(),
+      token: xToken,
+      cookies: args.cookies,
+    });
+
+    return HttpResponse.json(response.body, { status: 'status' in response ? response.status : 200 });
   };
 };

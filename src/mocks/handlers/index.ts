@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { rest } from 'msw';
+import { http } from 'msw';
 
 import type { SignInResponse } from '@/entities/auth';
 import type { Color } from '@/entities/color';
@@ -29,365 +29,343 @@ import type { UserRepository } from '@/repositories/userRepository';
 import { withValidateAccess } from '../utils/access';
 
 export const handlers = [
-  rest.get<never, never, CourseBook[] | CoreServerError>(
+  http.get<never, never, CourseBook[] | CoreServerError>(
     `*/v1/course_books`,
-    withValidateAccess((req, res, ctx) => res(ctx.json(mockCourseBooks)), { token: false }),
+    withValidateAccess(() => ({ body: mockCourseBooks }), { token: false }),
   ),
 
-  rest.get<never, never, Timetable[] | CoreServerError>(
+  http.get<never, never, Timetable[] | CoreServerError>(
     `*/v1/tables`,
-    withValidateAccess((req, res, ctx) => res(ctx.json(mockTimeTables))),
+    withValidateAccess(() => ({ body: mockTimeTables })),
   ),
 
-  rest.get<never, { id: string }, FullTimetable | CoreServerError>(
+  http.get<{ id: string }, never, FullTimetable | CoreServerError>(
     `*/v1/tables/:id`,
-    withValidateAccess((req, res, ctx) => {
-      const { id } = req.params;
+    withValidateAccess(({ params }) => {
+      const { id } = params;
 
-      if (id === '123') return res(ctx.json(mockTimeTable123));
-      if (id === '456') return res(ctx.json(mockTimeTable456));
-      if (id === '789') return res(ctx.json(mockTimeTable789));
-      if (id === '101112') return res(ctx.json(mockTimeTable101112));
+      if (id === '123') return { body: mockTimeTable123 };
+      if (id === '456') return { body: mockTimeTable456 };
+      if (id === '789') return { body: mockTimeTable789 };
+      if (id === '101112') return { body: mockTimeTable101112 };
 
-      return res(ctx.json(mockTimeTable));
+      return { body: mockTimeTable };
     }),
   ),
 
-  rest.put<{ title: string }, { id: string }, Timetable[] | CoreServerError>(
+  http.put<{ id: string }, { title: string }, Timetable[] | CoreServerError>(
     `*/v1/tables/:id`,
-    withValidateAccess(async (req, res, ctx) => {
-      const { title } = await req.json();
-      const { id } = req.params;
-
-      if (mockTimeTables.every((t) => t._id !== id)) return res(ctx.status(404));
-      return res(ctx.json(mockTimeTables.map((t) => (t._id === id ? { ...t, title } : t))));
+    withValidateAccess(({ params: { id }, body: { title } }) => {
+      if (mockTimeTables.every((t) => t._id !== id)) return { body: { ext: {}, errcode: 0, message: '' }, status: 404 };
+      return { body: mockTimeTables.map((t) => (t._id === id ? { ...t, title } : t)) };
     }),
   ),
 
-  rest.get<never, never, { message: 'ok'; colors: Color[]; names: string[] } | CoreServerError>(
+  http.get<never, never, { message: 'ok'; colors: Color[]; names: string[] } | CoreServerError>(
     `*/v1/colors/vivid_ios`,
-    withValidateAccess((req, res, ctx) => res(ctx.json(mockVividIos)), { token: false }),
+    withValidateAccess(() => ({ body: mockVividIos }), { token: false }),
   ),
 
-  rest.get<
-    never,
+  http.get<
     { year: string; semester: `${1 | 2 | 3 | 4}` },
+    never,
     Awaited<ReturnType<SearchRepository['getTags']> | CoreServerError>
   >(
     `*/v1/tags/:year/:semester`,
     withValidateAccess(
-      (req, res, ctx) => {
-        const { year, semester } = req.params;
-
+      ({ params: { year, semester } }) => {
         if (!mockCourseBooks.some((cb) => cb.year === Number(year) && cb.semester === Number(semester)))
-          return res(ctx.status(404), ctx.json({ errcode: 16384, message: 'not found', ext: {} }));
+          return { body: { errcode: 16384, message: 'not found', ext: {} }, status: 404 };
 
-        return res(ctx.json(mockTags));
+        return { body: mockTags };
       },
       { token: false },
     ),
   ),
 
-  rest.get<never, never, Awaited<ReturnType<UserRepository['getUserInfo']> | CoreServerError>>(
+  http.get<never, never, Awaited<ReturnType<UserRepository['getUserInfo']> | CoreServerError>>(
     `*/v1/user/info`,
-    withValidateAccess((req, res, ctx) => {
-      const token = req.headers.get('x-access-token');
+    withValidateAccess(({ token }) => {
       const user = mockUsers.find((u) => u.auth.token === token);
 
-      if (!user) return res(ctx.status(403), ctx.json({ errcode: 8194, ext: {}, message: '' }));
+      if (!user) return { body: { errcode: 8194, ext: {}, message: '' }, status: 403 };
 
-      return res(ctx.json(user.info));
+      return { body: user.info };
     }),
   ),
 
-  rest.get<never, never, { count: number } | CoreServerError>(
+  http.get<never, never, { count: number } | CoreServerError>(
     `*/v1/notification/count`,
-    withValidateAccess((req, res, ctx) => res(ctx.json({ count: 3 }))),
+    withValidateAccess(() => ({ body: { count: 3 } })),
   ),
 
-  rest.get<never, never, Notification[] | CoreServerError>(
+  http.get<never, never, Notification[] | CoreServerError>(
     `*/v1/notification`,
-    withValidateAccess((req, res, ctx) => res(ctx.json(mockNotification))),
+    withValidateAccess(() => ({ body: mockNotification })),
   ),
 
-  rest.post<Partial<SearchFilter>, never, SearchResultLecture[] | CoreServerError>(
+  http.post<never, Partial<SearchFilter>, SearchResultLecture[] | CoreServerError>(
     `*/v1/search_query`,
-    withValidateAccess((req, res, ctx) => res(ctx.json(mockSearchResult)), { token: false }),
+    withValidateAccess(() => ({ body: mockSearchResult }), { token: false }),
   ),
 
-  rest.post<{ title: string; year: number; semester: Semester }, never, Timetable[] | CoreServerError>(
+  http.post<never, { title: string; year: number; semester: Semester }, Timetable[] | CoreServerError>(
     `*/v1/tables`,
-    withValidateAccess(async (req, res, ctx) => {
+    withValidateAccess(({ body }) => {
       try {
-        const { title, year, semester } = await req.json();
+        const { title, year, semester } = body;
 
         if (mockTimeTables.some((tt) => tt.title === title && tt.year === year && tt.semester === semester))
-          return res(ctx.status(403), ctx.json({ errcode: 12291, message: 'duplicate timetable title', ext: {} }));
+          return { body: { errcode: 12291, message: 'duplicate timetable title', ext: {} }, status: 403 };
 
         const _id = `${Math.random()}`;
         const newTimetable = { _id, year, semester, title, total_credit: 0, updated_at: dayjs().format() };
 
-        return res(ctx.json(mockTimeTables.concat(newTimetable)));
+        return { body: mockTimeTables.concat(newTimetable) };
       } catch (err) {
-        return res(ctx.status(400));
+        return { status: 400, body: { errcode: 0, message: '', ext: {} } };
       }
     }),
   ),
 
-  rest.put<
-    Parameters<TimetableRepository['updateLecture']>[2],
+  http.put<
     Parameters<TimetableRepository['updateLecture']>[1],
+    Parameters<TimetableRepository['updateLecture']>[2],
     FullTimetable | CoreServerError
   >(
     `*/v1/tables/:id/lecture/:lecture_id`,
-    withValidateAccess(async (req, res, ctx) => {
+    withValidateAccess(({ body: { class_time_json } }) => {
       // TODO: 시간표 validation ?
-      const { class_time_json } = await req.json();
-      if (class_time_json && !Array.isArray(class_time_json)) return res(ctx.status(400));
+      if (class_time_json && !Array.isArray(class_time_json))
+        return { status: 400, body: { ext: {}, errcode: 0, message: '' } };
 
       const classTimeJson = class_time_json as { start_time: string; end_time: string; day: number }[] | undefined;
       if (classTimeJson?.some((c1, i1) => classTimeJson.some((c2, i2) => i1 !== i2 && isOverlap(c1, c2))))
-        return res(
-          ctx.status(403),
-          ctx.json({ errcode: 12300, message: 'Lecture time overlapped', ext: { confirm_message: '' } }),
-        );
+        return {
+          status: 403,
+          body: { errcode: 12300, message: 'Lecture time overlapped', ext: { confirm_message: '' } },
+        };
 
-      return res(ctx.status(200), ctx.json(mockTimeTable123));
+      return { body: mockTimeTable123 };
     }),
   ),
 
-  rest.post<
-    Parameters<TimetableRepository['updateLecture']>[2],
+  http.post<
     Parameters<TimetableRepository['updateLecture']>[1],
+    Parameters<TimetableRepository['updateLecture']>[2],
     FullTimetable | CoreServerError
   >(
     `*/v1/tables/:id/lecture`,
-    withValidateAccess(async (req, res, ctx) => {
+    withValidateAccess(async ({ body: { class_time_json } }) => {
       // TODO: 시간표 validation ?
-      const { class_time_json } = await req.json();
-      if (!class_time_json || !Array.isArray(class_time_json)) return res(ctx.status(400));
+      if (!class_time_json || !Array.isArray(class_time_json))
+        return { status: 400, body: { ext: {}, errcode: 0, message: '' } };
 
       const classTimeJson = class_time_json as { start_time: string; end_time: string; day: number }[];
       if (classTimeJson.some((c1, i1) => classTimeJson.some((c2, i2) => i1 !== i2 && isOverlap(c1, c2))))
-        return res(
-          ctx.status(403),
-          ctx.json({ errcode: 12300, message: 'Lecture time overlapped', ext: { confirm_message: '' } }),
-        );
+        return {
+          status: 403,
+          body: { errcode: 12300, message: 'Lecture time overlapped', ext: { confirm_message: '' } },
+        };
 
-      return res(ctx.status(200), ctx.json(mockTimeTable123));
+      return { body: mockTimeTable123 };
     }),
   ),
 
-  rest.delete<never, { id: string }, Timetable[] | CoreServerError>(
+  http.delete<{ id: string }, never, Timetable[] | CoreServerError>(
     `*/v1/tables/:id`,
-    withValidateAccess(async (req, res, ctx) => res(ctx.status(200), ctx.json(mockTimeTables))),
+    withValidateAccess(() => ({ body: mockTimeTables })),
   ),
 
-  rest.delete<never, { id: string; lectureId: string }, FullTimetable | CoreServerError>(
+  http.delete<{ id: string; lectureId: string }, never, FullTimetable | CoreServerError>(
     `*/v1/tables/:id/lecture/:lectureId`,
-    withValidateAccess(async (req, res, ctx) => res(ctx.status(200), ctx.json(mockTimeTable123)), { token: false }),
+    withValidateAccess(() => ({ body: mockTimeTable123 }), { token: false }),
   ),
 
-  rest.post<never, { id: string; lectureId: string }, FullTimetable | CoreServerError>(
+  http.post<{ id: string; lectureId: string }, never, FullTimetable | CoreServerError>(
     `*/v1/tables/:id/lecture/:lectureId`,
-    withValidateAccess(async (req, res, ctx) => {
-      const table =
-        req.params.id === '123' ? mockTimeTable123 : req.params.id === '456' ? mockTimeTable456 : mockTimeTable789;
-      const lecture = mockSearchResult.find((item) => item._id === req.params.lectureId);
+    withValidateAccess(({ params: { id, lectureId } }) => {
+      const table = id === '123' ? mockTimeTable123 : id === '456' ? mockTimeTable456 : mockTimeTable789;
+      const lecture = mockSearchResult.find((item) => item._id === lectureId);
 
       if (
         table.lecture_list
           .flatMap((ll) => ll.class_time_json)
           .some((t1, i1) => lecture?.class_time_json.some((t2, i2) => i1 !== i2 && isOverlap(t1, t2)))
       )
-        return res(ctx.status(403), ctx.json({ errcode: 12300, message: '', ext: {} }));
+        return { status: 403, body: { errcode: 12300, message: '', ext: {} } };
 
-      return res(ctx.status(200), ctx.json(mockTimeTable123));
+      return { body: mockTimeTable123 };
     }),
   ),
 
-  rest.post<{ id: string; password: string }, never, SignInResponse | CoreServerError>(
+  http.post<never, { id: string; password: string }, SignInResponse | CoreServerError>(
     `*/v1/auth/login_local`,
     withValidateAccess(
-      async (req, res, ctx) => {
-        const { id, password } = await req.json();
+      ({ body }) => {
+        const { id, password } = body;
         const user = mockUsers.find((mockUser) => mockUser.info.local_id === id);
 
-        if (!user) return res(ctx.status(403), ctx.json({ errcode: 8196, message: '', ext: {} }));
+        if (!user) return { body: { errcode: 8196, message: '', ext: {} }, status: 403 };
 
-        if (user.auth.password !== password)
-          return res(ctx.status(403), ctx.json({ errcode: 8197, message: '', ext: {} }));
+        if (user.auth.password !== password) return { body: { errcode: 8197, message: '', ext: {} }, status: 403 };
 
-        return res(ctx.json({ user_id: '여기뭐들어오는건지모르겠음', token: user.auth.token }));
+        return { body: { token: user.auth.token, user_id: '여기뭐들어오는건지모르겠음' } };
       },
       { token: false },
     ),
   ),
 
-  rest.post<{ email: string; message: string }, never, { message: 'ok' } | CoreServerError>(
+  http.post<never, { email: string; message: string }, { message: 'ok' } | CoreServerError>(
     `*/v1/feedback`,
-    withValidateAccess((req, res, ctx) => res(ctx.delay(300), ctx.json({ message: 'ok' })), { token: false }),
+    withValidateAccess(() => ({ body: { message: 'ok' } }), { token: false }),
   ),
 
-  rest.post<
-    { id: string; password: string },
+  http.post<
     never,
+    { id: string; password: string },
     { message: 'ok'; token: string; user_id: string } | CoreServerError
   >(
     `*/v1/auth/register_local`,
     withValidateAccess(
-      async (req, res, ctx) => {
-        const { id } = await req.json();
-
+      ({ body: { id } }) => {
         if (mockUsers.some((u) => u.info.local_id === id))
-          return res(ctx.status(403), ctx.json({ errcode: 12290, ext: {}, message: 'duplicate id' }));
+          return { body: { errcode: 12290, message: 'duplicate id', ext: {} }, status: 403 };
 
-        return res(ctx.status(200), ctx.json({ message: 'ok', token: 't1', user_id: '뭐냐이건' }));
+        return { body: { message: 'ok', token: 't1', user_id: '뭐냐이건' } };
       },
       { token: false },
     ),
   ),
 
-  rest.delete<never, never, { message: 'ok' } | CoreServerError>(
+  http.delete<never, never, { message: 'ok' } | CoreServerError>(
     `*/v1/user/account`,
-    withValidateAccess(async (req, res, ctx) => {
-      const token = req.headers.get('x-access-token');
+    withValidateAccess(({ token }) => {
+      if (mockUsers.every((u) => u.auth.token !== token))
+        return { body: { errcode: 0, message: '', ext: {} }, status: 403 };
 
-      if (mockUsers.every((u) => u.auth.token !== token)) return res(ctx.status(403));
-
-      return res(ctx.json({ message: 'ok' }));
+      return { body: { message: 'ok' } };
     }),
   ),
 
-  rest.post<{ email: string }, never, { message: 'ok' } | CoreServerError>(
+  http.post<never, { email: string }, { message: 'ok' } | CoreServerError>(
     `*/v1/auth/id/find`,
     withValidateAccess(
-      async (req, res, ctx) => {
-        const { email } = await req.json();
+      ({ body: { email } }) => {
+        if (!email) return { body: { errcode: 0x1018, message: '이메일을 입력해주세요.', ext: {} }, status: 400 };
 
-        if (!email)
-          return res(ctx.status(400), ctx.json({ errcode: 0x1018, message: '이메일을 입력해주세요.', ext: {} }));
         if (mockUsers.every((u) => u.info.email !== email))
-          return res(
-            ctx.status(404),
-            ctx.json({ errcode: 0x4004, message: '해당 이메일로 가입된 사용자가 없습니다.', ext: {} }),
-          );
+          return {
+            body: { errcode: 0x4004, message: '해당 이메일로 가입된 사용자가 없습니다.', ext: {} },
+            status: 404,
+          };
 
-        return res(ctx.json({ message: 'ok' }));
+        return { body: { message: 'ok' } };
       },
       { token: false },
     ),
   ),
 
-  rest.post<{ user_id: string }, never, { email: string } | CoreServerError>(
+  http.post<never, { user_id: string }, { email: string } | CoreServerError>(
     `*/v1/auth/password/reset/email/check`,
     withValidateAccess(
-      async (req, res, ctx) => {
-        const userId = (await req.json()).user_id;
-
-        if (!userId)
-          return res(ctx.status(400), ctx.json({ errcode: 0x1015, message: '등록된 이메일이 없습니다.', ext: {} }));
+      ({ body: { user_id: userId } }) => {
+        if (!userId) return { body: { errcode: 0x1015, message: '등록된 이메일이 없습니다.', ext: {} }, status: 400 };
 
         const foundUser = mockUsers.find((u) => u.info.local_id === userId);
 
         if (!foundUser)
-          return res(
-            ctx.status(404),
-            ctx.json({ errcode: 0x4004, message: '해당 아이디로 가입된 사용자가 없습니다.', ext: {} }),
-          );
+          return {
+            body: { errcode: 0x4004, message: '해당 아이디로 가입된 사용자가 없습니다.', ext: {} },
+            status: 404,
+          };
 
         const email = foundUser.info.email;
 
         if (!email)
-          return res(ctx.status(404), ctx.json({ errcode: 0x4006, message: '등록된 이메일이 없습니다.', ext: {} }));
+          return {
+            body: { errcode: 0x4006, message: '등록된 이메일이 없습니다.', ext: {} },
+            status: 404,
+          };
 
-        return res(ctx.json({ email }));
+        return { body: { email } };
       },
       { token: false },
     ),
   ),
 
-  rest.post<{ user_email: string }, never, { message: 'ok' } | CoreServerError>(
+  http.post<never, { user_email: string }, { message: 'ok' } | CoreServerError>(
     `*/v1/auth/password/reset/email/send`,
-    withValidateAccess((req, res, ctx) => res(ctx.json({ message: 'ok' })), { token: false }),
+    withValidateAccess(() => ({ body: { message: 'ok' } }), { token: false }),
   ),
 
-  rest.post<{ user_email: string }, never, { message: 'ok' } | CoreServerError>(
+  http.post<never, { user_email: string }, { message: 'ok' } | CoreServerError>(
     `*/v1/auth/password/reset/verification/code`,
     withValidateAccess(
-      (req, res, ctx) => {
+      ({ cookies }) => {
         type Status = 'expired' | 'no' | 'wrong' | 'success';
 
-        const status = (req.cookies.TEST_AUTH_PASSWORD_RESET_STATUS ?? 'success') as Status;
+        const status = (cookies.TEST_AUTH_PASSWORD_RESET_STATUS ?? 'success') as Status;
 
-        if (status === 'no') return res(ctx.status(409), ctx.json({ errcode: 0x2009, message: '', ext: {} }));
-        if (status === 'expired') return res(ctx.status(401), ctx.json({ errcode: 0x2010, message: '', ext: {} }));
-        if (status === 'wrong') return res(ctx.status(401), ctx.json({ errcode: 0x2011, message: '', ext: {} }));
+        if (status === 'no') return { body: { errcode: 0x2009, message: '', ext: {} }, status: 409 };
+        if (status === 'expired') return { body: { errcode: 0x2010, message: '', ext: {} }, status: 401 };
+        if (status === 'wrong') return { body: { errcode: 0x2011, message: '', ext: {} }, status: 401 };
 
-        return res(ctx.json({ message: 'ok' }));
+        return { body: { message: 'ok' } };
       },
       { token: false },
     ),
   ),
 
-  rest.post<{ user_id: string; password: string }, never, { message: 'ok' } | CoreServerError>(
+  http.post<never, { user_id: string; password: string }, { message: 'ok' } | CoreServerError>(
     `*/v1/auth/password/reset`,
-    withValidateAccess((req, res, ctx) => res(ctx.json({ message: 'ok' })), { token: false }),
+    withValidateAccess(() => ({ body: { message: 'ok' } }), { token: false }),
   ),
 
-  rest.put<{ old_password: string; new_password: string }, never, { token: string } | CoreServerError>(
+  http.put<never, { old_password: string; new_password: string }, { token: string } | CoreServerError>(
     `*/v1/user/password`,
-    withValidateAccess(async (req, res, ctx) => {
-      const token = req.headers.get('x-access-token');
-      if (!token) return res(ctx.status(403));
-
-      const { old_password } = await req.json();
+    withValidateAccess(({ token, body: { old_password: oldPassword } }) => {
+      if (!token) return { status: 403, body: { errcode: 0, message: '', ext: {} } };
 
       const user = mockUsers.find((u) => u.auth.token === token);
-      if (!user) return res(ctx.status(403));
-      if (user.auth.password !== old_password) return res(ctx.status(403));
+      if (!user) return { status: 403, body: { errcode: 0, message: '', ext: {} } };
+      if (user.auth.password !== oldPassword) return { status: 403, body: { errcode: 0, message: '', ext: {} } };
 
-      return res(ctx.json({ token }));
+      return { body: { token } };
     }),
   ),
 
-  rest.post<{ id: string; password: string }, never, { token: string } | CoreServerError>(
+  http.post<never, { id: string; password: string }, { token: string } | CoreServerError>(
     `*/v1/user/password`,
-    withValidateAccess(async (req, res, ctx) => {
-      const token = req.headers.get('x-access-token');
-      if (!token) return res(ctx.status(403));
+    withValidateAccess(async ({ token, body: { id } }) => {
+      if (!token) return { status: 403, body: { errcode: 0, message: '', ext: {} } };
 
-      const { id } = await req.json();
-
-      if (mockUsers.every((u) => u.auth.token !== token)) return res(ctx.status(403));
+      if (mockUsers.every((u) => u.auth.token !== token))
+        return { status: 403, body: { errcode: 0, message: '', ext: {} } };
       if (mockUsers.some((u) => u.info.local_id === id))
-        return res(ctx.status(403), ctx.json({ errcode: 12290, message: 'duplicate id', ext: {} }));
+        return { status: 403, body: { errcode: 12290, message: 'duplicate id', ext: {} } };
 
-      return res(ctx.json({ token }));
+      return { body: { token } };
     }),
   ),
 
-  rest.delete<never, never, { token: string } | CoreServerError>(
+  http.delete<never, never, { token: string } | CoreServerError>(
     `*/v1/user/facebook`,
-    withValidateAccess((req, res, ctx) => {
-      const token = req.headers.get('x-access-token');
-
+    withValidateAccess(({ token }) => {
       const user = mockUsers.find((u) => u.auth.token === token);
-      if (!user) return res(ctx.status(403));
+      if (!user) return { status: 403, body: { errcode: 0, message: '', ext: {} } };
 
-      return res(ctx.json({ token: 't1' }));
+      return { body: { token: 't1' } };
     }),
   ),
 
-  rest.post<{ fb_id: string; fb_token: string }, never, { token: string } | CoreServerError>(
+  http.post<never, { fb_id: string; fb_token: string }, { token: string } | CoreServerError>(
     `*/v1/user/facebook`,
-    withValidateAccess((req, res, ctx) => {
-      const token = req.headers.get('x-access-token');
-
+    withValidateAccess(({ token }) => {
       const user = mockUsers.find((u) => u.auth.token === token);
-      if (!user) return res(ctx.status(403));
+      if (!user) return { status: 403, body: { errcode: 0, message: '', ext: {} } };
 
-      return res(ctx.json({ token: 't5' }));
+      return { body: { token: 't5' } };
     }),
   ),
 ];
