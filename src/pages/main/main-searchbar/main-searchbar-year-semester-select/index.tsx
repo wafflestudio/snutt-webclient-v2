@@ -42,7 +42,7 @@ const Select = styled.select`
   height: 30px;
   cursor: pointer;
   border: none;
-  outline: none;
+
   opacity: 0.8;
   transition: all 0.2s;
 
