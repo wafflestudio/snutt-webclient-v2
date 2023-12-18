@@ -250,14 +250,15 @@ const Checkbox = <F extends 'academicYear' | 'category' | 'classification' | 'cr
 
 const useSearchFilterTags = () => {
   const { year, semester } = useYearSemester();
-  return useQuery(
-    ['tags', year, semester],
-    () => {
+  return useQuery({
+    queryKey: ['tags', year, semester],
+    queryFn: () => {
       if (!year || !semester) throw Error('no year or semester');
       return searchService.getTags({ year, semester });
     },
-    { enabled: !!(year && semester), staleTime: Infinity },
-  );
+    enabled: !!(year && semester),
+    staleTime: Infinity,
+  });
 };
 
 const StyledDialog = styled(Dialog)`

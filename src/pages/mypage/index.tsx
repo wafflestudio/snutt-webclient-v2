@@ -115,44 +115,40 @@ export const MyPage = () => {
 const useMyInfo = () => {
   const { token } = useTokenContext();
 
-  return useQuery(
-    queryKey('user/info', { token }),
-    () => {
+  return useQuery({
+    queryKey: queryKey('user/info', { token }),
+    queryFn: () => {
       if (!token) throw new Error('no token');
       return userService.getUserInfo(token);
     },
-    { enabled: !!token },
-  );
+    enabled: !!token,
+  });
 };
 
 const useAttachFacebook = () => {
   const { token, saveToken } = useTokenContext();
 
-  return useMutation(
-    (userInfo: ReactFacebookLoginInfo) => {
+  return useMutation({
+    mutationFn: (userInfo: ReactFacebookLoginInfo) => {
       if (!token) throw new Error('no token');
       return userService.attachFacebookAccount(token, { fb_id: userInfo.id, fb_token: userInfo.accessToken });
     },
-    {
-      onSuccess: ({ token }) => saveToken(token, false),
-      onError: (error) => alert(errorService.getErrorMessage((error as CoreServerError).errcode)),
-    },
-  );
+    onSuccess: ({ token }) => saveToken(token, false),
+    onError: (error) => alert(errorService.getErrorMessage((error as unknown as CoreServerError).errcode)),
+  });
 };
 
 const useDetachFacebook = () => {
   const { token, saveToken } = useTokenContext();
 
-  return useMutation(
-    () => {
+  return useMutation({
+    mutationFn: () => {
       if (!token) throw new Error('no token');
       return userService.detachFacebookAccount(token);
     },
-    {
-      onSuccess: ({ token }) => saveToken(token, false),
-      onError: (error) => alert(errorService.getErrorMessage((error as CoreServerError).errcode)),
-    },
-  );
+    onSuccess: ({ token }) => saveToken(token, false),
+    onError: (error) => alert(errorService.getErrorMessage((error as unknown as CoreServerError).errcode)),
+  });
 };
 
 const Wrapper = styled.div`

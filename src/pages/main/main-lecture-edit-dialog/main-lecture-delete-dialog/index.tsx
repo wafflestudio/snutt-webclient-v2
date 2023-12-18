@@ -4,7 +4,6 @@ import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { timetableService } from '@/services';
-import { queryKey } from '@/utils/query-key-factory';
 
 type Props = {
   open: boolean;
@@ -48,14 +47,14 @@ const useDeleteLecture = (id?: string, lecture_id?: string) => {
   const { token } = useTokenContext();
   const queryClient = useQueryClient();
 
-  return useMutation(
-    () => {
+  return useMutation({
+    mutationFn: () => {
       if (!token) throw new Error('no token');
       if (!id) throw new Error('no tt id');
       if (!lecture_id) throw new Error('no lecture_id');
 
       return timetableService.deleteLecture(token, { id, lecture_id });
     },
-    { onSuccess: () => queryClient.invalidateQueries(queryKey(`tables/${id}`, { token })) },
-  );
+    onSuccess: () => queryClient.invalidateQueries(),
+  });
 };

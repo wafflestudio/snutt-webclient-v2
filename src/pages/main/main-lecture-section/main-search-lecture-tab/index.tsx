@@ -21,7 +21,7 @@ export const MainSearchLectureTab = ({
   setPreviewLectureId,
   previewLectureId,
 }: Props) => {
-  const isSearchResultMutating = useIsMutating(['search_query']);
+  const isSearchResultMutating = useIsMutating({ mutationKey: ['search_query'] });
 
   if (isSearchResultMutating)
     return (

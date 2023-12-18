@@ -38,15 +38,12 @@ function App() {
     () =>
       new QueryClient({
         queryCache: new QueryCache({
-          onError: (error) => get(error, ['errcode']) === 8194 && setWrongTokenDialogOpen(true),
-        }),
-        defaultOptions: {
-          queries: {
-            refetchOnWindowFocus: false,
-            onError: (err) => truffleClient.capture(new Error(JSON.stringify(err))),
-            retry: false,
+          onError: (error) => {
+            if (get(error, ['errcode']) === 8194) setWrongTokenDialogOpen(true);
+            else truffleClient.capture(error);
           },
-        },
+        }),
+        defaultOptions: { queries: { refetchOnWindowFocus: false, retry: false } },
       }),
   );
 

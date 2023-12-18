@@ -8,7 +8,6 @@ import { useTokenContext } from '@/contexts/tokenContext';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { authService, errorService, userService } from '@/services';
 import { get } from '@/utils/object/get';
-import { queryKey } from '@/utils/query-key-factory';
 
 export const MypageRegisterId = () => {
   const [id, setId] = useState('');
@@ -69,18 +68,16 @@ const useAddIdPassword = () => {
   const { token, saveToken } = useTokenContext();
   const queryClient = useQueryClient();
 
-  return useMutation(
-    (body: { id: string; password: string }) => {
+  return useMutation({
+    mutationFn: (body: { id: string; password: string }) => {
       if (!token) throw new Error('no token');
       return userService.addIdPassword(token, body);
     },
-    {
-      onSuccess: ({ token }) => {
-        saveToken(token, false);
-        return queryClient.invalidateQueries(queryKey('user/info'));
-      },
+    onSuccess: ({ token }) => {
+      saveToken(token, false);
+      return queryClient.invalidateQueries();
     },
-  );
+  });
 };
 
 const PasswordInput = styled.input.attrs({ type: 'password' })`

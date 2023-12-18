@@ -9,7 +9,6 @@ import { useTokenContext } from '@/contexts/tokenContext';
 import type { Color } from '@/entities/color';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { lectureService, timetableService } from '@/services';
-import { queryKey } from '@/utils/query-key-factory';
 
 import { type LectureEditForm, MainLectureEditForm } from '../main-lecture-edit-form';
 
@@ -86,14 +85,14 @@ const useCreateLecture = (id?: string) => {
   const { token } = useTokenContext();
   const queryClient = useQueryClient();
 
-  return useMutation(
-    (body: Parameters<(typeof timetableService)['createLecture']>[2]) => {
+  return useMutation({
+    mutationFn: (body: Parameters<(typeof timetableService)['createLecture']>[2]) => {
       if (!token) throw new Error('no token');
       if (!id) throw new Error('no id');
       return timetableService.createLecture(token, { id }, body);
     },
-    { onSuccess: () => queryClient.invalidateQueries(queryKey(`tables/${id}`, { token })) },
-  );
+    onSuccess: () => queryClient.invalidateQueries(),
+  });
 };
 
 const EditDialog = styled(Dialog)`

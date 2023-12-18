@@ -44,14 +44,14 @@ export const LayoutNotificationPopoverContent = () => {
 const useNotificationList = (show: boolean) => {
   const { token } = useTokenContext();
 
-  return useQuery(
-    queryKey('notifications', { token }),
-    () => {
+  return useQuery({
+    queryKey: queryKey('notifications', { token }),
+    queryFn: () => {
       if (!token) throw new Error('no token');
       return notificationService.getList(token);
     },
-    { enabled: !!token && show },
-  );
+    enabled: !!token && show,
+  });
 };
 
 const NotificationList = styled.ul`

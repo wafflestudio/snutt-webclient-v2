@@ -91,7 +91,8 @@ export const MainLectureEditForm = ({ draft, defaultState = {}, setDraft }: Prop
   );
 };
 
-const useColorList = () => useQuery(['colors'], () => colorService.getColorList(), { staleTime: Infinity });
+const useColorList = () =>
+  useQuery({ queryKey: ['colors'], queryFn: () => colorService.getColorList(), staleTime: Infinity });
 
 const Wrapper = styled.div``;
 
