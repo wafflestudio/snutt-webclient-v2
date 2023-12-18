@@ -32,9 +32,17 @@ export const withValidateAccess = <
     if (isValidateToken && mockUsers.every((u) => u.auth.token !== xToken))
       return HttpResponse.json({ ext: {}, message: 'Failed to authenticate token', errcode: 8194 }, { status: 403 });
 
+    const body = await (async () => {
+      try {
+        return await args.request.json();
+      } catch (e) {
+        return {} as ReqBody;
+      }
+    })();
+
     const response = callback({
       params: args.params,
-      body: await args.request.json(),
+      body,
       token: xToken,
       cookies: args.cookies,
     });
