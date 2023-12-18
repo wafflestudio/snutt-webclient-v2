@@ -57,7 +57,7 @@ export const handlers = [
     `*/v1/tables/:id`,
     withValidateAccess(({ params: { id }, body: { title } }) => {
       if (mockTimeTables.every((t) => t._id !== id))
-        return { type: 'error', body: { ext: {}, errcode: 0, message: '' }, status: 404 };
+        return { type: 'error', body: { ext: {}, errcode: -1, message: '' }, status: 404 };
       return { type: 'success', body: mockTimeTables.map((t) => (t._id === id ? { ...t, title } : t)) };
     }),
   ),
@@ -128,7 +128,7 @@ export const handlers = [
 
         return { type: 'success', body: mockTimeTables.concat(newTimetable) };
       } catch (err) {
-        return { type: 'error', status: 400, body: { errcode: 0, message: '', ext: {} } };
+        return { type: 'error', status: 400, body: { errcode: -1, message: '', ext: {} } };
       }
     }),
   ),
@@ -142,7 +142,7 @@ export const handlers = [
     withValidateAccess(({ body: { class_time_json } }) => {
       // TODO: 시간표 validation ?
       if (class_time_json && !Array.isArray(class_time_json))
-        return { type: 'error', status: 400, body: { ext: {}, errcode: 0, message: '' } };
+        return { type: 'error', status: 400, body: { ext: {}, errcode: -1, message: '' } };
 
       const classTimeJson = class_time_json as { start_time: string; end_time: string; day: number }[] | undefined;
       if (classTimeJson?.some((c1, i1) => classTimeJson.some((c2, i2) => i1 !== i2 && isOverlap(c1, c2))))
@@ -165,7 +165,7 @@ export const handlers = [
     withValidateAccess(({ body: { class_time_json } }) => {
       // TODO: 시간표 validation ?
       if (!class_time_json || !Array.isArray(class_time_json))
-        return { type: 'error', status: 400, body: { ext: {}, errcode: 0, message: '' } };
+        return { type: 'error', status: 400, body: { ext: {}, errcode: -1, message: '' } };
 
       const classTimeJson = class_time_json as { start_time: string; end_time: string; day: number }[];
       if (classTimeJson.some((c1, i1) => classTimeJson.some((c2, i2) => i1 !== i2 && isOverlap(c1, c2))))
@@ -250,7 +250,7 @@ export const handlers = [
     `*/v1/user/account`,
     withValidateAccess(({ token }) => {
       if (mockUsers.every((u) => u.auth.token !== token))
-        return { type: 'error', body: { errcode: 0, message: '', ext: {} }, status: 403 };
+        return { type: 'error', body: { errcode: -1, message: '', ext: {} }, status: 403 };
 
       return { type: 'success', body: { message: 'ok' } };
     }),
@@ -347,12 +347,12 @@ export const handlers = [
   http.put<never, { old_password: string; new_password: string }, { token: string } | CoreServerError>(
     `*/v1/user/password`,
     withValidateAccess(({ token, body: { old_password: oldPassword } }) => {
-      if (!token) return { type: 'error', status: 403, body: { errcode: 0, message: '', ext: {} } };
+      if (!token) return { type: 'error', status: 403, body: { errcode: -1, message: '', ext: {} } };
 
       const user = mockUsers.find((u) => u.auth.token === token);
-      if (!user) return { type: 'error', status: 403, body: { errcode: 0, message: '', ext: {} } };
+      if (!user) return { type: 'error', status: 403, body: { errcode: -1, message: '', ext: {} } };
       if (user.auth.password !== oldPassword)
-        return { type: 'error', status: 403, body: { errcode: 0, message: '', ext: {} } };
+        return { type: 'error', status: 403, body: { errcode: -1, message: '', ext: {} } };
 
       return { type: 'success', body: { token } };
     }),
@@ -361,10 +361,10 @@ export const handlers = [
   http.post<never, { id: string; password: string }, { token: string } | CoreServerError>(
     `*/v1/user/password`,
     withValidateAccess(({ token, body: { id } }) => {
-      if (!token) return { type: 'error', status: 403, body: { errcode: 0, message: '', ext: {} } };
+      if (!token) return { type: 'error', status: 403, body: { errcode: -1, message: '', ext: {} } };
 
       if (mockUsers.every((u) => u.auth.token !== token))
-        return { type: 'error', status: 403, body: { errcode: 0, message: '', ext: {} } };
+        return { type: 'error', status: 403, body: { errcode: -1, message: '', ext: {} } };
       if (mockUsers.some((u) => u.info.local_id === id))
         return { type: 'error', status: 403, body: { errcode: 12290, message: 'duplicate id', ext: {} } };
 
@@ -376,7 +376,7 @@ export const handlers = [
     `*/v1/user/facebook`,
     withValidateAccess(({ token }) => {
       const user = mockUsers.find((u) => u.auth.token === token);
-      if (!user) return { type: 'error', status: 403, body: { errcode: 0, message: '', ext: {} } };
+      if (!user) return { type: 'error', status: 403, body: { errcode: -1, message: '', ext: {} } };
 
       return { type: 'success', body: { token: 't1' } };
     }),
@@ -386,7 +386,7 @@ export const handlers = [
     `*/v1/user/facebook`,
     withValidateAccess(({ token }) => {
       const user = mockUsers.find((u) => u.auth.token === token);
-      if (!user) return { type: 'error', status: 403, body: { errcode: 0, message: '', ext: {} } };
+      if (!user) return { type: 'error', status: 403, body: { errcode: -1, message: '', ext: {} } };
 
       return { type: 'success', body: { token: 't5' } };
     }),
