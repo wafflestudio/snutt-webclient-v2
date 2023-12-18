@@ -78,6 +78,9 @@ export const MyPage = () => {
                 페이스북 연동 해지하기
               </Button>
             ) : (
+              // TODO: remove & migrate this library
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               <FBLogin
                 appId={envService.getFacebookAppId()}
                 callback={attach}

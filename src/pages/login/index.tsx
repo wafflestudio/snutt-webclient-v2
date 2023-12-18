@@ -76,6 +76,9 @@ export const Login = () => {
         <LocalSignInButton disabled={!(id && password)} onClick={handleSignIn} data-testid="local-signin-button">
           로그인
         </LocalSignInButton>
+        {/* TODO: migrate to another library */}
+        {/* eslint-disable-next-line */}
+        {/* @ts-ignore */}
         <FBLogin
           appId={envService.getFacebookAppId()}
           callback={handleFacebookSignIn}

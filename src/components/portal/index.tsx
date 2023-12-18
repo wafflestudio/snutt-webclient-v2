@@ -1,11 +1,12 @@
-import { type PropsWithChildren, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 interface Props {
   portalRoot?: HTMLElement;
+  children: Parameters<typeof createPortal>[0];
 }
 
-export const Portal = (props: PropsWithChildren<Props>) => {
+export const Portal = (props: Props) => {
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -15,5 +16,5 @@ export const Portal = (props: PropsWithChildren<Props>) => {
 
   if (!portalRoot) return null;
 
-  return createPortal(props.children, portalRoot);
+  return <>{createPortal(props.children, portalRoot)}</>;
 };
