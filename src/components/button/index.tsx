@@ -34,7 +34,9 @@ const commonStyle = css`
   cursor: pointer;
   font-size: 14px;
   opacity: 0.8;
-  transition: opacity 0.2s, background-color 0.1s;
+  transition:
+    opacity 0.2s,
+    background-color 0.1s;
   line-height: 100%;
 
   &:hover {
@@ -60,7 +62,7 @@ const smallSize = css`
 
 const Contained = styled.button<{ $size: Size; $color: Color }>`
   ${commonStyle}
-  ${({ $size }) => ({ big: bigSize, small: smallSize }[$size])}
+  ${({ $size }) => ({ big: bigSize, small: smallSize })[$size]}
   border: none;
   color: #fff;
   background-color: ${({ $color }) => buttonColor[$color]};
@@ -72,11 +74,13 @@ const Contained = styled.button<{ $size: Size; $color: Color }>`
 
 const Outlined = styled.button<{ $size: Size; $color: Color }>`
   ${commonStyle}
-  ${({ $size }) => ({ big: bigSize, small: smallSize }[$size])}
+  ${({ $size }) => ({ big: bigSize, small: smallSize })[$size]}
   border: 1px solid ${({ $color }) => buttonColor[$color]};
   color: ${({ $color }) => buttonColor[$color]};
   background-color: transparent;
-  transition: background-color 0.1s, opacity 0.2s;
+  transition:
+    background-color 0.1s,
+    opacity 0.2s;
 
   &:hover {
     background-color: ${({ $color }) => `${buttonColor[$color]}10`};
@@ -85,7 +89,7 @@ const Outlined = styled.button<{ $size: Size; $color: Color }>`
 
 const Text = styled.button<{ $size: Size; $color: string }>`
   ${commonStyle}
-  ${({ $size }) => ({ big: bigSize, small: smallSize }[$size])}
+  ${({ $size }) => ({ big: bigSize, small: smallSize })[$size]}
 `;
 
 const ButtonText = styled.span<{ $loading: boolean }>`

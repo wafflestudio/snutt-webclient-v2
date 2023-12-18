@@ -131,7 +131,8 @@ export const MainTimeTable = ({
   );
 };
 
-const useColorList = () => useQuery(['colors'], () => colorService.getColorList(), { staleTime: Infinity });
+const useColorList = () =>
+  useQuery({ queryKey: ['colors'], queryFn: () => colorService.getColorList(), staleTime: Infinity });
 
 const Wrapper = styled.div<{ $columnCount: number; $rowCount: number }>`
   display: grid;

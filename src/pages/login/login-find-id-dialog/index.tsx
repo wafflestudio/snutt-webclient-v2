@@ -31,8 +31,8 @@ export const LoginFindIdDialog = ({ open, onClose }: Props) => {
           {isSuccess
             ? '이메일이 전송되었어요'
             : error
-            ? errorService.getErrorMessage(get(error, ['errcode']) as number)
-            : ''}
+              ? errorService.getErrorMessage(get(error, ['errcode']) as number)
+              : ''}
         </Result>
       </Content>
       <Dialog.Actions>
@@ -53,7 +53,7 @@ export const LoginFindIdDialog = ({ open, onClose }: Props) => {
 };
 
 const useFindId = () => {
-  return useMutation((body: { email: string }) => authService.findIdByEmail(body));
+  return useMutation({ mutationFn: (body: { email: string }) => authService.findIdByEmail(body) });
 };
 
 const Content = styled(Dialog.Content)`
@@ -70,9 +70,9 @@ const EmailInput = styled.input`
   padding: 8px 12px;
 `;
 
-const Result = styled.p<{ $status: 'success' | 'error' | 'idle' | 'loading' }>`
+const Result = styled.p<{ $status: 'success' | 'error' | 'idle' | 'pending' }>`
   margin: 8px 0 0;
   height: 20px;
   font-size: 14px;
-  color: ${({ $status }) => ({ success: '#160bdf', error: '#600303', idle: '#000', loading: '#000' }[$status])};
+  color: ${({ $status }) => ({ success: '#160bdf', error: '#600303', idle: '#000', pending: '#000' })[$status]};
 `;

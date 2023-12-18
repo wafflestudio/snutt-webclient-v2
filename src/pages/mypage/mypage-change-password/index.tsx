@@ -79,9 +79,11 @@ export const MypageChangePassword = () => {
 
 const useChangePassword = () => {
   const { token } = useTokenContext();
-  return useMutation((body: { old_password: string; new_password: string }) => {
-    if (!token) throw new Error('no token');
-    return authService.changePassword(token, body);
+  return useMutation({
+    mutationFn: (body: { old_password: string; new_password: string }) => {
+      if (!token) throw new Error('no token');
+      return authService.changePassword(token, body);
+    },
   });
 };
 

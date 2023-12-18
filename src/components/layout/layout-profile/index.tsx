@@ -27,14 +27,14 @@ export const LayoutProfile = () => {
 const useMyInfo = () => {
   const { token } = useTokenContext();
 
-  return useQuery(
-    queryKey('user/info', { token }),
-    () => {
+  return useQuery({
+    queryKey: queryKey('user/info', { token }),
+    queryFn: () => {
       if (!token) throw new Error('no token');
       return userService.getUserInfo(token);
     },
-    { enabled: !!token },
-  );
+    enabled: !!token,
+  });
 };
 
 const ProfileText = styled(Link)`

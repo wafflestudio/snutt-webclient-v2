@@ -64,18 +64,16 @@ const useCreateTimetable = (onSuccess: (createdId?: string) => void) => {
   const { year, semester } = useYearSemester();
   const queryClient = useQueryClient();
 
-  return useMutation(
-    (title: string) => {
+  return useMutation({
+    mutationFn: (title: string) => {
       if (!token || !year || !semester) throw new Error('no token | year | semester');
       return timetableService.createTimetable(token, { year, semester, title });
     },
-    {
-      onSuccess: (data, title) => {
-        queryClient.setQueryData(queryKey('tables', { token }), data);
-        onSuccess(data.find((item) => item.year === year && item.semester === semester && item.title === title)?._id);
-      },
+    onSuccess: (data, title) => {
+      queryClient.setQueryData(queryKey('tables', { token }), data);
+      onSuccess(data.find((item) => item.year === year && item.semester === semester && item.title === title)?._id);
     },
-  );
+  });
 };
 
 const Input = styled.input`

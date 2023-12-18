@@ -97,31 +97,34 @@ export const Main = () => {
 const useMyTimetables = () => {
   const { token } = useTokenContext();
 
-  return useQuery(
-    queryKey('tables', { token }),
-    () => {
+  return useQuery({
+    queryKey: queryKey('tables', { token }),
+    queryFn: () => {
       if (!token) throw Error('no token');
       return timetableService.getTimetables(token);
     },
-    { enabled: !!token },
-  );
+    enabled: !!token,
+  });
 };
 
 const useCurrentFullTimetable = (id: string | undefined) => {
   const { token } = useTokenContext();
 
-  return useQuery(
-    queryKey(`tables/${id}`, { token }),
-    () => {
+  return useQuery({
+    queryKey: queryKey(`tables/${id}`, { token }),
+    queryFn: () => {
       if (!id || !token) throw new Error('no id | token');
       return timetableService.getFullTimetable(token, id);
     },
-    { enabled: !!id && !!token },
-  );
+    enabled: !!id && !!token,
+  });
 };
 
 const useSearchResult = () => {
-  return useMutation(['search_query'], (value: Partial<SearchFilter>) => searchService.search(value));
+  return useMutation({
+    mutationKey: ['search_query'],
+    mutationFn: (value: Partial<SearchFilter>) => searchService.search(value),
+  });
 };
 
 const Wrapper = styled.div`

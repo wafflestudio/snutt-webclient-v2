@@ -59,7 +59,7 @@ export const LoginResetPasswordDialog = ({ open, onClose }: Props) => {
                   data-testid="login-reset-password-input"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
-                  disabled={checkEmailMutation.isLoading}
+                  disabled={checkEmailMutation.isPending}
                 />
                 <Error data-testid="login-reset-password-error">
                   {checkEmailMutation.error
@@ -107,7 +107,7 @@ export const LoginResetPasswordDialog = ({ open, onClose }: Props) => {
                   data-testid="login-reset-password-input"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  disabled={verifyCodeMutation.isLoading}
+                  disabled={verifyCodeMutation.isPending}
                 />
                 <Error data-testid="login-reset-password-error">
                   {verifyCodeMutation.error
@@ -134,7 +134,7 @@ export const LoginResetPasswordDialog = ({ open, onClose }: Props) => {
                   data-testid="login-reset-password-input"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  disabled={resetPasswordMutation.isLoading}
+                  disabled={resetPasswordMutation.isPending}
                   type="password"
                 />
                 <Error data-testid="login-reset-password-error" />
@@ -168,16 +168,17 @@ export const LoginResetPasswordDialog = ({ open, onClose }: Props) => {
   );
 };
 
-const useCheckEmail = () => useMutation((body: { user_id: string }) => authService.passwordResetCheckEmail(body));
+const useCheckEmail = () =>
+  useMutation({ mutationFn: (body: { user_id: string }) => authService.passwordResetCheckEmail(body) });
 
 const useSendCodeEmail = () =>
-  useMutation((body: { user_email: string }) => authService.sendPasswordResetVerificationEmail(body));
+  useMutation({ mutationFn: (body: { user_email: string }) => authService.sendPasswordResetVerificationEmail(body) });
 
 const useVerifyCode = () =>
-  useMutation((body: { user_id: string; code: string }) => authService.verifyPasswordResetCode(body));
+  useMutation({ mutationFn: (body: { user_id: string; code: string }) => authService.verifyPasswordResetCode(body) });
 
 const useResetPassword = () =>
-  useMutation((body: { user_id: string; password: string }) => authService.resetPassword(body));
+  useMutation({ mutationFn: (body: { user_id: string; password: string }) => authService.resetPassword(body) });
 
 const Content = styled(Dialog.Content)`
   width: 300px;

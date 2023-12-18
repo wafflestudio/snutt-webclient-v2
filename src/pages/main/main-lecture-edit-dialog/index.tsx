@@ -10,7 +10,6 @@ import type { Color } from '@/entities/color';
 import type { Lecture } from '@/entities/lecture';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { lectureService, timetableService } from '@/services';
-import { queryKey } from '@/utils/query-key-factory';
 
 import { type LectureEditForm, MainLectureEditForm } from '../main-lecture-edit-form';
 import { MainLectureDeleteDialog } from './main-lecture-delete-dialog';
@@ -36,8 +35,8 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
       draft.colorIndex === 0
         ? { colorIndex: 0 as const, color: draft.color as Color }
         : draft.colorIndex
-        ? { colorIndex: draft.colorIndex }
-        : {};
+          ? { colorIndex: draft.colorIndex }
+          : {};
 
     mutate(
       {
@@ -117,15 +116,15 @@ const useUpdateLecture = (id?: string, lectureId?: string) => {
   const { token } = useTokenContext();
   const queryClient = useQueryClient();
 
-  return useMutation(
-    (body: Parameters<typeof timetableService.updateLecture>[2]) => {
+  return useMutation({
+    mutationFn: (body: Parameters<typeof timetableService.updateLecture>[2]) => {
       if (!token) throw new Error('no token');
       if (!id) throw new Error('no id');
       if (!lectureId) throw new Error('no lectureId');
       return timetableService.updateLecture(token, { id, lecture_id: lectureId }, body);
     },
-    { onSuccess: () => queryClient.invalidateQueries(queryKey(`tables/${id}`, { token })) },
-  );
+    onSuccess: () => queryClient.invalidateQueries(),
+  });
 };
 
 const EditDialog = styled(Dialog)`

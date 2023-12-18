@@ -85,7 +85,7 @@ export const SignUp = () => {
 };
 
 const useSignUp = () => {
-  return useMutation((body: { id: string; password: string }) => authService.signUp(body));
+  return useMutation({ mutationFn: (body: { id: string; password: string }) => authService.signUp(body) });
 };
 
 const Input = styled.input`

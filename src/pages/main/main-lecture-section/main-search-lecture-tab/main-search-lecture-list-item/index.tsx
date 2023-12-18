@@ -7,7 +7,6 @@ import type { BaseLecture } from '@/entities/lecture';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { timetableService } from '@/services';
 import { get } from '@/utils/object/get';
-import { queryKey } from '@/utils/query-key-factory';
 
 import { MainLectureListItem } from '../../main-lecture-listitem';
 
@@ -64,16 +63,16 @@ export const MainSearchLectureListItem = ({ lecture, timetableId, setPreviewLect
 const useAddLecture = (id?: string, lectureId?: string) => {
   const { token } = useTokenContext();
   const queryClient = useQueryClient();
-  return useMutation(
-    () => {
+  return useMutation({
+    mutationFn: () => {
       if (!token) throw new Error('no token');
       if (!id) throw new Error('no id');
       if (!lectureId) throw new Error('no lectureId');
 
       return timetableService.addLecture(token, { id, lecture_id: lectureId });
     },
-    { onSuccess: () => queryClient.invalidateQueries(queryKey(`tables/${id}`, { token })) },
-  );
+    onSuccess: () => queryClient.invalidateQueries(),
+  });
 };
 
 const LectureListItem = styled.li<{ $isPreview: boolean }>`

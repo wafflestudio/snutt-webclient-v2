@@ -12,12 +12,12 @@ export const LayoutFooterFeedbackDialog = ({ onClose, isOpen }: Props) => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  const { mutate, isLoading, isSuccess, reset } = useSubmitFeedback();
+  const { mutate, isPending, isSuccess, reset } = useSubmitFeedback();
 
   const isValid = email && message;
 
   const submit = () => {
-    if (!isValid || isLoading) return;
+    if (!isValid || isPending) return;
     mutate({ email, message });
   };
 
@@ -34,7 +34,7 @@ export const LayoutFooterFeedbackDialog = ({ onClose, isOpen }: Props) => {
       <Content>
         <label>이메일</label>
         <Input
-          disabled={isLoading || isSuccess}
+          disabled={isPending || isSuccess}
           data-testid="feedback-email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -43,7 +43,7 @@ export const LayoutFooterFeedbackDialog = ({ onClose, isOpen }: Props) => {
         />
         <label>내용</label>
         <Textarea
-          disabled={isLoading || isSuccess}
+          disabled={isPending || isSuccess}
           data-testid="feedback-message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -55,7 +55,7 @@ export const LayoutFooterFeedbackDialog = ({ onClose, isOpen }: Props) => {
           <Button size="small" color="gray" data-testid="feedback-cancel" onClick={close}>
             취소
           </Button>
-          <Button loading={isLoading} size="small" data-testid="feedback-submit" onClick={submit} disabled={!isValid}>
+          <Button loading={isPending} size="small" data-testid="feedback-submit" onClick={submit} disabled={!isValid}>
             제출
           </Button>
         </Dialog.Actions>
@@ -72,7 +72,7 @@ export const LayoutFooterFeedbackDialog = ({ onClose, isOpen }: Props) => {
 };
 
 const useSubmitFeedback = () => {
-  return useMutation((body: { email: string; message: string }) => feedbackService.post(body));
+  return useMutation({ mutationFn: (body: { email: string; message: string }) => feedbackService.post(body) });
 };
 
 const Content = styled(Dialog.Content)`

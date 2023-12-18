@@ -7,7 +7,6 @@ import { Dialog } from '@/components/dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { FullTimetable } from '@/entities/timetable';
 import { timetableService } from '@/services';
-import { queryKey } from '@/utils/query-key-factory';
 
 type Props = {
   isOpen: boolean;
@@ -68,14 +67,14 @@ const useDeleteTimetable = (id?: string) => {
   const { token } = useTokenContext();
   const queryClient = useQueryClient();
 
-  return useMutation(
-    () => {
+  return useMutation({
+    mutationFn: () => {
       if (!token) throw new Error('no token');
       if (!id) throw new Error('no tt');
       return timetableService.deleteTimetable(token, id);
     },
-    { onSuccess: () => queryClient.invalidateQueries(queryKey('tables', { token })) },
-  );
+    onSuccess: () => queryClient.invalidateQueries(),
+  });
 };
 
 const Input = styled.input`

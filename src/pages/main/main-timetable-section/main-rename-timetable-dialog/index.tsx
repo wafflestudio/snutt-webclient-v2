@@ -7,7 +7,6 @@ import { Dialog } from '@/components/dialog';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { FullTimetable } from '@/entities/timetable';
 import { timetableService } from '@/services';
-import { queryKey } from '@/utils/query-key-factory';
 
 type Props = {
   isOpen: boolean;
@@ -63,14 +62,14 @@ const useRenameTimetable = (id?: string) => {
   const { token } = useTokenContext();
   const queryClient = useQueryClient();
 
-  return useMutation(
-    (title: string) => {
+  return useMutation({
+    mutationFn: (title: string) => {
       if (!token) throw new Error('no token');
       if (!id) throw new Error('no tt');
       return timetableService.renameTimetable(token, id, title);
     },
-    { onSuccess: () => queryClient.invalidateQueries(queryKey('tables', { token })) },
-  );
+    onSuccess: () => queryClient.invalidateQueries(),
+  });
 };
 
 const Input = styled.input`
