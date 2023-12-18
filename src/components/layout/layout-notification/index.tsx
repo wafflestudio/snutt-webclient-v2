@@ -8,7 +8,9 @@ import { LayoutNotificationPopoverContent } from './layout-notification-popover-
 export const LayoutNotification = () => {
   return (
     <Popover>
-      <NotificationIcon data-testid="layout-notification" />
+      <TransparentButton>
+        <NotificationIcon data-testid="layout-notification" />
+      </TransparentButton>
       <Pop>
         알림
         <LayoutNotificationPopoverContent />
@@ -50,6 +52,12 @@ const NotificationIcon = styled(IcAlarm)`
     opacity: 1;
     animation: ${shake} 1s infinite linear;
   }
+`;
+
+const TransparentButton = styled.button`
+  border: none;
+  background-color: transparent;
+  padding: 0;
 `;
 
 const Pop = styled(Popover.Pop)`
