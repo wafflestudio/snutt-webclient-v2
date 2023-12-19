@@ -2,7 +2,7 @@
 
 import { devices, type PlaywrightTestConfig } from '@playwright/test';
 
-const PORT = 4174;
+const PORT = 5173;
 
 const config: PlaywrightTestConfig = {
   testDir: './e2e',
@@ -25,12 +25,6 @@ const config: PlaywrightTestConfig = {
 
   /* Configure projects for major browsers */
   projects: [{ name: 'Chrome', use: { ...devices['Desktop Chrome'] } }],
-
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: `yarn build:test && yarn preview:test --port ${PORT}`,
-    port: PORT,
-  },
 };
 
 export default config;
