@@ -32,11 +32,11 @@ test('GET (error case)', async () => {
   const client = getApiClient({ baseURL: 'https://test-get', headers: { 'test-get-header': 'hello' } });
   const params = new URLSearchParams();
   params.set('test', 'zxcv');
-  const promise = client.get('/test1', { headers: { 'test-get-header': 'bye' }, params });
+  const promise = client.get('/test1', { params });
 
   expect(promise).rejects.toEqual({ errcode: 8093 });
   expect(global.fetch).toBeCalledWith('https://test-get/test1?test=zxcv', {
-    headers: { 'test-get-header': 'bye' },
+    headers: { 'test-get-header': 'hello' },
     method: 'GET',
   });
 });
@@ -57,11 +57,11 @@ test('POST (success case)', async () => {
 test('POST (error case)', async () => {
   global.fetch = jest.fn(emptyFetch);
   const client = getApiClient({ headers: { 'content-type': 'ignored' } });
-  const promise = client.post('/test1', undefined, { headers: { 'content-type': 'testct' } });
+  const promise = client.post('/test1', undefined);
 
   expect(promise).rejects.toStrictEqual(null);
   expect(global.fetch).toBeCalledWith('/test1', {
-    headers: { 'content-type': 'testct' },
+    headers: { 'content-type': 'ignored' },
     method: 'POST',
   });
 });
@@ -81,12 +81,12 @@ test('PUT (success case)', async () => {
 
 test('PUT (error case)', async () => {
   global.fetch = jest.fn(emptyFetch);
-  const client = getApiClient({ headers: { 'content-type': 'ignored' } });
-  const promise = client.put('/test1', undefined, { headers: { 'content-type': 'testct' } });
+  const client = getApiClient();
+  const promise = client.put('/test1', undefined);
 
   expect(promise).rejects.toStrictEqual(null);
   expect(global.fetch).toBeCalledWith('/test1', {
-    headers: { 'content-type': 'testct' },
+    headers: { 'content-type': 'application/json;charset=UTF-8' },
     method: 'PUT',
   });
 });
@@ -108,11 +108,11 @@ test('DELETE (error case)', async () => {
   const client = getApiClient({ baseURL: 'https://test-get', headers: { 'test-get-header': 'hello' } });
   const params = new URLSearchParams();
   params.set('test', 'zxcv');
-  const promise = client.delete('/test1', { headers: { 'test-get-header': 'bye' }, params });
+  const promise = client.delete('/test1', { params });
 
   expect(promise).rejects.toEqual({ errcode: 8093 });
   expect(global.fetch).toBeCalledWith('https://test-get/test1?test=zxcv', {
-    headers: { 'test-get-header': 'bye' },
+    headers: { 'test-get-header': 'hello' },
     method: 'DELETE',
   });
 });

@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { serviceContext } from '@/contexts/ServiceContext';
-import { useTokenContext } from '@/contexts/tokenContext';
 import { useGuardContext } from '@/hooks/useGuardContext';
 
 type Props = {
@@ -45,17 +44,15 @@ export const MainLectureDeleteDialog = ({ open, onClose, timetableId, lectureId,
 };
 
 const useDeleteLecture = (id?: string, lecture_id?: string) => {
-  const { token } = useTokenContext();
   const queryClient = useQueryClient();
   const { timetableService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: () => {
-      if (!token) throw new Error('no token');
       if (!id) throw new Error('no tt id');
       if (!lecture_id) throw new Error('no lecture_id');
 
-      return timetableService.deleteLecture(token, { id, lecture_id });
+      return timetableService.deleteLecture({ id, lecture_id });
     },
     onSuccess: () => queryClient.invalidateQueries(),
   });

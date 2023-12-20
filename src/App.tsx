@@ -68,14 +68,14 @@ export const App = () => {
   const [token, setToken] = useState(tokenService.getToken());
 
   const tokenContextValue = {
-    token,
-    saveToken: (token: string, permanent: boolean) => {
-      setToken(token);
-      tokenService.saveToken(token, permanent);
+    saveToken: (newToken: string, permanent: boolean) => {
+      setToken(newToken);
+      tokenService.saveToken(newToken, permanent);
     },
     clearToken: () => {
       setToken(null);
       tokenService.clearToken();
+      queryClient.resetQueries();
     },
   };
 
@@ -100,7 +100,7 @@ export const App = () => {
   const unauthorizedServices = getUnauthorizedServices(ENV);
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider key={token} client={queryClient}>
       <GlobalStyles />
       <tokenContext.Provider value={tokenContextValue}>
         {token ? (

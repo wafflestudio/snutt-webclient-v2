@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { serviceContext } from '@/contexts/ServiceContext';
-import { useTokenContext } from '@/contexts/tokenContext';
 import type { FullTimetable } from '@/entities/timetable';
 import { useGuardContext } from '@/hooks/useGuardContext';
 
@@ -60,15 +59,13 @@ export const MainRenameTimetableDialog = ({ isOpen, close, timetable }: Props) =
 };
 
 const useRenameTimetable = (id?: string) => {
-  const { token } = useTokenContext();
   const queryClient = useQueryClient();
   const { timetableService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: (title: string) => {
-      if (!token) throw new Error('no token');
       if (!id) throw new Error('no tt');
-      return timetableService.renameTimetable(token, id, title);
+      return timetableService.renameTimetable(id, title);
     },
     onSuccess: () => queryClient.invalidateQueries(),
   });

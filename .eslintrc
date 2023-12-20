@@ -1,7 +1,12 @@
 {
-  "extends": ["plugin:react-hooks/recommended", "plugin:prettier/recommended", "plugin:@typescript-eslint/recommended"],
+  "extends": [
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@tanstack/eslint-plugin-query/recommended"
+  ],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["react", "@typescript-eslint", "simple-import-sort"],
+  "plugins": ["react", "@typescript-eslint", "simple-import-sort", "@tanstack/query"],
   "root": true,
   "rules": {
     "@typescript-eslint/no-empty-interface": "off",
