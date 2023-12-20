@@ -2,8 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
-import { userService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { queryKey } from '@/utils/query-key-factory';
 
 export const LayoutProfile = () => {
@@ -26,6 +27,7 @@ export const LayoutProfile = () => {
 
 const useMyInfo = () => {
   const { token } = useTokenContext();
+  const { userService } = useGuardContext(serviceContext);
 
   return useQuery({
     queryKey: queryKey('user/info', { token }),

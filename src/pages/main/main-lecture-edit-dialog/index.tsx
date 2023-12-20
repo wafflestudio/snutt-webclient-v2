@@ -5,11 +5,12 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { ErrorDialog } from '@/components/error-dialog';
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { Color } from '@/entities/color';
 import type { Lecture } from '@/entities/lecture';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
-import { lectureService, timetableService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
 
 import { type LectureEditForm, MainLectureEditForm } from '../main-lecture-edit-form';
 import { MainLectureDeleteDialog } from './main-lecture-delete-dialog';
@@ -25,6 +26,7 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
   const [draft, setDraft] = useState<Partial<LectureEditForm>>({});
   const { open: openErrorDialog, isOpen: isOpenErrorDialog, onClose: onCloseErrorDialog, message } = useErrorDialog();
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const { lectureService } = useGuardContext(serviceContext);
 
   const { mutate } = useUpdateLecture(timetableId, lecture?._id);
 
@@ -115,6 +117,7 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
 const useUpdateLecture = (id?: string, lectureId?: string) => {
   const { token } = useTokenContext();
   const queryClient = useQueryClient();
+  const { timetableService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: (body: Parameters<typeof timetableService.updateLecture>[2]) => {

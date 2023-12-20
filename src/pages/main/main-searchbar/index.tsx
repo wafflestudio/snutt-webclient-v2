@@ -4,11 +4,12 @@ import styled from 'styled-components';
 
 import { IcFilter } from '@/components/icons/ic-filter';
 import { IcSearch } from '@/components/icons/ic-search';
+import { serviceContext } from '@/contexts/ServiceContext';
 import type { SearchFilter } from '@/entities/search';
 import type { FullTimetable } from '@/entities/timetable';
 import { useCourseBooks } from '@/hooks/useCourseBooks';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { useYearSemester } from '@/hooks/useYearSemester';
-import { timeMaskService } from '@/services';
 import type { ArrayElement } from '@/utils/array-element';
 
 import { MainSearchbarFilterDialog } from './main-searchbar-filter-dialog';
@@ -49,6 +50,7 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable, resetSearchResul
   const [searchForm, setSearchForm] = useState<SearchForm>(initialForm);
   const { year, semester } = useYearSemester();
   const { data: courseBooks } = useCourseBooks();
+  const { timeMaskService } = useGuardContext(serviceContext);
   const currentCourseBook = courseBooks?.find((c) => c.year === year && c.semester === semester);
   const currentCourseBookUpdatedAt = currentCourseBook
     ? dayjs(currentCourseBook.updated_at).format('YYYY. MM. DD')

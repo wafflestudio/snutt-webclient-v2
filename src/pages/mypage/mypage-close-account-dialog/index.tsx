@@ -5,8 +5,9 @@ import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
-import { authService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { get } from '@/utils/object/get';
 
 const CONFIRM_TEXT = '탈퇴';
@@ -64,6 +65,7 @@ export const MypageCloseAccountDialog = ({ onClose, isOpen }: Props) => {
 
 const useCloseAccount = () => {
   const { token } = useTokenContext();
+  const { authService } = useGuardContext(serviceContext);
   return useMutation({
     mutationFn: () => {
       if (!token) throw new Error('no token');

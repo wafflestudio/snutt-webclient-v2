@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
+import { serviceContext } from '@/contexts/ServiceContext';
 import type { Hour12, Hour24, HourMinute12, HourMinute24, Minute } from '@/entities/time';
-import { hourMinutePickerService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
 
 import { Clock } from '../clock';
 import { Dialog } from '../dialog';
@@ -25,6 +25,7 @@ enum Step {
 export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMinute, range }: Props) => {
   const [step, setStep] = useState(Step.HOUR);
   const [state, setState] = useState<Partial<HourMinute12>>({});
+  const { hourMinutePickerService, errorService } = useGuardContext(serviceContext);
 
   const { amPm, hour, minute } = state;
   const ampmWithDefault = hourMinutePickerService.getAmPmWithDefault(amPm, defaultHourMinute);
@@ -42,7 +43,7 @@ export const HourMinutePickDialog = ({ isOpen, onClose, onSubmit, defaultHourMin
     if (!isValid) return;
 
     const submitHourMinute = hourMinutePickerService.getSubmitHourMinute({ amPm, hour, minute }, { defaultHourMinute });
-    if (submitHourMinute === null) return truffleClient.capture(new Error('submitHourMinute is null'));
+    if (submitHourMinute === null) return errorService.captureError(new Error('submitHourMinute is null'));
 
     onSubmit?.(submitHourMinute.hour, submitHourMinute.minute);
     handleClose();

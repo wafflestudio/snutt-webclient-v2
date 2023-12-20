@@ -2,10 +2,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import { ErrorDialog } from '@/components/error-dialog';
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { BaseLecture } from '@/entities/lecture';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
-import { timetableService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { get } from '@/utils/object/get';
 
 import { MainLectureListItem } from '../../main-lecture-listitem';
@@ -63,6 +64,7 @@ export const MainSearchLectureListItem = ({ lecture, timetableId, setPreviewLect
 const useAddLecture = (id?: string, lectureId?: string) => {
   const { token } = useTokenContext();
   const queryClient = useQueryClient();
+  const { timetableService } = useGuardContext(serviceContext);
   return useMutation({
     mutationFn: () => {
       if (!token) throw new Error('no token');

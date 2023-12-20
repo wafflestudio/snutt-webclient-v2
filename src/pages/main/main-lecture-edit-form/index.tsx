@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
+import { serviceContext } from '@/contexts/ServiceContext';
 import type { Color } from '@/entities/color';
 import type { WithInternalId } from '@/entities/id';
 import type { ClassTime, Lecture } from '@/entities/lecture';
-import { colorService, lectureService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
 
 import { MainLectureEditFormColor } from './main-lecture-edit-form-color';
 import { MainLectureEditFormTime } from './main-lecture-edit-form-time';
@@ -27,6 +28,7 @@ type Props = {
 
 export const MainLectureEditForm = ({ draft, defaultState = {}, setDraft }: Props) => {
   const { data: colorList } = useColorList();
+  const { lectureService } = useGuardContext(serviceContext);
 
   const currentColor =
     draft.color ??
@@ -91,8 +93,10 @@ export const MainLectureEditForm = ({ draft, defaultState = {}, setDraft }: Prop
   );
 };
 
-const useColorList = () =>
-  useQuery({ queryKey: ['colors'], queryFn: () => colorService.getColorList(), staleTime: Infinity });
+const useColorList = () => {
+  const { colorService } = useGuardContext(serviceContext);
+  return useQuery({ queryKey: ['colors'], queryFn: () => colorService.getColorList(), staleTime: Infinity });
+};
 
 const Wrapper = styled.div``;
 

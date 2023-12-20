@@ -1,14 +1,16 @@
 import { useEffect } from 'react';
 import { useRouteError } from 'react-router-dom';
 
-import { truffleClient } from '@/clients/truffle';
+import { serviceContext } from '@/contexts/ServiceContext';
+import { useGuardContext } from '@/hooks/useGuardContext';
 
 export const ErrorPage = () => {
   const error = useRouteError();
+  const { errorService } = useGuardContext(serviceContext);
 
   useEffect(() => {
-    truffleClient.capture(new Error(JSON.stringify(error)));
-  }, [error]);
+    errorService.captureError(new Error(JSON.stringify(error)));
+  }, [errorService, error]);
 
   return <div>Error</div>;
 };

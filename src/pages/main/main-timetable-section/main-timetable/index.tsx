@@ -2,10 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import styled, { css, keyframes } from 'styled-components';
 
 import { Button } from '@/components/button';
+import { serviceContext } from '@/contexts/ServiceContext';
 import type { BaseLecture } from '@/entities/lecture';
 import { DAY_LABEL_MAP } from '@/entities/time';
 import type { FullTimetable } from '@/entities/timetable';
-import { colorService, lectureService, timetableViewService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { rangeToArray } from '@/utils/rangeToArray';
 
 type Props = {
@@ -28,6 +29,7 @@ export const MainTimeTable = ({
   openCreateLectureDialog,
 }: Props) => {
   const { data: colorList } = useColorList();
+  const { lectureService, timetableViewService } = useGuardContext(serviceContext);
 
   const allClassTimes = timetable.lecture_list
     .flatMap((l) => l.class_time_json)
@@ -131,8 +133,10 @@ export const MainTimeTable = ({
   );
 };
 
-const useColorList = () =>
-  useQuery({ queryKey: ['colors'], queryFn: () => colorService.getColorList(), staleTime: Infinity });
+const useColorList = () => {
+  const { colorService } = useGuardContext(serviceContext);
+  return useQuery({ queryKey: ['colors'], queryFn: () => colorService.getColorList(), staleTime: Infinity });
+};
 
 const Wrapper = styled.div<{ $columnCount: number; $rowCount: number }>`
   display: grid;

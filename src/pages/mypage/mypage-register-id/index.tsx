@@ -4,15 +4,17 @@ import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { ErrorDialog } from '@/components/error-dialog';
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
-import { authService, errorService, userService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { get } from '@/utils/object/get';
 
 export const MypageRegisterId = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const { authService, errorService } = useGuardContext(serviceContext);
 
   const { isOpen, message, onClose, open } = useErrorDialog();
 
@@ -67,6 +69,7 @@ export const MypageRegisterId = () => {
 const useAddIdPassword = () => {
   const { token, saveToken } = useTokenContext();
   const queryClient = useQueryClient();
+  const { userService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: (body: { id: string; password: string }) => {

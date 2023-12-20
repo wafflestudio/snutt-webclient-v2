@@ -6,15 +6,17 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { ErrorDialog } from '@/components/error-dialog';
 import { Layout } from '@/components/layout';
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
-import { authService, errorService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { get } from '@/utils/object/get';
 
 export const SignUp = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const { authService, errorService } = useGuardContext(serviceContext);
 
   const { isOpen, message, onClose, open } = useErrorDialog();
   const { saveToken } = useTokenContext();
@@ -85,6 +87,7 @@ export const SignUp = () => {
 };
 
 const useSignUp = () => {
+  const { authService } = useGuardContext(serviceContext);
   return useMutation({ mutationFn: (body: { id: string; password: string }) => authService.signUp(body) });
 };
 
