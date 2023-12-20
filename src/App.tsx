@@ -4,16 +4,25 @@ import { useMemo, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
+import { getApiClient } from '@/clients/api';
 import { getStorageClient } from '@/clients/storage';
 import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
+// 이 파일은 전체 프로젝트에서 유일하게 @/constants/environment 에 접근할 수 있습니다.
+// eslint-disable-next-line no-restricted-imports
+import { viteEnvironmentVariables } from '@/constants/environment';
 import { serviceContext } from '@/contexts/ServiceContext';
 import { ErrorPage } from '@/pages/error';
 import { Main } from '@/pages/main';
 import { MyPage } from '@/pages/mypage';
 import { SignUp } from '@/pages/signup';
+import { getAuthRepository } from '@/repositories/authRepository';
+import { getEnvRepository } from '@/repositories/envRepository';
 import { getStorageRepository } from '@/repositories/storageRepository';
+import { getUserRepository } from '@/repositories/userRepository';
+import { getAuthService } from '@/usecases/authService';
+import { getEnvService } from '@/usecases/envService';
 import { getHourMinutePickerService } from '@/usecases/hourMinutePickerService';
 import { getHourMinuteService } from '@/usecases/hourMinuteService';
 import { getLectureService } from '@/usecases/lectureService';
@@ -68,15 +77,35 @@ function App() {
   const services = useMemo(() => {
     const persistStorage = getStorageClient(true);
     const temporaryStorage = getStorageClient(false);
+
+    const envRepository = getEnvRepository({ external: [viteEnvironmentVariables] });
+    const envService = getEnvService({ repositories: [envRepository] });
+
+    const snuttApiClient = getApiClient({
+      baseURL: envService.getBaseUrl(),
+      headers: { 'x-access-apikey': envService.getApiKey() },
+    });
+
+    const userRepository = getUserRepository({ clients: [snuttApiClient] });
     const storageRepository = getStorageRepository({ clients: [persistStorage, temporaryStorage] });
+    const authRepository = getAuthRepository({ clients: [snuttApiClient] });
 
     const lectureService = getLectureService();
     const timeMaskService = getTimeMaskService();
     const hourMinuteService = getHourMinuteService();
     const hourMinutePickerService = getHourMinutePickerService({ services: [hourMinuteService] });
     const timetableViewService = getTimetableViewService({ repositories: [storageRepository] });
+    const authService = getAuthService({ repositories: [storageRepository, authRepository, userRepository] });
 
-    return { lectureService, timeMaskService, hourMinutePickerService, hourMinuteService, timetableViewService };
+    return {
+      lectureService,
+      timeMaskService,
+      hourMinutePickerService,
+      hourMinuteService,
+      timetableViewService,
+      authService,
+      envService,
+    };
   }, []);
 
   return (

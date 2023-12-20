@@ -4,9 +4,11 @@ import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { ErrorDialog } from '@/components/error-dialog';
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
-import { authService, errorService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
+import { errorService } from '@/services';
 import { get } from '@/utils/object/get';
 
 export const MypageChangePassword = () => {
@@ -14,6 +16,7 @@ export const MypageChangePassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const { saveToken } = useTokenContext();
+  const { authService } = useGuardContext(serviceContext);
 
   const { isOpen, message, onClose, open } = useErrorDialog();
 
@@ -79,6 +82,7 @@ export const MypageChangePassword = () => {
 
 const useChangePassword = () => {
   const { token } = useTokenContext();
+  const { authService } = useGuardContext(serviceContext);
   return useMutation({
     mutationFn: (body: { old_password: string; new_password: string }) => {
       if (!token) throw new Error('no token');

@@ -4,7 +4,9 @@ import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
-import { authService, errorService } from '@/services';
+import { serviceContext } from '@/contexts/ServiceContext';
+import { useGuardContext } from '@/hooks/useGuardContext';
+import { errorService } from '@/services';
 import { get } from '@/utils/object/get';
 
 type Props = { open: boolean; onClose: () => void };
@@ -53,6 +55,7 @@ export const LoginFindIdDialog = ({ open, onClose }: Props) => {
 };
 
 const useFindId = () => {
+  const { authService } = useGuardContext(serviceContext);
   return useMutation({ mutationFn: (body: { email: string }) => authService.findIdByEmail(body) });
 };
 

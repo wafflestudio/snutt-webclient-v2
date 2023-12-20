@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 
+import { type AuthService } from '@/usecases/authService';
 import { type HourMinutePickerService } from '@/usecases/hourMinutePickerService';
 import { type HourMinuteService } from '@/usecases/hourMinuteService';
 import { type LectureService } from '@/usecases/lectureService';
@@ -7,6 +8,7 @@ import { type TimeMaskService } from '@/usecases/timeMaskService';
 import { type TimetableViewService } from '@/usecases/timetableViewService';
 
 export type ServiceContext = {
+  authService: AuthService;
   lectureService: LectureService;
   timeMaskService: TimeMaskService;
   hourMinuteService: HourMinuteService;

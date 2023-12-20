@@ -1,6 +1,7 @@
 import { createContext, type PropsWithChildren, useContext, useMemo, useState } from 'react';
 
-import { authService } from '@/services';
+import { serviceContext } from '@/contexts/ServiceContext';
+import { useGuardContext } from '@/hooks/useGuardContext';
 
 type TokenContext = {
   token: string | null;
@@ -11,6 +12,7 @@ type TokenContext = {
 const tokenContext = createContext<TokenContext | null>(null);
 
 export const TokenContextProvider = ({ children }: PropsWithChildren<unknown>) => {
+  const { authService } = useGuardContext(serviceContext);
   const [token, setToken] = useState(authService.getToken());
 
   const { Provider } = tokenContext;
@@ -27,7 +29,7 @@ export const TokenContextProvider = ({ children }: PropsWithChildren<unknown>) =
         authService.clearToken();
       },
     };
-  }, [token]);
+  }, [token, authService]);
 
   return <Provider value={value}>{children}</Provider>;
 };

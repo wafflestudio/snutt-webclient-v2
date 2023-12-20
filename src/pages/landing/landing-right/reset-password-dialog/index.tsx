@@ -5,7 +5,9 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { Progress } from '@/components/progress';
-import { authService, errorService } from '@/services';
+import { serviceContext } from '@/contexts/ServiceContext';
+import { useGuardContext } from '@/hooks/useGuardContext';
+import { errorService } from '@/services';
 import { get } from '@/utils/object/get';
 
 type Props = { open: boolean; onClose: () => void };
@@ -168,17 +170,29 @@ export const LoginResetPasswordDialog = ({ open, onClose }: Props) => {
   );
 };
 
-const useCheckEmail = () =>
-  useMutation({ mutationFn: (body: { user_id: string }) => authService.passwordResetCheckEmail(body) });
+const useCheckEmail = () => {
+  const { authService } = useGuardContext(serviceContext);
+  return useMutation({ mutationFn: (body: { user_id: string }) => authService.passwordResetCheckEmail(body) });
+};
 
-const useSendCodeEmail = () =>
-  useMutation({ mutationFn: (body: { user_email: string }) => authService.sendPasswordResetVerificationEmail(body) });
+const useSendCodeEmail = () => {
+  const { authService } = useGuardContext(serviceContext);
+  return useMutation({
+    mutationFn: (body: { user_email: string }) => authService.sendPasswordResetVerificationEmail(body),
+  });
+};
 
-const useVerifyCode = () =>
-  useMutation({ mutationFn: (body: { user_id: string; code: string }) => authService.verifyPasswordResetCode(body) });
+const useVerifyCode = () => {
+  const { authService } = useGuardContext(serviceContext);
+  return useMutation({
+    mutationFn: (body: { user_id: string; code: string }) => authService.verifyPasswordResetCode(body),
+  });
+};
 
-const useResetPassword = () =>
-  useMutation({ mutationFn: (body: { user_id: string; password: string }) => authService.resetPassword(body) });
+const useResetPassword = () => {
+  const { authService } = useGuardContext(serviceContext);
+  return useMutation({ mutationFn: (body: { user_id: string; password: string }) => authService.resetPassword(body) });
+};
 
 const Content = styled(Dialog.Content)`
   width: 300px;
