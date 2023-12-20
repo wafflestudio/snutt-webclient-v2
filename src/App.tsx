@@ -19,6 +19,7 @@ import { MyPage } from '@/pages/mypage';
 import { SignUp } from '@/pages/signup';
 import { getAuthRepository } from '@/repositories/authRepository';
 import { getEnvRepository } from '@/repositories/envRepository';
+import { getNotificationRepository } from '@/repositories/notificationRepository';
 import { getSearchRepository } from '@/repositories/searchRepository';
 import { getSemesterRepository } from '@/repositories/semesterRepository';
 import { getStorageRepository } from '@/repositories/storageRepository';
@@ -29,6 +30,7 @@ import { getEnvService } from '@/usecases/envService';
 import { getHourMinutePickerService } from '@/usecases/hourMinutePickerService';
 import { getHourMinuteService } from '@/usecases/hourMinuteService';
 import { getLectureService } from '@/usecases/lectureService';
+import { getNotificationService } from '@/usecases/notificationService';
 import { getSearchService } from '@/usecases/searchService';
 import { getSemesterService } from '@/usecases/semesterService';
 import { getTimeMaskService } from '@/usecases/timeMaskService';
@@ -98,7 +100,9 @@ function App() {
     const timetableRepository = getTimetableRepository({ clients: [snuttApiClient] });
     const semesterRepository = getSemesterRepository({ clients: [snuttApiClient] });
     const searchRepository = getSearchRepository({ clients: [snuttApiClient] });
+    const notificationRepository = getNotificationRepository({ clients: [snuttApiClient] });
 
+    const notificationService = getNotificationService({ repositories: [notificationRepository] });
     const searchService = getSearchService({ repositories: [searchRepository] });
     const timetableService = getTimetableService({ repositories: [timetableRepository] });
     const lectureService = getLectureService();
@@ -120,6 +124,7 @@ function App() {
       timetableService,
       semesterService,
       searchService,
+      notificationService,
     };
   }, []);
 

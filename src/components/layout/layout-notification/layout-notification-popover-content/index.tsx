@@ -7,9 +7,10 @@ import { IcExclamation } from '@/components/icons/ic-exclamation';
 import { IcRecycle } from '@/components/icons/ic-recycle';
 import { IcTrash } from '@/components/icons/ic-trash';
 import { usePopoverContext } from '@/components/popover';
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { NotificationType } from '@/entities/notification';
-import { notificationService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { queryKey } from '@/utils/query-key-factory';
 
 export const LayoutNotificationPopoverContent = () => {
@@ -43,6 +44,7 @@ export const LayoutNotificationPopoverContent = () => {
 
 const useNotificationList = (show: boolean) => {
   const { token } = useTokenContext();
+  const { notificationService } = useGuardContext(serviceContext);
 
   return useQuery({
     queryKey: queryKey('notifications', { token }),
