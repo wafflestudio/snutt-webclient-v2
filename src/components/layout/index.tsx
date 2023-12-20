@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
 import { IcLogo } from '@/components/icons/ic-logo';
+import { serviceContext } from '@/contexts/ServiceContext';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { BREAKPOINT } from '@/styles/constants';
 
 import { LayoutFooter } from './layout-footer';
@@ -12,6 +14,8 @@ import { LayoutProfile } from './layout-profile';
 type Props = { headerChildren?: ReactNode };
 
 export const Layout = ({ children, headerChildren }: PropsWithChildren<Props>) => {
+  const { feedbackService } = useGuardContext(serviceContext);
+
   return (
     <div>
       <Header>
@@ -30,7 +34,7 @@ export const Layout = ({ children, headerChildren }: PropsWithChildren<Props>) =
         </HeaderInner>
       </Header>
       <Main>{children}</Main>
-      <LayoutFooter />
+      <LayoutFooter feedbackService={feedbackService} />
     </div>
   );
 };

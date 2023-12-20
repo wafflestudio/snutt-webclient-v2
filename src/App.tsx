@@ -1,7 +1,7 @@
 import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { getTruffleClient } from '@wafflestudio/truffle-browser';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
@@ -11,12 +11,11 @@ import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { envContext } from '@/contexts/EnvContext';
 import { serviceContext } from '@/contexts/ServiceContext';
-import { type TokenContext, tokenContext } from '@/contexts/tokenContext';
+import { tokenContext } from '@/contexts/tokenContext';
 import { useGuardContext } from '@/hooks/useGuardContext';
 import { ErrorPage } from '@/pages/error';
 import { Main } from '@/pages/main';
 import { MyPage } from '@/pages/mypage';
-import { SignUp } from '@/pages/signup';
 import { getAuthRepository } from '@/repositories/authRepository';
 import { getColorRepository } from '@/repositories/colorRepository';
 import { getErrorRepository } from '@/repositories/errorRepository';
@@ -40,6 +39,7 @@ import { getSemesterService } from '@/usecases/semesterService';
 import { getTimeMaskService } from '@/usecases/timeMaskService';
 import { getTimetableService } from '@/usecases/timetableService';
 import { getTimetableViewService } from '@/usecases/timetableViewService';
+import { getTokenService } from '@/usecases/tokenService';
 import { getUserService } from '@/usecases/userService';
 import { get } from '@/utils/object/get';
 
@@ -50,94 +50,34 @@ export const App = () => {
   const [isWrongTokenDialogOpen, setWrongTokenDialogOpen] = useState(false);
   const ENV = useGuardContext(envContext);
 
-  const services = useMemo(() => {
-    const persistStorage = getStorageClient(true);
-    const temporaryStorage = getStorageClient(false);
-
-    const truffleClient = getTruffleClient({
+  const errorService = getErrorService({
+    repositories: [getErrorRepository()],
+    errorCaptureClient: getTruffleClient({
       enabled: ENV.NODE_ENV === 'production' && ENV.APP_ENV !== 'test',
       app: { name: 'snutt-webclient-v2', phase: ENV.APP_ENV },
       apiKey: ENV.TRUFFLE_API_KEY,
-    });
-    const snuttApiClient = getApiClient({ baseURL: ENV.API_BASE_URL, headers: { 'x-access-apikey': ENV.API_KEY } });
+    }),
+  });
 
-    const userRepository = getUserRepository({ clients: [snuttApiClient] });
-    const storageRepository = getStorageRepository({ clients: [persistStorage, temporaryStorage] });
-    const authRepository = getAuthRepository({ clients: [snuttApiClient] });
-    const timetableRepository = getTimetableRepository({ clients: [snuttApiClient] });
-    const semesterRepository = getSemesterRepository({ clients: [snuttApiClient] });
-    const searchRepository = getSearchRepository({ clients: [snuttApiClient] });
-    const notificationRepository = getNotificationRepository({ clients: [snuttApiClient] });
-    const feedbackRepository = getFeedbackRepository({ clients: [snuttApiClient] });
-    const errorRepository = getErrorRepository();
-    const colorRepository = getColorRepository({ clients: [snuttApiClient] });
+  const persistStorage = getStorageClient(true);
+  const temporaryStorage = getStorageClient(false);
+  const storageRepository = getStorageRepository({ clients: [persistStorage, temporaryStorage] });
+  const tokenService = getTokenService({ storageRepository });
+  const timetableViewService = getTimetableViewService({ repositories: [storageRepository] });
 
-    const userService = getUserService({ repositories: [userRepository] });
-    const colorService = getColorService({ repositories: [colorRepository] });
-    const errorService = getErrorService({ repositories: [errorRepository], errorCaptureClient: truffleClient });
-    const feedbackService = getFeedbackService({ repositories: [feedbackRepository] });
-    const notificationService = getNotificationService({ repositories: [notificationRepository] });
-    const searchService = getSearchService({ repositories: [searchRepository] });
-    const timetableService = getTimetableService({ repositories: [timetableRepository] });
-    const lectureService = getLectureService();
-    const timeMaskService = getTimeMaskService();
-    const hourMinuteService = getHourMinuteService();
-    const hourMinutePickerService = getHourMinutePickerService({ services: [hourMinuteService] });
-    const timetableViewService = getTimetableViewService({ repositories: [storageRepository] });
-    const authService = getAuthService({ repositories: [storageRepository, authRepository, userRepository] });
-    const semesterService = getSemesterService({ repositories: [semesterRepository] });
+  const [token, setToken] = useState(tokenService.getToken());
 
-    return {
-      lectureService,
-      timeMaskService,
-      hourMinutePickerService,
-      hourMinuteService,
-      timetableViewService,
-      authService,
-      timetableService,
-      semesterService,
-      searchService,
-      notificationService,
-      feedbackService,
-      errorService,
-      colorService,
-      userService,
-    };
-  }, [ENV]);
-
-  const [token, setToken] = useState(services.authService.getToken());
-
-  const tokenContextValue = useMemo((): TokenContext => {
-    return {
-      token,
-      saveToken: (token, permanent) => {
-        setToken(token);
-        services.authService.saveToken(token, permanent);
-      },
-      clearToken: () => {
-        setToken(null);
-        services.authService.clearToken();
-      },
-    };
-  }, [token, services]);
-
-  const router = createBrowserRouter([
-    {
-      children: [
-        ...(token
-          ? [
-              { path: '/', element: <Main /> },
-              { path: '/mypage', element: <MyPage /> },
-            ]
-          : [
-              { path: '/', element: <Landing /> },
-              { path: '/signup', element: <SignUp /> },
-            ]),
-        { path: '/*', element: <NotFoundPage /> },
-      ],
-      errorElement: <ErrorPage />,
+  const tokenContextValue = {
+    token,
+    saveToken: (token: string, permanent: boolean) => {
+      setToken(token);
+      tokenService.saveToken(token, permanent);
     },
-  ]);
+    clearToken: () => {
+      setToken(null);
+      tokenService.clearToken();
+    },
+  };
 
   const onClickLogout = () => {
     tokenContextValue.clearToken();
@@ -150,31 +90,59 @@ export const App = () => {
         queryCache: new QueryCache({
           onError: (error) => {
             if (get(error, ['errcode']) === 8194) setWrongTokenDialogOpen(true);
-            else services.errorService.captureError(error);
+            else errorService.captureError(error);
           },
         }),
         defaultOptions: { queries: { refetchOnWindowFocus: false, retry: false } },
       }),
   );
 
+  const unauthorizedServices = getUnauthorizedServices(ENV);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <serviceContext.Provider value={services}>
-        <tokenContext.Provider value={tokenContextValue}>
-          <RouterProvider router={router} />
-          <GlobalStyles />
-          <ReactQueryDevtools />
-          <Dialog open={isWrongTokenDialogOpen}>
-            <Dialog.Title>인증정보가 올바르지 않아요</Dialog.Title>
-            <Dialog.Content>다시 로그인해 주세요</Dialog.Content>
-            <Dialog.Actions>
-              <Button data-testid="wrong-token-dialog-logout" onClick={onClickLogout}>
-                로그아웃하기
-              </Button>
-            </Dialog.Actions>
-          </Dialog>
-        </tokenContext.Provider>
-      </serviceContext.Provider>
+      <GlobalStyles />
+      <tokenContext.Provider value={tokenContextValue}>
+        {token ? (
+          <serviceContext.Provider
+            value={{
+              ...getAuthorizedServices(token, ENV),
+              errorService,
+              timetableViewService,
+              feedbackService: unauthorizedServices.feedbackService,
+            }}
+          >
+            <RouterProvider
+              router={createBrowserRouter([
+                {
+                  children: [
+                    { path: '/', element: <Main /> },
+                    { path: '/mypage', element: <MyPage /> },
+                    { path: '/*', element: <NotFoundPage /> },
+                  ],
+                  errorElement: <ErrorPage errorService={errorService} />,
+                },
+              ])}
+            />
+            <Dialog open={isWrongTokenDialogOpen}>
+              <Dialog.Title>인증정보가 올바르지 않아요</Dialog.Title>
+              <Dialog.Content>다시 로그인해 주세요</Dialog.Content>
+              <Dialog.Actions>
+                <Button data-testid="wrong-token-dialog-logout" onClick={onClickLogout}>
+                  로그아웃하기
+                </Button>
+              </Dialog.Actions>
+            </Dialog>
+          </serviceContext.Provider>
+        ) : (
+          <Landing
+            feedbackService={unauthorizedServices.feedbackService}
+            authService={unauthorizedServices.authService}
+            errorService={errorService}
+          />
+        )}
+      </tokenContext.Provider>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 };
@@ -190,3 +158,66 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
   }
 `;
+
+const getUnauthorizedServices = (ENV: { API_BASE_URL: string; API_KEY: string }) => {
+  const snuttApiClient = getApiClient({
+    baseURL: ENV.API_BASE_URL,
+    headers: { 'x-access-apikey': ENV.API_KEY },
+  });
+  const authRepository = getAuthRepository({ clients: [snuttApiClient] });
+  const feedbackRepository = getFeedbackRepository({ clients: [snuttApiClient] });
+  const userRepository = getUserRepository({ clients: [snuttApiClient] });
+  const authService = getAuthService({ repositories: [authRepository, userRepository] });
+  const feedbackService = getFeedbackService({ repositories: [feedbackRepository] });
+
+  return { authService, feedbackService };
+};
+
+const getAuthorizedServices = (
+  token: string,
+  ENV: {
+    NODE_ENV: 'production' | 'development';
+    APP_ENV: 'prod' | 'dev' | 'test';
+    API_BASE_URL: string;
+    API_KEY: string;
+  },
+) => {
+  const snuttApiClient = getApiClient({
+    baseURL: ENV.API_BASE_URL,
+    headers: { 'x-access-apikey': ENV.API_KEY, 'x-access-token': token },
+  });
+
+  const userRepository = getUserRepository({ clients: [snuttApiClient] });
+  const authRepository = getAuthRepository({ clients: [snuttApiClient] });
+  const timetableRepository = getTimetableRepository({ clients: [snuttApiClient] });
+  const semesterRepository = getSemesterRepository({ clients: [snuttApiClient] });
+  const searchRepository = getSearchRepository({ clients: [snuttApiClient] });
+  const notificationRepository = getNotificationRepository({ clients: [snuttApiClient] });
+  const colorRepository = getColorRepository({ clients: [snuttApiClient] });
+
+  const userService = getUserService({ repositories: [userRepository] });
+  const colorService = getColorService({ repositories: [colorRepository] });
+  const notificationService = getNotificationService({ repositories: [notificationRepository] });
+  const searchService = getSearchService({ repositories: [searchRepository] });
+  const timetableService = getTimetableService({ repositories: [timetableRepository] });
+  const lectureService = getLectureService();
+  const timeMaskService = getTimeMaskService();
+  const hourMinuteService = getHourMinuteService();
+  const hourMinutePickerService = getHourMinutePickerService({ services: [hourMinuteService] });
+  const authService = getAuthService({ repositories: [authRepository, userRepository] });
+  const semesterService = getSemesterService({ repositories: [semesterRepository] });
+
+  return {
+    lectureService,
+    timeMaskService,
+    hourMinutePickerService,
+    hourMinuteService,
+    authService,
+    timetableService,
+    semesterService,
+    searchService,
+    notificationService,
+    colorService,
+    userService,
+  };
+};

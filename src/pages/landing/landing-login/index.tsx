@@ -1,24 +1,22 @@
 import { useState } from 'react';
 import { type ReactFacebookFailureResponse, type ReactFacebookLoginInfo } from 'react-facebook-login';
 import FBLogin from 'react-facebook-login/dist/facebook-login-render-props';
-import { Link, useNavigate } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { envContext } from '@/contexts/EnvContext';
-import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { type CoreServerError } from '@/entities/error';
 import { useGuardContext } from '@/hooks/useGuardContext';
-import { LoginFindIdDialog } from '@/pages/landing/landing-right/find-id-dialog';
-import { LoginResetPasswordDialog } from '@/pages/landing/landing-right/reset-password-dialog';
+import { LoginFindIdDialog } from '@/pages/landing/landing-login/find-id-dialog';
+import { LoginResetPasswordDialog } from '@/pages/landing/landing-login/reset-password-dialog';
+import { type AuthService } from '@/usecases/authService';
+import { type ErrorService } from '@/usecases/errorService';
 
-type Props = { className?: string };
+type Props = { className?: string; authService: AuthService; errorService: ErrorService; onSignUp: () => void };
 
-export const LandingRight = ({ className }: Props) => {
-  const navigate = useNavigate();
+export const LandingLogin = ({ className, authService, errorService, onSignUp }: Props) => {
   const { saveToken } = useTokenContext();
-  const { authService, errorService } = useGuardContext(serviceContext);
   const { FACEBOOK_APP_ID } = useGuardContext(envContext);
   const [id, setId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -34,7 +32,6 @@ export const LandingRight = ({ className }: Props) => {
       const res = await authService.signIn({ type: 'LOCAL', id, password });
 
       saveToken(res.token, keepSignIn);
-      navigate('/');
     } catch (error) {
       const errorCode = (error as CoreServerError).errcode;
 
@@ -49,7 +46,6 @@ export const LandingRight = ({ className }: Props) => {
       const res = await authService.signIn({ type: 'FACEBOOK', fb_id: userInfo.id, fb_token: userInfo.accessToken });
 
       saveToken(res.token, keepSignIn);
-      navigate('/');
     } catch (error) {
       const errorCode = (error as CoreServerError).errcode;
 
@@ -103,19 +99,27 @@ export const LandingRight = ({ className }: Props) => {
             비밀번호 재설정
           </OtherButton>
         </FindWrapper>
-        <OtherLink data-testid="login-signup-link" to="/signup">
+        <OtherButton data-testid="login-signup-link" onClick={onSignUp}>
           회원가입
-        </OtherLink>
+        </OtherButton>
       </EtcWrapper>
-      <LoginFindIdDialog open={findIdDialogOpen} onClose={() => setFindIdDialogOpen(false)} />
-      <LoginResetPasswordDialog open={resetPasswordDialogOpen} onClose={() => setResetPasswordDialogOpen(false)} />
+      <LoginFindIdDialog
+        authService={authService}
+        errorService={errorService}
+        open={findIdDialogOpen}
+        onClose={() => setFindIdDialogOpen(false)}
+      />
+      <LoginResetPasswordDialog
+        authService={authService}
+        errorService={errorService}
+        open={resetPasswordDialogOpen}
+        onClose={() => setResetPasswordDialogOpen(false)}
+      />
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  background-color: #fafafa;
-  border-left: 1px solid #efefef;
   padding: 50px 20px;
   display: flex;
   flex-direction: column;
@@ -175,7 +179,8 @@ const ErrorMessage = styled.span`
   margin: 20px 0;
 `;
 
-const otherStyle = css`
+const OtherButton = styled.button`
+  padding: 0;
   font-size: 14px;
   text-decoration: none;
   color: #000;
@@ -186,15 +191,6 @@ const otherStyle = css`
     opacity: 0.8;
     text-decoration: underline;
   }
-`;
-
-const OtherLink = styled(Link)`
-  ${otherStyle};
-`;
-
-const OtherButton = styled.button`
-  padding: 0;
-  ${otherStyle};
   background: transparent;
   border: none;
   cursor: pointer;

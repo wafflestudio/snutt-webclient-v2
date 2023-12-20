@@ -1,27 +1,31 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { ErrorDialog } from '@/components/error-dialog';
-import { Layout } from '@/components/layout';
-import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
-import { useGuardContext } from '@/hooks/useGuardContext';
+import { type AuthService } from '@/usecases/authService';
+import { type ErrorService } from '@/usecases/errorService';
 import { get } from '@/utils/object/get';
 
-export const SignUp = () => {
+export const LandingSignUp = ({
+  authService,
+  errorService,
+  className,
+}: {
+  className?: string;
+  authService: AuthService;
+  errorService: ErrorService;
+}) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  const { authService, errorService } = useGuardContext(serviceContext);
 
   const { isOpen, message, onClose, open } = useErrorDialog();
   const { saveToken } = useTokenContext();
-  const { mutate } = useSignUp();
-  const navigate = useNavigate();
+  const { mutate } = useSignUp(authService);
 
   const onSubmit = async () => {
     if (password !== passwordConfirm) {
@@ -37,10 +41,7 @@ export const SignUp = () => {
     mutate(
       { id, password },
       {
-        onSuccess: ({ token }) => {
-          saveToken(token, false);
-          navigate('/');
-        },
+        onSuccess: ({ token }) => saveToken(token, false),
         onError: (err) => {
           const errcode = Number(get(err, ['errcode']));
           open(errorService.getErrorMessage(errcode, true));
@@ -50,44 +51,42 @@ export const SignUp = () => {
   };
 
   return (
-    <Layout>
-      <PasswordWrapper
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit();
-        }}
-      >
-        <h1>회원가입</h1>
+    <PasswordWrapper
+      className={className}
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+    >
+      <h1>회원가입</h1>
 
-        <Input data-testid="signup-id" placeholder="id" value={id} onChange={(e) => setId(e.target.value)} />
-        <Input
-          type="password"
-          data-testid="signup-pw"
-          placeholder="비밀번호"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Input
-          type="password"
-          data-testid="signup-pwc"
-          placeholder="비밀번호 확인"
-          value={passwordConfirm}
-          onChange={(e) => setPasswordConfirm(e.target.value)}
-        />
+      <Input data-testid="signup-id" placeholder="id" value={id} onChange={(e) => setId(e.target.value)} />
+      <Input
+        type="password"
+        data-testid="signup-pw"
+        placeholder="비밀번호"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <Input
+        type="password"
+        data-testid="signup-pwc"
+        placeholder="비밀번호 확인"
+        value={passwordConfirm}
+        onChange={(e) => setPasswordConfirm(e.target.value)}
+      />
 
-        <br />
+      <br />
 
-        <Button data-testid="signup-submit" disabled={!id || !password || !passwordConfirm}>
-          가입하기
-        </Button>
-      </PasswordWrapper>
+      <Button data-testid="signup-submit" disabled={!id || !password || !passwordConfirm}>
+        가입하기
+      </Button>
       <ErrorDialog message={message} isOpen={isOpen} onClose={onClose} />
-    </Layout>
+    </PasswordWrapper>
   );
 };
 
-const useSignUp = () => {
-  const { authService } = useGuardContext(serviceContext);
+const useSignUp = (authService: AuthService) => {
   return useMutation({ mutationFn: (body: { id: string; password: string }) => authService.signUp(body) });
 };
 

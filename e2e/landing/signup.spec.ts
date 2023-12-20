@@ -5,8 +5,9 @@ import { expect, test } from '@playwright/test';
 import { givenUser } from '../utils/user.ts';
 
 test('회원가입이 잘 실패된다 (비밀번호 확인 일치하지 않는 케이스)', async ({ page }) => {
-  await page.goto('/signup');
+  await page.goto('/');
   await givenUser(page, { login: false });
+  await page.getByTestId('login-signup-link').click();
   await page.getByTestId('signup-id').type('asdf');
   await page.getByTestId('signup-pw').type('qwer');
   await page.getByTestId('signup-pwc').type('zxcv');
@@ -15,8 +16,9 @@ test('회원가입이 잘 실패된다 (비밀번호 확인 일치하지 않는 
 });
 
 test('회원가입이 잘 실패한다 (비밀번호 포맷 잘못된 케이스)', async ({ page }) => {
-  await page.goto('/signup');
+  await page.goto('/');
   await givenUser(page, { login: false });
+  await page.getByTestId('login-signup-link').click();
   await page.getByTestId('signup-id').type('asdf');
   await page.getByTestId('signup-pw').type('qwer');
   await page.getByTestId('signup-pwc').type('qwer');
@@ -27,8 +29,9 @@ test('회원가입이 잘 실패한다 (비밀번호 포맷 잘못된 케이스)
 });
 
 test('회원가입이 잘 실패한다 (동일 id 존재)', async ({ page }) => {
-  await page.goto('/signup');
+  await page.goto('/');
   await givenUser(page, { login: false });
+  await page.getByTestId('login-signup-link').click();
   await page.getByTestId('signup-id').type('woohm402');
   await page.getByTestId('signup-pw').type('snuttSNUTT1!');
   await page.getByTestId('signup-pwc').type('snuttSNUTT1!');
@@ -37,8 +40,9 @@ test('회원가입이 잘 실패한다 (동일 id 존재)', async ({ page }) => 
 });
 
 test('비밀번호 변경 기능이 정상 동작한다 (정상 케이스)', async ({ page }) => {
-  await page.goto('/signup');
+  await page.goto('/');
   await givenUser(page, { login: false });
+  await page.getByTestId('login-signup-link').click();
   await page.getByTestId('signup-id').type('woohm403');
   await page.getByTestId('signup-pw').type('snuttSNUTT1!');
   await page.getByTestId('signup-pwc').type('snuttSNUTT1!');

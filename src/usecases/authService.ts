@@ -1,12 +1,8 @@
 import { type SignInResponse } from '@/entities/auth';
 import { type AuthRepository } from '@/repositories/authRepository';
-import { type StorageRepository } from '@/repositories/storageRepository';
 import { type UserRepository } from '@/repositories/userRepository';
 
 export interface AuthService {
-  getToken(): string | null;
-  saveToken(token: string, persist: boolean): void;
-  clearToken(): void;
   isValidPassword(password: string): boolean;
   changePassword(token: string, body: { old_password: string; new_password: string }): Promise<{ token: string }>;
   signIn(
@@ -21,17 +17,9 @@ export interface AuthService {
   resetPassword(body: { user_id: string; password: string }): Promise<{ message: 'ok' }>;
 }
 
-type Deps = { repositories: [StorageRepository, AuthRepository, UserRepository] };
-export const getAuthService = ({
-  repositories: [storageRepository, authRepository, userRepository],
-}: Deps): AuthService => {
+type Deps = { repositories: [AuthRepository, UserRepository] };
+export const getAuthService = ({ repositories: [authRepository, userRepository] }: Deps): AuthService => {
   return {
-    getToken: () => storageRepository.get('snutt_token', false) ?? storageRepository.get('snutt_token', true),
-    saveToken: (token, persist) => storageRepository.set('snutt_token', token, persist),
-    clearToken: () => {
-      storageRepository.remove('snutt_token', false);
-      storageRepository.remove('snutt_token', true);
-    },
     isValidPassword: (password) =>
       password.split('').some((item) => /[0-9]+/.test(item)) &&
       password.split('').some((item) => /[a-zA-Z]+/.test(item)) &&

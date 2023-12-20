@@ -1,13 +1,34 @@
-import styled from 'styled-components';
+import { useState } from 'react';
+import styled, { css } from 'styled-components';
 
-import { LandingLeft } from './landing-left';
-import { LandingRight } from './landing-right';
+import { LandingSignUp } from '@/pages/landing/landing-signup';
+import { type AuthService } from '@/usecases/authService';
+import { type ErrorService } from '@/usecases/errorService';
+import { type FeedbackService } from '@/usecases/feedbackService';
 
-export const Landing = () => {
+import { LandingDescription } from './landing-description';
+import { LandingLogin } from './landing-login';
+
+export const Landing = ({
+  authService,
+  errorService,
+  feedbackService,
+}: {
+  authService: AuthService;
+  errorService: ErrorService;
+  feedbackService: FeedbackService;
+}) => {
+  const [mode, setMode] = useState<'LOGIN' | 'SIGNUP'>('LOGIN');
+
   return (
     <Wrapper data-testid="landing">
-      <Left />
-      <Right />
+      <Left feedbackService={feedbackService} />
+      {
+        {
+          LOGIN: <Login authService={authService} errorService={errorService} onSignUp={() => setMode('SIGNUP')} />,
+          SIGNUP: <SignUp authService={authService} errorService={errorService} />,
+        }[mode]
+      }
     </Wrapper>
   );
 };
@@ -17,11 +38,21 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
-const Left = styled(LandingLeft)`
+const Left = styled(LandingDescription)`
   flex: 1;
   overflow-y: auto;
 `;
 
-const Right = styled(LandingRight)`
+const rightStyle = css`
   width: 428px;
+  background-color: #fafafa;
+  border-left: 1px solid #efefef;
+`;
+
+const Login = styled(LandingLogin)`
+  ${rightStyle}
+`;
+
+const SignUp = styled(LandingSignUp)`
+  ${rightStyle}
 `;
