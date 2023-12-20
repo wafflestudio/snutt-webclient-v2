@@ -10,7 +10,6 @@ import { useTokenContext } from '@/contexts/tokenContext';
 import type { Color } from '@/entities/color';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { useGuardContext } from '@/hooks/useGuardContext';
-import { timetableService } from '@/services';
 
 import { type LectureEditForm, MainLectureEditForm } from '../main-lecture-edit-form';
 
@@ -87,6 +86,7 @@ export const MainLectureCreateDialog = ({ open, onClose, timetableId }: Props) =
 const useCreateLecture = (id?: string) => {
   const { token } = useTokenContext();
   const queryClient = useQueryClient();
+  const { timetableService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: (body: Parameters<(typeof timetableService)['createLecture']>[2]) => {

@@ -4,9 +4,10 @@ import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { useYearSemester } from '@/hooks/useYearSemester';
-import { timetableService } from '@/services';
 import { get } from '@/utils/object/get';
 import { queryKey } from '@/utils/query-key-factory';
 
@@ -63,6 +64,7 @@ const useCreateTimetable = (onSuccess: (createdId?: string) => void) => {
   const { token } = useTokenContext();
   const { year, semester } = useYearSemester();
   const queryClient = useQueryClient();
+  const { timetableService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: (title: string) => {

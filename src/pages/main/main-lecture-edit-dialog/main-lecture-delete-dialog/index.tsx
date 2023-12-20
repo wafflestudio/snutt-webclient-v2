@@ -2,8 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
-import { timetableService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
 
 type Props = {
   open: boolean;
@@ -46,6 +47,7 @@ export const MainLectureDeleteDialog = ({ open, onClose, timetableId, lectureId,
 const useDeleteLecture = (id?: string, lecture_id?: string) => {
   const { token } = useTokenContext();
   const queryClient = useQueryClient();
+  const { timetableService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: () => {

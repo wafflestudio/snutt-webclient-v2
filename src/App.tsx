@@ -20,6 +20,7 @@ import { SignUp } from '@/pages/signup';
 import { getAuthRepository } from '@/repositories/authRepository';
 import { getEnvRepository } from '@/repositories/envRepository';
 import { getStorageRepository } from '@/repositories/storageRepository';
+import { getTimetableRepository } from '@/repositories/timetableRepository';
 import { getUserRepository } from '@/repositories/userRepository';
 import { getAuthService } from '@/usecases/authService';
 import { getEnvService } from '@/usecases/envService';
@@ -27,6 +28,7 @@ import { getHourMinutePickerService } from '@/usecases/hourMinutePickerService';
 import { getHourMinuteService } from '@/usecases/hourMinuteService';
 import { getLectureService } from '@/usecases/lectureService';
 import { getTimeMaskService } from '@/usecases/timeMaskService';
+import { getTimetableService } from '@/usecases/timetableService';
 import { getTimetableViewService } from '@/usecases/timetableViewService';
 import { get } from '@/utils/object/get';
 
@@ -89,7 +91,9 @@ function App() {
     const userRepository = getUserRepository({ clients: [snuttApiClient] });
     const storageRepository = getStorageRepository({ clients: [persistStorage, temporaryStorage] });
     const authRepository = getAuthRepository({ clients: [snuttApiClient] });
+    const timetableRepository = getTimetableRepository({ clients: [snuttApiClient] });
 
+    const timetableService = getTimetableService({ repositories: [timetableRepository] });
     const lectureService = getLectureService();
     const timeMaskService = getTimeMaskService();
     const hourMinuteService = getHourMinuteService();
@@ -105,6 +109,7 @@ function App() {
       timetableViewService,
       authService,
       envService,
+      timetableService,
     };
   }, []);
 

@@ -11,7 +11,6 @@ import type { Color } from '@/entities/color';
 import type { Lecture } from '@/entities/lecture';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { useGuardContext } from '@/hooks/useGuardContext';
-import { timetableService } from '@/services';
 
 import { type LectureEditForm, MainLectureEditForm } from '../main-lecture-edit-form';
 import { MainLectureDeleteDialog } from './main-lecture-delete-dialog';
@@ -118,6 +117,7 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
 const useUpdateLecture = (id?: string, lectureId?: string) => {
   const { token } = useTokenContext();
   const queryClient = useQueryClient();
+  const { timetableService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: (body: Parameters<typeof timetableService.updateLecture>[2]) => {

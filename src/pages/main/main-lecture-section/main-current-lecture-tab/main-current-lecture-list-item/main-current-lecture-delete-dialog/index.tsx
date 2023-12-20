@@ -3,9 +3,10 @@ import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { BaseLecture } from '@/entities/lecture';
-import { timetableService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
 
 type Props = {
   isOpen: boolean;
@@ -42,6 +43,7 @@ export const MainCurrentLectureDeleteDialog = ({ isOpen, close, timetableId, lec
 const useDeleteLecture = (id?: string, lecture_id?: string) => {
   const { token } = useTokenContext();
   const queryClient = useQueryClient();
+  const { timetableService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: () => {

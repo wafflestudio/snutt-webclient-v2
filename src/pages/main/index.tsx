@@ -3,10 +3,12 @@ import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { Layout } from '@/components/layout';
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { SearchFilter } from '@/entities/search';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { useYearSemester } from '@/hooks/useYearSemester';
-import { searchService, timetableService } from '@/services';
+import { searchService } from '@/services';
 import { BREAKPOINT } from '@/styles/constants';
 import { queryKey } from '@/utils/query-key-factory';
 
@@ -96,6 +98,7 @@ export const Main = () => {
 
 const useMyTimetables = () => {
   const { token } = useTokenContext();
+  const { timetableService } = useGuardContext(serviceContext);
 
   return useQuery({
     queryKey: queryKey('tables', { token }),
@@ -109,6 +112,7 @@ const useMyTimetables = () => {
 
 const useCurrentFullTimetable = (id: string | undefined) => {
   const { token } = useTokenContext();
+  const { timetableService } = useGuardContext(serviceContext);
 
   return useQuery({
     queryKey: queryKey(`tables/${id}`, { token }),

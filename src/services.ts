@@ -9,7 +9,6 @@ import { getFeedbackRepository } from '@/repositories/feedbackRepository';
 import { getNotificationRepository } from '@/repositories/notificationRepository';
 import { getSearchRepository } from '@/repositories/searchRepository';
 import { getSemesterRepository } from '@/repositories/semesterRepository';
-import { getTimetableRepository } from '@/repositories/timetableRepository';
 import { getUserRepository } from '@/repositories/userRepository';
 import { getColorService } from '@/usecases/colorService';
 import { getEnvService } from '@/usecases/envService';
@@ -18,7 +17,6 @@ import { getFeedbackService } from '@/usecases/feedbackService';
 import { getNotificationService } from '@/usecases/notificationService';
 import { getSearchService } from '@/usecases/searchService';
 import { getSemesterService } from '@/usecases/semesterService';
-import { getTimetableService } from '@/usecases/timetableService';
 import { getUserService } from '@/usecases/userService';
 
 const envRepository = getEnvRepository({ external: [viteEnvironmentVariables] });
@@ -49,6 +47,3 @@ export const searchService = getSearchService({ repositories: [searchRepository]
 
 const semesterRepository = getSemesterRepository({ clients: [snuttApiClient] });
 export const semesterService = getSemesterService({ repositories: [semesterRepository] });
-
-const timetableRepository = getTimetableRepository({ clients: [snuttApiClient] });
-export const timetableService = getTimetableService({ repositories: [timetableRepository] });
