@@ -1,7 +1,7 @@
 import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { getTruffleClient } from '@wafflestudio/truffle-browser';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
@@ -67,15 +67,22 @@ export const App = () => {
 
   const [token, setToken] = useState(tokenService.getToken());
 
+  const resetAllData = () => {
+    // TODO: reload 없이 로직으로 reset 할 수 있는 방법 찾기
+    window.location.reload();
+  };
+
   const tokenContextValue = {
-    token,
-    saveToken: (token: string, permanent: boolean) => {
-      setToken(token);
-      tokenService.saveToken(token, permanent);
+    saveToken: (newToken: string, permanent: boolean) => {
+      setToken(newToken);
+      tokenService.saveToken(newToken, permanent);
+      if (token !== null) resetAllData();
     },
     clearToken: () => {
       setToken(null);
       tokenService.clearToken();
+      queryClient.resetQueries();
+      resetAllData();
     },
   };
 
@@ -96,6 +103,10 @@ export const App = () => {
         defaultOptions: { queries: { refetchOnWindowFocus: false, retry: false } },
       }),
   );
+
+  useEffect(() => {
+    queryClient.resetQueries();
+  }, [token, queryClient]);
 
   const unauthorizedServices = getUnauthorizedServices(ENV);
 

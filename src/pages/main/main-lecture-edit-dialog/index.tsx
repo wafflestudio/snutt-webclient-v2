@@ -6,7 +6,6 @@ import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { ErrorDialog } from '@/components/error-dialog';
 import { serviceContext } from '@/contexts/ServiceContext';
-import { useTokenContext } from '@/contexts/tokenContext';
 import type { Color } from '@/entities/color';
 import type { Lecture } from '@/entities/lecture';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
@@ -115,16 +114,14 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
 };
 
 const useUpdateLecture = (id?: string, lectureId?: string) => {
-  const { token } = useTokenContext();
   const queryClient = useQueryClient();
   const { timetableService } = useGuardContext(serviceContext);
 
   return useMutation({
-    mutationFn: (body: Parameters<typeof timetableService.updateLecture>[2]) => {
-      if (!token) throw new Error('no token');
+    mutationFn: (body: Parameters<typeof timetableService.updateLecture>[1]) => {
       if (!id) throw new Error('no id');
       if (!lectureId) throw new Error('no lectureId');
-      return timetableService.updateLecture(token, { id, lecture_id: lectureId }, body);
+      return timetableService.updateLecture({ id, lecture_id: lectureId }, body);
     },
     onSuccess: () => queryClient.invalidateQueries(),
   });

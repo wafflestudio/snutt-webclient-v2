@@ -1,6 +1,6 @@
 type Url = string;
 type Headers = { [key: string]: string };
-type Config = { headers: Headers; params: URLSearchParams };
+type Config = { params: URLSearchParams };
 type CreateClientOptions = { baseURL: string; headers: Headers };
 
 export interface ApiClient {
@@ -19,7 +19,7 @@ export const getApiClient = (options: Partial<CreateClientOptions> = {}): ApiCli
   return {
     async get<D = unknown>(url: Url, config?: Partial<Config>) {
       const fetchUrl = `${baseURL}${url}${paramsToString(config?.params)}`;
-      const fetchHeaders = { ...headers, ...config?.headers };
+      const fetchHeaders = { ...headers };
       const response = await fetch(fetchUrl, { headers: fetchHeaders, method: 'GET' });
       const responseBody = await response.json().catch(() => null);
 
@@ -32,7 +32,7 @@ export const getApiClient = (options: Partial<CreateClientOptions> = {}): ApiCli
 
     async post<D = unknown, B = unknown>(url: Url, body?: B, config?: Partial<Config>) {
       const fetchUrl = `${baseURL}${url}${paramsToString(config?.params)}`;
-      const fetchHeaders = { 'content-type': 'application/json;charset=UTF-8', ...headers, ...config?.headers };
+      const fetchHeaders = { 'content-type': 'application/json;charset=UTF-8', ...headers };
       const response = await fetch(fetchUrl, { headers: fetchHeaders, method: 'POST', body: JSON.stringify(body) });
       const responseBody = await response.json().catch(() => null);
 
@@ -45,7 +45,7 @@ export const getApiClient = (options: Partial<CreateClientOptions> = {}): ApiCli
 
     async put<D = unknown, B = unknown>(url: Url, body?: B, config?: Partial<Config>) {
       const fetchUrl = `${baseURL}${url}${paramsToString(config?.params)}`;
-      const fetchHeaders = { 'content-type': 'application/json;charset=UTF-8', ...headers, ...config?.headers };
+      const fetchHeaders = { 'content-type': 'application/json;charset=UTF-8', ...headers };
       const response = await fetch(fetchUrl, { headers: fetchHeaders, method: 'PUT', body: JSON.stringify(body) });
       const responseBody = await response.json().catch(() => null);
 
@@ -58,7 +58,7 @@ export const getApiClient = (options: Partial<CreateClientOptions> = {}): ApiCli
 
     async delete<D = unknown>(url: Url, config?: Partial<Config>) {
       const fetchUrl = `${baseURL}${url}${paramsToString(config?.params)}`;
-      const fetchHeaders = { ...headers, ...config?.headers };
+      const fetchHeaders = { ...headers };
       const response = await fetch(fetchUrl, { headers: fetchHeaders, method: 'DELETE' });
       const responseBody = await response.json().catch(() => null);
 
