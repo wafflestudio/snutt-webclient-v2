@@ -8,7 +8,6 @@ import { useTokenContext } from '@/contexts/tokenContext';
 import type { SearchFilter } from '@/entities/search';
 import { useGuardContext } from '@/hooks/useGuardContext';
 import { useYearSemester } from '@/hooks/useYearSemester';
-import { searchService } from '@/services';
 import { BREAKPOINT } from '@/styles/constants';
 import { queryKey } from '@/utils/query-key-factory';
 
@@ -125,6 +124,7 @@ const useCurrentFullTimetable = (id: string | undefined) => {
 };
 
 const useSearchResult = () => {
+  const { searchService } = useGuardContext(serviceContext);
   return useMutation({
     mutationKey: ['search_query'],
     mutationFn: (value: Partial<SearchFilter>) => searchService.search(value),

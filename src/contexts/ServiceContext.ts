@@ -4,6 +4,7 @@ import { type AuthService } from '@/usecases/authService';
 import { type HourMinutePickerService } from '@/usecases/hourMinutePickerService';
 import { type HourMinuteService } from '@/usecases/hourMinuteService';
 import { type LectureService } from '@/usecases/lectureService';
+import { type SearchService } from '@/usecases/searchService';
 import { type SemesterService } from '@/usecases/semesterService';
 import { type TimeMaskService } from '@/usecases/timeMaskService';
 import { type TimetableService } from '@/usecases/timetableService';
@@ -18,6 +19,7 @@ export type ServiceContext = {
   timetableViewService: TimetableViewService;
   timetableService: TimetableService;
   semesterService: SemesterService;
+  searchService: SearchService;
 };
 
 export const serviceContext = createContext<ServiceContext | null>(null);

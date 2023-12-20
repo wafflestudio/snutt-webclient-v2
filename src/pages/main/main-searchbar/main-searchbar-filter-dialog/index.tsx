@@ -4,8 +4,9 @@ import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
+import { serviceContext } from '@/contexts/ServiceContext';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { useYearSemester } from '@/hooks/useYearSemester';
-import { searchService } from '@/services';
 import type { ArrayElement } from '@/utils/array-element';
 
 import type { SearchForm } from '..';
@@ -250,6 +251,8 @@ const Checkbox = <F extends 'academicYear' | 'category' | 'classification' | 'cr
 
 const useSearchFilterTags = () => {
   const { year, semester } = useYearSemester();
+  const { searchService } = useGuardContext(serviceContext);
+
   return useQuery({
     queryKey: ['tags', year, semester],
     queryFn: () => {
