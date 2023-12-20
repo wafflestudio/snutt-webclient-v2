@@ -11,6 +11,7 @@ import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { envContext } from '@/contexts/EnvContext';
 import { serviceContext } from '@/contexts/ServiceContext';
+import { type TokenContext, tokenContext } from '@/contexts/tokenContext';
 import { useGuardContext } from '@/hooks/useGuardContext';
 import { ErrorPage } from '@/pages/error';
 import { Main } from '@/pages/main';
@@ -42,37 +43,12 @@ import { getTimetableViewService } from '@/usecases/timetableViewService';
 import { getUserService } from '@/usecases/userService';
 import { get } from '@/utils/object/get';
 
-import { useTokenContext } from './contexts/tokenContext';
 import { Landing } from './pages/landing';
 import { NotFoundPage } from './pages/not-found';
 
 export const App = () => {
-  const { clearToken, token } = useTokenContext();
   const [isWrongTokenDialogOpen, setWrongTokenDialogOpen] = useState(false);
   const ENV = useGuardContext(envContext);
-
-  const router = createBrowserRouter([
-    {
-      children: [
-        ...(token
-          ? [
-              { path: '/', element: <Main /> },
-              { path: '/mypage', element: <MyPage /> },
-            ]
-          : [
-              { path: '/', element: <Landing /> },
-              { path: '/signup', element: <SignUp /> },
-            ]),
-        { path: '/*', element: <NotFoundPage /> },
-      ],
-      errorElement: <ErrorPage />,
-    },
-  ]);
-
-  const onClickLogout = () => {
-    clearToken();
-    setWrongTokenDialogOpen(false);
-  };
 
   const services = useMemo(() => {
     const persistStorage = getStorageClient(true);
@@ -129,6 +105,45 @@ export const App = () => {
     };
   }, [ENV]);
 
+  const [token, setToken] = useState(services.authService.getToken());
+
+  const tokenContextValue = useMemo((): TokenContext => {
+    return {
+      token,
+      saveToken: (token, permanent) => {
+        setToken(token);
+        services.authService.saveToken(token, permanent);
+      },
+      clearToken: () => {
+        setToken(null);
+        services.authService.clearToken();
+      },
+    };
+  }, [token, services]);
+
+  const router = createBrowserRouter([
+    {
+      children: [
+        ...(token
+          ? [
+              { path: '/', element: <Main /> },
+              { path: '/mypage', element: <MyPage /> },
+            ]
+          : [
+              { path: '/', element: <Landing /> },
+              { path: '/signup', element: <SignUp /> },
+            ]),
+        { path: '/*', element: <NotFoundPage /> },
+      ],
+      errorElement: <ErrorPage />,
+    },
+  ]);
+
+  const onClickLogout = () => {
+    tokenContextValue.clearToken();
+    setWrongTokenDialogOpen(false);
+  };
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -145,18 +160,20 @@ export const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <serviceContext.Provider value={services}>
-        <RouterProvider router={router} />
-        <GlobalStyles />
-        <ReactQueryDevtools />
-        <Dialog open={isWrongTokenDialogOpen}>
-          <Dialog.Title>인증정보가 올바르지 않아요</Dialog.Title>
-          <Dialog.Content>다시 로그인해 주세요</Dialog.Content>
-          <Dialog.Actions>
-            <Button data-testid="wrong-token-dialog-logout" onClick={onClickLogout}>
-              로그아웃하기
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
+        <tokenContext.Provider value={tokenContextValue}>
+          <RouterProvider router={router} />
+          <GlobalStyles />
+          <ReactQueryDevtools />
+          <Dialog open={isWrongTokenDialogOpen}>
+            <Dialog.Title>인증정보가 올바르지 않아요</Dialog.Title>
+            <Dialog.Content>다시 로그인해 주세요</Dialog.Content>
+            <Dialog.Actions>
+              <Button data-testid="wrong-token-dialog-logout" onClick={onClickLogout}>
+                로그아웃하기
+              </Button>
+            </Dialog.Actions>
+          </Dialog>
+        </tokenContext.Provider>
       </serviceContext.Provider>
     </QueryClientProvider>
   );

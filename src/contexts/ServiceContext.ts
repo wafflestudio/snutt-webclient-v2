@@ -33,3 +33,4 @@ export type ServiceContext = {
 };
 
 export const serviceContext = createContext<ServiceContext | null>(null);
+serviceContext.displayName = 'ServiceContext';

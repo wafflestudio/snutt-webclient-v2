@@ -4,7 +4,6 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { envContext } from '@/contexts/EnvContext';
-import { TokenContextProvider } from '@/contexts/tokenContext';
 
 import { App } from './App';
 
@@ -34,9 +33,7 @@ async function startApp() {
   ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <StrictMode>
       <envContext.Provider value={ENV}>
-        <TokenContextProvider>
-          <App />
-        </TokenContextProvider>
+        <App />
       </envContext.Provider>
     </StrictMode>,
   );

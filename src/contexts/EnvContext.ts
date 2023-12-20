@@ -10,3 +10,4 @@ export type EnvContext = {
 };
 
 export const envContext = createContext<EnvContext | null>(null);
+envContext.displayName = 'EnvContext';
