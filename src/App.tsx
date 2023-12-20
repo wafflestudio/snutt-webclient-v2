@@ -12,6 +12,8 @@ import { ErrorPage } from '@/pages/error';
 import { Main } from '@/pages/main';
 import { MyPage } from '@/pages/mypage';
 import { SignUp } from '@/pages/signup';
+import { getHourMinutePickerService } from '@/usecases/hourMinutePickerService';
+import { getHourMinuteService } from '@/usecases/hourMinuteService';
 import { getLectureService } from '@/usecases/lectureService';
 import { getTimeMaskService } from '@/usecases/timeMaskService';
 import { get } from '@/utils/object/get';
@@ -63,7 +65,10 @@ function App() {
   const services = useMemo(() => {
     const lectureService = getLectureService();
     const timeMaskService = getTimeMaskService();
-    return { lectureService, timeMaskService };
+    const hourMinuteService = getHourMinuteService();
+    const hourMinutePickerService = getHourMinutePickerService({ services: [hourMinuteService] });
+
+    return { lectureService, timeMaskService, hourMinutePickerService, hourMinuteService };
   }, []);
 
   return (

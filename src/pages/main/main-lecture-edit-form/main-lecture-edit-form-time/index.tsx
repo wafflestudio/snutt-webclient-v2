@@ -9,7 +9,7 @@ import type { WithInternalId } from '@/entities/id';
 import type { ClassTime } from '@/entities/lecture';
 import { type Day, DAY_LABEL_MAP, type HourMinute24 } from '@/entities/time';
 import { useGuardContext } from '@/hooks/useGuardContext';
-import { hourMinuteService, timetableViewService } from '@/services';
+import { timetableViewService } from '@/services';
 
 type Props = {
   lectureTime: WithInternalId<ClassTime>[];
@@ -22,7 +22,7 @@ export const MainLectureEditFormTime = ({ lectureTime, onChangeLectureTime }: Pr
     type: 'start' | 'end';
     defaultTime: HourMinute24;
   } | null>(null);
-  const { lectureService } = useGuardContext(serviceContext);
+  const { lectureService, hourMinuteService } = useGuardContext(serviceContext);
   const handleAddTime = () => onChangeLectureTime([...lectureTime, lectureService.getEmptyClassTime()]);
 
   const handleDeleteLectureTime = (__id__: string) =>
