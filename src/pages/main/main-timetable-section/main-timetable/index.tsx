@@ -7,7 +7,6 @@ import type { BaseLecture } from '@/entities/lecture';
 import { DAY_LABEL_MAP } from '@/entities/time';
 import type { FullTimetable } from '@/entities/timetable';
 import { useGuardContext } from '@/hooks/useGuardContext';
-import { colorService } from '@/services';
 import { rangeToArray } from '@/utils/rangeToArray';
 
 type Props = {
@@ -134,8 +133,10 @@ export const MainTimeTable = ({
   );
 };
 
-const useColorList = () =>
-  useQuery({ queryKey: ['colors'], queryFn: () => colorService.getColorList(), staleTime: Infinity });
+const useColorList = () => {
+  const { colorService } = useGuardContext(serviceContext);
+  return useQuery({ queryKey: ['colors'], queryFn: () => colorService.getColorList(), staleTime: Infinity });
+};
 
 const Wrapper = styled.div<{ $columnCount: number; $rowCount: number }>`
   display: grid;
