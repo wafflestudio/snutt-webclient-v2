@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 import { Button } from '@/components/button';
+import { envContext } from '@/contexts/EnvContext';
 import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { type CoreServerError } from '@/entities/error';
@@ -17,7 +18,8 @@ type Props = { className?: string };
 export const LandingRight = ({ className }: Props) => {
   const navigate = useNavigate();
   const { saveToken } = useTokenContext();
-  const { authService, errorService, envService } = useGuardContext(serviceContext);
+  const { authService, errorService } = useGuardContext(serviceContext);
+  const { FACEBOOK_APP_ID } = useGuardContext(envContext);
   const [id, setId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [keepSignIn, setKeepSignIn] = useState<boolean>(false);
@@ -86,7 +88,7 @@ export const LandingRight = ({ className }: Props) => {
       {/* eslint-disable-next-line */}
       {/* @ts-ignore */}
       <FBLogin
-        appId={envService.getFacebookAppId()}
+        appId={FACEBOOK_APP_ID}
         callback={handleFacebookSignIn}
         onFailure={({ status }: ReactFacebookFailureResponse) => setErrorMessage(status || '')}
         render={({ onClick }) => <FBSignInButton onClick={onClick}>facebook으로 로그인</FBSignInButton>}

@@ -7,11 +7,11 @@ import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { Layout } from '@/components/layout';
+import { envContext } from '@/contexts/EnvContext';
 import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { CoreServerError } from '@/entities/error';
 import { useGuardContext } from '@/hooks/useGuardContext';
-import { envService, userService } from '@/services';
 import { queryKey } from '@/utils/query-key-factory';
 
 import { MypageChangePassword } from './mypage-change-password';
@@ -23,7 +23,8 @@ export const MyPage = () => {
   const { token, clearToken } = useTokenContext();
   const { data: myInfo } = useMyInfo();
   const navigate = useNavigate();
-  const { timetableViewService } = useGuardContext(serviceContext);
+  const { timetableViewService, userService } = useGuardContext(serviceContext);
+  const { FACEBOOK_APP_ID } = useGuardContext(envContext);
   const [displayMode, setDisplayMode] = useState(timetableViewService.getDisplayMode());
 
   const { mutate: attach } = useAttachFacebook();
@@ -85,7 +86,7 @@ export const MyPage = () => {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               <FBLogin
-                appId={envService.getFacebookAppId()}
+                appId={FACEBOOK_APP_ID}
                 callback={attach}
                 onFailure={({ status }: ReactFacebookFailureResponse) => alert(status || '')}
                 render={({ onClick }) => (
@@ -117,6 +118,7 @@ export const MyPage = () => {
 
 const useMyInfo = () => {
   const { token } = useTokenContext();
+  const { userService } = useGuardContext(serviceContext);
 
   return useQuery({
     queryKey: queryKey('user/info', { token }),
@@ -131,6 +133,7 @@ const useMyInfo = () => {
 const useAttachFacebook = () => {
   const { token, saveToken } = useTokenContext();
   const { errorService } = useGuardContext(serviceContext);
+  const { userService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: (userInfo: ReactFacebookLoginInfo) => {
@@ -145,6 +148,7 @@ const useAttachFacebook = () => {
 const useDetachFacebook = () => {
   const { token, saveToken } = useTokenContext();
   const { errorService } = useGuardContext(serviceContext);
+  const { userService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: () => {

@@ -2,7 +2,6 @@ import { createContext } from 'react';
 
 import { type AuthService } from '@/usecases/authService';
 import { type ColorService } from '@/usecases/colorService';
-import { type EnvService } from '@/usecases/envService';
 import { type ErrorService } from '@/usecases/errorService';
 import { type FeedbackService } from '@/usecases/feedbackService';
 import { type HourMinutePickerService } from '@/usecases/hourMinutePickerService';
@@ -14,6 +13,7 @@ import { type SemesterService } from '@/usecases/semesterService';
 import { type TimeMaskService } from '@/usecases/timeMaskService';
 import { type TimetableService } from '@/usecases/timetableService';
 import { type TimetableViewService } from '@/usecases/timetableViewService';
+import { type UserService } from '@/usecases/userService';
 
 export type ServiceContext = {
   authService: AuthService;
@@ -28,8 +28,8 @@ export type ServiceContext = {
   notificationService: NotificationService;
   feedbackService: FeedbackService;
   errorService: ErrorService;
-  envService: EnvService;
   colorService: ColorService;
+  userService: UserService;
 };
 
 export const serviceContext = createContext<ServiceContext | null>(null);

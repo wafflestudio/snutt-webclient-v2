@@ -8,7 +8,6 @@ import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { useGuardContext } from '@/hooks/useGuardContext';
-import { userService } from '@/services';
 import { get } from '@/utils/object/get';
 
 export const MypageRegisterId = () => {
@@ -70,6 +69,7 @@ export const MypageRegisterId = () => {
 const useAddIdPassword = () => {
   const { token, saveToken } = useTokenContext();
   const queryClient = useQueryClient();
+  const { userService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: (body: { id: string; password: string }) => {

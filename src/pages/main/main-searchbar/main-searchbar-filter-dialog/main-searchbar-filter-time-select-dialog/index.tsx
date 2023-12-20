@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { serviceContext } from '@/contexts/ServiceContext';
@@ -17,7 +16,7 @@ type Props = { open: boolean; onClose: () => void; onChangeBitMask: (bm: number[
  * @note 테스트코드가 붙어있지 않습니다. 수정할 때 주의해 주세요!
  */
 export const MainSearchbarFilterTimeSelectDialog = ({ open, onClose, onChangeBitMask }: Props) => {
-  const { timeMaskService } = useGuardContext(serviceContext);
+  const { timeMaskService, errorService } = useGuardContext(serviceContext);
   const [dragStart, setDragStart] = useState<Position | null>(null);
   const [currentDrag, setCurrentDrag] = useState<Position | null>(null);
   const [cellStatus, setCellStatus] = useState<CellStatus>(
@@ -31,7 +30,8 @@ export const MainSearchbarFilterTimeSelectDialog = ({ open, onClose, onChangeBit
 
   const endDrag = () => {
     try {
-      if (!dragStart || !currentDrag) return truffleClient.capture(new Error('endDrag no dragStart no currentDrag'));
+      if (!dragStart || !currentDrag)
+        return errorService.captureError(new Error('endDrag no dragStart no currentDrag'));
       setCellStatus(timeMaskService.getUpdatedCellStatus(cellStatus, dragStart, currentDrag));
     } catch (err) {
       // TODO: capture sentry
