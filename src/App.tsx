@@ -19,6 +19,7 @@ import { MyPage } from '@/pages/mypage';
 import { SignUp } from '@/pages/signup';
 import { getAuthRepository } from '@/repositories/authRepository';
 import { getEnvRepository } from '@/repositories/envRepository';
+import { getSemesterRepository } from '@/repositories/semesterRepository';
 import { getStorageRepository } from '@/repositories/storageRepository';
 import { getTimetableRepository } from '@/repositories/timetableRepository';
 import { getUserRepository } from '@/repositories/userRepository';
@@ -27,6 +28,7 @@ import { getEnvService } from '@/usecases/envService';
 import { getHourMinutePickerService } from '@/usecases/hourMinutePickerService';
 import { getHourMinuteService } from '@/usecases/hourMinuteService';
 import { getLectureService } from '@/usecases/lectureService';
+import { getSemesterService } from '@/usecases/semesterService';
 import { getTimeMaskService } from '@/usecases/timeMaskService';
 import { getTimetableService } from '@/usecases/timetableService';
 import { getTimetableViewService } from '@/usecases/timetableViewService';
@@ -92,6 +94,7 @@ function App() {
     const storageRepository = getStorageRepository({ clients: [persistStorage, temporaryStorage] });
     const authRepository = getAuthRepository({ clients: [snuttApiClient] });
     const timetableRepository = getTimetableRepository({ clients: [snuttApiClient] });
+    const semesterRepository = getSemesterRepository({ clients: [snuttApiClient] });
 
     const timetableService = getTimetableService({ repositories: [timetableRepository] });
     const lectureService = getLectureService();
@@ -100,6 +103,7 @@ function App() {
     const hourMinutePickerService = getHourMinutePickerService({ services: [hourMinuteService] });
     const timetableViewService = getTimetableViewService({ repositories: [storageRepository] });
     const authService = getAuthService({ repositories: [storageRepository, authRepository, userRepository] });
+    const semesterService = getSemesterService({ repositories: [semesterRepository] });
 
     return {
       lectureService,
@@ -110,6 +114,7 @@ function App() {
       authService,
       envService,
       timetableService,
+      semesterService,
     };
   }, []);
 

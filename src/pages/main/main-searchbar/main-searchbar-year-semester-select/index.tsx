@@ -1,9 +1,10 @@
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useCourseBooks } from '@/hooks/useCourseBooks';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { useYearSemester } from '@/hooks/useYearSemester';
-import { semesterService } from '@/services';
 
 type Props = { resetSearchResult: () => void };
 
@@ -11,6 +12,7 @@ export const MainSearchbarYearSemesterSelect = ({ resetSearchResult }: Props) =>
   const { data: courseBooks } = useCourseBooks();
   const [searchParams, setSearchParams] = useSearchParams();
   const { year, semester } = useYearSemester();
+  const { semesterService } = useGuardContext(serviceContext);
 
   const value = year && semester ? semesterService.courseBookToValue({ year, semester }) : 0;
 
