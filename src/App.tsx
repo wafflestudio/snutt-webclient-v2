@@ -13,6 +13,7 @@ import { Main } from '@/pages/main';
 import { MyPage } from '@/pages/mypage';
 import { SignUp } from '@/pages/signup';
 import { getLectureService } from '@/usecases/lectureService';
+import { getTimeMaskService } from '@/usecases/timeMaskService';
 import { get } from '@/utils/object/get';
 
 import { useTokenContext } from './contexts/tokenContext';
@@ -61,7 +62,8 @@ function App() {
 
   const services = useMemo(() => {
     const lectureService = getLectureService();
-    return { lectureService };
+    const timeMaskService = getTimeMaskService();
+    return { lectureService, timeMaskService };
   }, []);
 
   return (
