@@ -8,7 +8,6 @@ import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { useGuardContext } from '@/hooks/useGuardContext';
-import { errorService } from '@/services';
 import { get } from '@/utils/object/get';
 
 export const MypageChangePassword = () => {
@@ -16,7 +15,7 @@ export const MypageChangePassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const { saveToken } = useTokenContext();
-  const { authService } = useGuardContext(serviceContext);
+  const { authService, errorService } = useGuardContext(serviceContext);
 
   const { isOpen, message, onClose, open } = useErrorDialog();
 

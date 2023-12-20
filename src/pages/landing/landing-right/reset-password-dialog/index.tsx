@@ -7,7 +7,6 @@ import { Dialog } from '@/components/dialog';
 import { Progress } from '@/components/progress';
 import { serviceContext } from '@/contexts/ServiceContext';
 import { useGuardContext } from '@/hooks/useGuardContext';
-import { errorService } from '@/services';
 import { get } from '@/utils/object/get';
 
 type Props = { open: boolean; onClose: () => void };
@@ -25,6 +24,7 @@ export const LoginResetPasswordDialog = ({ open, onClose }: Props) => {
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
   const [step, setStep] = useState(Step.ID_INPUT);
+  const { errorService } = useGuardContext(serviceContext);
 
   const checkEmailMutation = useCheckEmail();
   const sendCodeEmailMutation = useSendCodeEmail();

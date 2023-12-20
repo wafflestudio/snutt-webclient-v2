@@ -8,14 +8,14 @@ import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { useGuardContext } from '@/hooks/useGuardContext';
-import { errorService, userService } from '@/services';
+import { userService } from '@/services';
 import { get } from '@/utils/object/get';
 
 export const MypageRegisterId = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  const { authService } = useGuardContext(serviceContext);
+  const { authService, errorService } = useGuardContext(serviceContext);
 
   const { isOpen, message, onClose, open } = useErrorDialog();
 

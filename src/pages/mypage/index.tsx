@@ -11,7 +11,7 @@ import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { CoreServerError } from '@/entities/error';
 import { useGuardContext } from '@/hooks/useGuardContext';
-import { envService, errorService, userService } from '@/services';
+import { envService, userService } from '@/services';
 import { queryKey } from '@/utils/query-key-factory';
 
 import { MypageChangePassword } from './mypage-change-password';
@@ -130,6 +130,7 @@ const useMyInfo = () => {
 
 const useAttachFacebook = () => {
   const { token, saveToken } = useTokenContext();
+  const { errorService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: (userInfo: ReactFacebookLoginInfo) => {
@@ -143,6 +144,7 @@ const useAttachFacebook = () => {
 
 const useDetachFacebook = () => {
   const { token, saveToken } = useTokenContext();
+  const { errorService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: () => {

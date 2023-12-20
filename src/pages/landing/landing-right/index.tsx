@@ -11,14 +11,13 @@ import { type CoreServerError } from '@/entities/error';
 import { useGuardContext } from '@/hooks/useGuardContext';
 import { LoginFindIdDialog } from '@/pages/landing/landing-right/find-id-dialog';
 import { LoginResetPasswordDialog } from '@/pages/landing/landing-right/reset-password-dialog';
-import { envService, errorService } from '@/services';
 
 type Props = { className?: string };
 
 export const LandingRight = ({ className }: Props) => {
   const navigate = useNavigate();
   const { saveToken } = useTokenContext();
-  const { authService } = useGuardContext(serviceContext);
+  const { authService, errorService, envService } = useGuardContext(serviceContext);
   const [id, setId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [keepSignIn, setKeepSignIn] = useState<boolean>(false);

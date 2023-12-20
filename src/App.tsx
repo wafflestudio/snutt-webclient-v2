@@ -19,6 +19,7 @@ import { MyPage } from '@/pages/mypage';
 import { SignUp } from '@/pages/signup';
 import { getAuthRepository } from '@/repositories/authRepository';
 import { getEnvRepository } from '@/repositories/envRepository';
+import { getErrorRepository } from '@/repositories/errorRepository';
 import { getFeedbackRepository } from '@/repositories/feedbackRepository';
 import { getNotificationRepository } from '@/repositories/notificationRepository';
 import { getSearchRepository } from '@/repositories/searchRepository';
@@ -28,6 +29,7 @@ import { getTimetableRepository } from '@/repositories/timetableRepository';
 import { getUserRepository } from '@/repositories/userRepository';
 import { getAuthService } from '@/usecases/authService';
 import { getEnvService } from '@/usecases/envService';
+import { getErrorService } from '@/usecases/errorService';
 import { getFeedbackService } from '@/usecases/feedbackService';
 import { getHourMinutePickerService } from '@/usecases/hourMinutePickerService';
 import { getHourMinuteService } from '@/usecases/hourMinuteService';
@@ -104,7 +106,9 @@ function App() {
     const searchRepository = getSearchRepository({ clients: [snuttApiClient] });
     const notificationRepository = getNotificationRepository({ clients: [snuttApiClient] });
     const feedbackRepository = getFeedbackRepository({ clients: [snuttApiClient] });
+    const errorRepository = getErrorRepository();
 
+    const errorService = getErrorService({ repositories: [errorRepository] });
     const feedbackService = getFeedbackService({ repositories: [feedbackRepository] });
     const notificationService = getNotificationService({ repositories: [notificationRepository] });
     const searchService = getSearchService({ repositories: [searchRepository] });
@@ -130,6 +134,7 @@ function App() {
       searchService,
       notificationService,
       feedbackService,
+      errorService,
     };
   }, []);
 

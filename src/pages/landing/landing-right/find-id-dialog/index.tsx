@@ -6,7 +6,6 @@ import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { serviceContext } from '@/contexts/ServiceContext';
 import { useGuardContext } from '@/hooks/useGuardContext';
-import { errorService } from '@/services';
 import { get } from '@/utils/object/get';
 
 type Props = { open: boolean; onClose: () => void };
@@ -14,6 +13,7 @@ type Props = { open: boolean; onClose: () => void };
 export const LoginFindIdDialog = ({ open, onClose }: Props) => {
   const [email, setEmail] = useState('');
   const { mutate, isSuccess, error, reset, status } = useFindId();
+  const { errorService } = useGuardContext(serviceContext);
 
   const isValid = !!email;
 
