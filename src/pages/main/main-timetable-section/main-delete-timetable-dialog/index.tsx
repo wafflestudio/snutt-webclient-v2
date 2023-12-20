@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { serviceContext } from '@/contexts/ServiceContext';
-import { useTokenContext } from '@/contexts/tokenContext';
 import type { FullTimetable } from '@/entities/timetable';
 import { useGuardContext } from '@/hooks/useGuardContext';
 
@@ -65,15 +64,13 @@ export const MainDeleteTimetableDialog = ({ isOpen, close, onDelete, timetable }
 };
 
 const useDeleteTimetable = (id?: string) => {
-  const { token } = useTokenContext();
   const queryClient = useQueryClient();
   const { timetableService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: () => {
-      if (!token) throw new Error('no token');
       if (!id) throw new Error('no tt');
-      return timetableService.deleteTimetable(token, id);
+      return timetableService.deleteTimetable(id);
     },
     onSuccess: () => queryClient.invalidateQueries(),
   });

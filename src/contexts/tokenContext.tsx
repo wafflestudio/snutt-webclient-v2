@@ -1,7 +1,6 @@
 import { createContext, useContext } from 'react';
 
 export type TokenContext = {
-  token: string | null;
   saveToken: (token: string, permanent: boolean) => void;
   clearToken: () => void;
 };

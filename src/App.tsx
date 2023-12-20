@@ -68,7 +68,6 @@ export const App = () => {
   const [token, setToken] = useState(tokenService.getToken());
 
   const tokenContextValue = {
-    token,
     saveToken: (token: string, permanent: boolean) => {
       setToken(token);
       tokenService.saveToken(token, permanent);
@@ -76,6 +75,7 @@ export const App = () => {
     clearToken: () => {
       setToken(null);
       tokenService.clearToken();
+      queryClient.resetQueries(); // 로그아웃할 경우 모든 캐싱된 데이터를 날려줘야 한다
     },
   };
 

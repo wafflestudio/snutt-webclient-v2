@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import { ErrorDialog } from '@/components/error-dialog';
 import { serviceContext } from '@/contexts/ServiceContext';
-import { useTokenContext } from '@/contexts/tokenContext';
 import type { BaseLecture } from '@/entities/lecture';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
 import { useGuardContext } from '@/hooks/useGuardContext';
@@ -62,16 +61,14 @@ export const MainSearchLectureListItem = ({ lecture, timetableId, setPreviewLect
 };
 
 const useAddLecture = (id?: string, lectureId?: string) => {
-  const { token } = useTokenContext();
   const queryClient = useQueryClient();
   const { timetableService } = useGuardContext(serviceContext);
   return useMutation({
     mutationFn: () => {
-      if (!token) throw new Error('no token');
       if (!id) throw new Error('no id');
       if (!lectureId) throw new Error('no lectureId');
 
-      return timetableService.addLecture(token, { id, lecture_id: lectureId });
+      return timetableService.addLecture({ id, lecture_id: lectureId });
     },
     onSuccess: () => queryClient.invalidateQueries(),
   });

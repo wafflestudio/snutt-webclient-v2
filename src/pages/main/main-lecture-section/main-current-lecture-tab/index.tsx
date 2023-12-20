@@ -1,5 +1,4 @@
 import { Loader } from '@/components/loader';
-import { useTokenContext } from '@/contexts/tokenContext';
 import type { FullTimetable, Timetable } from '@/entities/timetable';
 
 import { MainSectionEmptyWrapper } from '../../main-section-empty-wrapper';
@@ -21,16 +20,6 @@ export const MainCurrentLectureTab = ({
   hoveredLectureId,
   setHoveredLectureId,
 }: Props) => {
-  const { token } = useTokenContext();
-  const isLoggedIn = !!token;
-
-  if (!isLoggedIn)
-    return (
-      <MainSectionEmptyWrapper data-testid="ml-current-not-logged-in">
-        로그인하면 시간표를 이용할 수 있어요
-      </MainSectionEmptyWrapper>
-    );
-
   if (currentYearSemesterTimetables && currentYearSemesterTimetables.length === 0)
     return <MainSectionEmptyWrapper data-testid="ml-current-no-timetable">시간표가 없습니다.</MainSectionEmptyWrapper>;
 

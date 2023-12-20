@@ -134,8 +134,8 @@ export const handlers = [
   ),
 
   http.put<
+    Parameters<TimetableRepository['updateLecture']>[0],
     Parameters<TimetableRepository['updateLecture']>[1],
-    Parameters<TimetableRepository['updateLecture']>[2],
     FullTimetable | CoreServerError
   >(
     `*/v1/tables/:id/lecture/:lecture_id`,
@@ -157,8 +157,8 @@ export const handlers = [
   ),
 
   http.post<
+    Parameters<TimetableRepository['updateLecture']>[0],
     Parameters<TimetableRepository['updateLecture']>[1],
-    Parameters<TimetableRepository['updateLecture']>[2],
     FullTimetable | CoreServerError
   >(
     `*/v1/tables/:id/lecture`,

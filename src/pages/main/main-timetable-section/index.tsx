@@ -1,15 +1,12 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { IcClose } from '@/components/icons/ic-close';
 import { IcPlus } from '@/components/icons/ic-plus';
 import { Tabs } from '@/components/tabs';
-import { useTokenContext } from '@/contexts/tokenContext';
 import type { BaseLecture } from '@/entities/lecture';
 import type { FullTimetable, Timetable } from '@/entities/timetable';
 
-import { MainSectionEmptyWrapper } from '../main-section-empty-wrapper';
 import { MainCreateTimetableDialog } from './main-create-timetable-dialog';
 import { MainDeleteTimetableDialog } from './main-delete-timetable-dialog';
 import { MainNoTimetable } from './main-no-timetable';
@@ -43,18 +40,11 @@ export const MainTimetableSection = ({
   setCurrentTimetable,
   openCreateLectureDialog,
 }: Props) => {
-  const { token } = useTokenContext();
-  const navigate = useNavigate();
   const [isCreateTimetableDialogOpen, setCreateTimetableDialogOpen] = useState(false);
   const [deleteTimetableDialogId, setDeleteTimetableDialogId] = useState<string | null>(null);
   const [renameTimetableDialogId, setRenameTimetableDialogId] = useState<string | null>(null);
 
-  const isLoggedIn = !!token;
-
-  const onClickCreate = () => {
-    if (isLoggedIn) setCreateTimetableDialogOpen(true);
-    else navigate('/login');
-  };
+  const onClickCreate = () => setCreateTimetableDialogOpen(true);
 
   return (
     <Wrapper className={className}>
@@ -78,8 +68,7 @@ export const MainTimetableSection = ({
         <AddIcon data-testid="mt-create-timetable" onClick={onClickCreate} />
       </TTTabs>
       <Content>
-        {isLoggedIn ? (
-          currentYearSemesterTimetables &&
+        {currentYearSemesterTimetables &&
           (currentYearSemesterTimetables.length > 0 ? (
             currentFullTimetable && (
               <MainTimeTable
@@ -93,12 +82,7 @@ export const MainTimetableSection = ({
             )
           ) : (
             <NoTimetable onClickCreate={() => setCreateTimetableDialogOpen(true)} />
-          ))
-        ) : (
-          <MainSectionEmptyWrapper data-testid="mt-not-logged-in">
-            로그인하면 시간표를 이용할 수 있어요
-          </MainSectionEmptyWrapper>
-        )}
+          ))}
       </Content>
       <MainCreateTimetableDialog
         isOpen={isCreateTimetableDialogOpen}

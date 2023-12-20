@@ -80,13 +80,9 @@ export const MypageChangePassword = () => {
 };
 
 const useChangePassword = () => {
-  const { token } = useTokenContext();
   const { authService } = useGuardContext(serviceContext);
   return useMutation({
-    mutationFn: (body: { old_password: string; new_password: string }) => {
-      if (!token) throw new Error('no token');
-      return authService.changePassword(token, body);
-    },
+    mutationFn: (body: { old_password: string; new_password: string }) => authService.changePassword(body),
   });
 };
 
