@@ -7,16 +7,6 @@ import { givenTimetableDisplayMode } from '../utils/timetable.ts';
 // @ts-ignore
 import { givenUser } from '../utils/user.js';
 
-test('로그인되지 않았을 경우, 로그인해야 이용할 수 있다는 ui가 보여진다', async ({ page }) => {
-  await page.goto('/');
-  await givenUser(page, { login: false });
-  const tabs = page.getByTestId('mt-tab');
-  await expect(tabs).toHaveCount(0);
-  await expect(page.getByTestId('mt-not-logged-in')).toHaveCount(1);
-  await page.getByTestId('mt-create-timetable').click();
-  await expect(page).toHaveURL('/login');
-});
-
 test('로그인되었을 경우, 시간표 목록 탭이 정상 동작한다 (시간표 2개인 학기)', async ({ page }) => {
   await page.goto('/');
   await givenUser(page);
@@ -102,13 +92,6 @@ test('로그인되었을 경우, 시간표 내용이 보인다 (시작 끝 난�
   await expect(lecture.filter({ hasText: '가디언세미나' })).toHaveCSS('grid-row', '224 / 279');
   await expect(lecture.filter({ hasText: '베이스 과외' })).toHaveCSS('grid-row', '200 / 212');
   await expect(lecture.filter({ hasText: '논리와 비판적 사고' })).toHaveCSS('grid-row', '170 / 204');
-});
-
-test('로그인되지 않았을 경우, 시간표 목록 탭이 정상 동작한다 (시간표 없는 학기)', async ({ page }) => {
-  await page.goto('/?year=3001&semester=4');
-  await givenUser(page, { login: false });
-  const tabs = page.getByTestId('mt-tab');
-  await expect(tabs).toHaveCount(0);
 });
 
 test('로그인되었을 경우, 시간표 생성 기능이 정상 동작한다 (성공 케이스)', async ({ page }) => {

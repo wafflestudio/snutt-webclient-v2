@@ -19,7 +19,7 @@ const testIds = {
 /* -------------------------- */
 
 test('Step 1: 아이디로 이메일이 잘 찾아진다 (기본)', async ({ page }) => {
-  await page.goto('/login');
+  await page.goto('/');
   await givenUser(page, { login: false });
   await page.getByTestId(testIds['비밀번호 재설정 버튼']).click();
 
@@ -40,7 +40,7 @@ test('Step 1: 아이디로 이메일이 잘 찾아진다 (기본)', async ({ pag
 });
 
 test('Step 1: 아이디로 이메일이 잘 찾아진다 (오류: 존재하지 않는 아이디)', async ({ page }) => {
-  await page.goto('/login');
+  await page.goto('/');
   await givenUser(page, { login: false });
   await page.getByTestId(testIds['비밀번호 재설정 버튼']).click();
 
@@ -51,7 +51,7 @@ test('Step 1: 아이디로 이메일이 잘 찾아진다 (오류: 존재하지 �
 });
 
 test('Step 1: 아이디로 이메일이 잘 찾아진다 (오류: 이메일 없는 유저)', async ({ page }) => {
-  await page.goto('/login');
+  await page.goto('/');
   await givenUser(page, { login: false });
   await page.getByTestId(testIds['비밀번호 재설정 버튼']).click();
 
@@ -66,7 +66,7 @@ test('Step 1: 아이디로 이메일이 잘 찾아진다 (오류: 이메일 없�
 /* -------------------------- */
 
 test('Step 2: 아이디로 이메일이 잘 찾아진다 (기본)', async ({ page }) => {
-  await page.goto('/login');
+  await page.goto('/');
   await givenUser(page, { login: false });
   await page.getByTestId(testIds['비밀번호 재설정 버튼']).click();
   await page.getByTestId(testIds['인풋']).type('woohm402');
@@ -90,7 +90,7 @@ test('Step 2: 아이디로 이메일이 잘 찾아진다 (기본)', async ({ pag
 /* -------------------------- */
 
 test('Step 3: 코드 입력이 잘 된다 (기본)', async ({ page }) => {
-  await page.goto('/login');
+  await page.goto('/');
   await givenUser(page, { login: false });
   await page.getByTestId(testIds['비밀번호 재설정 버튼']).click();
   await page.getByTestId(testIds['인풋']).type('woohm402');
@@ -121,7 +121,7 @@ test('Step 3: 코드 입력이 잘 된다 (만료)', async ({ browser }) => {
 
   // When
   const page = await context.newPage();
-  await page.goto('/login');
+  await page.goto('/');
   await givenUser(page, { login: false });
   await page.getByTestId(testIds['비밀번호 재설정 버튼']).click();
   await page.getByTestId(testIds['인풋']).type('woohm402');
@@ -141,7 +141,7 @@ test('Step 3: 코드 입력이 잘 된다 (인증한적 없음)', async ({ brows
 
   // When
   const page = await context.newPage();
-  await page.goto('/login');
+  await page.goto('/');
   await givenUser(page, { login: false });
   await page.getByTestId(testIds['비밀번호 재설정 버튼']).click();
   await page.getByTestId(testIds['인풋']).type('woohm402');
@@ -161,7 +161,7 @@ test('Step 3: 코드 입력이 잘 된다 (틀림)', async ({ browser }) => {
 
   // When
   const page = await context.newPage();
-  await page.goto('/login');
+  await page.goto('/');
   await givenUser(page, { login: false });
   await page.getByTestId(testIds['비밀번호 재설정 버튼']).click();
   await page.getByTestId(testIds['인풋']).type('woohm402');
@@ -179,7 +179,7 @@ test('Step 3: 코드 입력이 잘 된다 (틀림)', async ({ browser }) => {
 /* -------------------------- */
 
 test('Step 4: 비밀번호 변경이 잘 된다 (기본)', async ({ page }) => {
-  await page.goto('/login');
+  await page.goto('/');
   await givenUser(page, { login: false });
   await page.getByTestId(testIds['비밀번호 재설정 버튼']).click();
   await page.getByTestId(testIds['인풋']).type('woohm402');
@@ -210,15 +210,15 @@ test('Step 4: 비밀번호 변경이 잘 된다 (기본)', async ({ page }) => {
 /* -------------------------- */
 
 test('Step 5: 비밀번호 변경이 잘 된다 (기본)', async ({ page }) => {
-  await page.goto('/login');
+  await page.goto('/');
   await givenUser(page, { login: false });
   await page.getByTestId(testIds['비밀번호 재설정 버튼']).click();
-  await page.getByTestId(testIds['인풋']).type('woohm402');
+  await page.getByTestId(testIds['인풋']).fill('woohm402');
   await page.getByTestId(testIds['버튼']).click();
   await page.getByTestId(testIds['버튼']).click();
-  await page.getByTestId(testIds['인풋']).type('코드');
+  await page.getByTestId(testIds['인풋']).fill('코드');
   await page.getByTestId(testIds['버튼']).click();
-  await page.getByTestId(testIds['인풋']).type('qwerqwer');
+  await page.getByTestId(testIds['인풋']).fill('qwerqwer');
   await page.getByTestId(testIds['버튼']).click();
 
   // test

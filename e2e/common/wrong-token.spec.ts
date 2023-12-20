@@ -27,5 +27,5 @@ test('잘못된 토큰일 때 모달을 통해 로그아웃이 잘 된다', asyn
   await givenUser(page, { login: true, type: 'wrong' });
   await page.getByTestId('wrong-token-dialog-logout').click();
   await expect(page.getByTestId('wrong-token-dialog-logout')).toHaveCount(0);
-  await expect(page.getByTestId('layout-my-info')).toHaveText('로그인');
+  await expect(page.getByTestId('landing')).toHaveCount(1);
 });

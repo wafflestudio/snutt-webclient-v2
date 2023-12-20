@@ -8,30 +8,17 @@ import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { ErrorPage } from '@/pages/error';
-import { Login } from '@/pages/login';
 import { Main } from '@/pages/main';
 import { MyPage } from '@/pages/mypage';
 import { SignUp } from '@/pages/signup';
 import { get } from '@/utils/object/get';
 
 import { useTokenContext } from './contexts/tokenContext';
+import { Landing } from './pages/landing';
 import { NotFoundPage } from './pages/not-found';
 
-const router = createBrowserRouter([
-  {
-    children: [
-      { path: '/', element: <Main /> },
-      { path: '/login', element: <Login /> },
-      { path: '/signup', element: <SignUp /> },
-      { path: '/mypage', element: <MyPage /> },
-      { path: '/*', element: <NotFoundPage /> },
-    ],
-    errorElement: <ErrorPage />,
-  },
-]);
-
 function App() {
-  const { clearToken } = useTokenContext();
+  const { clearToken, token } = useTokenContext();
   const [isWrongTokenDialogOpen, setWrongTokenDialogOpen] = useState(false);
 
   const [queryClient] = useState(
@@ -46,6 +33,24 @@ function App() {
         defaultOptions: { queries: { refetchOnWindowFocus: false, retry: false } },
       }),
   );
+
+  const router = createBrowserRouter([
+    {
+      children: [
+        ...(token
+          ? [
+              { path: '/', element: <Main /> },
+              { path: '/mypage', element: <MyPage /> },
+            ]
+          : [
+              { path: '/', element: <Landing /> },
+              { path: '/signup', element: <SignUp /> },
+            ]),
+        { path: '/*', element: <NotFoundPage /> },
+      ],
+      errorElement: <ErrorPage />,
+    },
+  ]);
 
   const onClickLogout = () => {
     clearToken();
