@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
+import { getStorageClient } from '@/clients/storage';
 import { truffleClient } from '@/clients/truffle';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
@@ -12,10 +13,12 @@ import { ErrorPage } from '@/pages/error';
 import { Main } from '@/pages/main';
 import { MyPage } from '@/pages/mypage';
 import { SignUp } from '@/pages/signup';
+import { getStorageRepository } from '@/repositories/storageRepository';
 import { getHourMinutePickerService } from '@/usecases/hourMinutePickerService';
 import { getHourMinuteService } from '@/usecases/hourMinuteService';
 import { getLectureService } from '@/usecases/lectureService';
 import { getTimeMaskService } from '@/usecases/timeMaskService';
+import { getTimetableViewService } from '@/usecases/timetableViewService';
 import { get } from '@/utils/object/get';
 
 import { useTokenContext } from './contexts/tokenContext';
@@ -63,12 +66,17 @@ function App() {
   };
 
   const services = useMemo(() => {
+    const persistStorage = getStorageClient(true);
+    const temporaryStorage = getStorageClient(false);
+    const storageRepository = getStorageRepository({ clients: [persistStorage, temporaryStorage] });
+
     const lectureService = getLectureService();
     const timeMaskService = getTimeMaskService();
     const hourMinuteService = getHourMinuteService();
     const hourMinutePickerService = getHourMinutePickerService({ services: [hourMinuteService] });
+    const timetableViewService = getTimetableViewService({ repositories: [storageRepository] });
 
-    return { lectureService, timeMaskService, hourMinutePickerService, hourMinuteService };
+    return { lectureService, timeMaskService, hourMinutePickerService, hourMinuteService, timetableViewService };
   }, []);
 
   return (

@@ -7,9 +7,11 @@ import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { Layout } from '@/components/layout';
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { CoreServerError } from '@/entities/error';
-import { envService, errorService, timetableViewService, userService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
+import { envService, errorService, userService } from '@/services';
 import { queryKey } from '@/utils/query-key-factory';
 
 import { MypageChangePassword } from './mypage-change-password';
@@ -21,6 +23,7 @@ export const MyPage = () => {
   const { token, clearToken } = useTokenContext();
   const { data: myInfo } = useMyInfo();
   const navigate = useNavigate();
+  const { timetableViewService } = useGuardContext(serviceContext);
   const [displayMode, setDisplayMode] = useState(timetableViewService.getDisplayMode());
 
   const { mutate: attach } = useAttachFacebook();

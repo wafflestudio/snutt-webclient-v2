@@ -7,7 +7,7 @@ import type { BaseLecture } from '@/entities/lecture';
 import { DAY_LABEL_MAP } from '@/entities/time';
 import type { FullTimetable } from '@/entities/timetable';
 import { useGuardContext } from '@/hooks/useGuardContext';
-import { colorService, timetableViewService } from '@/services';
+import { colorService } from '@/services';
 import { rangeToArray } from '@/utils/rangeToArray';
 
 type Props = {
@@ -30,7 +30,7 @@ export const MainTimeTable = ({
   openCreateLectureDialog,
 }: Props) => {
   const { data: colorList } = useColorList();
-  const { lectureService } = useGuardContext(serviceContext);
+  const { lectureService, timetableViewService } = useGuardContext(serviceContext);
 
   const allClassTimes = timetable.lecture_list
     .flatMap((l) => l.class_time_json)
