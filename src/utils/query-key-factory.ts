@@ -1,2 +1,1 @@
-export const queryKey = (endpoint: string, args?: { token?: string | null }) =>
-  args ? [endpoint, args?.token] : [endpoint];
+export const queryKey = (endpoint: string) => [endpoint];

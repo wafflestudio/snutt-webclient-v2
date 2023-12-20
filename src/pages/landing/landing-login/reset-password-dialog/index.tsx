@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { Progress } from '@/components/progress';
-import { serviceContext } from '@/contexts/ServiceContext';
-import { useGuardContext } from '@/hooks/useGuardContext';
+import { type AuthService } from '@/usecases/authService';
+import { type ErrorService } from '@/usecases/errorService';
 import { get } from '@/utils/object/get';
 
-type Props = { open: boolean; onClose: () => void };
+type Props = { open: boolean; onClose: () => void; errorService: ErrorService; authService: AuthService };
 
 enum Step {
   ID_INPUT, //       아이디 입력
@@ -19,17 +19,16 @@ enum Step {
   DONE, //           완료
 }
 
-export const LoginResetPasswordDialog = ({ open, onClose }: Props) => {
+export const LoginResetPasswordDialog = ({ open, onClose, errorService, authService }: Props) => {
   const [id, setId] = useState('');
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
   const [step, setStep] = useState(Step.ID_INPUT);
-  const { errorService } = useGuardContext(serviceContext);
 
-  const checkEmailMutation = useCheckEmail();
-  const sendCodeEmailMutation = useSendCodeEmail();
-  const verifyCodeMutation = useVerifyCode();
-  const resetPasswordMutation = useResetPassword();
+  const checkEmailMutation = useCheckEmail(authService);
+  const sendCodeEmailMutation = useSendCodeEmail(authService);
+  const verifyCodeMutation = useVerifyCode(authService);
+  const resetPasswordMutation = useResetPassword(authService);
 
   const resetAll = () => {
     setId('');
@@ -170,27 +169,23 @@ export const LoginResetPasswordDialog = ({ open, onClose }: Props) => {
   );
 };
 
-const useCheckEmail = () => {
-  const { authService } = useGuardContext(serviceContext);
+const useCheckEmail = (authService: AuthService) => {
   return useMutation({ mutationFn: (body: { user_id: string }) => authService.passwordResetCheckEmail(body) });
 };
 
-const useSendCodeEmail = () => {
-  const { authService } = useGuardContext(serviceContext);
+const useSendCodeEmail = (authService: AuthService) => {
   return useMutation({
     mutationFn: (body: { user_email: string }) => authService.sendPasswordResetVerificationEmail(body),
   });
 };
 
-const useVerifyCode = () => {
-  const { authService } = useGuardContext(serviceContext);
+const useVerifyCode = (authService: AuthService) => {
   return useMutation({
     mutationFn: (body: { user_id: string; code: string }) => authService.verifyPasswordResetCode(body),
   });
 };
 
-const useResetPassword = () => {
-  const { authService } = useGuardContext(serviceContext);
+const useResetPassword = (authService: AuthService) => {
   return useMutation({ mutationFn: (body: { user_id: string; password: string }) => authService.resetPassword(body) });
 };
 

@@ -4,16 +4,15 @@ import styled, { css } from 'styled-components';
 
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
-import { serviceContext } from '@/contexts/ServiceContext';
-import { useGuardContext } from '@/hooks/useGuardContext';
+import { type FeedbackService } from '@/usecases/feedbackService';
 
-type Props = { isOpen: boolean; onClose: () => void };
+type Props = { isOpen: boolean; onClose: () => void; feedbackService: FeedbackService };
 
-export const LayoutFooterFeedbackDialog = ({ onClose, isOpen }: Props) => {
+export const LayoutFooterFeedbackDialog = ({ onClose, isOpen, feedbackService }: Props) => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  const { mutate, isPending, isSuccess, reset } = useSubmitFeedback();
+  const { mutate, isPending, isSuccess, reset } = useSubmitFeedback(feedbackService);
 
   const isValid = email && message;
 
@@ -72,8 +71,7 @@ export const LayoutFooterFeedbackDialog = ({ onClose, isOpen }: Props) => {
   );
 };
 
-const useSubmitFeedback = () => {
-  const { feedbackService } = useGuardContext(serviceContext);
+const useSubmitFeedback = (feedbackService: FeedbackService) => {
   return useMutation({ mutationFn: (body: { email: string; message: string }) => feedbackService.post(body) });
 };
 

@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components';
 
 import { Layout } from '@/components/layout';
 import { serviceContext } from '@/contexts/ServiceContext';
-import { useTokenContext } from '@/contexts/tokenContext';
 import type { SearchFilter } from '@/entities/search';
 import { useGuardContext } from '@/hooks/useGuardContext';
 import { useYearSemester } from '@/hooks/useYearSemester';
@@ -18,12 +17,11 @@ import { MainSearchbar } from './main-searchbar';
 import { MainTimetableSection } from './main-timetable-section';
 
 export const Main = () => {
-  const { token } = useTokenContext();
   const [hoveredLectureId, setHoveredLectureId] = useState<string | null>(null);
   const [previewLectureId, setPreviewLectureId] = useState<string | null>(null);
   const [dialogLectureId, setDialogLectureId] = useState<string | null>(null);
   const [isCreateLectureDialog, setCreateLectureDialog] = useState(false);
-  const [lectureTab, setLectureTab] = useState<'result' | 'current'>(token ? 'current' : 'result');
+  const [lectureTab, setLectureTab] = useState<'result' | 'current'>('current');
   const [currentTimetableId, setCurrentTimetableId] = useState<string | null>(null);
   const { year, semester } = useYearSemester();
   const { data: timetables } = useMyTimetables();
@@ -96,30 +94,24 @@ export const Main = () => {
 };
 
 const useMyTimetables = () => {
-  const { token } = useTokenContext();
   const { timetableService } = useGuardContext(serviceContext);
 
   return useQuery({
-    queryKey: queryKey('tables', { token }),
-    queryFn: () => {
-      if (!token) throw Error('no token');
-      return timetableService.getTimetables(token);
-    },
-    enabled: !!token,
+    queryKey: queryKey('tables'),
+    queryFn: () => timetableService.getTimetables(),
   });
 };
 
 const useCurrentFullTimetable = (id: string | undefined) => {
-  const { token } = useTokenContext();
   const { timetableService } = useGuardContext(serviceContext);
 
   return useQuery({
-    queryKey: queryKey(`tables/${id}`, { token }),
+    queryKey: queryKey(`tables/${id}`),
     queryFn: () => {
-      if (!id || !token) throw new Error('no id | token');
-      return timetableService.getFullTimetable(token, id);
+      if (!id) throw new Error('no id');
+      return timetableService.getFullTimetable(id);
     },
-    enabled: !!id && !!token,
+    enabled: !!id,
   });
 };
 

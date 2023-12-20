@@ -67,15 +67,12 @@ export const MypageRegisterId = () => {
 };
 
 const useAddIdPassword = () => {
-  const { token, saveToken } = useTokenContext();
+  const { saveToken } = useTokenContext();
   const queryClient = useQueryClient();
   const { userService } = useGuardContext(serviceContext);
 
   return useMutation({
-    mutationFn: (body: { id: string; password: string }) => {
-      if (!token) throw new Error('no token');
-      return userService.addIdPassword(token, body);
-    },
+    mutationFn: (body: { id: string; password: string }) => userService.addIdPassword(body),
     onSuccess: ({ token }) => {
       saveToken(token, false);
       return queryClient.invalidateQueries();

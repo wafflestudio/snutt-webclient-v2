@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from 'react-facebook-login';
 import FBLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +20,7 @@ import { MypageRegisterId } from './mypage-register-id';
 
 export const MyPage = () => {
   const [isCloseOpen, setCloseOpen] = useState(false);
-  const { token, clearToken } = useTokenContext();
+  const { clearToken } = useTokenContext();
   const { data: myInfo } = useMyInfo();
   const navigate = useNavigate();
   const { timetableViewService, userService } = useGuardContext(serviceContext);
@@ -29,10 +29,6 @@ export const MyPage = () => {
 
   const { mutate: attach } = useAttachFacebook();
   const { mutate: detach } = useDetachFacebook();
-
-  useEffect(() => {
-    if (!token) navigate('/login');
-  }, [token, navigate]);
 
   const isFbOnlyUser = myInfo && userService.isFbOnlyUser(myInfo);
 
@@ -117,28 +113,22 @@ export const MyPage = () => {
 };
 
 const useMyInfo = () => {
-  const { token } = useTokenContext();
   const { userService } = useGuardContext(serviceContext);
 
   return useQuery({
-    queryKey: queryKey('user/info', { token }),
-    queryFn: () => {
-      if (!token) throw new Error('no token');
-      return userService.getUserInfo(token);
-    },
-    enabled: !!token,
+    queryKey: queryKey('user/info'),
+    queryFn: () => userService.getUserInfo(),
   });
 };
 
 const useAttachFacebook = () => {
-  const { token, saveToken } = useTokenContext();
+  const { saveToken } = useTokenContext();
   const { errorService } = useGuardContext(serviceContext);
   const { userService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: (userInfo: ReactFacebookLoginInfo) => {
-      if (!token) throw new Error('no token');
-      return userService.attachFacebookAccount(token, { fb_id: userInfo.id, fb_token: userInfo.accessToken });
+      return userService.attachFacebookAccount({ fb_id: userInfo.id, fb_token: userInfo.accessToken });
     },
     onSuccess: ({ token }) => saveToken(token, false),
     onError: (error) => alert(errorService.getErrorMessage((error as unknown as CoreServerError).errcode)),
@@ -146,15 +136,12 @@ const useAttachFacebook = () => {
 };
 
 const useDetachFacebook = () => {
-  const { token, saveToken } = useTokenContext();
+  const { saveToken } = useTokenContext();
   const { errorService } = useGuardContext(serviceContext);
   const { userService } = useGuardContext(serviceContext);
 
   return useMutation({
-    mutationFn: () => {
-      if (!token) throw new Error('no token');
-      return userService.detachFacebookAccount(token);
-    },
+    mutationFn: () => userService.detachFacebookAccount(),
     onSuccess: ({ token }) => saveToken(token, false),
     onError: (error) => alert(errorService.getErrorMessage((error as unknown as CoreServerError).errcode)),
   });

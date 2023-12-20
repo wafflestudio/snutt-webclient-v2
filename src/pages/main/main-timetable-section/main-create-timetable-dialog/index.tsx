@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { serviceContext } from '@/contexts/ServiceContext';
-import { useTokenContext } from '@/contexts/tokenContext';
 import { useGuardContext } from '@/hooks/useGuardContext';
 import { useYearSemester } from '@/hooks/useYearSemester';
 import { get } from '@/utils/object/get';
@@ -61,18 +60,17 @@ export const MainCreateTimetableDialog = ({ isOpen, close, setCurrentTimetable }
 };
 
 const useCreateTimetable = (onSuccess: (createdId?: string) => void) => {
-  const { token } = useTokenContext();
   const { year, semester } = useYearSemester();
   const queryClient = useQueryClient();
   const { timetableService } = useGuardContext(serviceContext);
 
   return useMutation({
     mutationFn: (title: string) => {
-      if (!token || !year || !semester) throw new Error('no token | year | semester');
-      return timetableService.createTimetable(token, { year, semester, title });
+      if (!year || !semester) throw new Error('no year | semester');
+      return timetableService.createTimetable({ year, semester, title });
     },
     onSuccess: (data, title) => {
-      queryClient.setQueryData(queryKey('tables', { token }), data);
+      queryClient.setQueryData(queryKey('tables'), data);
       onSuccess(data.find((item) => item.year === year && item.semester === semester && item.title === title)?._id);
     },
   });

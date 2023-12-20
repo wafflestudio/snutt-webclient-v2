@@ -64,13 +64,9 @@ export const MypageCloseAccountDialog = ({ onClose, isOpen }: Props) => {
 };
 
 const useCloseAccount = () => {
-  const { token } = useTokenContext();
   const { authService } = useGuardContext(serviceContext);
   return useMutation({
-    mutationFn: () => {
-      if (!token) throw new Error('no token');
-      return authService.closeAccount(token);
-    },
+    mutationFn: () => authService.closeAccount(),
   });
 };
 

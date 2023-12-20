@@ -4,16 +4,15 @@ import styled from 'styled-components';
 
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
-import { serviceContext } from '@/contexts/ServiceContext';
-import { useGuardContext } from '@/hooks/useGuardContext';
+import { type AuthService } from '@/usecases/authService';
+import { type ErrorService } from '@/usecases/errorService';
 import { get } from '@/utils/object/get';
 
-type Props = { open: boolean; onClose: () => void };
+type Props = { open: boolean; onClose: () => void; errorService: ErrorService; authService: AuthService };
 
-export const LoginFindIdDialog = ({ open, onClose }: Props) => {
+export const LoginFindIdDialog = ({ open, onClose, errorService, authService }: Props) => {
   const [email, setEmail] = useState('');
-  const { mutate, isSuccess, error, reset, status } = useFindId();
-  const { errorService } = useGuardContext(serviceContext);
+  const { mutate, isSuccess, error, reset, status } = useFindId(authService);
 
   const isValid = !!email;
 
@@ -54,8 +53,7 @@ export const LoginFindIdDialog = ({ open, onClose }: Props) => {
   );
 };
 
-const useFindId = () => {
-  const { authService } = useGuardContext(serviceContext);
+const useFindId = (authService: AuthService) => {
   return useMutation({ mutationFn: (body: { email: string }) => authService.findIdByEmail(body) });
 };
 
