@@ -5,14 +5,16 @@ import { IcClock } from '@/components/icons/ic-clock';
 import { IcDots } from '@/components/icons/ic-dots';
 import { IcLabel } from '@/components/icons/ic-label';
 import { IcMap } from '@/components/icons/ic-map';
+import { serviceContext } from '@/contexts/ServiceContext';
 import type { BaseLecture } from '@/entities/lecture';
+import { useGuardContext } from '@/hooks/useGuardContext';
 import { useYearSemester } from '@/hooks/useYearSemester';
-import { lectureService } from '@/services';
 
 type Props = { lecture: BaseLecture; cta: ReactNode };
 
 export const MainLectureListItem = ({ lecture, cta }: Props) => {
   const { year, semester } = useYearSemester();
+  const { lectureService } = useGuardContext(serviceContext);
 
   const department = [lecture.department, lecture.academic_year];
   const places = lecture.class_time_json.map((t) => t.place);

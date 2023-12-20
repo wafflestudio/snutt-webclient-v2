@@ -5,10 +5,12 @@ import styled from 'styled-components';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { ErrorDialog } from '@/components/error-dialog';
+import { serviceContext } from '@/contexts/ServiceContext';
 import { useTokenContext } from '@/contexts/tokenContext';
 import type { Color } from '@/entities/color';
 import { useErrorDialog } from '@/hooks/useErrorDialog';
-import { lectureService, timetableService } from '@/services';
+import { useGuardContext } from '@/hooks/useGuardContext';
+import { timetableService } from '@/services';
 
 import { type LectureEditForm, MainLectureEditForm } from '../main-lecture-edit-form';
 
@@ -21,6 +23,7 @@ type Props = {
 export const MainLectureCreateDialog = ({ open, onClose, timetableId }: Props) => {
   const [draft, setDraft] = useState<Partial<LectureEditForm>>({});
   const { open: openErrorDialog, isOpen: isOpenErrorDialog, onClose: onCloseErrorDialog, message } = useErrorDialog();
+  const { lectureService } = useGuardContext(serviceContext);
 
   const { mutate } = useCreateLecture(timetableId);
 
