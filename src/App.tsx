@@ -90,7 +90,7 @@ export const App = () => {
         queryCache: new QueryCache({
           onError: (error) => {
             if (get(error, ['errcode']) === 8194) setWrongTokenDialogOpen(true);
-            else errorService.captureError(error);
+            else errorService.captureError(new Error(JSON.stringify(error)));
           },
         }),
         defaultOptions: { queries: { refetchOnWindowFocus: false, retry: false } },
