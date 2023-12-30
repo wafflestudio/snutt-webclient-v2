@@ -6,13 +6,14 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
 import { getApiClient } from '@/clients/api';
-import { getStorageClient } from '@/clients/storage';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { envContext } from '@/contexts/EnvContext';
 import { serviceContext } from '@/contexts/ServiceContext';
 import { tokenContext } from '@/contexts/tokenContext';
 import { useGuardContext } from '@/hooks/useGuardContext';
+import { createLocalStorageClient } from '@/infrastructures/createLocalStorageClient';
+import { createSessionStorageClient } from '@/infrastructures/createSessionStorageClient';
 import { ErrorPage } from '@/pages/error';
 import { Main } from '@/pages/main';
 import { MyPage } from '@/pages/mypage';
@@ -59,8 +60,8 @@ export const App = () => {
     }),
   });
 
-  const persistStorage = getStorageClient(true);
-  const temporaryStorage = getStorageClient(false);
+  const persistStorage = createLocalStorageClient();
+  const temporaryStorage = createSessionStorageClient();
   const storageRepository = getStorageRepository({ clients: [persistStorage, temporaryStorage] });
   const tokenService = getTokenService({ storageRepository });
   const timetableViewService = getTimetableViewService({ repositories: [storageRepository] });
