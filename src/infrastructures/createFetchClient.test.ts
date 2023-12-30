@@ -1,6 +1,6 @@
 import { afterEach, expect, jest, test } from '@jest/globals';
 
-import { getApiClient } from './api';
+import { createFetchClient } from '@/infrastructures/createFetchClient';
 
 afterEach(() => {
   if (jest.isMockFunction(global.fetch)) (global.fetch as jest.Mock).mockClear();
@@ -17,7 +17,7 @@ const emptyFetch = (() =>
 
 test('GET (success case)', async () => {
   global.fetch = jest.fn(successFetch);
-  const client = getApiClient({ baseURL: 'https://test-get', headers: { 'test-get-header': 'hello' } });
+  const client = createFetchClient({ baseURL: 'https://test-get', headers: { 'test-get-header': 'hello' } });
   const promise = client.get('/test1');
 
   expect(promise).resolves.toStrictEqual({ data: 3 });
@@ -29,7 +29,7 @@ test('GET (success case)', async () => {
 
 test('GET (error case)', async () => {
   global.fetch = jest.fn(errorFetch);
-  const client = getApiClient({ baseURL: 'https://test-get', headers: { 'test-get-header': 'hello' } });
+  const client = createFetchClient({ baseURL: 'https://test-get', headers: { 'test-get-header': 'hello' } });
   const params = new URLSearchParams();
   params.set('test', 'zxcv');
   const promise = client.get('/test1', { params });
@@ -43,7 +43,7 @@ test('GET (error case)', async () => {
 
 test('POST (success case)', async () => {
   global.fetch = jest.fn(successFetch);
-  const client = getApiClient();
+  const client = createFetchClient();
   const promise = client.post('/test1', { name: 'asdf' });
 
   expect(promise).resolves.toStrictEqual({ data: 3 });
@@ -56,7 +56,7 @@ test('POST (success case)', async () => {
 
 test('POST (error case)', async () => {
   global.fetch = jest.fn(emptyFetch);
-  const client = getApiClient({ headers: { 'content-type': 'ignored' } });
+  const client = createFetchClient({ headers: { 'content-type': 'ignored' } });
   const promise = client.post('/test1', undefined);
 
   expect(promise).rejects.toStrictEqual(null);
@@ -68,7 +68,7 @@ test('POST (error case)', async () => {
 
 test('PUT (success case)', async () => {
   global.fetch = jest.fn(successFetch);
-  const client = getApiClient();
+  const client = createFetchClient();
   const promise = client.put('/test1', { name: 'asdf' });
 
   expect(promise).resolves.toStrictEqual({ data: 3 });
@@ -81,7 +81,7 @@ test('PUT (success case)', async () => {
 
 test('PUT (error case)', async () => {
   global.fetch = jest.fn(emptyFetch);
-  const client = getApiClient();
+  const client = createFetchClient();
   const promise = client.put('/test1', undefined);
 
   expect(promise).rejects.toStrictEqual(null);
@@ -93,7 +93,7 @@ test('PUT (error case)', async () => {
 
 test('DELETE (success case)', async () => {
   global.fetch = jest.fn(successFetch);
-  const client = getApiClient({ baseURL: 'https://test-get', headers: { 'test-get-header': 'hello' } });
+  const client = createFetchClient({ baseURL: 'https://test-get', headers: { 'test-get-header': 'hello' } });
   const promise = client.delete('/test1');
 
   expect(promise).resolves.toStrictEqual({ data: 3 });
@@ -105,7 +105,7 @@ test('DELETE (success case)', async () => {
 
 test('DELETE (error case)', async () => {
   global.fetch = jest.fn(errorFetch);
-  const client = getApiClient({ baseURL: 'https://test-get', headers: { 'test-get-header': 'hello' } });
+  const client = createFetchClient({ baseURL: 'https://test-get', headers: { 'test-get-header': 'hello' } });
   const params = new URLSearchParams();
   params.set('test', 'zxcv');
   const promise = client.delete('/test1', { params });

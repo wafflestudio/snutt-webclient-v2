@@ -1,18 +1,11 @@
+import { type HttpClient } from '@/clients/HttpClient';
+
 type Url = string;
-type Headers = { [key: string]: string };
 type Config = { params: URLSearchParams };
-type CreateClientOptions = { baseURL: string; headers: Headers };
 
-export interface ApiClient {
-  get<D = unknown>(url: Url, config?: Partial<Config>): Promise<{ data: D }>;
-  post<D = unknown, B = unknown>(url: Url, body?: B, config?: Partial<Config>): Promise<{ data: D }>;
-  put<D = unknown, B = unknown>(url: Url, body?: B, config?: Partial<Config>): Promise<{ data: D }>;
-  delete<D = unknown>(url: Url, config?: Partial<Config>): Promise<{ data: D }>;
-}
-
-const paramsToString = (params?: URLSearchParams) => (params ? `?${params}` : '');
-
-export const getApiClient = (options: Partial<CreateClientOptions> = {}): ApiClient => {
+export const createFetchClient = (
+  options: Partial<{ baseURL: string; headers: { [key: string]: string } }> = {},
+): HttpClient => {
   const baseURL = options.baseURL ?? '';
   const headers = options.headers ?? {};
 
@@ -70,3 +63,5 @@ export const getApiClient = (options: Partial<CreateClientOptions> = {}): ApiCli
     },
   };
 };
+
+const paramsToString = (params?: URLSearchParams) => (params ? `?${params}` : '');

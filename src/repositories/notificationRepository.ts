@@ -1,4 +1,4 @@
-import type { ApiClient } from '@/clients/api';
+import type { HttpClient } from '@/clients/HttpClient';
 import type { Notification } from '@/entities/notification';
 
 export interface NotificationRepository {
@@ -6,10 +6,9 @@ export interface NotificationRepository {
   getList(): Promise<Notification[]>;
 }
 
-type Deps = { clients: [ApiClient] };
-export const getNotificationRepository = ({ clients: [apiClient] }: Deps): NotificationRepository => {
+export const getNotificationRepository = ({ httpClient }: { httpClient: HttpClient }): NotificationRepository => {
   return {
-    getCount: async () => (await apiClient.get<{ count: number }>(`/v1/notification/count`)).data,
-    getList: async () => (await apiClient.get<Notification[]>(`/v1/notification`)).data,
+    getCount: async () => (await httpClient.get<{ count: number }>(`/v1/notification/count`)).data,
+    getList: async () => (await httpClient.get<Notification[]>(`/v1/notification`)).data,
   };
 };
