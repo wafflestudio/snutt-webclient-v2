@@ -1,4 +1,4 @@
-import { type StorageClient } from '@/clients/storage';
+import { type StorageClient } from '@/clients/StorageClient';
 import type { StorageKey } from '@/entities/storage';
 
 export interface StorageRepository {

@@ -1,4 +1,4 @@
-import type { ApiClient } from '@/clients/api';
+import type { HttpClient } from '@/clients/HttpClient';
 import type { User } from '@/entities/user';
 
 export interface UserRepository {
@@ -10,14 +10,13 @@ export interface UserRepository {
   addIdPassword(body: { id: string; password: string }): Promise<{ token: string }>;
 }
 
-type Deps = { clients: [ApiClient] };
-export const getUserRepository = ({ clients: [apiClient] }: Deps): UserRepository => {
+export const getUserRepository = ({ httpClient }: { httpClient: HttpClient }): UserRepository => {
   return {
-    getUserInfo: async () => (await apiClient.get<User>('/v1/user/info')).data,
-    deleteUser: async () => (await apiClient.delete<{ message: 'ok' }>('/v1/user/account')).data,
-    changePassword: async (body) => (await apiClient.put<{ token: string }>('/v1/user/password', body)).data,
-    addIdPassword: async (body) => (await apiClient.post<{ token: string }>('/v1/user/password', body)).data,
-    attachFacebookAccount: async (body) => (await apiClient.post<{ token: string }>('/v1/user/facebook', body)).data,
-    detachFacebookAccount: async () => (await apiClient.delete<{ token: string }>('/v1/user/facebook')).data,
+    getUserInfo: async () => (await httpClient.get<User>('/v1/user/info')).data,
+    deleteUser: async () => (await httpClient.delete<{ message: 'ok' }>('/v1/user/account')).data,
+    changePassword: async (body) => (await httpClient.put<{ token: string }>('/v1/user/password', body)).data,
+    addIdPassword: async (body) => (await httpClient.post<{ token: string }>('/v1/user/password', body)).data,
+    attachFacebookAccount: async (body) => (await httpClient.post<{ token: string }>('/v1/user/facebook', body)).data,
+    detachFacebookAccount: async () => (await httpClient.delete<{ token: string }>('/v1/user/facebook')).data,
   };
 };

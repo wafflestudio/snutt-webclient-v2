@@ -1,4 +1,4 @@
-import type { ApiClient } from '@/clients/api';
+import type { HttpClient } from '@/clients/HttpClient';
 import type { SearchFilter, SearchResultLecture } from '@/entities/search';
 import type { CourseBook } from '@/entities/semester';
 
@@ -16,10 +16,9 @@ export interface SearchRepository {
   search(params: Partial<SearchFilter>): Promise<SearchResultLecture[]>;
 }
 
-type Deps = { clients: [ApiClient] };
-export const getSearchRepository = ({ clients: [apiClient] }: Deps): SearchRepository => {
+export const getSearchRepository = ({ httpClient }: { httpClient: HttpClient }): SearchRepository => {
   return {
-    getTags: async ({ year, semester }) => (await apiClient.get<Tags>(`/v1/tags/${year}/${semester}`)).data,
-    search: async (params) => (await apiClient.post<SearchResultLecture[]>(`/v1/search_query`, params)).data,
+    getTags: async ({ year, semester }) => (await httpClient.get<Tags>(`/v1/tags/${year}/${semester}`)).data,
+    search: async (params) => (await httpClient.post<SearchResultLecture[]>(`/v1/search_query`, params)).data,
   };
 };

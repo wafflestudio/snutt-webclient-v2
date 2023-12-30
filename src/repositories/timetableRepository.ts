@@ -1,4 +1,4 @@
-import type { ApiClient } from '@/clients/api';
+import type { HttpClient } from '@/clients/HttpClient';
 import type { Semester } from '@/entities/semester';
 import type { CreateLectureRequest, FullTimetable, Timetable, UpdateLectureRequest } from '@/entities/timetable';
 
@@ -14,21 +14,21 @@ export interface TimetableRepository {
   updateTimetable(params: { id: string }, data: { title: string }): Promise<Timetable[]>;
 }
 
-type Deps = { clients: [ApiClient] };
-export const getTimetableRepository = ({ clients: [apiClient] }: Deps): TimetableRepository => {
+export const getTimetableRepository = ({ httpClient }: { httpClient: HttpClient }): TimetableRepository => {
   return {
-    getTimetables: async () => (await apiClient.get<Timetable[]>('/v1/tables')).data,
-    getFullTimetable: async ({ id }) => (await apiClient.get<FullTimetable>(`/v1/tables/${id}`)).data,
-    deleteTimetable: async ({ id }) => (await apiClient.delete<Timetable[]>(`/v1/tables/${id}`)).data,
+    getTimetables: async () => (await httpClient.get<Timetable[]>('/v1/tables')).data,
+    getFullTimetable: async ({ id }) => (await httpClient.get<FullTimetable>(`/v1/tables/${id}`)).data,
+    deleteTimetable: async ({ id }) => (await httpClient.delete<Timetable[]>(`/v1/tables/${id}`)).data,
     createTimetable: async ({ title, year, semester }) =>
-      (await apiClient.post<Timetable[]>('/v1/tables', { title, year, semester })).data,
+      (await httpClient.post<Timetable[]>('/v1/tables', { title, year, semester })).data,
     updateLecture: async ({ id, lecture_id }, body) =>
-      (await apiClient.put<FullTimetable>(`/v1/tables/${id}/lecture/${lecture_id}`, body)).data,
-    createLecture: async ({ id }, body) => (await apiClient.post<FullTimetable>(`/v1/tables/${id}/lecture`, body)).data,
+      (await httpClient.put<FullTimetable>(`/v1/tables/${id}/lecture/${lecture_id}`, body)).data,
+    createLecture: async ({ id }, body) =>
+      (await httpClient.post<FullTimetable>(`/v1/tables/${id}/lecture`, body)).data,
     deleteLecture: async ({ id, lecture_id }) =>
-      (await apiClient.delete<FullTimetable>(`/v1/tables/${id}/lecture/${lecture_id}`)).data,
+      (await httpClient.delete<FullTimetable>(`/v1/tables/${id}/lecture/${lecture_id}`)).data,
     addLecture: async ({ id, lecture_id }) =>
-      (await apiClient.post<FullTimetable>(`/v1/tables/${id}/lecture/${lecture_id}`, undefined)).data,
-    updateTimetable: async ({ id }, body) => (await apiClient.put<Timetable[]>(`/v1/tables/${id}`, body)).data,
+      (await httpClient.post<FullTimetable>(`/v1/tables/${id}/lecture/${lecture_id}`, undefined)).data,
+    updateTimetable: async ({ id }, body) => (await httpClient.put<Timetable[]>(`/v1/tables/${id}`, body)).data,
   };
 };

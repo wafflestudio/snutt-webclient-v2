@@ -5,13 +5,13 @@ import { useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
-import { getApiClient } from '@/clients/api';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
 import { envContext } from '@/contexts/EnvContext';
 import { serviceContext } from '@/contexts/ServiceContext';
 import { tokenContext } from '@/contexts/tokenContext';
 import { useGuardContext } from '@/hooks/useGuardContext';
+import { createFetchClient } from '@/infrastructures/createFetchClient';
 import { createLocalStorageClient } from '@/infrastructures/createLocalStorageClient';
 import { createSessionStorageClient } from '@/infrastructures/createSessionStorageClient';
 import { ErrorPage } from '@/pages/error';
@@ -161,13 +161,13 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 const getUnauthorizedServices = (ENV: { API_BASE_URL: string; API_KEY: string }) => {
-  const snuttApiClient = getApiClient({
+  const httpClient = createFetchClient({
     baseURL: ENV.API_BASE_URL,
     headers: { 'x-access-apikey': ENV.API_KEY },
   });
-  const authRepository = getAuthRepository({ clients: [snuttApiClient] });
-  const feedbackRepository = getFeedbackRepository({ clients: [snuttApiClient] });
-  const userRepository = getUserRepository({ clients: [snuttApiClient] });
+  const authRepository = getAuthRepository({ httpClient });
+  const feedbackRepository = getFeedbackRepository({ httpClient });
+  const userRepository = getUserRepository({ httpClient });
   const authService = getAuthService({ repositories: [authRepository, userRepository] });
   const feedbackService = getFeedbackService({ repositories: [feedbackRepository] });
 
@@ -183,18 +183,18 @@ const getAuthorizedServices = (
     API_KEY: string;
   },
 ) => {
-  const snuttApiClient = getApiClient({
+  const httpClient = createFetchClient({
     baseURL: ENV.API_BASE_URL,
     headers: { 'x-access-apikey': ENV.API_KEY, 'x-access-token': token },
   });
 
-  const userRepository = getUserRepository({ clients: [snuttApiClient] });
-  const authRepository = getAuthRepository({ clients: [snuttApiClient] });
-  const timetableRepository = getTimetableRepository({ clients: [snuttApiClient] });
-  const semesterRepository = getSemesterRepository({ clients: [snuttApiClient] });
-  const searchRepository = getSearchRepository({ clients: [snuttApiClient] });
-  const notificationRepository = getNotificationRepository({ clients: [snuttApiClient] });
-  const colorRepository = getColorRepository({ clients: [snuttApiClient] });
+  const userRepository = getUserRepository({ httpClient });
+  const authRepository = getAuthRepository({ httpClient });
+  const timetableRepository = getTimetableRepository({ httpClient });
+  const semesterRepository = getSemesterRepository({ httpClient });
+  const searchRepository = getSearchRepository({ httpClient });
+  const notificationRepository = getNotificationRepository({ httpClient });
+  const colorRepository = getColorRepository({ httpClient });
 
   const userService = getUserService({ repositories: [userRepository] });
   const colorService = getColorService({ repositories: [colorRepository] });

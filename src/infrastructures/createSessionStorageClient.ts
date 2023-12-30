@@ -1,4 +1,4 @@
-import { type StorageClient } from '@/clients/storage';
+import { type StorageClient } from '@/clients/StorageClient';
 
 export const createSessionStorageClient = (): StorageClient => ({
   get: (key) => sessionStorage.getItem(key),

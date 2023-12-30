@@ -1,4 +1,4 @@
-import type { ApiClient } from '@/clients/api';
+import { type HttpClient } from '@/clients/HttpClient';
 import type { SignInResponse } from '@/entities/auth';
 
 export interface AuthRepository {
@@ -15,20 +15,19 @@ export interface AuthRepository {
   resetPassword(body: { user_id: string; password: string }): Promise<{ message: 'ok' }>;
 }
 
-type Deps = { clients: [ApiClient] };
-export const getAuthRepository = ({ clients: [apiClient] }: Deps): AuthRepository => {
+export const getAuthRepository = ({ httpClient }: { httpClient: HttpClient }): AuthRepository => {
   return {
-    signInWithIdPassword: async (body) => (await apiClient.post<SignInResponse>(`/v1/auth/login_local`, body)).data,
-    signInWithFacebook: async (body) => (await apiClient.post<SignInResponse>(`/auth/login_fb`, body)).data,
+    signInWithIdPassword: async (body) => (await httpClient.post<SignInResponse>(`/v1/auth/login_local`, body)).data,
+    signInWithFacebook: async (body) => (await httpClient.post<SignInResponse>(`/auth/login_fb`, body)).data,
     signUpWithIdPassword: async (body) =>
-      (await apiClient.post<{ message: 'ok'; token: string; user_id: string }>(`/v1/auth/register_local`, body)).data,
-    findId: async (body) => (await apiClient.post<{ message: 'ok' }>(`/v1/auth/id/find`, body)).data,
+      (await httpClient.post<{ message: 'ok'; token: string; user_id: string }>(`/v1/auth/register_local`, body)).data,
+    findId: async (body) => (await httpClient.post<{ message: 'ok' }>(`/v1/auth/id/find`, body)).data,
     passwordResetCheckEmail: async (body) =>
-      (await apiClient.post<{ email: string }>(`/v1/auth/password/reset/email/check`, body)).data,
+      (await httpClient.post<{ email: string }>(`/v1/auth/password/reset/email/check`, body)).data,
     sendPasswordResetVerificationEmail: async (body) =>
-      (await apiClient.post<{ message: 'ok' }>(`/v1/auth/password/reset/email/send`, body)).data,
+      (await httpClient.post<{ message: 'ok' }>(`/v1/auth/password/reset/email/send`, body)).data,
     verifyPasswordResetCode: async (body) =>
-      (await apiClient.post<{ message: 'ok' }>(`/v1/auth/password/reset/verification/code`, body)).data,
-    resetPassword: async (body) => (await apiClient.post<{ message: 'ok' }>(`/v1/auth/password/reset`, body)).data,
+      (await httpClient.post<{ message: 'ok' }>(`/v1/auth/password/reset/verification/code`, body)).data,
+    resetPassword: async (body) => (await httpClient.post<{ message: 'ok' }>(`/v1/auth/password/reset`, body)).data,
   };
 };
