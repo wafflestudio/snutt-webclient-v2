@@ -41,7 +41,12 @@ export const MainLectureEditDialog = ({ open, onClose, timetableId, lecture }: P
 
     mutate(
       {
-        class_time_json: draft.class_time_json?.map((t) => lectureService.removeInternalId(t)),
+        class_time_json: draft.class_time_json?.map((t) => ({
+          day: t.day,
+          start_time: t.start_time,
+          end_time: t.end_time,
+          place: t.place,
+        })),
         course_title: draft.course_title,
         credit: draft.credit,
         instructor: draft.instructor,
