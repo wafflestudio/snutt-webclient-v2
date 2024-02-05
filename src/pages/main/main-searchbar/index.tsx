@@ -45,6 +45,8 @@ const initialForm = {
   manualBitmask: [],
 };
 
+const isInitialForm = (form: SearchForm) => JSON.stringify(initialForm) === JSON.stringify(form);
+
 export const MainSearchbar = ({ onSearch, currentFullTimetable, resetSearchResult }: Props) => {
   const [open, setOpen] = useState(false);
   const [searchForm, setSearchForm] = useState<SearchForm>(initialForm);
@@ -117,6 +119,7 @@ export const MainSearchbar = ({ onSearch, currentFullTimetable, resetSearchResul
         <MainSearchbarFilterDialog
           open={open}
           onSubmit={onSubmit}
+          onReset={isInitialForm(searchForm) ? null : () => setSearchForm(initialForm)}
           onClose={() => setOpen(false)}
           searchForm={searchForm}
           onChangeCheckbox={onChangeCheckbox}

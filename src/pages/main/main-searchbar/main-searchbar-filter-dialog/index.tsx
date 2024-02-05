@@ -16,6 +16,7 @@ type Props = {
   open: boolean;
   onClose: () => void;
   onSubmit: () => void;
+  onReset: null | (() => void);
   searchForm: SearchForm;
   onChangeCheckbox: <F extends 'academicYear' | 'category' | 'classification' | 'credit' | 'department' | 'etc'>(
     field: F,
@@ -30,6 +31,7 @@ export const MainSearchbarFilterDialog = ({
   open,
   onClose,
   onSubmit,
+  onReset,
   searchForm,
   onChangeCheckbox,
   onChangeTimeRadio,
@@ -41,7 +43,17 @@ export const MainSearchbarFilterDialog = ({
 
   return (
     <StyledDialog open={open} onClose={onClose}>
-      <StyledDialog.Title>상세조건 설정</StyledDialog.Title>
+      <StyledDialog.Title style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        상세조건 설정
+        <Button
+          data-testid="main-searchbar-filter-dialog-reset"
+          color="gray"
+          onClick={onReset ?? undefined}
+          disabled={onReset === null}
+        >
+          초기화
+        </Button>
+      </StyledDialog.Title>
 
       <StyledContent>
         <form>
