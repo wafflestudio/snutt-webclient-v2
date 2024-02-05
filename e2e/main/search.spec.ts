@@ -58,6 +58,12 @@ test('검색 기능이 정상 동작한다 (검색 결과 없을 때)', async ({
   // TODO:
 });
 
+test('검색 초기화 기능이 정상 동작한다', async ({ page }) => {
+  await page.goto('/');
+  await givenUser(page, { login: true });
+  // TODO:
+});
+
 test('미리보기가 정상 동작한다 (평일 강의)', async ({ page }) => {
   await page.goto('/');
   await givenUser(page, { login: true });
